@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 5: Self-Improvement and Deep Research Agents — Stanford Frontier AI</title>
+<meta name="description" content="AlphaCode samples a million programs per problem and filters down to ten. AlphaCode 2 learns to search better. Search-o1 gives reasoning models an agentic searc">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-l05" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05" class="active">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 5: Self-Improvement and Deep Research Agents</nav>
+      <h1>Lecture 5: Self-Improvement and Deep Research Agents</h1>
+      <p class="meta-line">Autumn 2025 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="Uni9dqyuuDM"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/Uni9dqyuuDM" title="Stanford CS329A Self-Improving AI Agents | Part 7 | Self-Improvement and Deep Research Agents" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=Uni9dqyuuDM" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=Uni9dqyuuDM" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">AlphaCode and AlphaCode 2 on sampling at competitive-programming scale, then Search-o1 and Search-R1 on agentic search for reasoning models.</p></div><h2 id="a-million-tries-per-problem">A million tries per problem</h2>
+<p><em>Builds on: Lecture 2&rsquo;s repeated sampling, pushed to industrial scale.</em></p>
+<p>Lecture 2 sampled thousands of times. <strong>AlphaCode</strong> samples a
+million. The task is competitive programming: given a problem
+statement, write a program that passes hidden tests. The method
+is the generate-verify loop at industrial scale, and it is the
+clearest proof in the course that sampling is a serious
+strategy, not a party trick.</p>
+<p>The pipeline has five stages. <strong>Sampling</strong>: generate 1,000,000
+programs per problem, half Python and half C++. Two model sizes
+in the paper, 9B and 41B parameters. <strong>Test input generation</strong>:
+train a separate model to generate test inputs, then run every
+sampled program on them. <strong>Filtering</strong>: drop every program that
+fails known tests. <strong>Clustering</strong>: group the survivors by their
+behavior on the generated tests, programs that agree on outputs
+form a cluster, and keep the biggest clusters. <strong>Selection</strong>:
+submit from the top 10 clusters. The metric is <strong>10@k</strong>: solve
+the problem if any of 10 submissions from k samples is correct.</p>
+<p>The result: an average rank placing in the top 54 percent of
+5,000 <strong>Codeforces</strong> participants across 10 contests, roughly
+54.3 percent average rank. The findings the lecture stresses:
+pass@k grows <strong>log-linear</strong>ly in k. Log-linear means each
+doubling of k buys the same additive gain, so the curve is a
+straight line when k is plotted on a logarithmic axis. The
+bigger models get a better slope, and there is a selection bottleneck. With unlimited
+submissions the solve rate reached about 40 percent, but under
+the 10@k constraint it fell to about 30. Generation was not the
+ceiling. Picking was.</p>
+<figure><img alt="A million samples, ten submissions" src="assets/plate-l05-alphacode.svg"><figcaption>1M programs per problem. Filter, cluster by behavior, submit from top 10. 10@k solve about 30 percent. Unlimited submissions about 40 percent. Shell 3. Source: paper, AlphaCode. Project: Stanford Frontier AI.</figcaption></figure>
+<p>Three training details from the lecture. <strong>GOLD
+regularization</strong>: the model is trained to match the
+distribution of good solutions, not just to maximize likelihood,
+so samples stay diverse. <strong>Value conditioning</strong>: the model is
+told the target quality during training and asked for high
+quality at sampling time. And the diversity is deliberate:
+half the samples in Python, half in C++, because different
+languages reach different solutions.</p>
+<p>The honest weakness: AlphaCode is weak on dynamic programming
+and constructive problems, the ones that need a flash of
+insight rather than enumeration. Sampling covers the space of
+obvious approaches. It does not invent the clever one.</p>
+<h2 id="alphacode-2-learn-to-search">AlphaCode 2: learn to search</h2>
+<p><em>Builds on: AlphaCode&rsquo;s sampling pipeline, replacing hand-designed filtering with a learned scorer.</em></p>
+<p><strong>AlphaCode 2</strong> keeps the sampling strategy and improves the
+search. Built on a fine-tuned Gemini Pro family of models, it
+replaces hand-designed filtering with a <strong>learned scoring
+model</strong> that predicts which samples are worth keeping.</p>
+<p>The pipeline tightens. On <strong>CodeContests v2</strong>, with C++ only,
+the system samples 1,000,000 programs, the scoring model filters
+95 percent away leaving about 50,000, and clustering plus
+selection continues from there. The headline from the lecture:
+100 samples from AlphaCode 2 match 1,000,000 samples from
+AlphaCode 1 on solve rate. At the million-sample budget, the
+solve rate rose from 25 to 43 percent, and the system reached
+the 85th percentile of contestants, up from the top 54 percent.</p>
+<p>The lecture&rsquo;s moral is the course&rsquo;s moral in miniature. The
+first system scaled sampling. The second scaled the selection.
+The verifier, the scorer, the judge: every turn of the flywheel
+moves the bottleneck from generation to verification and back.</p>
+<h2 id="search-o1-the-model-that-knows-it-does-not-know">Search-o1: the model that knows it does not know</h2>
+<p><em>Builds on: The selection bottleneck, extending the loop to knowledge the weights do not contain.</em></p>
+<p>Sampling solves problems the model almost knows. <strong>Search-o1</strong>
+solves problems the model knows it does not know. It gives a
+reasoning model an agentic search loop: when the trace hits a
+<strong>knowledge gap</strong>, the model searches the web, reads documents, and
+continues reasoning with the new facts.</p>
+<p>The mechanism has two parts. <strong>Agentic RAG</strong>: the model itself
+decides when to search, what to query, and which results to
+read, inside the reasoning loop. <strong>Reason-in-documents</strong>: a
+module that reasons over the retrieved documents to extract
+exactly what the trace needs, instead of dumping raw pages into
+context. The loop is the ReAct shape from Lecture 3, but the
+tool is search and the trigger is uncertainty.</p>
+<p>How does the model know it has a gap? The lecture points to the
+trace itself. Words like &ldquo;perhaps&rdquo;, &ldquo;alternatively&rdquo;, and &ldquo;wait&rdquo;
+mark <strong>self-reflection</strong>: the model hedging, reconsidering, or
+catching its own error. Those moments are the search trigger.
+The paper&rsquo;s carbon-atom example shows the mechanism: without
+search the model answers from memory and gets the count wrong,
+10 versus the correct 14. With search it reads the facts and
+gets it right.</p>
+<p>The results: on <strong>GPQA</strong>, Graduate-Level Google-Proof Q&amp;A, a
+hard science benchmark, the model is competitive with human
+experts on the diagonal the lecture shows, and on <strong>HotpotQA</strong>,
+2WikiMultiHopQA, and Bamboogle it reaches state of the art.
+More retrieved documents help up to a point: accuracy rises with
+document count, then the context fills and the gains flatten.
+The lecture names the follow-up, <strong>Search-R1</strong>, which trains the
+search behavior with reinforcement learning instead of
+prompting it, but covers it only as a pointer.</p>
+<figure><img alt="Search when the trace hesitates" src="assets/plate-l05-search-o1.svg"><figcaption>Hedging words mark the knowledge gap. Search fires. Reason-in-documents extracts. GPQA competitive with experts. Shell 3. Source: paper, Search-o1. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="the-selection-bottleneck-restated">The selection bottleneck, restated</h2>
+<p><em>Builds on: All three systems, naming the pattern that repeats across them.</em></p>
+<p>Put the three systems together and one pattern repeats. In
+AlphaCode, unlimited submissions solve 40 percent, 10@k solves
+30: the gap is selection. In AlphaCode 2, the learned scorer
+closes most of that gap: 100 samples do the work of a million.
+In Search-o1, the model must select not just answers but
+questions: what to search for. Every system in this lecture
+generates far more than it can use, and its intelligence lives
+in what it keeps.</p>
+<div class="qa"><div class="q">Walk the AlphaCode pipeline with the lecture&#x27;s numbers.</div><div class="a"><p>Sample 1,000,000 programs per problem, half Python, half
+C++. Generate test inputs with a separate model. Run all
+programs on them. Filter out failures. Cluster survivors by
+output behavior. Submit from the top 10 clusters. With 10
+submissions the solve rate is about 30 percent. With
+unlimited submissions it would be about 40. The 10-point gap
+is the selection bottleneck: generation found the answer,
+selection could not always pick it.
+Many programs are textually different but
+computationally identical. Clustering by outputs on test
+inputs groups true duplicates, so the 10 submissions cover
+10 genuinely different approaches instead of 10 spellings of
+one idea.</p><div class="followup"><strong>Follow-up:</strong> Why cluster by behavior instead of by code?</div></div></div>
+<div class="qa"><div class="q">What do GOLD regularization and value conditioning buy?</div><div class="a"><p>GOLD trains the model to match the distribution of good
+solutions rather than maximizing likelihood, which keeps the
+samples diverse. Maximum likelihood concentrates on the most
+common pattern. Diversity is the whole game when you sample a
+million times: identical samples waste the budget. Value
+conditioning tells the model the target quality during
+training, so at sampling time you can ask for the
+high-quality end of the distribution.
+Different languages reach different solutions. A
+Python-first approach and a C++-first approach explore
+different corners of program space. The split is deliberate
+diversity, same as temperature but structural.</p><div class="followup"><strong>Follow-up:</strong> Why split samples across Python and C++?</div></div></div>
+<div class="qa"><div class="q">AlphaCode 2 matches AlphaCode 1&#x27;s million samples with 100. Where did the million go?</div><div class="a"><p>Into the learned scoring model. AlphaCode 1 filtered with
+tests and clustered by hand-designed rules, which needed
+volume to work. AlphaCode 2 trained a scorer to predict which
+samples are promising, filtering 95 percent before
+clustering. The million samples were paying for bad
+selection. Better selection costs fewer samples.
+Yes: the scorer&rsquo;s own accuracy. A perfect scorer needs one
+sample. A weak scorer needs the million back. The lecture&rsquo;s
+100-sample figure measures the scorer, not the generator.</p><div class="followup"><strong>Follow-up:</strong> Is there a limit to this trade?</div></div></div>
+<div class="qa"><div class="q">How does Search-o1 know when to search?</div><div class="a"><p>The reasoning trace tells it. Hedging language,
+&ldquo;perhaps&rdquo;, &ldquo;alternatively&rdquo;, &ldquo;wait&rdquo;, marks moments of
+uncertainty or self-correction. Those moments trigger a
+search: the model queries, reads, and continues with facts.
+The carbon example: memory said 10, the documents said 14,
+and the trace&rsquo;s hesitation was the signal to check.
+Context fills with documents, attention dilutes, and the
+model reasons over retrieval instead of the problem. The
+paper&rsquo;s curve shows accuracy rising with document count then
+flattening. The reason-in-documents module exists to compress
+each retrieval to what the trace needs.</p><div class="followup"><strong>Follow-up:</strong> What goes wrong if it searches too much?</div></div></div>
+<div class="qa"><div class="q">Why is AlphaCode weak on dynamic programming?</div><div class="a"><p>Dynamic programming needs the insight: the recurrence,
+the state definition. Sampling enumerates variations on
+approaches the model already considers. The clever
+reformulation is a single point in program space, not a
+region, so a million samples can miss it. The lecture is
+explicit: sampling scales the obvious, not the ingenious.
+A different generator: one that proposes reformulations,
+not completions. Or a verifier that rewards partial insight.
+The course&rsquo;s later lectures on planning and reflection aim at
+exactly this gap.</p><div class="followup"><strong>Follow-up:</strong> What would fix it?</div></div></div>
+<div class="qa"><div class="q">Connect this lecture to the self-improvement loop.</div><div class="a"><p>AlphaCode is the generate step at scale. AlphaCode 2 is
+the verify step learning to be smarter. Search-o1 is the
+generate step learning to ask for help. The loop from
+Lecture 1 needs all three: generate broadly, verify sharply,
+and know when the weights do not contain the answer. The
+40-to-30 selection gap is the loop&rsquo;s current tax.
+Selection. The lecture&rsquo;s numbers say generation already
+outruns it: 40 percent found, 30 percent picked. Every point
+of selection accuracy is a free point of solve rate with no
+new samples.</p><div class="followup"><strong>Follow-up:</strong> Which part would you automate first?</div></div></div>
+<div class="qa"><div class="q">Search-R1 is mentioned but not covered. What is the idea?</div><div class="a"><p>Search-o1 prompts the search behavior: the model is told
+when and how to search. Search-R1 trains it: reinforcement
+learning rewards traces that search well and answer right.
+The lecture names it as the direction without details. The
+bet is that learned search policies beat prompted ones, the
+same bet the whole course makes about learned versus
+hand-designed behavior.
+Not stated in the lecture. The honest answer: presumably
+answer correctness with a cost term for searches, so the
+model learns to search when it pays. Designing that reward
+without teaching the model to game it is the open problem.</p><div class="followup"><strong>Follow-up:</strong> What is the reward?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>A million tries.</strong> AlphaCode samples 1M programs, filters,
+   clusters by behavior, submits 10. Top 54 percent of
+   Codeforces. 10@k about 30 percent, unlimited about 40.</li>
+<li><strong>Selection is the tax.</strong> The 10-point gap between found and
+   picked is where intelligence lives.</li>
+<li><strong>Learn the scorer.</strong> AlphaCode 2&rsquo;s scoring model filters 95
+   percent. 100 samples match the old million. 85th percentile.</li>
+<li><strong>Know what you lack.</strong> Search-o1 searches when the trace
+   hesitates. Reason-in-documents compresses retrieval.
+   GPQA competitive with experts.</li>
+<li><strong>Sampling scales the obvious.</strong> Weak on DP and insight
+   problems. The clever point in program space needs a
+   different generator.</li>
+<li><strong>The loop&rsquo;s shape.</strong> Generate broadly, verify sharply, ask
+   for help when the weights are empty.</li>
+</ol>
+<h2 id="used-where-as-of-october-2026">Used where, as of October 2026</h2>
+<ul>
+<li><strong>Competitive programming with AI:</strong> AlphaCode (DeepMind,
+  2022, Science) reached the top 54.3 percent of Codeforces
+  competitors with the sample-filter-cluster pipeline: generate
+  millions of programs, filter by execution, cluster by
+  behavior, submit 10. The pattern remains the evaluation
+  template for code generation.</li>
+<li><strong>Deep Research products:</strong> OpenAI Deep Research (February
+  2025) and Gemini Deep Research (rebuilt on Gemini 3 Pro,
+  December 2025) run the agentic loop the lecture describes: an
+  orchestrator plans, parallel sub-agents search, a synthesizer
+  writes the cited report.</li>
+<li><strong>Learned selection:</strong> AlphaCode 2 (DeepMind, 2024) replaced
+  hand-designed filtering with a learned scoring model that
+  filtered 95 percent of samples before clustering. The
+  lecture&rsquo;s template: selection learned, not hand-built.</li>
+<li><strong>Agentic RAG in production (2026):</strong> retrieval embedded in
+  the reasoning loop, the agent deciding when to retrieve and
+  when to re-retrieve, is the documented production pattern
+  (Dify, January 2026). Reason-in-documents anticipates it:
+  compress each retrieval to what the trace needs.</li>
+</ul>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- CS329A Part 7: Self-Improvement and Deep Research Agents
+  (Autumn 2025). https://www.youtube.com/watch?v=Uni9dqyuuDM</p>
+<p><strong>Further reading:</strong>
+- Li et al., &ldquo;AlphaCode&rdquo; (2022).
+  https://arxiv.org/abs/2203.07814
+- Li et al., &ldquo;Search-o1&rdquo; (2025).
+  https://arxiv.org/abs/2501.05366</p>
+<p><strong>Caveats from these sources.</strong> The AlphaCode numbers are from
+the 2022 paper and the lecture&rsquo;s telling. The AlphaCode 2
+figures are as reported in the lecture from DeepMind&rsquo;s
+announcement. Search-R1 is named but not detailed in the
+lecture.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS329Z:</strong> RAG and agentic retrieval from the builder side:
+  how production systems implement the search loop Search-o1
+  studies.</li>
+<li><strong>CS336:</strong> the base models under the sampling: what
+  pretraining puts in the weights that a million samples
+  draw out.</li>
+<li><strong>CS229S:</strong> the systems cost of a million samples: how
+  inference infrastructure makes the AlphaCode budget
+  thinkable.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=Uni9dqyuuDM" target="_blank" rel="noopener">CS329A Part 7: Self-Improvement and Deep Research Agents (Autumn 2025, published 2026-08)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2203.07814" target="_blank" rel="noopener">Li et al., Competition-Level Code Generation with AlphaCode (2022)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2501.05366" target="_blank" rel="noopener">Li et al., Search-o1: Agentic Search-Enhanced Large Reasoning Models (2025)</a></li></ul></section>
+      <nav class="pager"><a href="../cs329a/l04-planning-multistep-reasoning.html"><span class="lbl">← Previous</span>Lecture 4: Planning and Multi-Step Reasoning</a><a href="../cs329a/l06-train-time-scaling.html"><span class="lbl">Next →</span>Lecture 6: Train-Time Scaling and Scaling RL</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

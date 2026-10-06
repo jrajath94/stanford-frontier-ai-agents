@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: retention, not generation</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. Generation is the cheap input. Retention is the product.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT the question</text>
+<text x="404" y="124">the rule: ask Wednesday</text>
+<text x="648" y="124">WITH the question</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">Saturday-morning</text>
+<text x="190" y="208" text-anchor="middle" fill="#1B2838">generation</text>
+<text x="190" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">custom demos per sales call,</text>
+<text x="190" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">dead by Wednesday</text>
+<text x="190" y="324" text-anchor="middle" fill="#C46B2C" font-size="14">throwaway software:</text>
+<text x="190" y="348" text-anchor="middle" fill="#C46B2C" font-size="14">useful for one call,</text>
+<text x="190" y="372" text-anchor="middle" fill="#C46B2C" font-size="14">a toy by morning</text>
+<text x="190" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">counting generation</text>
+<text x="190" y="440" text-anchor="middle" fill="#5C6B7A" font-size="14">counts the wrong thing</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">measure Wednesday-</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">morning retention</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">do people still need it</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">after the demo?</text>
+<text x="490" y="324" text-anchor="middle" fill="#1E4D8C" font-size="14">the toy: 100 apps, 90 die</text>
+<text x="490" y="348" text-anchor="middle" fill="#1E4D8C" font-size="14">in a week, 10 become</text>
+<text x="490" y="372" text-anchor="middle" fill="#1E4D8C" font-size="14">workflows. The 10 compound.</text>
+<text x="490" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">at prompt prices, they are</text>
+<text x="490" y="440" text-anchor="middle" fill="#5C6B7A" font-size="14">worth more than the total cost</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">reflexivity</text>
+<text x="780" y="212" text-anchor="middle" fill="#5C6B7A" font-size="14">once you know you are one</text>
+<text x="780" y="236" text-anchor="middle" fill="#5C6B7A" font-size="14">prompt away from high-fidelity</text>
+<text x="780" y="260" text-anchor="middle" fill="#5C6B7A" font-size="14">software, you never go back</text>
+<text x="780" y="304" text-anchor="middle" fill="#1F7A72" font-size="14">free software multiplies</text>
+<text x="780" y="328" text-anchor="middle" fill="#1F7A72" font-size="14">engagement instead</text>
+<text x="780" y="352" text-anchor="middle" fill="#1F7A72" font-size="14">of killing it</text>
+<text x="780" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">engineers tell Rauch they</text>
+<text x="780" y="420" text-anchor="middle" fill="#5C6B7A" font-size="14">could never code the old way again</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: Rauch does not claim every generated app survives. His bet is that reflexivity wins on average.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">One-call throwaway sits next to deeply embedded workflows. Watch retention, not generation.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: "software is basically now free." Free drives engagement. That is the demand engine.</text>
+</svg>

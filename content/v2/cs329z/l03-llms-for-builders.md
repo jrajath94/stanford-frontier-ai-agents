@@ -10,7 +10,7 @@ summary: "What an agent engineer must know about the model underneath: sampling,
 date: "[uncertain: Fall 2026]"
 instructor: "Diyi Yang, Michael Ryan, John Yang"
 offering: "Fall 2026"
-concepts: [language-model, sampling, temperature, decoder, attention, linear-attention, cross-entropy, pretraining, midtraining, post-training, rlvr, prefill, decode, kv-cache, speculative-decoding]
+concepts: [language-model, sampling, temperature, softmax, top-k, top-p, beam-search, decoder, attention, gqa, mqa, linear-attention, cross-entropy, pretraining, midtraining, post-training, sft, rlhf, dpo, rlvr, prefill, decode, kv-cache, speculative-decoding]
 sources:
   - tag: slides
     label: "Lecture 2 slides: LLMs for Builders (local: sources/agents/cs329z/lecture02.pdf)"
@@ -72,7 +72,7 @@ The menu of strategies:
 
 - **Greedy:** pick the highest score every time. Deterministic. Fast.
 - **Temperature:** divide every score by T and renormalize. High T
-  flattens toward uniform; low T sharpens toward greedy.
+  flattens toward uniform. Low T sharpens toward greedy.
 - **Top-k:** keep the k best tokens, sample among them.
 - **Top-p (nucleus):** keep the smallest set whose total probability
   reaches p, sample among them.
@@ -118,19 +118,44 @@ to produce. That needs the shape of the machine.
 
 What does the engine do with each token, and what does it cost?
 
+### From logits to tokens: the softmax step
+
+The model does not output probabilities. It outputs **logits**: raw,
+unnormalized scores, one per vocabulary token. Three steps turn logits
+into text: scale by temperature, softmax into probabilities, sample.
+
+![Temperature](assets/l03-softmax.svg "Same logits at T = 0.5 and T = 2. The cool distribution is nearly greedy. The warm one gives the tail a real chance. Project: Stanford Frontier AI. Source: original.")
+
+Work it on logits [2.0, 1.0, 0.5]. At T = 0.5, the scaled scores are
+[4, 2, 1]. Exponentiated and normalized: [0.84, 0.11, 0.04]. The leader
+takes 84 percent. At T = 2, the scaled scores are [1, 0.5, 0.25].
+normalized: [0.48, 0.29, 0.23]. The tail takes 23 percent. Same model,
+same logits, different behavior: the dial is real.
+
+The **softmax** is the normalization: exp(score_i) divided by the sum
+of exp over all tokens. It turns any real numbers into a distribution.
+Top-k and top-p then cut the tail before sampling: top-k keeps a fixed
+count, top-p keeps a probability mass. The order matters: temperature
+first (reshape), truncation second (cut), sampling third (draw).
+
+The trap: temperature and top-p interact. High temperature with tight
+top-p gives a flat draw among the leaders: diverse but sane. Low
+temperature with loose top-p is nearly greedy: the dial does nothing.
+Set them as a pair, not as two dials.
+
 ## The decoder stack, built from zero
 
 Modern LLMs are **decoder-only transformers**: they read tokens left
 to right and predict the next one. The stack, bottom to top:
 
-1. **Embedding plus positions.** Each token becomes a vector; a
+1. **Embedding plus positions.** Each token becomes a vector. A
    position signal is added so the model knows the order.
 2. **N transformer blocks.** Each block is a causal multi-head
    attention layer plus a feed-forward layer, wrapped in layer norms
    and residual connections. Causal means each token sees only the
    tokens before it: the mask enforces left-to-right order.
 3. **LM head and softmax.** The final state maps to one score per
-   vocabulary token; softmax turns the scores into the distribution
+   vocabulary token. Softmax turns the scores into the distribution
    that sampling draws from.
 
 ![The decoder-only stack](assets/l03-decoder-stack.svg "Embedding and positions at the bottom, N transformer blocks, LM head, softmax at the top. Project: Stanford Frontier AI. Source: source.")
@@ -140,7 +165,7 @@ The attention layer is where tokens meet. Each token forms a query
 offers). Queries match keys, the matches become weights, and the values
 mix by those weights. That is the whole mechanism at the level an
 agent engineer needs. The full derivation lives in the attention
-lessons of the other courses; the cost analysis below is why it
+lessons of the other courses. The cost analysis below is why it
 matters here.
 
 ## The attention tradeoff, with numbers
@@ -168,9 +193,19 @@ any length. It means the work parallelizes. The total work still grows
 quadratically, and the constant factors are large. Agents feel this as
 latency on long contexts.
 
-**Linear attention** attacks the bill. Standard attention computes
-softmax(QK^T)V: every query meets every key. Drop the softmax and
-everything left is linear, so the multiplication can reassociate:
+### Attention variants the agent engineer meets
+
+The O(n^2) bill is paid in the KV cache at inference time, and three
+variants shrink it. **MHA** (multi-head attention) keeps separate keys
+and values per head: the biggest cache. **MQA** (multi-query attention)
+shares one key/value head across all query heads: the smallest cache,
+slightly weaker. **GQA** (grouped-query attention) shares KV heads in
+groups: the middle ground, nearly no quality loss. The cache shrinks by
+the group size.
+
+**Linear attention** attacks the bill differently. Standard attention
+computes softmax(QK^T)V: every query meets every key. Drop the softmax
+and everything left is linear, so the multiplication can reassociate:
 compute K^T V first, then multiply by Q. The new object is the state S,
 a compressed summary that updates per token: save the state, clear
 unimportant memory. Memory is constant, not O(n).
@@ -206,6 +241,8 @@ each changing the data mix:
 
 ![The training ladder](assets/l03-training-ladder.svg "Pretrain on web text. Midtrain toward target domains. Post-train with SFT, RLHF/DPO, RLVR. Train agents on agent data. Project: Stanford Frontier AI. Source: source.")
 
+### Pretraining and midtraining: the data sets the ceiling
+
 **Pretraining:** web-scale text, next-token loss. The pipeline:
 extract text from HTML, deduplicate, identify languages, apply rule and
 quality filters, mix the data. Scale markers from the lecture: The
@@ -213,34 +250,57 @@ Pile at 800 GB, Nemotron-CC-Math at 133 billion tokens of math.
 
 **Midtraining:** shift the mix toward target domains like math and
 code. Mixing target data into pretraining helps: the model that will
-write code should read code early.
+write code should read code early. The agent reading: a coding agent
+built on a model midtrained on code inherits the patterns. One built
+on a chat model does not.
 
-**Post-training:** instruction fine-tuning first (teach the format:
-follow instructions), then learning from preferences. RLHF: sample
-responses, have humans rank them, train a reward model, optimize with
-RL. DPO is the direct variant. The preference pair behind it: a prompt,
-a chosen response, a rejected response; the update widens the reward
-gap between them.
+### SFT: teach the format
+
+**Supervised fine-tuning** teaches the model the shape of the job:
+follow instructions, use the tool format, answer in the right schema.
+The data is prompt-response pairs, often written or curated by humans.
+SFT is cheap and fast, and it is the first thing that makes a base
+model usable as an agent core. Its limit: it teaches the format, not
+the judgment. A model can emit perfect tool-call JSON and still call
+the wrong tool.
+
+### RLHF and DPO: learn from preferences
+
+**RLHF** learns from human taste. Sample responses, have humans rank
+them, train a reward model on the rankings, optimize the policy against
+the reward model. **DPO** is the direct variant: skip the reward model
+and optimize the preference pair directly (prompt, chosen, rejected).
 
 Human feedback has traps. Annotators are unreliable. Preferences differ
 across people. The incentives go wrong: sycophancy and
 authoritativeness get rewarded because annotators like confident,
-agreeable answers. The data itself can be sourced unethically.
+agreeable answers. The data itself can be sourced unethically. For
+agents, the deepest trap is that human taste rewards the *appearance*
+of good work: a confident wrong answer outranks a hesitant right one.
 
-**RLVR**, reinforcement learning with verifiable rewards, replaces
-human taste with checkable truth. The reward is 1 if the verifier says
-correct, 0 otherwise. Verifiers: unit tests, Lean proofs, exact match,
-system state. DeepSeekMath showed the pattern. RLVR is great for math
-and code. The work moves to verifier design: a bad verifier teaches
+### RLVR: replace taste with truth
+
+**Reinforcement learning with verifiable rewards** replaces human taste
+with checkable truth. The reward is 1 if the verifier says correct, 0
+otherwise. Verifiers: unit tests, Lean proofs, exact match, system
+state. DeepSeekMath showed the pattern. RLVR is great for math and
+code. The work moves to verifier design: a bad verifier teaches
 reward hacking, because the model optimizes exactly what the verifier
 checks.
+
+For agents, RLVR is the natural fit: agent success is checkable in the
+world. The tests pass, the booking exists, the query returned rows.
+That is why the ladder's top rung is agent training.
+
+### Agent training: synthesize the tasks
 
 **Agent training** is the ladder's top rung. SWE-Smith scales data for
 software-engineering agents by synthesizing bug-fix tasks: take real
 repos, inject bugs, generate fix tasks with tests. The agent learns the
 full loop: read the issue, explore the repo, edit, run tests. The
 pattern generalizes: any agent skill can be trained by synthesizing
-tasks with verifiable outcomes in a sandbox.
+tasks with verifiable outcomes in a sandbox. The loop from the intro
+lesson becomes the training environment.
 
 ## Inference: prefill, decode, and the draft trick
 
@@ -261,6 +321,19 @@ Long agent trajectories are decode-heavy: many short generations, each
 paying memory bandwidth. Every token kept in context is bandwidth paid
 per decode step. Context engineering is inference engineering.
 
+### The KV cache, priced
+
+The cache is 2 (keys and values) times layers times tokens times
+dimension times bytes per number. Worked for a 32-layer model, 4,096
+tokens, 4,096 dimensions, fp16:
+
+![The KV cache, priced](assets/l03-kv-math.svg "2 x 32 layers x 4096 tokens x 4096 dims x 2 bytes = 2.0 GiB. Every context token is memory paid per decode step. Project: Stanford Frontier AI. Source: original.")
+
+2.0 GiB for one sequence's cache. Decode reads all of it per generated
+token, which is why the step is memory-bound. Halve the context and
+you halve the bandwidth tax on every future token. GQA, MQA, and MLA
+shrink what is stored. The formula stays the same.
+
 **Speculative decoding** attacks the decode bottleneck. A small draft
 model proposes tokens cheaply. The big target model verifies them in
 one parallel pass. Accept the longest correct prefix, repeat.
@@ -273,14 +346,32 @@ long prefixes. Creative text drafts poorly. Agent loops emit many
 short, structured generations: exactly the workload where a draft model
 earns its keep.
 
+## What is used where: the engine under the agents
+
+| Model | Attention | KV strategy | Why |
+|---|---|---|---|
+| Llama 3 | GQA | grouped KV heads shrink the cache | open weights; the cache fits longer contexts |
+| Mistral 7B | sliding window + GQA | O(n x w) attention | long context on a budget |
+| DeepSeek-V3/R1 | MLA | latent KV cache, not full K/V | 671B params servable; compression by rank |
+| Kimi K3 | MLA + linear attention mix | exact where it matters, linear where cheap | recall where needed, speed everywhere else |
+| GPT-4 class [uncertain: not public] | full attention (reported) | scale pays the bill | generation quality first |
+
+The agent engineer reads this table as a context-budget table. A GQA
+model serves your 128K context cheaper than an MHA one. A linear-mix
+model needs its critical facts kept recent. The architecture is the
+price list.
+
 ## Mapping back: what each piece gives the agent engineer
 
 | Engine fact | Agent decision it drives |
 |---|---|
 | Sampling turns scores into text | Cool for acting (tool calls must be steady), warm for thinking (plans need variety) |
+| Temperature reshapes before truncation | Set temperature and top-p as a pair; high T with tight top-p is diverse but sane |
 | Attention costs O(n^2) | Context budgets, compaction, retrieval instead of stuffing |
+| KV cache is 2 x layers x tokens x dims x bytes | Every context token is bandwidth per decode step; 2 GiB at 4K tokens for a 32-layer model |
 | Linear layers compress history | Keep critical facts recent or retrieved; test recall at your length |
 | Loss = -log p(true token) | Low loss on code predicts code well; midtraining on code helps coding agents |
+| SFT teaches format, not judgment | Perfect tool-call JSON can still call the wrong tool |
 | RLVR rewards verifiable outcomes | Train agents on what the world confirms: tests pass, the file exists |
 | Prefill is parallel, decode is a loop | Agent loops are decode-heavy; every context token is bandwidth per step |
 | Draft-then-verify | Structured agent outputs draft well; speculative decoding cuts loop latency |
@@ -291,7 +382,7 @@ The engine's prices are all in this chapter. Attention is quadratic:
 16.7 million scores per layer per head at n = 4,096, and the memory,
 not the arithmetic, is the bottleneck. Decode is memory-bound: long
 contexts tax every future token. Linear attention dodges the bill but
-pays in recall. RLHF buys alignment but risks sycophancy; RLVR fixes
+pays in recall. RLHF buys alignment but risks sycophancy. RLVR fixes
 the reward but moves the work to verifier design, and a weak verifier
 teaches reward hacking.
 
@@ -305,15 +396,27 @@ training instead of trusting it.
 
 > [!QA]
 > Q: When would you raise the temperature in an agent, and when would you lower it?
-> A: Raise it for the open-ended parts: drafting summaries, brainstorming query rewrites, generating diverse candidate plans. Lower it for tool calls and structured output, where a wrong token breaks the schema. The worked demo shows why: at T=2 the probabilities [0.7, 0.2, 0.1] flatten to [0.52, 0.28, 0.20], giving the tail a real chance; at T=0.5 they sharpen to [0.91, 0.07, 0.02]. One agent can run two temperatures in one loop: cool for acting, warm for thinking.
+> A: Raise it for the open-ended parts: drafting summaries, brainstorming query rewrites, generating diverse candidate plans. Lower it for tool calls and structured output, where a wrong token breaks the schema. The worked demo shows why: at T=2 the probabilities [0.7, 0.2, 0.1] flatten to [0.52, 0.28, 0.20], giving the tail a real chance. At T=0.5 they sharpen to [0.91, 0.07, 0.02]. One agent can run two temperatures in one loop: cool for acting, warm for thinking.
 > Follow-up: Why not always use beam search for the best answer?
 > A: Cost. Beam search multiplies time and memory by the beam width, and every extra token in an agent loop is latency the user feels. It also cannot fix a bad model: it finds the most likely path under a flawed distribution. Spend the budget on better checks instead of wider beams.
+
+> [!QA]
+> Q: Walk me through what happens to logits [2.0, 1.0, 0.5] at T = 0.5 and T = 2.
+> A: Three steps: scale by temperature, softmax, sample. At T = 0.5 the scaled scores are [4, 2, 1]. Exponentiated and normalized they give [0.84, 0.11, 0.04]: the leader takes 84 percent, nearly greedy. At T = 2 the scaled scores are [1, 0.5, 0.25]. Normalized: [0.48, 0.29, 0.23]: the tail takes 23 percent. Same logits, different behavior. Then top-k or top-p truncates before the draw, so set temperature and truncation as a pair.
+> Follow-up: Why does low temperature with loose top-p behave like greedy?
+> A: Because the truncation never binds. At T = 0.5 the leader already holds 0.84 of the mass, so a loose top-p cutoff keeps tokens the draw will almost never pick. The dial that matters is the one that changes the distribution before sampling. Temperature reshapes. Top-p cuts. Sampling draws.
+
+> [!QA]
+> Q: Price the KV cache for a 32-layer model at 4,096 tokens.
+> A: 2 (keys and values) x 32 layers x 4,096 tokens x 4,096 dims x 2 bytes (fp16) = 2,147,483,648 bytes, about 2.0 GiB for one sequence. Decode reads this cache once per generated token, which is why decode is memory-bound: the bottleneck is moving the cache, not the arithmetic. Halve the context and you halve the bandwidth tax on every future token.
+> Follow-up: How do GQA and MLA change this number?
+> A: They shrink what is stored, not the formula. GQA shares KV heads across query groups, cutting the cache by the group size. MLA compresses keys and values into a latent vector per token. The bill is still 2 x layers x tokens x stored-dims x bytes. The variants reduce stored-dims.
 
 > [!QA]
 > Q: Your agent needs a 200k-token context. The model mixes global and linear attention. What do you watch for?
 > A: The linear layers compress history into a fixed-size state, so fine detail from early in the context degrades. RULER-style benchmarks show this recall gap against full attention. Design around it: keep critical facts in recent context or in retrieval rather than buried at the start, and test recall at your actual context length instead of trusting the headline number.
 > Follow-up: Why not use pure linear attention everywhere?
-> A: Quality on long-context recall drops. Softmax attention lets every token reference every prior token exactly; linear attention trades that exactness for O(n) time and constant memory. The mixed design, as in Kimi K3, keeps exact attention where it matters most and linear attention where it is cheap.
+> A: Quality on long-context recall drops. Softmax attention lets every token reference every prior token exactly. Linear attention trades that exactness for O(n) time and constant memory. The mixed design, as in Kimi K3, keeps exact attention where it matters most and linear attention where it is cheap.
 
 > [!QA]
 > Q: Why is RLVR a better fit for agent training than RLHF?
@@ -327,31 +430,56 @@ training instead of trusting it.
 > Follow-up: How does speculative decoding help, and when does it not?
 > A: A small draft model proposes tokens cheaply and the big model verifies them in one parallel pass, accepting the longest correct prefix. It helps when the output is predictable: structured tool calls with fixed schemas draft well. It does not help on unpredictable text, where the target rejects most proposals and the draft cost is wasted.
 
+> [!QA]
+> Q: SFT, RLHF, RLVR: what does each one buy the agent builder, and what does each fail to buy?
+> A: SFT teaches the format: instruction following, tool-call JSON, the right schema. It is cheap and fast, but it teaches shape, not judgment: perfect JSON can call the wrong tool. RLHF teaches preferences: tone, helpfulness, style. It drifts into sycophancy because annotators reward confident, agreeable answers. RLVR teaches verifiable outcomes: the tests pass, the proof checks. It cannot be flattered, but it moves all the work to verifier design, and a weak verifier teaches reward hacking. For agents, the stack is: SFT for the interface, RLVR for the outcomes, and human taste only where no check exists.
+> Follow-up: Where does agent training with synthesized tasks fit?
+> A: On top of RLVR. SWE-Smith synthesizes bug-fix tasks from real repos with tests as the verifier, so the agent trains on the full loop: read the issue, explore, edit, run tests. The pattern generalizes: any agent skill becomes trainable once you can synthesize tasks with verifiable outcomes in a sandbox.
+
 ## Recap: the whole lesson on one screen
 
-The story in eight steps. Each step answers the one before it.
+The story in nine steps. Each step answers the one before it.
 
 1. **Two daily decisions.** How the model picks tokens, and what each
    token costs. Same loop, different sampling, different behavior.
 2. **The model is a distribution.** p(sequence) is the product of
    next-token probabilities. Sampling turns the scores into text.
-3. **Greedy is frozen; temperature is a dial.** [0.7, 0.2, 0.1]
-   becomes [0.91, 0.07, 0.02] at T=0.5 and [0.52, 0.28, 0.20] at T=2.
-   Cool for acting, warm for thinking.
+3. **Logits to tokens in three steps.** Scale by T, softmax, sample.
+   [2.0, 1.0, 0.5] becomes [0.84, 0.11, 0.04] at T=0.5 and [0.48, 0.29,
+   0.23] at T=2. Cool for acting, warm for thinking.
 4. **The stack: tokens in, distribution out.** Embedding, N blocks,
    LM head, softmax. The cost lives in the attention layer.
 5. **Attention: O(1) to train, O(n^2) to pay.** 16.7M scores per
-   layer per head at n = 4,096. Linear attention drops the softmax
-   for O(n) and constant memory, and pays in recall.
-6. **Loss is -log p(true token).** The toy: -log10(0.0124) = 1.907.
-   The ladder: pretrain, midtrain, post-train, agent-train. The
-   corpus sets the ceiling; the mix sets the shape.
-7. **RLVR beats RLHF for agents.** Human taste drifts into
+   layer per head at n = 4,096. GQA shares KV heads, MLA compresses
+   them, linear attention drops the softmax for O(n) and pays in recall.
+6. **The KV cache is 2 GiB at 4K tokens.** 2 x 32 x 4096 x 4096 x 2
+   bytes. Decode reads it per token: memory-bound.
+7. **Loss is -log p(true token).** The toy: -log10(0.0124) = 1.907.
+   The ladder: pretrain, midtrain, SFT, RLHF/DPO, RLVR, agent-train.
+   The corpus sets the ceiling. The mix sets the shape.
+8. **RLVR beats RLHF for agents.** Human taste drifts into
    sycophancy. Verifiable rewards (tests, proofs) cannot be
    flattered. Weak verifiers teach reward hacking.
-8. **Prefill is parallel; decode is a loop.** The KV cache grows
-   O(n). Speculative decoding drafts cheap and verifies in one
-   pass. Every context token is bandwidth per decode step.
+9. **Prefill is parallel. Decode is a loop.** Speculative decoding
+   drafts cheap and verifies in one pass. Every context token is
+   bandwidth per decode step.
+
+## Go deeper
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/IvhTJ0UQIQU" title="How LLMs Actually Choose the Next Word" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- How LLMs Actually Choose the Next Word (the embed above): https://www.youtube.com/watch?v=IvhTJ0UQIQU, temperature with real numbers, top-k versus top-p, greedy versus beam search, and self-consistency.
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/k37FDxGyCt4" title="Next-Token Prediction: How LLMs Actually Think" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- Next-Token Prediction: How LLMs Actually Think (the embed above): https://www.youtube.com/watch?v=k37FDxGyCt4, softmax, temperature, KV caching, and speculative decoding in one pass.
+
+Further:
+- Hugging Face, Decoding Strategies in Large Language Models: https://huggingface.co/blog/mlabonne/decoding-strategies, the sampling menu in depth.
+- DeepSeekMath paper: https://arxiv.org/abs/2402.03300, the RLVR pattern the lecture cites.
+- Kimi K3 technical report: the mixed global-plus-linear architecture the lecture cites. [uncertain: exact report URL. Search "Kimi K3 technical report".]
 
 ## Official sources and further reading
 
@@ -360,18 +488,19 @@ The story in eight steps. Each step answers the one before it.
 - Course site: http://web.stanford.edu/class/cs329z.
 
 **Further reading:**
-- Kimi K3 technical report: the mixed global-plus-linear architecture
-  the lecture cites.
 - RULER benchmark: long-context recall measurements behind the linear
   attention caveat.
 - SWE-smith paper (2025): scaling software-engineering agent data.
-- Hugging Face decoding-strategies blog: the sampling menu in depth.
+- Vaswani et al. (2017): https://arxiv.org/abs/1706.03762, the
+  attention the whole lesson prices.
 
 **Caveats from these sources.** The toy probabilities and the 1.907
 loss are the lecture's own numbers (the loss uses log base 10 as
 written on the slide). The RULER and Kimi K3 figures are cited
 qualitatively in the slides without exact numbers, so none are quoted.
-No video ID is on record.
+The 2.0 GiB cache figure is worked arithmetic for a 32-layer, 4096-dim
+model, not a measurement. No lecture video is on record. The embeds
+above are third-party explainers, verified live.
 
 ## Connections to the other courses
 

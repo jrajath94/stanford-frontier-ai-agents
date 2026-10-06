@@ -270,6 +270,47 @@ the nearest centroids. **PQ** (product quantization): compress each
 vector into a short code. **HNSW** (hierarchical navigable small
 world): a multi-layer proximity graph.
 
+### IVF: cluster the index, probe a few clusters
+
+IVF turns one big scan into a few small ones. Cluster the N vectors
+into C centroids at index time (C = 1024 is typical for a million
+vectors). At query time, find the nearest few centroids and scan only
+their clusters. Worked on a toy: 1,000,000 vectors, 1,024 clusters,
+probe 8 nearest clusters:
+
+```ascii
+per cluster:  1,000,000 / 1,024 = ~976 vectors
+query scans:  8 clusters x 976 = ~7,800 vectors
+speedup:      1,000,000 / 7,800 = ~128x
+```
+
+The price: the true nearest neighbor can sit in an unprobed cluster.
+Probe more clusters and recall rises. The knob is the probe count.
+IVF needs the clustering step (k-means over the index), unlike HNSW.
+
+### PQ: compress each vector into a short code
+
+PQ attacks the memory instead of the scan. A 768-dimension float32
+vector is 3,072 bytes. PQ splits the vector into M subvectors (M = 96
+is typical for 768 dims), quantizes each subvector to one of 256
+centroids, and stores one byte per subvector:
+
+```ascii
+768 floats x 4 bytes = 3,072 bytes per vector (raw)
+96 subvectors x 1 byte = 96 bytes per vector (PQ)
+compression: 3,072 / 96 = 32x
+1M vectors: 3 GB -> 96 MB
+```
+
+Distances are computed against the 256 centroids per subvector via
+lookup tables, so the query is fast too. The price is quantization
+error: the compressed vectors are approximations, so PQ is often
+paired with a re-rank on the raw vectors of the shortlist. The
+standard production combo is IVF plus PQ: cluster first, compress
+second, re-rank third.
+
+![IVF plus PQ](assets/l06-ivf-pq.svg "IVF: probe 8 of 1024 clusters, scan 7,800 of 1,000,000 vectors, 128x faster. PQ: 3,072 bytes to 96 bytes per vector, 32x smaller. Project: Stanford Frontier AI. Source: original.")
+
 ### HNSW: the graph behind the search
 
 All vectors sit at the bottom layer, thinner samples above. Search
@@ -287,7 +328,7 @@ slower query, better recall). For agent workloads, HNSW is the default
 because it needs no training (unlike IVF) and queries in milliseconds
 at billion-vector scale. Every managed vector store runs it underneath.
 
-## Scoring the retriever: what each metric rewards
+## Retrieval metrics: what each one rewards
 
 Same top-5 list, different questions about it. The figure's list has
 relevant passages at ranks 1 and 3.
@@ -296,6 +337,9 @@ relevant passages at ranks 1 and 3.
 
 Two queries make the differences concrete. Q1: first relevant passage
 at rank 1. Q2: first relevant at rank 3.
+
+The names first: MRR is mean reciprocal rank. nDCG is normalized
+discounted cumulative gain.
 
 ```ascii
 Hit@5:    any relevant passage in the top 5?
@@ -313,6 +357,27 @@ nDCG@5:   DCG = sum rel_i / log2(i+1); normalized by the ideal ranking
           rank position is discounted smoothly
 Failed@k = 1 - Hit@k: queries with nothing relevant in the top k
 ```
+
+Work nDCG on a toy where the top-5 list has relevance grades 3 at
+rank 1 and 2 at rank 3 (other positions irrelevant):
+
+```ascii
+DCG  = 3 / log2(1+1) + 2 / log2(3+1)
+     = 3 / 1 + 2 / 2
+     = 4.0
+IDCG = ideal order: 3 first, then 2
+     = 3 / log2(2) + 2 / log2(3)
+     = 3 + 1.262
+     = 4.262
+nDCG = 4.0 / 4.262 = 0.94
+```
+
+The log2 discount is the mechanism: rank 1 pays no discount, rank 3
+pays log2(4) = 2, so a grade-2 passage at rank 3 contributes 1.0
+instead of 2.0. Move that grade-2 passage to rank 2 and the DCG rises
+to 3 + 2/1.585 = 4.262: the ideal, nDCG = 1.0. This is why nDCG is
+the metric for ranked quality, not just presence: it scores the
+whole ordering, smoothly.
 
 Hit@k asks "did we find anything". MRR asks "how far down did the
 user scroll". Recall asks "did we find all of it". nDCG asks "how good
@@ -448,6 +513,11 @@ The story in nine steps. Each step answers the one before it.
 <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/t5zTNqe0Jck" title="Hybrid Search And RRF" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 - Hybrid Search And RRF (the embed above): https://www.youtube.com/watch?v=t5zTNqe0Jck, why dense misses rare terms, BM25 misses meaning, and RRF fuses ranks in seven lines of Python.
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/D5qEFJ8dXxQ" title="Hybrid Search Explained: Keyword plus Semantic for Better RAG" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- Sukrid LearnHub, Hybrid Search Explained (the embed above): https://www.youtube.com/watch?v=D5qEFJ8dXxQ, BM25 and dense side by side, RRF versus score fusion, cross-encoder reranking as the third stage.
 
 Further:
 - Karpukhin et al. (2020), DPR: https://arxiv.org/abs/2004.04906, training with in-batch and BM25 hard negatives.

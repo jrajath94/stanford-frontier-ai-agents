@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="600" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the data wall</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. The web weakens; the checker becomes the moat. Source: original synthesis of the session.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT checkers: the wall</text>
+<text x="328" y="124">the stored object: the checker</text>
+<text x="648" y="124">WITH checkers: code leads</text>
+</g>
+<g font-size="14" font-weight="500">
+<rect x="48" y="140" width="264" height="330" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="180" y="180" text-anchor="middle" fill="#1B2838">internet text tapped out</text>
+<text x="180" y="204" text-anchor="middle" fill="#5C6B7A">the frontier is reached</text>
+<text x="180" y="244" text-anchor="middle" fill="#1B2838">35% of pages AI-authored</text>
+<text x="180" y="268" text-anchor="middle" fill="#5C6B7A">Pew, July 2026 sample</text>
+<text x="180" y="308" text-anchor="middle" fill="#1B2838">bots overtook humans</text>
+<text x="180" y="332" text-anchor="middle" fill="#5C6B7A">Cloudflare, May 2026</text>
+<text x="180" y="372" text-anchor="middle" fill="#1B2838">snake eats its own tail</text>
+<text x="180" y="396" text-anchor="middle" fill="#5C6B7A">collapse toward the average</text>
+<rect x="328" y="140" width="304" height="330" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="480" y="200" text-anchor="middle" fill="#1B2838" font-size="20" font-weight="600">unit tests</text>
+<text x="480" y="226" text-anchor="middle" fill="#5C6B7A">pass is 1, fail is 0</text>
+<text x="480" y="266" text-anchor="middle" fill="#1B2838" font-size="24" font-weight="600">+</text>
+<text x="480" y="316" text-anchor="middle" fill="#1B2838" font-size="20" font-weight="600">RLVR</text>
+<text x="480" y="342" text-anchor="middle" fill="#5C6B7A">free, loud, ungameable</text>
+<text x="480" y="382" text-anchor="middle" fill="#1B2838">cannot be flattered</text>
+<text x="480" y="406" text-anchor="middle" fill="#5C6B7A">you cannot flatter a unit test</text>
+<text x="480" y="440" text-anchor="middle" fill="#5C6B7A">taste has no checker</text>
+<rect x="648" y="140" width="264" height="330" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="180" text-anchor="middle" fill="#1B2838">code: verifiable rewards</text>
+<text x="780" y="204" text-anchor="middle" fill="#5C6B7A">compiles or it does not</text>
+<text x="780" y="244" text-anchor="middle" fill="#1B2838">tokens are abundant</text>
+<text x="780" y="268" text-anchor="middle" fill="#5C6B7A">synthetic data forever</text>
+<text x="780" y="308" text-anchor="middle" fill="#1B2838">code is general</text>
+<text x="780" y="332" text-anchor="middle" fill="#5C6B7A">"AGI-complete"</text>
+<text x="780" y="372" text-anchor="middle" fill="#1B2838">R1 reasoning: ~5%</text>
+<text x="780" y="396" text-anchor="middle" fill="#5C6B7A">of the pre-training spend</text>
+<text x="780" y="436" text-anchor="middle" fill="#1B2838">build checkers for business</text>
+</g>
+<rect x="48" y="486" width="864" height="56" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="521" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: superhuman at anything with a checker, merely good at everything else. Synthetic data risks collapse.</text>
+<text x="48" y="578" font-size="15" font-weight="500" fill="#1B2838">One connection: whoever owns the verifier owns the domain. Enterprise value lives in building checkers.</text>
+</svg>

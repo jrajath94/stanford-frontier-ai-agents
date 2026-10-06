@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 1: From Electrons to Tokens — Stanford Frontier AI</title>
+<meta name="description" content="Why the five hyperscalers are spending ~$730B: the AI production function, the Cobb-Douglas growth equation, digital labor as the first digitally scalable labor">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="mse435-l01" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01" class="active">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">MS&amp;E 435: Economics of the AI Supercycle</a> / Lecture 1: From Electrons to Tokens</nav>
+      <h1>Lecture 1: From Electrons to Tokens</h1>
+      <p class="meta-line">2026-04 · Instructor: Apoorv Agrawal · Spring 2026</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="GcCGzfKdCd0"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/GcCGzfKdCd0" title="Building AI Factories" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Guest: Chase Lochmiller, Co-Founder and CEO of Crusoe. Session covers infrastructure and building AI factories at gigawatt scale.</p></div><h3 id="coverage-and-sourcing">Coverage and sourcing</h3>
+<p>This lesson follows one session: &ldquo;Building AI Factories,&rdquo; the
+MS&amp;E 435 (Economics of the AI Supercycle, Spring 2026,
+instructor Apoorv Agrawal) session with guest Chase
+Lochmiller, co-founder and CEO of Crusoe, on infrastructure
+and building AI factories at gigawatt scale. It also uses
+the course site&rsquo;s framing of AI as &ldquo;the biggest technology
+supercycle since the PC, Internet, and Mobile.&rdquo; Figures and
+claims marked &ldquo;October 2026&rdquo; are updates added after the
+session, each with its source. No transcript or captions
+exist for the video, so segment-level mapping of claims to
+timestamps is not possible. The coverage map at the end of
+the chapter maps every major session claim to the section
+that covers it instead.</p>
+<h2 id="the-chart-that-opens-the-course">The chart that opens the course</h2>
+<p>The first session opens on one chart. It plots the capital
+expenditure of the five hyperscalers on AI, and the line goes up
+and to the right, fast. <strong>CapEx</strong> means capital expenditure:
+money spent to build long-lived assets, not to run the business
+day to day. A <strong>hyperscaler</strong> is one of the giant cloud
+operators: Amazon, Alphabet, Meta, Microsoft, and Oracle. To put
+the scale in context, the host frames it as one of the largest
+investments ever made: bigger than the space program, bigger
+than the interstate highway system, bigger than the Manhattan
+Project. Second only to the United States defense budget.</p>
+<p>The natural question is the one the host puts to the guest:
+when the hyperscalers spend on the order of $650 billion
+building data centers, where does that money actually go?</p>
+<p>A <strong>megawatt</strong> is one million watts of power draw. It is
+the unit price of the whole business: the substation, the
+cooling plant, and the rack count are all priced per
+megawatt. Think of it as the &ldquo;per seat&rdquo; of the data center
+business.</p>
+<p>This chapter builds the answer from zero. It starts with what
+it takes to produce AI at all, then shows why the spending is
+rational under one economic model, then follows the money down
+into the physical stack: the power path, the cooling path, the
+steel, the concrete, and the hands. Three anchor numbers to
+hold: about $20M per MW for the factory, about $40M per MW
+for the machines, and a 4-year payback renting chips. It ends
+by checking whether the $60 million megawatt earns its keep.
+The next chapter prices the depreciation debate this chapter
+opens. <strong>Depreciation</strong> is how an asset&rsquo;s cost is spread
+over its useful life: the fight is over how many years a GPU
+stays valuable.</p>
+<h3 id="subchapter-the-chart-updated-to-october-2026">Subchapter: the chart, updated to October 2026</h3>
+<p>The session&rsquo;s $650B framing is a host&rsquo;s estimate from spring
+2026. What happened next made the chart steeper, not flatter.
+Three of the four largest hyperscalers raised their 2026
+guidance mid-year. Latest full-year guidance as of September
+2026:</p>
+<table>
+<thead>
+<tr>
+<th>Company</th>
+<th>2025 actual</th>
+<th>2026 guidance</th>
+<th>Year over year</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon</td>
+<td>~$128B</td>
+<td>~$220B</td>
+<td>+72%</td>
+</tr>
+<tr>
+<td>Alphabet</td>
+<td>~$91B</td>
+<td>$195-205B</td>
+<td>~+115%</td>
+</tr>
+<tr>
+<td>Meta</td>
+<td>~$72B</td>
+<td>$130-145B</td>
+<td>~+90%</td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td>~$118B</td>
+<td>~$175B</td>
+<td>+48%</td>
+</tr>
+<tr>
+<td><strong>Combined</strong></td>
+<td><strong>~$410B</strong></td>
+<td><strong>~$730B</strong></td>
+<td><strong>+78%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Sources: company earnings calls and 10-K filings (a 10-K is
+the audited annual report a US public company must file with
+the SEC), via valueaddvc and financial press, July-September
+2026. Oracle,
+the fifth hyperscaler, guides about $70B of net cash capex
+for fiscal 2027. Gross spend runs $90-95B. The $20-25B gap
+is customer prepayments netted against the build: customers
+partly finance the factory they will later rent
+(Q1 FY2027 earnings call, September 2026). For scale, the
+four companies spent a combined $141B in 2023.
+The 2026 figure is 5.2 times that. Goldman Sachs credit
+strategists put the 2027 combined bill near $1.14 trillion
+(July 2026), later raising the base case to about $1.2
+trillion with upside to $1.4 trillion. Treat that as
+an analyst estimate, not a promise.</p>
+<p>Two footnotes keep the table honest. Microsoft&rsquo;s $175B is
+calendar-2026 capex including finance leases. A <strong>finance
+lease</strong> is a lease accountants treat like a purchase: the
+asset sits on the company&rsquo;s books. An <strong>operating lease</strong> is
+treated as rent: it stays off the balance sheet. The number
+looks smaller than an earlier ~$190B figure only because more
+future data-center leases now count as operating leases, not
+because the build shrank. And Amazon&rsquo;s trailing-twelve-month
+<strong>free cash flow</strong>, the cash left after paying for operations
+and capital spending, swung from an $18.2B inflow to a $7.6B
+outflow in the second quarter of 2026 as the spending
+accelerated (Amazon Q2 2026 earnings, July 30, 2026): the
+money is real, and it is being spent ahead of the revenue.</p>
+<p>In July 2026, Census data put US private data-center
+construction at a $75.2 billion annualized pace, up 57%
+year over year, and the sector accounted for essentially
+all of that month&rsquo;s nonresidential construction growth.
+A broader measure, private data-center outlays plus IT
+equipment, pulled ahead of residential construction
+investment for the first time in modern records. The
+thesis from the session held up: the money kept flowing, and
+it flowed to the three inputs this chapter identifies.</p>
+<h2 id="the-ai-production-function">The AI production function</h2>
+<p>Before the money, the recipe. The guest, Chase Lochmiller of
+Crusoe, starts with a plain question: what does it take to
+produce AI? His answer is an equation with five ingredients,
+and the money lands on only three of them.
+A <strong>production function</strong> is an economist&rsquo;s recipe: the list
+of inputs a process needs, and what each one does. Decision
+rule for the rest of the chapter: money flows to the inputs
+that gate output, never to the inputs that do not.</p>
+<pre class="ascii">AI = data + algorithms + compute + energy + data centers
+</pre>
+<p>Four of the algorithm words need definitions now. A
+<strong>neural network</strong> is a computing model built from layers
+of simple math units that learns patterns from examples.
+<strong>Training</strong> is the phase that teaches a neural network:
+one giant compute run that sets the model&rsquo;s internal
+numbers, done once. <strong>Backpropagation</strong> is the algorithm
+that trains a neural network: it measures the error at
+the output and pushes corrections backward through the
+layers. A <strong>transformer</strong> is the neural network
+architecture behind modern language models: the design
+that made large-scale training work.</p>
+<table>
+<thead>
+<tr>
+<th>Ingredient</th>
+<th>Plain meaning</th>
+<th>Economic role</th>
+<th>$/MW</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>the text, images, and labels models learn from</td>
+<td>raw material</td>
+<td>no per-MW price</td>
+</tr>
+<tr>
+<td>algorithms</td>
+<td>backpropagation, neural networks, transformers</td>
+<td>process technology</td>
+<td>no per-MW price</td>
+</tr>
+<tr>
+<td>compute</td>
+<td>GPUs doing parallel tensor math at high speed</td>
+<td>machinery</td>
+<td>about $40M</td>
+</tr>
+<tr>
+<td>energy</td>
+<td>the electricity that runs the GPUs</td>
+<td>fuel</td>
+<td>about $20M, combined with data centers</td>
+</tr>
+<tr>
+<td>data centers</td>
+<td>the buildings that house and cool the machines</td>
+<td>factory buildings</td>
+<td>about $20M, combined with energy</td>
+</tr>
+</tbody>
+</table>
+<p>Read each ingredient the way an economist reads an input to a
+factory. <strong>Data</strong> is raw material. Scale AI buys and labels
+it. The transcript names a second company that sounds like
+&ldquo;Merkur&rdquo;: the match is Mercor, the AI talent marketplace
+that routes 300,000+ vetted experts to labs like OpenAI,
+Google, Meta, Microsoft, Amazon, and Nvidia, paying out over
+$4M a day (Mercor company statements, September 2026). CEO
+Brendan Foody said the annualized revenue run rate crossed
+$2B in July 2026 (reported by Forbes, July 2026), after a
+$350M Series C at a $10B valuation in October 2025, led by
+Felicis. A <strong>Series C</strong> is a startup&rsquo;s third priced
+venture-capital round: the letters run Seed, A, B, C, and
+later letters mean later, larger raises, so a Series F sits
+three rounds after a Series C. The market
+now prices neutrality: Meta&rsquo;s $14.3B Scale AI investment in
+June 2025 pushed OpenAI and Google to cut ties over
+independence concerns. Handshake is the third name in the
+transcript. <strong>Algorithms</strong> are the process
+technology, invented mostly inside the research labs: new
+architectures, recursive learning techniques, better ways to
+use the data. <strong>Compute</strong> is the machinery: large numbers of
+GPUs running the same math in parallel. <strong>Energy</strong> is the
+fuel. <strong>Data centers</strong> are the factory buildings.</p>
+<h3 id="subchapter-data-and-algorithms-the-unspent-inputs">Subchapter: data and algorithms, the unspent inputs</h3>
+<p>Data and algorithms are real costs, but they do not absorb
+CapEx at the factory scale. Data labeling is a services
+business with thin margins and no capacity constraint that
+gates anything. Algorithms are labor costs inside labs: a few
+hundred researchers, salaries in the millions, against a
+$60B-per-gigawatt build. The guest&rsquo;s point is about marginal
+bottlenecks: doubling the data budget buys no AI factory.
+Doubling the energy budget buys a gigawatt of output. Money
+flows to the inputs that gate output, and those are the last
+three.</p>
+<h3 id="subchapter-compute-energy-data-centers-where-the-money-lands">Subchapter: compute, energy, data centers, where the money lands</h3>
+<p>The last three inputs share one property: each is bought by
+the megawatt, defined at the top of this chapter. The
+session prices it exactly: about $20M per MW for the factory
+(the building plus the power plant) and about $40M per MW
+for the machines inside. The production function is a menu.
+The megawatt is the unit price. This chapter&rsquo;s longest
+section opens each of those dollars.</p>
+<h2 id="the-growth-equation">The growth equation</h2>
+<p>The guest reaches for a classic economics model to explain
+the bet. It is called the <strong>Cobb-Douglas</strong> model of
+production, and it decomposes the growth of an economy into
+three additive parts. Douglas and Cobb published it in 1928.
+A century later it still frames how economists split growth
+into its causes.</p>
+<p>The guest&rsquo;s intuitive version:</p>
+<pre class="ascii">GDP growth = change in labor + change in capital + change in technology
+
+labor       more workers, or more productive hours
+capital     buildings, plants, equipment, invested money
+technology  ideas that make labor more productive
+</pre>
+<p>The textbook&rsquo;s formal version, for the record, is
+multiplicative: output = A x K^a x L^b, where A is
+technology, K is capital, L is labor, and the exponents are
+each input&rsquo;s share of output. In growth rates that becomes:
+GDP growth = tech growth + a x (capital growth) + b x (labor
+growth). The guest uses the simple additive form. The
+formal form agrees with his point: labor&rsquo;s contribution is
+its share of output, about 0.6 in the US, times how fast the
+workforce grows.</p>
+<p>A <strong>supercycle</strong> is a long wave of investment driven by a
+general-purpose technology: the PC, the internet, mobile,
+and now AI. The course site names AI &ldquo;the biggest technology
+supercycle since the PC, Internet, and Mobile.&rdquo; The
+Cobb-Douglas frame says a supercycle earns its name when it
+moves one of the three terms hard.</p>
+<p>Technology gets most of the press. The guest&rsquo;s argument is
+about labor. Historically, the labor term could only change
+through the birth rate: a 20-year lead time, because a new
+worker must be born, raised, schooled, fed, and housed
+before producing anything. Labor was the slow term. Capital
+could move fast. Labor could not.</p>
+<figure><img alt="The growth equation, and the capped labor term" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBncm93dGggZXF1YXRpb24sIGFuZCB0aGUgY2FwcGVkIHRlcm08L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI5NiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzVDNkI3QSI+R0RQIGdyb3d0aCA9IGNoYW5nZSBpbiBsYWJvciArIGNoYW5nZSBpbiBjYXBpdGFsICsgY2hhbmdlIGluIHRlY2hub2xvZ3kuIFNoZWxsIDIuIFNvdXJjZTogb3JpZ2luYWwgdG95LjwvdGV4dD4KPCEtLSB0b3kgLS0+CjxnIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI1MDAiPgo8cmVjdCB4PSI0OCIgeT0iMTM2IiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjEyMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjE4OCIgeT0iMTc2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5sYWJvcjogKzEgcG9pbnQ8L3RleHQ+Cjx0ZXh0IHg9IjE4OCIgeT0iMjA0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjQzQ2QjJDIiBmb250LXNpemU9IjE0Ij5jYXBwZWQgYnkgYmlydGggcmF0ZTwvdGV4dD4KPHRleHQgeD0iMTg4IiB5PSIyMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPjIwLXllYXIgbGVhZCB0aW1lPC90ZXh0Pgo8cmVjdCB4PSIzNDAiIHk9IjEzNiIgd2lkdGg9IjI4MCIgaGVpZ2h0PSIxMjAiIHJ4PSIxMiIgZmlsbD0iI0U3RjRFRiIgc3Ryb2tlPSIjMUY3QTcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNDgwIiB5PSIxNzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmNhcGl0YWw6ICsxIHBvaW50PC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjIwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFGN0E3MiIgZm9udC1zaXplPSIxNCI+bW92ZXMgd2l0aCBtb25leTwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSIyMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmRlcGxveXMgaW4gcXVhcnRlcnM8L3RleHQ+CjxyZWN0IHg9IjYzMiIgeT0iMTM2IiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjEyMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9Ijc3MiIgeT0iMTc2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij50ZWNobm9sb2d5OiArMSBwb2ludDwvdGV4dD4KPHRleHQgeD0iNzcyIiB5PSIyMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmlkZWFzIHRoYXQgbWFrZTwvdGV4dD4KPHRleHQgeD0iNzcyIiB5PSIyMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmxhYm9yIHByb2R1Y3RpdmU8L3RleHQ+CjwvZz4KPCEtLSBhZnRlcjogZGlnaXRhbCBsYWJvciBicmVha3MgdGhlIGNhcCAtLT4KPHRleHQgeD0iNDgiIHk9IjMxNiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzFCMjgzOCI+VGhlbiBkaWdpdGFsIGxhYm9yIGJyZWFrcyB0aGUgY2FwPC90ZXh0Pgo8bGluZSB4MT0iNDgiIHkxPSIzMzYiIHgyPSI5MTIiIHkyPSIzMzYiIHN0cm9rZT0iI0Q5RDNDNyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPGcgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIzNjAiIHdpZHRoPSIyODAiIGhlaWdodD0iODgiIHJ4PSIxMiIgZmlsbD0iI0U3RjRFRiIgc3Ryb2tlPSIjMUY3QTcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMTg4IiB5PSIzOTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmxhYm9yOiArMSBwb2ludDwvdGV4dD4KPHRleHQgeD0iMTg4IiB5PSI0MjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxRjdBNzIiIGZvbnQtc2l6ZT0iMTQiPm5vdyBtb3ZlcyB3aXRoIENhcEV4PC90ZXh0Pgo8cmVjdCB4PSIzNDQiIHk9IjM2MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSI4OCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjQ0NCIgeT0iNDAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5hZ2VudHM8L3RleHQ+Cjx0ZXh0IHg9IjQ0NCIgeT0iNDI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5kb2luZyByZWFsIHdvcms8L3RleHQ+CjxyZWN0IHg9IjU2MCIgeT0iMzYwIiB3aWR0aD0iMzUyIiBoZWlnaHQ9Ijg4IiByeD0iMTIiIGZpbGw9IiNFN0YxRjgiIHN0cm9rZT0iIzFFNEQ4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNzM2IiB5PSIzOTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmdyb3d0aCAzLjAlIOKGkiAzLjUlPC90ZXh0Pgo8dGV4dCB4PSI3MzYiIHk9IjQyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFFNEQ4QyIgZm9udC1zaXplPSIxNCI+KyQwLjUgcHQgZnJvbSB0aGUgZnJlZWQgdGVybTwvdGV4dD4KPC9nPgo8dGV4dCB4PSI0OCIgeT0iNTAwIiBmb250LXNpemU9IjE2IiBmaWxsPSIjMUIyODM4IiBmb250LXdlaWdodD0iNTAwIj5PbmUgY2xhaW06IGxhYm9yIHdhcyB0aGUgb25seSB0ZXJtIHRoYXQgY291bGQgbm90IG1vdmUgb24gYW4gaW52ZXN0bWVudCBob3Jpem9uLiBOb3cgaXQgY2FuLjwvdGV4dD4KPC9zdmc+Cg=="><figcaption>Plate L01-F2. A 3 percent growth split three ways. The labor point is capped by demography. Shell 2. Source: original toy for the Cobb-Douglas decomposition. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-toy-version-with-numbers">Subchapter: the toy version, with numbers</h3>
+<p>Run the toy. Suppose an economy grows 3 percent a year,
+split evenly: 1 point from labor, 1 from capital, 1 from
+technology. The labor point is capped by demography. No
+investment decision made this quarter changes how many
+20-year-olds exist. The term is, for all practical purposes,
+fixed on any horizon a company plans against.</p>
+<p>Now suppose an investment could buy 0.5 points of labor
+growth the way capital buys 1 point. Total growth moves
+from 3 percent to 3.5 percent, and the buyer captures the
+surplus. Compounded over a decade:</p>
+<pre><code>at 3.0%:  1.03^10  = 1.34
+at 3.5%:  1.035^10 = 1.41
+ratio:    1.41 / 1.34 = 1.05
+</code></pre>
+<p>That half point is the difference between $1.34 and $1.41
+on every dollar of GDP: a 5 percent larger economy. The
+$650 billion is a bid on that half point.</p>
+<h3 id="subchapter-why-labor-was-the-slow-term">Subchapter: why labor was the slow term</h3>
+<p>Birth rate is not a dial. Raising a worker costs two decades
+of food, schooling, and housing before the first productive
+hour. The guest jokes that he has three kids: he knows the
+incubation period personally. Immigration moves labor across
+borders but does not create it. Training changes quality,
+not headcount. Every lever on the labor term has a lead
+time measured in years or decades. Capital, by contrast,
+deploys in quarters: a loan becomes a factory. The guest&rsquo;s
+insight is that the asymmetry, not the technology itself,
+is the opportunity.</p>
+<p><strong>The key question:</strong> what if the labor term could be moved
+by an investment decision, the way capital always could?</p>
+<h2 id="digital-labor-the-term-that-became-investable">Digital labor: the term that became investable</h2>
+<p>AI breaks the cap. When you hand a task to a coding agent
+(&ldquo;build a CRM for my new product&rdquo;) and it does the work,
+that is labor being produced. Not a tool assisting a worker.
+Labor itself, created by buying data centers and GPUs. The
+guest&rsquo;s phrase is <strong>digital labor</strong>: the first labor force
+in history whose size changes through an investment
+decision instead of a birth rate.</p>
+<figure><img alt="Digital labor: the labor term becomes an investment decision" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI2NCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPkRpZ2l0YWwgbGFib3I6IHRoZSBsYWJvciB0ZXJtIGJlY29tZXMgaW52ZXN0YWJsZTwvdGV4dD4KPHRleHQgeD0iNjQiIHk9Ijk2IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNUM2QjdBIj5UcmFkaXRpb25hbCBsYWJvciB3YWl0cyBvbiB0aGUgYmlydGggcmF0ZTsgZGlnaXRhbCBsYWJvciBzY2FsZXMgd2l0aCBDYXBFeC4gU2hlbGwgMy4gU291cmNlOiBvcmlnaW5hbC48L3RleHQ+CjwhLS0gbGVmdDogYmVmb3JlIC0tPgo8Zz4KPHJlY3QgeD0iNjQiIHk9IjEzNiIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNjQiIHJ4PSIxMiIgZmlsbD0iI0ZGRkRGOCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSIxOTIiIHk9IjE3MCIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzFCMjgzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+YmVmb3JlOiB0cmFkaXRpb25hbCBsYWJvcjwvdGV4dD4KPHJlY3QgeD0iODAiIHk9IjE4NiIgd2lkdGg9IjIyNCIgaGVpZ2h0PSI1NiIgcng9IjgiIGZpbGw9IiNFN0YxRjgiLz4KPHRleHQgeD0iMTkyIiB5PSIyMTQiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPndvcmtlcnM6IGhlYWRjb3VudDwvdGV4dD4KPHRleHQgeD0iMTkyIiB5PSIyNzQiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiNDNDZCMkMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmNhcHBlZCBieSBiaXJ0aCByYXRlPC90ZXh0Pgo8bGluZSB4MT0iODgiIHkxPSIzMTIiIHgyPSIyOTYiIHkyPSIzMTIiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPGxpbmUgeDE9Ijg4IiB5MT0iMzA4IiB4Mj0iODgiIHkyPSIzMTYiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPGxpbmUgeDE9IjI5NiIgeTE9IjMwOCIgeDI9IjI5NiIgeTI9IjMxNiIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSI4OCIgeT0iMzM2IiBmb250LXNpemU9IjEzIiBmaWxsPSIjNUM2QjdBIj5iaXJ0aDwvdGV4dD4KPHRleHQgeD0iMjk2IiB5PSIzMzYiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiM1QzZCN0EiIHRleHQtYW5jaG9yPSJlbmQiPmZpcnN0IHByb2R1Y3RpdmUgaG91cjwvdGV4dD4KPHRleHQgeD0iMTkyIiB5PSIzNjAiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmxlYWQgdGltZSAmIzg3NzY7IDIwIHllYXJzPC90ZXh0Pgo8dGV4dCB4PSIxOTIiIHk9IjM4NCIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzVDNkI3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZXZlcnkgbGV2ZXIgdGFrZXMgeWVhcnMgb3IgZGVjYWRlczwvdGV4dD4KPC9nPgo8IS0tIGNoZXZyb24gYmVmb3JlIC0+IHJ1bGUgLS0+Cjxwb2x5Z29uIHBvaW50cz0iMzI4LDI2MCAzNDQsMjY4IDMyOCwyNzYiIGZpbGw9IiMxQjI4MzgiLz4KPCEtLSBjZW50ZXI6IHRoZSBydWxlIC0tPgo8Zz4KPHJlY3QgeD0iMzUyIiB5PSIxMzYiIHdpZHRoPSIyNTYiIGhlaWdodD0iMjY0IiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPnRoZSBydWxlPC90ZXh0Pgo8cmVjdCB4PSIzNjgiIHk9IjE4NiIgd2lkdGg9IjIyNCIgaGVpZ2h0PSI4MCIgcng9IjEyIiBmaWxsPSIjRTdGNEVGIiBzdHJva2U9IiMxRjdBNzIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI0ODAiIHk9IjIxNiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCIgZmlsbD0iIzFCMjgzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZGlnaXRhbCBsYWJvciBzY2FsZXM8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMjM4IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjMUIyODM4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj53aXRoIENhcEV4PC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjMwMCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFCMjgzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+YSB0YXNrIGdvZXMgdG8gYW4gYWdlbnQ8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzIyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMUIyODM4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj50aGUgYWdlbnQgY29uc3VtZXMgdG9rZW5zPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjM0NCIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzFCMjgzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+dG9rZW5zIGNvc3QgcG93ZXIsIGNoaXBzLCBidWlsZGluZ3M8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzg0IiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjMUY3QTcyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj50aGUgd2FnZSBiZWNvbWVzIGEgQ2FwRXggbGluZTwvdGV4dD4KPC9nPgo8IS0tIGNoZXZyb24gcnVsZSAtPiBhZnRlciAtLT4KPHBvbHlnb24gcG9pbnRzPSI2MTYsMjYwIDYzMiwyNjggNjE2LDI3NiIgZmlsbD0iIzFCMjgzOCIvPgo8IS0tIHJpZ2h0OiBhZnRlciAtLT4KPGc+CjxyZWN0IHg9IjY0MCIgeT0iMTM2IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI2NCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9Ijc2OCIgeT0iMTcwIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMUIyODM4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5hZnRlcjogZGlnaXRhbCBsYWJvcjwvdGV4dD4KPHJlY3QgeD0iNjU2IiB5PSIxODYiIHdpZHRoPSIyMjQiIGhlaWdodD0iNTYiIHJ4PSI4IiBmaWxsPSIjRTdGNEVGIi8+Cjx0ZXh0IHg9Ijc2OCIgeT0iMjE0IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjMUIyODM4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5sYWJvciBmcm9tIENhcEV4PC90ZXh0Pgo8dGV4dCB4PSI3NjgiIHk9IjI3NCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjUwMCIgZmlsbD0iIzFGN0E3MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bGVhZCB0aW1lOiBxdWFydGVyczwvdGV4dD4KPHRleHQgeD0iNzY4IiB5PSIyOTYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPm1vdmVzIHdoZW4gbW9uZXkgbW92ZXM8L3RleHQ+Cjx0ZXh0IHg9Ijc2OCIgeT0iMzI4IiBmb250LXNpemU9IjEzIiBmaWxsPSIjNUM2QjdBIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5sZWFkIHRpbWUsIGJlZm9yZSB2cyBhZnRlcjwvdGV4dD4KPHJlY3QgeD0iNjcyIiB5PSIzNDAiIHdpZHRoPSIxNjgiIGhlaWdodD0iMTYiIHJ4PSI0IiBmaWxsPSIjRTZFMkRBIi8+Cjx0ZXh0IHg9Ijg0OCIgeT0iMzUzIiBmb250LXNpemU9IjEzIiBmaWxsPSIjMUIyODM4Ij4yMCB5ZWFyczwvdGV4dD4KPHJlY3QgeD0iNjcyIiB5PSIzNjQiIHdpZHRoPSI0MCIgaGVpZ2h0PSIxNiIgcng9IjQiIGZpbGw9IiMxRjdBNzIiLz4KPHRleHQgeD0iNzIwIiB5PSIzNzciIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMxQjI4MzgiPnF1YXJ0ZXJzPC90ZXh0Pgo8L2c+CjxsaW5lIHgxPSI2NCIgeTE9IjQ1MiIgeDI9Ijg5NiIgeTI9IjQ1MiIgc3Ryb2tlPSIjRDlEM0M3IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSI2NCIgeT0iNDg4IiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjMUIyODM4Ij5PbmUgY2xhaW06IHRoZSBsYWJvciB0ZXJtIG1vdmVzIHdoZW4gbW9uZXkgbW92ZXMuIFRoZSBsZWFkIHRpbWUgY29sbGFwc2VzIHRvIHF1YXJ0ZXJzLjwvdGV4dD4KPC9zdmc+Cg=="><figcaption>Plate L01-F3. Traditional labor waits on the birth rate. Digital labor scales with CapEx. Shell 3. Source: original. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-mechanism-step-by-step">Subchapter: the mechanism, step by step</h3>
+<p>A <strong>token</strong> is the basic unit of text an AI model reads and
+writes: roughly three quarters of a word. The paragraph you
+just read is a few hundred tokens. Every token an agent
+consumes costs compute, power, and buildings.</p>
+<p>Step one: a task exists that a human would do for wages.
+Step two: an agent does it, consuming tokens. Step three:
+tokens cost power, chips, and buildings, all bought with
+capital. The wage becomes a CapEx line. The labor term
+moves when money moves, on a quarterly horizon, like
+capital always did. That is the whole mechanism. Nothing in
+it requires the agent to be as good as the human. It
+requires the agent to be cheap enough per task.</p>
+<h3 id="subchapter-what-it-replaces-and-what-it-does-not">Subchapter: what it replaces and what it does not</h3>
+<p>Digital labor substitutes for routine cognitive work:
+drafting, summarizing, triaging, coding boilerplate. It
+does not substitute for physical presence, trust
+relationships, or judgment under ambiguity. The guest&rsquo;s
+thesis does not require replacing all labor. It requires
+replacing enough that the labor term of GDP growth moves.
+Even a fraction is a first in history. The guest&rsquo;s bar is
+deliberately low: in the toy economy, half a point of labor
+growth bought a 5 percent larger economy in ten years.
+Decision rule: ask whether agents can take a slice of the
+routine cognitive work, not whether they can do everything.</p>
+<p>That is the thesis behind the chart. The $650 billion is
+not a bet that chatbots are fun. It is a bet that the labor
+term of the growth equation can now be scaled the way
+capital always could, and that whoever builds the factories
+for digital labor captures the return. Demand-side
+corroboration exists: Goldman Sachs projects token
+consumption rising roughly 24-fold by 2030, reaching about
+120 quadrillion tokens a month, driven mainly by enterprise
+AI agents (May 2026 report, &ldquo;Decoding the Agentic Economy,&rdquo;
+analyst Jim Schneider), and expects AI supply and demand
+to stay unbalanced until at least the second half of 2027
+(June 2026 analysis).</p>
+<figure><img alt="Chapter plate: the digital labor thesis, end to end" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgOTYwIDYwMCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNTYiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPkNoYXB0ZXIgcGxhdGU6IHRoZSBkaWdpdGFsIGxhYm9yIHRoZXNpcywgZW5kIHRvIGVuZDwvdGV4dD4KPHRleHQgeD0iNDgiIHk9Ijg2IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNUM2QjdBIj5DaGFwdGVyIHBsYXRlLiBUaGUgbGFib3IgdGVybSBiZWNvbWVzIGludmVzdGFibGUuIFNvdXJjZTogb3JpZ2luYWwgc3ludGhlc2lzIG9mIHRoZSBzZXNzaW9uLjwvdGV4dD4KPGcgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzFCMjgzOCI+Cjx0ZXh0IHg9IjQ4IiB5PSIxMjQiPldJVEhPVVQgdGhlIHJ1bGU8L3RleHQ+Cjx0ZXh0IHg9IjMyOCIgeT0iMTI0Ij50aGUgc3RvcmVkIG9iamVjdDwvdGV4dD4KPHRleHQgeD0iNjQ4IiB5PSIxMjQiPldJVEggdGhlIHJ1bGU8L3RleHQ+CjwvZz4KPGcgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIxNDAiIHdpZHRoPSIyNjQiIGhlaWdodD0iMzAwIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMTgwIiB5PSIxODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmxhYm9yIGNhcHBlZDwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIyMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmJ5IHRoZSBiaXJ0aCByYXRlPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjI1NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjYwMCI+My4wJTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIyODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmdyb3d0aCwgbGFib3IgZml4ZWQ8L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iMzI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij4yMC15ZWFyIGxlYWQgdGltZTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIzNTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPm5vIGRpYWwgdG8gdHVybjwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSI0MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPnRlcm0gZml4ZWQgb24gYW55PC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjQyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+cGxhbm5pbmcgaG9yaXpvbjwvdGV4dD4KPHJlY3QgeD0iMzI4IiB5PSIxNDAiIHdpZHRoPSIzMDQiIGhlaWdodD0iMzAwIiByeD0iMTIiIGZpbGw9IiNFN0YxRjgiIHN0cm9rZT0iIzFFNEQ4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSIxODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmFnZW50IGRvZXMgdGhlIHdvcms8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5hIHRhc2sgYSBodW1hbiB3b3VsZCBkbzwvdGV4dD4KPGxpbmUgeDE9IjQ4MCIgeTE9IjIzMiIgeDI9IjQ4MCIgeTI9IjI1MiIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjQ3MiwyNTIgNDgwLDI2OCA0ODgsMjUyIiBmaWxsPSIjMUIyODM4Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iMjk2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij50b2tlbnMgY29zdCBmYWN0b3JpZXM8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5wb3dlciwgY2hpcHMsIGJ1aWxkaW5nczwvdGV4dD4KPGxpbmUgeDE9IjQ4MCIgeTE9IjM0NCIgeDI9IjQ4MCIgeTI9IjM2NCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjQ3MiwzNjQgNDgwLDM4MCA0ODgsMzY0IiBmaWxsPSIjMUIyODM4Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iNDA4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij50aGUgd2FnZSBiZWNvbWVzPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjQzMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+YSBDYXBFeCBsaW5lPC90ZXh0Pgo8cmVjdCB4PSI2NDgiIHk9IjE0MCIgd2lkdGg9IjI2NCIgaGVpZ2h0PSIzMDAiIHJ4PSIxMiIgZmlsbD0iI0U3RjRFRiIgc3Ryb2tlPSIjMUY3QTcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNzgwIiB5PSIxODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmxhYm9yIGludmVzdGFibGU8L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5tb3ZlcyB3aXRoIG1vbmV5PC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjI1NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjYwMCI+My4wJSB0byAzLjUlPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjI4NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFGN0E3MiIgZm9udC1zaXplPSIxNCI+KzAuNSBwdCBvZiBsYWJvciBncm93dGg8L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMzI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij4kMS4zNCB0byAkMS40MSBwZXIgJDE8L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMzU2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5pbiB0ZW4geWVhcnM6IDUlIGxhcmdlcjwvdGV4dD4KPHRleHQgeD0iNzgwIiB5PSI0MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPnRva2VuIGRlbWFuZDogMjR4IGJ5IDIwMzA8L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iNDI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5Hb2xkbWFuIFNhY2hzLCBNYXkgMjAyNjwvdGV4dD4KPC9nPgo8cmVjdCB4PSI0OCIgeT0iNDU2IiB3aWR0aD0iODY0IiBoZWlnaHQ9IjcyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSI0ODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiMxQjI4MzgiPlByaWNlOiB0aGUgJDY1MEIgKCQ3MzBCIGd1aWRlZCBmb3IgMjAyNikgaXMgYSBiaWQgb24gdGhhdCBoYWxmIHBvaW50LjwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSI1MTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM1QzZCN0EiPkl0IHBheXMgb25seSBpZiB0b2tlbiByZXZlbnVlIHBlciBNVyBzdGF5cyBpbiB0aGUgdXBwZXIgcGF5YmFjayByb3dzLjwvdGV4dD4KPHRleHQgeD0iNDgiIHk9IjU2NiIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjUwMCIgZmlsbD0iIzFCMjgzOCI+T25lIGNvbm5lY3Rpb246IGRpZ2l0YWwgbGFib3IgdHVybnMgdGhlIGNhcHBlZCBsYWJvciB0ZXJtIGludG8gYW4gaW52ZXN0YWJsZSBvbmUsIGFuZCB0aGUgZmFjdG9yaWVzIGFyZSB0aGUgaW52ZXN0bWVudCB2ZWhpY2xlLjwvdGV4dD4KPC9zdmc+Cg=="><figcaption>Chapter plate L01-C1. Left: growth without the rule, labor capped. Center: the agent, tokens, and the factory. Right: growth with the rule, labor investable. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="why-energy-comes-first">Why energy comes first</h2>
+<p>Here the chapter turns from the thesis to the strategy it
+implies. If digital labor is the prize, the bottleneck is
+whatever gates the factories. The guest&rsquo;s founding insight,
+from just under a decade of building, was that the scarce
+resource was <strong>energy</strong>, not chips. Decision rule: rank the
+inputs by scarcity, then move the factory to the scarcest
+one. Everything after this paragraph is that rule, applied.</p>
+<h3 id="subchapter-why-the-hubs-filled-first">Subchapter: why the hubs filled first</h3>
+<p>The reasoning is market logic. Data center capacity had
+grown steadily through the web 2.0 era, clustering in
+established hubs. Northern Virginia, which the guest names,
+runs a large share of the internet. Building &ldquo;the next data
+center in Northern Virginia&rdquo; was a crowded trade: land
+costs more, permitting queues are long, and power prices
+reflect competition. Meanwhile the new workloads shared
+one trait: at scale, they are limited by energy.
+Training, defined at the top of this chapter, runs once.
+<strong>Inference</strong> is running the trained model for users:
+answering each query and generating each token, done
+billions of times. <strong>Proof-of-work</strong> is the crypto
+mining method where computers burn energy solving puzzles
+to validate transactions. AI training and proof-of-work
+crypto both turn electricity directly into output, which
+is why both hunted cheap power.
+The guest&rsquo;s premise is that markets are reasonably
+efficient everywhere else. Energy was the one input where
+the market had mispriced location.</p>
+<h3 id="subchapter-the-inversion">Subchapter: the inversion</h3>
+<p>So Crusoe inverted the usual plan. Instead of moving energy
+to the computers, move the computers to the energy. Find
+places with abundant cheap power that are not historical
+data center markets, and build there. Moving data over
+fiber is cheap. Moving electrons over transmission lines is
+expensive and slow to permit. The inversion follows the
+cheap move. The host gives the company name its frame:
+Robinson Crusoe, the castaway who made do with what the
+island had. The company makes do with stranded energy.</p>
+<h3 id="subchapter-abilene-the-tax-credit-arithmetic">Subchapter: Abilene, the tax-credit arithmetic</h3>
+<p>The worked example is Abilene, Texas, and it deserves the
+arithmetic. West Texas is consistently windy and sunny.
+Renewable developers built heavily there because
+<strong>production tax credits</strong> paid them per clean electron
+produced, independent of the sale price. The guest&rsquo;s
+explanation: developers get paid by the government to
+produce clean electrons, and they must sell them to someone
+independent of the price. The result was overbuild: more
+generation than the grid could carry out, and no marginal
+buyer. Power prices went negative. There was not enough
+transmission to move the power somewhere useful. Crusoe&rsquo;s
+answer: &ldquo;Have we got a power-hungry application for you?&rdquo;</p>
+<p>Crusoe signed its first two buildings there in June 2024,
+and the site is now described as one of the largest AI
+computing campuses in the world, possibly the largest.</p>
+<figure><img alt="The energy-first inversion, with the Abilene arithmetic" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBlbmVyZ3ktZmlyc3QgaW52ZXJzaW9uOiBBYmlsZW5lPC90ZXh0Pgo8dGV4dCB4PSI0OCIgeT0iOTYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM1QzZCN0EiPk1vdmUgdGhlIGNvbXB1dGVycyB0byB0aGUgY2hlYXAgcG93ZXIsIG5vdCB0aGUgcmV2ZXJzZS4gU2hlbGwgMy4gU291cmNlOiBvcmlnaW5hbCwgbnVtYmVycyBmcm9tIHRoZSBzZXNzaW9uLjwvdGV4dD4KPGcgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIxMzYiIHdpZHRoPSIxNjAiIGhlaWdodD0iMTIwIiByeD0iMTIiIGZpbGw9IiNGNEU2RDQiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMTI4IiB5PSIxNjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPnRheCBjcmVkaXRzPC90ZXh0Pgo8dGV4dCB4PSIxMjgiIHk9IjE5NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+cGF5IGZvciBjbGVhbjwvdGV4dD4KPHRleHQgeD0iMTI4IiB5PSIyMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmVsZWN0cm9uczwvdGV4dD4KPGxpbmUgeDE9IjIwOCIgeTE9IjE5NiIgeDI9IjI0NCIgeTI9IjE5NiIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjI0NCwxODggMjYwLDE5NiAyNDQsMjA0IiBmaWxsPSIjMUIyODM4Ii8+CjxyZWN0IHg9IjI2MCIgeT0iMTM2IiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEyMCIgcng9IjEyIiBmaWxsPSIjRjRFNkQ0IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjM0MCIgeT0iMTY4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5vdmVyYnVpbGQ8L3RleHQ+Cjx0ZXh0IHg9IjM0MCIgeT0iMTk2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5tb3JlIGdlbmVyYXRpb248L3RleHQ+Cjx0ZXh0IHg9IjM0MCIgeT0iMjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij50aGFuIHRoZSBncmlkIGNhcnJpZXM8L3RleHQ+CjxsaW5lIHgxPSI0MjAiIHkxPSIxOTYiIHgyPSI0NTYiIHkyPSIxOTYiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI0NTYsMTg4IDQ3MiwxOTYgNDU2LDIwNCIgZmlsbD0iIzFCMjgzOCIvPgo8cmVjdCB4PSI0NzIiIHk9IjEzNiIgd2lkdGg9IjE2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIxMiIgZmlsbD0iI0U3RjFGOCIgc3Ryb2tlPSIjMUU0RDhDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNTUyIiB5PSIxNjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPm5lZ2F0aXZlIHByaWNlczwvdGV4dD4KPHRleHQgeD0iNTUyIiB5PSIxOTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPm5vIG1hcmdpbmFsPC90ZXh0Pgo8dGV4dCB4PSI1NTIiIHk9IjIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+YnV5ZXIgZm9yIHBvd2VyPC90ZXh0Pgo8bGluZSB4MT0iNjMyIiB5MT0iMTk2IiB4Mj0iNjY4IiB5Mj0iMTk2IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjxwb2x5Z29uIHBvaW50cz0iNjY4LDE4OCA2ODQsMTk2IDY2OCwyMDQiIGZpbGw9IiMxQjI4MzgiLz4KPHJlY3QgeD0iNjg0IiB5PSIxMzYiIHdpZHRoPSIyMjgiIGhlaWdodD0iMTIwIiByeD0iMTIiIGZpbGw9IiNFN0Y0RUYiIHN0cm9rZT0iIzFGN0E3MiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9Ijc5OCIgeT0iMTY4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5idWlsZCBoZXJlPC90ZXh0Pgo8dGV4dCB4PSI3OTgiIHk9IjE5NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+Zmlyc3QgYnVpbGRpbmdzPC90ZXh0Pgo8dGV4dCB4PSI3OTgiIHk9IjIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+c2lnbmVkIEp1bmUgMjAyNDwvdGV4dD4KPC9nPgo8ZyBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNTAwIj4KPHRleHQgeD0iNDgiIHk9IjMxNiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzFCMjgzOCI+VGhlIGNhbXB1cyB0aGF0IHJlc3VsdGVkPC90ZXh0Pgo8cmVjdCB4PSI0OCIgeT0iMzM2IiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjgwIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMTg4IiB5PSIzNjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI2MDAiPjEuMiBHVyBkZWxpdmVyZWQ8L3RleHQ+Cjx0ZXh0IHg9IjE4OCIgeT0iMzk2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5vZiAyLjEgR1cgcGxhbm5lZDsgZ3JpZCBjYXBwZWQgaXQ8L3RleHQ+CjxyZWN0IHg9IjMzNiIgeT0iMzM2IiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjgwIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDc2IiB5PSIzNjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI2MDAiPjEgR1cgc3Vic3RhdGlvbjwvdGV4dD4KPHRleHQgeD0iNDc2IiB5PSIzOTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmxhcmdlc3QgcHJpdmF0ZSBVUyBzdWJzdGF0aW9uPC90ZXh0Pgo8cmVjdCB4PSI2MjQiIHk9IjMzNiIgd2lkdGg9IjI4MCIgaGVpZ2h0PSI4MCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9Ijc2NCIgeT0iMzY4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4IiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNjAwIj45LDAwMCB3b3JrZXJzPC90ZXh0Pgo8dGV4dCB4PSI3NjQiIHk9IjM5NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+b24gc2l0ZSBkYWlseSwgdG93biBvZiAxMjBrPC90ZXh0Pgo8L2c+Cjx0ZXh0IHg9IjQ4IiB5PSI0NzIiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiPk9uZSBjbGFpbTogc3RyYW5kZWQgcG93ZXIgaXMgYSBsb2NhdGlvbiBkZWNpc2lvbi4gQnVpbGQgdGhlIGZhY3Rvcnkgd2hlcmUgdGhlIGVsZWN0cm9ucyBhbHJlYWR5IGFyZS48L3RleHQ+Cjwvc3ZnPgo="><figcaption>Plate L01-F4. Tax credits to overbuild to negative prices to a 2.1 GW campus (1.2 GW delivered; the grid capped growth in March 2026). Eight buildings serve Oracle and OpenAI (Project Stargate); a 350 MW gas plant energizes the cluster. Shell 3. Source: original, numbers from the session; 1.2 GW cap from March 2026 press. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-abilene-the-substations">Subchapter: Abilene, the substations</h3>
+<p>The campus numbers set the scale for the whole course. A
+<strong>substation</strong> is the facility where high-voltage grid
+power is received and stepped down for local use. Abilene
+has a 200 MW substation and a 1 GW substation, the latter
+described as the largest privately owned substation in the
+United States. One gigawatt is roughly the power draw of
+the city of Denver, the guest&rsquo;s home town. The full campus
+is 2.1 gigawatts in aggregate: two Denvers of power, all
+feeding computers. Eight buildings serve Oracle and OpenAI,
+the project known as Project Stargate.</p>
+<h3 id="subchapter-abilene-one-coherent-cluster">Subchapter: Abilene, one coherent cluster</h3>
+<p>The campus runs as <strong>one coherent cluster</strong>: all chips
+across all data centers connect on the same
+high-performance back-end network, so one training job can
+run across every data center at once. That is an unusual
+architecture. Most campuses are separate buildings that
+happen to share a fence. Abilene is one machine with eight
+halls.</p>
+<h3 id="subchapter-abilene-the-construction-workforce">Subchapter: Abilene, the construction workforce</h3>
+<p>The human scale: a 5,000-car parking lot, completely full,
+with roughly 9,000 people on site every day building the
+campus, against a town of 120,000. Crusoe had to create
+labor and retention incentives to attract workers to move
+there for short-term construction. The long tail: the
+steady operating staff is around 2,000 people running the
+clusters and the power plant, a large permanent job creator
+in that local economy.</p>
+<h3 id="subchapter-abilene-the-350-mw-gas-plant">Subchapter: Abilene, the 350 MW gas plant</h3>
+<p>Abilene added a 350 MW natural gas plant to energize the
+cluster: when the grid cannot deliver, the campus makes its
+own power.</p>
+<h3 id="subchapter-abilene-since-the-session">Subchapter: Abilene since the session</h3>
+<p>The session&rsquo;s numbers are spring 2026: 2.1 GW planned.
+October 2026 adds confirmation and a caution: the plan
+stands, but the grid capped the build at 1.2 GW, 57% of
+the plan.</p>
+<table>
+<thead>
+<tr>
+<th>What changed</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scale capped at 1.2 GW</td>
+<td>In March 2026 OpenAI and Oracle stopped expanding the site beyond 1.2 gigawatts, citing power grid delays of over a year. Construction continues on the eight buildings; only the growth beyond 1.2 GW halted.</td>
+</tr>
+<tr>
+<td>450,000 GB200s</td>
+<td>At Oracle AI World in October 2026, Larry Ellison said the site will house more than 450,000 Nvidia GB200 GPUs at 1.2 GW, &ldquo;enough power for one million four-bedroom homes.&rdquo;</td>
+</tr>
+<tr>
+<td>First buildings live</td>
+<td>The first two buildings went operational in September 2025. The remaining six are expected by mid-2026.</td>
+</tr>
+<tr>
+<td>The money</td>
+<td>Crusoe and Blue Owl raised about $15B in debt and equity for the project (reported at about $15B in March 2026 press coverage. A $7.1B JPMorgan-led construction loan for phase two was arranged by Newmark). JPMorgan provided about $9.6B of the debt [uncertain]. Oracle signed a 15-year lease [uncertain].</td>
+</tr>
+<tr>
+<td>The Microsoft expansion</td>
+<td>The session noted an expansion planned to the south of the campus, for Microsoft. Announced in March 2026 as a 900 MW adjacent Abilene campus with an on-site power plant. Separately, Bloomberg reported (via Data Center Dynamics, October 2026) that Nvidia paid Crusoe about $150M as a deposit on the expansion footprint after Oracle and OpenAI dropped a planned 600 MW expansion, and that Nvidia is in talks with Meta as a possible tenant. A deal has not been signed, and neither company has confirmed the payment.</td>
+</tr>
+</tbody>
+</table>
+<p>The lesson, in one number: 2.1 GW planned, 1.2 GW
+delivered. Power availability, not chips, set the ceiling:
+43% of the plan died in grid delays of over a year. The
+energy-first strategy won the site. The grid still set its
+size.</p>
+<h3 id="subchapter-across-the-meter-defined">Subchapter: across the meter, defined</h3>
+<p>The model has a name: <strong>across the meter</strong>. The <strong>meter</strong>
+is the interconnection point with the grid: the boundary
+where the utility&rsquo;s wires meet yours. <strong>Behind the meter</strong>
+is power generated on your side of that boundary. Across
+the meter means: build on-site generation (wind, planned
+solar, batteries, gas), use what the campus needs, sell
+the surplus into the grid, and draw from the grid when the
+campus needs firming (wind calm, sun down, maintenance).
+One claim: the campus is a power plant that happens to
+compute. Generation and load sit on the same site, and
+the grid is the battery.</p>
+<h3 id="subchapter-quan-the-worked-example">Subchapter: Quan, the worked example</h3>
+<p>Abilene was not a one-off. The guest showed a second site
+to prove the playbook repeats. Quan, Texas: 3,500 people
+working on the project in a town of 1,500. It sits close
+enough to Amarillo to draw on that city&rsquo;s working
+population, and on some of the best wind in the United
+States. An on-site wind farm feeds power directly into the
+data center.</p>
+<p>Apply the across-the-meter model: the wind farm sits
+behind the meter, feeding the campus first. Surplus sales
+into the grid create energy abundance that drops costs
+for local ratepayers. The guest calls it mutually
+beneficial: Crusoe invests in power infrastructure, and
+the town gets cheaper, more abundant power. The customer
+is unnamed: &ldquo;a very big customer.&rdquo;</p>
+<div class="mermaid">flowchart LR
+  wind[On-site wind farm] --> campus[Data center campus]
+  other[Solar, batteries, gas] --> campus
+  campus --> grid[Sell surplus to grid]
+  grid --> campus2[Draw from grid to firm]
+  campus2 --> campus
+</div><pre class="mermaid-fallback"><code>flowchart LR
+  wind[On-site wind farm] --&gt; campus[Data center campus]
+  other[Solar, batteries, gas] --&gt; campus
+  campus --&gt; grid[Sell surplus to grid]
+  grid --&gt; campus2[Draw from grid to firm]
+  campus2 --&gt; campus
+</code></pre>
+<h3 id="subchapter-what-is-used-where-october-2026">Subchapter: what is used where, October 2026</h3>
+<p>The energy-first playbook is now the industry&rsquo;s default
+strategy. The pattern repeats the Abilene logic at
+national scale: secure generation, transmission, and
+permits before the GPUs arrive, because power is the
+longest lead-time input.</p>
+<ul>
+<li><strong>Nvidia, SB Energy, OpenAI in Ohio.</strong> The PORTS-Pike
+  campus in Pike County, Ohio targets 8 GW of IT load with
+  at least 10 GW of new power generation. Nvidia invested
+  $1.5B in SB Energy and agreed to up to $105B in credit
+  support for the land, power, and shell buildout of the
+  initial 4.25 GW, with an option on the remaining 3.75 GW.
+  OpenAI signed a 20-year lease. The first 800 MW is
+  expected in 2028. (Announced August 17, 2026. Nvidia
+  8-K filing.) At the session&rsquo;s $60M per MW, 8 GW
+  implies roughly $480B of implied build cost, financed
+  through the lease structure, not paid upfront by one
+  party.</li>
+<li><strong>Microsoft.</strong> The guest reported Microsoft adding about
+  a gigawatt of capacity in a single quarter in spring
+  2026.</li>
+<li><strong>Crusoe.</strong> In September 2026 Crusoe raised a $3.9B
+  Series F, co-led by Mubadala Capital, with over 1 GW
+  delivered and operational. Crusoe says OpenAI trained its
+  Astra model at the Abilene campus.</li>
+<li><strong>The neoclouds.</strong> A <strong>neocloud</strong> is a cloud provider
+  built almost entirely around GPU infrastructure, selling
+  compute rather than general IT. Nvidia CFO Colette Kress
+  expects the neocloud partner network to end 2026 with
+  about 8 GW of installed capacity, up from roughly 3 GW
+  at the end of 2025 (Nvidia Q2 FY2027 earnings call,
+  August 2026). Nvidia has become the financier of
+  the layer, not just its supplier: up to $105B in credit
+  support for the Ohio campus, $6.3B in guarantees with
+  CoreWeave (announced with the July 2026 financing
+  model), and memoranda with Apollo and BlackRock to
+  mobilize more than $500B of third-party capital
+  (announced July 2026, agreement signed August 17, 2026).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Neocloud</th>
+<th>Scale, October 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CoreWeave (Nasdaq: CRWV)</td>
+<td>1.5 GW active power, 3.7-4.2 GW contracted, ~$104B revenue backlog. Q2 2026 revenue $2.575B, up 112% (Q2 2026 earnings, August 11, 2026). Full-year 2026 guidance: $12.4-13.2B revenue on $35-39B capex.</td>
+</tr>
+<tr>
+<td>Nebius (Nasdaq: NBIS)</td>
+<td>Q2 2026 group revenue $582.3M, up 454% (Q2 2026 earnings report, August 2026). $8.0B cash. 5 GW contracted power target by year-end 2026.</td>
+</tr>
+<tr>
+<td>Lambda (private)</td>
+<td>$1.5B+ Series E (Nov 2025), $1B credit facility (May 2026). Multibillion-dollar multi-year Microsoft agreement covering tens of thousands of Nvidia GPUs (announced November 2025; covered in September 2026 press).</td>
+</tr>
+<tr>
+<td>Crusoe Cloud</td>
+<td>Customers include Cognition, Figure, and Perplexity. Abstracts the chip: the user buys a service, not an A100 or H100.</td>
+</tr>
+</tbody>
+</table>
+<p>The row that matters for this chapter: every one of them
+sells power-shaped compute. The factory is the product.</p>
+<figure><img alt="Chapter plate: the energy-first playbook" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgOTYwIDYwMCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNTYiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPkNoYXB0ZXIgcGxhdGU6IHRoZSBlbmVyZ3ktZmlyc3QgcGxheWJvb2s8L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI4NiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzVDNkI3QSI+Q2hhcHRlciBwbGF0ZS4gTW92ZSB0aGUgY29tcHV0ZXJzIHRvIHRoZSBjaGVhcCBwb3dlci4gU291cmNlOiBvcmlnaW5hbCBzeW50aGVzaXMgb2YgdGhlIHNlc3Npb24uPC90ZXh0Pgo8ZyBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMUIyODM4Ij4KPHRleHQgeD0iNDgiIHk9IjEyNCI+V0lUSE9VVCB0aGUgcnVsZTogdGhlIGh1YjwvdGV4dD4KPHRleHQgeD0iMzI4IiB5PSIxMjQiPnRoZSBpbnZlcnNpb248L3RleHQ+Cjx0ZXh0IHg9IjY0OCIgeT0iMTI0Ij5XSVRIIHRoZSBydWxlOiBjYW1wdXNlczwvdGV4dD4KPC9nPgo8ZyBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNTAwIj4KPHJlY3QgeD0iNDgiIHk9IjE0MCIgd2lkdGg9IjI2NCIgaGVpZ2h0PSIzMDAiIHJ4PSIxMiIgZmlsbD0iI0ZGRkRGOCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSIxODAiIHk9IjE4NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+Tm9ydGhlcm4gVmlyZ2luaWE8L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iMjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij50aGUgY3Jvd2RlZCB0cmFkZTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIyNTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmxhbmQgY29zdHMgbW9yZTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIyODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPnBlcm1pdHRpbmcgcXVldWVzIGxvbmc8L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iMzEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5wb3dlciBwcmljZXMgcmVmbGVjdDwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIzMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmNvbXBldGl0aW9uPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjM4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+ZW5lcmd5IG1pc3ByaWNlZDwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSI0MDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmJ5IGxvY2F0aW9uIG9ubHk8L3RleHQ+CjxyZWN0IHg9IjMyOCIgeT0iMTQwIiB3aWR0aD0iMzA0IiBoZWlnaHQ9IjMwMCIgcng9IjEyIiBmaWxsPSIjRTdGMUY4IiBzdHJva2U9IiMxRTREOEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iMTg0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5tb3ZlIGNvbXB1dGVyczwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSIyMDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPnRvIHRoZSBlbmVyZ3k8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMjUyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5kYXRhIG92ZXIgZmliZXI6IGNoZWFwPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+ZWxlY3Ryb25zIG92ZXIgd2lyZXM6PC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjMwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+ZXhwZW5zaXZlLCBzbG93IHRvIHBlcm1pdDwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSIzNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmZvbGxvdyB0aGUgY2hlYXAgbW92ZTwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSIzNzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmFjcm9zcyB0aGUgbWV0ZXI6PC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjQwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+Z2VuZXJhdGUgb24gc2l0ZSwgc2VsbCBzdXJwbHVzLDwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSI0MjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmRyYXcgZnJvbSB0aGUgZ3JpZCB0byBmaXJtPC90ZXh0Pgo8cmVjdCB4PSI2NDgiIHk9IjE0MCIgd2lkdGg9IjI2NCIgaGVpZ2h0PSIzMDAiIHJ4PSIxMiIgZmlsbD0iI0U3RjRFRiIgc3Ryb2tlPSIjMUY3QTcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNzgwIiB5PSIxODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPkFiaWxlbmUsIFRleGFzPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjIxMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+Mi4xIEdXIHBsYW5uZWQ8L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMjM2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjQzQ2QjJDIiBmb250LXNpemU9IjE0Ij4xLjIgR1cgZGVsaXZlcmVkOiBncmlkIGNhcHBlZCBpdDwvdGV4dD4KPHRleHQgeD0iNzgwIiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPlF1YW4sIFRleGFzPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjMwOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+d2luZCBiZWhpbmQgdGhlIG1ldGVyPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjM1MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+T2hpbzogOCBHVyBwbGFubmVkPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjM4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+MTAgR1cgbmV3IGdlbmVyYXRpb248L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iNDA0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5maXJzdCA4MDAgTVcgaW4gMjAyODwvdGV4dD4KPC9nPgo8cmVjdCB4PSI0OCIgeT0iNDU2IiB3aWR0aD0iODY0IiBoZWlnaHQ9IjcyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSI0ODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiMxQjI4MzgiPlRyYWRlb2ZmOiBwb3dlciBpcyB0aGUgbG9uZ2VzdCBsZWFkLXRpbWUgaW5wdXQuIFNlY3VyZSBnZW5lcmF0aW9uLCB0cmFuc21pc3Npb24sIGFuZCBwZXJtaXRzIGJlZm9yZSB0aGUgR1BVcyBhcnJpdmUuPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjUxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNSIgZmlsbD0iIzVDNkI3QSI+QWJpbGVuZSBwcm92ZXMgdGhlIHdpbiBhbmQgdGhlIGNlaWxpbmc6IDQzJSBvZiB0aGUgcGxhbiBkaWVkIGluIGdyaWQgZGVsYXlzLjwvdGV4dD4KPHRleHQgeD0iNDgiIHk9IjU2NiIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjUwMCIgZmlsbD0iIzFCMjgzOCI+T25lIGNvbm5lY3Rpb246IGVuZXJneS1maXJzdCB3b24gdGhlIHNpdGVzLCBidXQgcG93ZXIgYXZhaWxhYmlsaXR5LCBub3QgY2hpcHMsIHNldCB0aGVpciBzaXplLjwvdGV4dD4KPC9zdmc+Cg=="><figcaption>Chapter plate L01-C2. Left: building in a crowded hub. Center: the inversion, computers move to stranded power. Right: gigawatt campuses on cheap electrons. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="the-moving-bottleneck">The moving bottleneck</h2>
+<p>A common misunderstanding is that the binding constraint
+in AI is fixed. The guest insists it moves, and the
+history of the last four years proves it. A <strong>binding
+constraint</strong> is the one input that gates output right now:
+more of everything else changes nothing until it is
+fixed. Four years, three gates: chips, then memory, now
+energized shells, with skilled labor binding underneath
+the whole time. Decision rule: invest in whatever gates
+output this year, and be ready to move when the gate
+moves. Last year&rsquo;s gate is a sunk cost.</p>
+<figure><img alt="The bottleneck timeline, with the labor floor" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBib3R0bGVuZWNrIG1vdmVzLiBMYWJvciBiaW5kcyB1bmRlcm5lYXRoLjwvdGV4dD4KPHRleHQgeD0iNDgiIHk9Ijk2IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNUM2QjdBIj5Gb3VyIHllYXJzIG9mIEFJIGluZnJhc3RydWN0dXJlIGhpc3RvcnkuIFNoZWxsIDIuIFNvdXJjZTogb3JpZ2luYWwsIGRyYXduIGZyb20gdGhlIHNlc3Npb24uPC90ZXh0Pgo8ZyBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNTAwIj4KPHJlY3QgeD0iNDgiIHk9IjEzNiIgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxMTIiIHJ4PSIxMiIgZmlsbD0iI0ZGRkRGOCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSIxNDQiIHk9IjE3MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+NCB5ZWFycyBhZ288L3RleHQ+Cjx0ZXh0IHg9IjE0NCIgeT0iMjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4IiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNjAwIj5jaGlwczwvdGV4dD4KPHRleHQgeD0iMTQ0IiB5PSIyMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmdldCB0aGUgR1BVczwvdGV4dD4KPGxpbmUgeDE9IjI0MCIgeTE9IjE5MiIgeDI9IjI2NCIgeTI9IjE5MiIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjI2NCwxODQgMjgwLDE5MiAyNjQsMjAwIiBmaWxsPSIjMUIyODM4Ii8+CjxyZWN0IHg9IjI3MiIgeT0iMTM2IiB3aWR0aD0iMTkyIiBoZWlnaHQ9IjExMiIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjM2OCIgeT0iMTcyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij50aGVuPC90ZXh0Pgo8dGV4dCB4PSIzNjgiIHk9IjIwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCI+bWVtb3J5PC90ZXh0Pgo8dGV4dCB4PSIzNjgiIHk9IjIyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+bWVtb3J5IHN0b2NrcyByaXA8L3RleHQ+CjxsaW5lIHgxPSI0NjQiIHkxPSIxOTIiIHgyPSI0ODgiIHkyPSIxOTIiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI0ODgsMTg0IDUwNCwxOTIgNDg4LDIwMCIgZmlsbD0iIzFCMjgzOCIvPgo8cmVjdCB4PSI0OTYiIHk9IjEzNiIgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxMTIiIHJ4PSIxMiIgZmlsbD0iI0U3RjFGOCIgc3Ryb2tlPSIjMUU0RDhDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNTkyIiB5PSIxNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPnRvZGF5PC90ZXh0Pgo8dGV4dCB4PSI1OTIiIHk9IjIwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCI+ZW5lcmdpemVkIHNoZWxsczwvdGV4dD4KPHRleHQgeD0iNTkyIiB5PSIyMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmEgcGxhY2UgdG8gdHVybiB0aGVtIG9uPC90ZXh0Pgo8bGluZSB4MT0iNjg4IiB5MT0iMTkyIiB4Mj0iNzEyIiB5Mj0iMTkyIiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjxwb2x5Z29uIHBvaW50cz0iNzEyLDE4NCA3MjgsMTkyIDcxMiwyMDAiIGZpbGw9IiMxQjI4MzgiLz4KPHJlY3QgeD0iNzIwIiB5PSIxMzYiIHdpZHRoPSIxOTIiIGhlaWdodD0iMTEyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iI0Q5RDNDNyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjggNiIvPgo8dGV4dCB4PSI4MTYiIHk9IjE3OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+bmV4dDo8L3RleHQ+Cjx0ZXh0IHg9IjgxNiIgeT0iMjA2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij51bmtub3duPC90ZXh0Pgo8L2c+CjxyZWN0IHg9IjQ4IiB5PSIyODgiIHdpZHRoPSI4NjQiIGhlaWdodD0iMTIwIiByeD0iMTIiIGZpbGw9IiNGNEU2RDQiIHN0cm9rZT0iI0M0NkIyQyIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMUIyODM4Ij51bmRlcm5lYXRoLCBhbHdheXM6IHNraWxsZWQgbGFib3I8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE1IiBmaWxsPSIjNUM2QjdBIj5lbGVjdHJpY2lhbnMsIHdlbGRlcnMsIHBsdW1iZXJzLCBjb25zdHJ1Y3Rpb24gJmd0OyA5LDAwMCB3b3JrZXJzIG9uIHNpdGUgYXQgQWJpbGVuZTwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSIzODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM1QzZCN0EiPm9uZSBnaWdhd2F0dCBuZWVkcyAxLDAwMHggdGhlICQ0LjdNL01XIGxhYm9yIGJhciA9ICQ0LjdCIGluIHdhZ2VzPC90ZXh0Pgo8cmVjdCB4PSI0OCIgeT0iNDQwIiB3aWR0aD0iODY0IiBoZWlnaHQ9IjU2IiByeD0iMTIiIGZpbGw9IiNFN0Y0RUYiIHN0cm9rZT0iIzFGN0E3MiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSI0NzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiPkhlZGdlOiB2ZXJ0aWNhbCBpbnRlZ3JhdGlvbi4gRW5lcmd5IHRvIGJ1aWxkaW5ncyB0byBHUFUgY2x1c3RlcnMgdG8gbWFuYWdlZCBzZXJ2aWNlcy48L3RleHQ+Cjwvc3ZnPgo="><figcaption>Plate L01-F5. Chips, then memory, then energized shells, with skilled labor binding underneath. Shell 2. Source: original diagram for Stanford Frontier AI, drawn from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-chips-four-years-ago">Subchapter: chips, four years ago</h3>
+<p>The first bottleneck was compute itself: getting the
+chips. In 2023, H100 lead times stretched to 36-52 weeks,
+and a single H100 card retailed for about $30,000
+(HPCwire, August 2023). Training runs competed for scarce
+GPUs, and allocation was the strategy. Whoever held the
+most H100s held the lead. By early 2024 lead times had
+eased to 3-4 months (Tom&rsquo;s Hardware), and buyers were
+reselling surplus cards. That phase is over. Access to
+chips has softened as the binding constraint. The
+session&rsquo;s decision rule for that era: when lead times run
+past two quarters, chips gate everything, and you buy
+allocation, not architecture.</p>
+<h3 id="subchapter-memory-then">Subchapter: memory, then</h3>
+<p>Memory stocks ripped next. High-bandwidth memory and the
+memory subsystem of the chip package gated how many
+training clusters could ship. The constraint moved one
+layer inside the machine. The price moves carried the
+signal: a 12-layer HBM3E stack rose from about $300 to
+about $500 on contract renewal (SEdaily, 2025), and by
+September 2026 spot buyers were paying about $2,100 for
+a 36GB HBM3E stack against $365-510 contract prices
+(Intuition Labs data, via financial press). Memory makers&rsquo;
+stock prices told the story before any analyst note did:
+SK hynix ran about 250% year to date on HBM scarcity
+(ainvest, May 2026), and Samsung&rsquo;s semiconductor division
+posted an 80% profit surge in Q3 2025 on HBM3E demand.</p>
+<h3 id="subchapter-energized-shells-today">Subchapter: energized shells, today</h3>
+<p>The binding constraint today is finding places where you
+can put the chips and turn them on: powered shells with
+the electrical and cooling plant ready. A <strong>power shell</strong>
+is an energized data center: the building, the
+substation, the cooling, everything needed so that you
+can plug in chips and start computing. Chips themselves
+have become easier to get. The scarce thing is a place to
+turn them on. Sometimes the binding layer is even more
+specific: individual components like switchgear (the
+industrial breakers that route and protect power circuits),
+chillers (the machines that make the cold water for
+cooling), or power generation equipment.</p>
+<h3 id="subchapter-labor-always">Subchapter: labor, always</h3>
+<p>Underneath every phase, labor. The guest calls the
+shortage of tradespeople a bottleneck in its own right,
+with 9,000 people on site at Abilene every day against a
+town of 120,000. Electricians, welders, plumbers,
+construction workers: the factories need hands as much
+as they need electrons. The session prices this
+bottleneck exactly: $4.7M per MW of capitalized labor.
+Multiply by 1,000 MW and one gigawatt carries $4.7B in
+wages during construction. For Abilene&rsquo;s 2.1 GW, that is
+roughly $9.9B of labor CapEx. There is huge competition
+for these workers across many simultaneous projects.
+Crusoe&rsquo;s answer is to reinvent how the infrastructure gets
+built, which is the subject of the next section&rsquo;s final
+subchapter.</p>
+<h3 id="subchapter-vertical-integration-as-the-hedge">Subchapter: vertical integration as the hedge</h3>
+<p>This is why Crusoe is <strong>vertically integrated</strong>, meaning
+it owns multiple layers of the stack instead of one. The
+company works from energy development at the bottom,
+through the data center buildings, up to GPU cluster
+deployment and managed services at the top. When the
+bottleneck moves, a single-layer company is stuck. A
+vertically integrated one retools. The guest is explicit
+about the boundary: not in the chip business, not in the
+model business. Everything between energy and tokens.</p>
+<figure><img alt="Chapter plate: the moving bottleneck and the hedge" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgOTYwIDYwMCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNTYiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPkNoYXB0ZXIgcGxhdGU6IHRoZSBtb3ZpbmcgYm90dGxlbmVjayBhbmQgdGhlIGhlZGdlPC90ZXh0Pgo8dGV4dCB4PSI0OCIgeT0iODYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM1QzZCN0EiPkNoYXB0ZXIgcGxhdGUuIFRoZSBoZWRnZSBpcyBvd25pbmcgdGhlIG1vdmluZyBsYXllcnMuIFNvdXJjZTogb3JpZ2luYWwgc3ludGhlc2lzIG9mIHRoZSBzZXNzaW9uLjwvdGV4dD4KPGcgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzFCMjgzOCI+Cjx0ZXh0IHg9IjQ4IiB5PSIxMjQiPldJVEhPVVQgdGhlIGhlZGdlPC90ZXh0Pgo8dGV4dCB4PSIzMjgiIHk9IjEyNCI+dGhlIHN0b3JlZCBvYmplY3Q6IHRoZSBzdGFjazwvdGV4dD4KPHRleHQgeD0iNjQ4IiB5PSIxMjQiPldJVEggdGhlIGhlZGdlPC90ZXh0Pgo8L2c+CjxnIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI1MDAiPgo8cmVjdCB4PSI0OCIgeT0iMTQwIiB3aWR0aD0iMjY0IiBoZWlnaHQ9IjMwMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjE4MCIgeT0iMTg0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5zaW5nbGUtbGF5ZXIgY29tcGFueTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIyMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmhvc3RhZ2UgdG8gb25lIGJvdHRsZW5lY2s8L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iMjcyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5jaGlwcywgdGhlbiBtZW1vcnksPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjI5NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+dGhlbiBlbmVyZ2l6ZWQgc2hlbGxzPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjM0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0M0NkIyQyIgZm9udC1zaXplPSIxNCI+c3R1Y2sgd2hlbiB0aGUgZ2F0ZSBtb3ZlczwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIzODQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmxhYm9yIGJpbmRzIHVuZGVybmVhdGg8L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iNDA4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij50aGUgd2hvbGUgdGltZTwvdGV4dD4KPHJlY3QgeD0iMzI4IiB5PSIxNDAiIHdpZHRoPSIzMDQiIGhlaWdodD0iMzAwIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPGcgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjM2MCIgeT0iMTY0IiB3aWR0aD0iMjQwIiBoZWlnaHQ9IjU2IiByeD0iMTIiIGZpbGw9IiNFN0YxRjgiIHN0cm9rZT0iIzFFNEQ4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSIxOTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmVuZXJneSBkZXZlbG9wbWVudDwvdGV4dD4KPHJlY3QgeD0iMzYwIiB5PSIyMjgiIHdpZHRoPSIyNDAiIGhlaWdodD0iNTYiIHJ4PSIxMiIgZmlsbD0iI0U2RTJEQSIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSI0ODAiIHk9IjI2MyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+ZGF0YSBjZW50ZXIgYnVpbGRpbmdzPC90ZXh0Pgo8cmVjdCB4PSIzNjAiIHk9IjI5MiIgd2lkdGg9IjI0MCIgaGVpZ2h0PSI1NiIgcng9IjEyIiBmaWxsPSIjRTZFMkRBIiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzI3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5HUFUgY2x1c3RlciBkZXBsb3ltZW50PC90ZXh0Pgo8cmVjdCB4PSIzNjAiIHk9IjM1NiIgd2lkdGg9IjI0MCIgaGVpZ2h0PSI1NiIgcng9IjEyIiBmaWxsPSIjRTdGNEVGIiBzdHJva2U9IiMxRjdBNzIiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzkxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5tYW5hZ2VkIHNlcnZpY2VzPC90ZXh0Pgo8L2c+CjxyZWN0IHg9IjY0OCIgeT0iMTQwIiB3aWR0aD0iMjY0IiBoZWlnaHQ9IjMwMCIgcng9IjEyIiBmaWxsPSIjRTdGNEVGIiBzdHJva2U9IiMxRjdBNzIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI3ODAiIHk9IjE4NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+dmVydGljYWxseSBpbnRlZ3JhdGVkPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjIyOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+cmV0b29scyBhcyB0aGUgZ2F0ZSBtb3ZlczwvdGV4dD4KPHRleHQgeD0iNzgwIiB5PSIyNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPm5vdCBpbiB0aGUgY2hpcCBidXNpbmVzczwvdGV4dD4KPHRleHQgeD0iNzgwIiB5PSIyOTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPm5vdCBpbiB0aGUgbW9kZWwgYnVzaW5lc3M8L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMzQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUY3QTcyIiBmb250LXNpemU9IjE0Ij5ldmVyeXRoaW5nIGJldHdlZW48L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMzY0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUY3QTcyIiBmb250LXNpemU9IjE0Ij5lbmVyZ3kgYW5kIHRva2VuczwvdGV4dD4KPC9nPgo8cmVjdCB4PSI0OCIgeT0iNDU2IiB3aWR0aD0iODY0IiBoZWlnaHQ9IjcyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSI0ODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiMxQjI4MzgiPlRyYWRlb2ZmOiBsYXN0IHllYXIncyBnYXRlIGlzIGEgc3VuayBjb3N0LiBJbnZlc3QgaW4gd2hhdGV2ZXIgZ2F0ZXMgb3V0cHV0IHRoaXMgeWVhciwgYW5kIGJlIHJlYWR5IHRvIG1vdmUuPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjUxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNSIgZmlsbD0iIzVDNkI3QSI+Rm91ciB5ZWFycywgdGhyZWUgZ2F0ZXM6IGNoaXBzLCB0aGVuIG1lbW9yeSwgbm93IGVuZXJnaXplZCBzaGVsbHMuIExhYm9yIGFsd2F5cy48L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI1NjYiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiPk9uZSBjb25uZWN0aW9uOiB0aGUgYmluZGluZyBjb25zdHJhaW50IG1vdmVzLCBzbyB0aGUgaGVkZ2UgaXMgb3duaW5nIHRoZSBsYXllcnMgaXQgY2FuIG1vdmUgYWNyb3NzLjwvdGV4dD4KPC9zdmc+Cg=="><figcaption>Chapter plate L01-C3. Left: single-layer company hostage to one bottleneck. Center: the stack, energy to managed services. Right: vertical integration retools as the bottleneck moves. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="inside-the-factory-anatomy-of-a-megawatt">Inside the factory: anatomy of a megawatt</h2>
+<p>The host asked the question this whole chapter has been
+building toward: walk through the spend of $100. Where
+does it go, layer by layer? Before the walk, the guest&rsquo;s
+own definition of the asset. A data center is a building
+that has power and cooling, and you plug in computers.
+At gigawatt scale the simple building becomes an
+amalgamation of every form of engineering: chemical
+engineering in the cooling architectures, mechanical and
+electrical engineering in the high-voltage power systems,
+and computer science and chip architecture in how compute
+runs and data moves. The guest answered by walking
+the campus, system by system. This section is that walk,
+with the session&rsquo;s numbers attached. Every number below is
+per megawatt, the unit price of the business. The walk
+ends at two anchor numbers: about $20M per MW for the
+factory and the power plant, about $40M per MW for the
+machines inside.</p>
+<h3 id="subchapter-power-distribution-centers">Subchapter: power distribution centers</h3>
+<p>Start at the substation. Power arrives at high voltage and
+must be stepped down in stages before a chip can use it.
+The campus uses small buildings with white roofs called
+<strong>power distribution centers</strong>. They take power from the
+substation at medium voltage, 34.5 kV (34,500 volts), and
+distribute it onward to the rows of equipment. They are
+the first stop on the power path.</p>
+<h3 id="subchapter-transformers">Subchapter: transformers</h3>
+<p>From the distribution centers, power flows to rows of
+<strong>transformers</strong>. A transformer, the electrical kind, not
+the machine-learning kind, steps voltage down: here from
+34.5 kV to 480 or 415 volts, the level the data hall
+equipment takes. Each stage trades voltage for current at
+roughly constant power, until the level is safe for the
+racks.</p>
+<h3 id="subchapter-switchgear">Subchapter: switchgear</h3>
+<p>Between the substation and the rack also sit power
+transformers, medium voltage <strong>switchgear</strong>, and low
+voltage switchgear. Switchgear is the industrial breaker
+system: it routes circuits and protects them, cutting
+power when a fault would damage equipment. The guest&rsquo;s
+image: think of the electrical panel in your home, where
+you flip breakers when the lights go out, built at the
+scale of a city, all inside one giant electrical room.</p>
+<h3 id="subchapter-the-ups">Subchapter: the UPS</h3>
+<p>The <strong>UPS</strong>, the uninterruptible power supply, is a
+battery system that smooths the power flowing from the
+substation to the chip. It covers the seconds between a
+grid failure and the generators starting, so a flicker
+never becomes an outage. Crusoe also experiments with
+alternative battery systems beyond the standard UPS.</p>
+<h3 id="subchapter-diesel-generators">Subchapter: diesel generators</h3>
+<p><strong>Diesel generators</strong> are the last resort: engines that
+burn diesel to make electricity when the grid is down.
+They back up the core network and storage, not the whole
+campus.</p>
+<h3 id="subchapter-the-five-nines-sizing-rule">Subchapter: the five-nines sizing rule</h3>
+<p><strong>Five nines</strong> means 99.999% uptime: about five minutes
+of downtime a year. The guest&rsquo;s rule: not every system
+needs it, but storage and networking do, so that in a
+full grid outage the team can still reach a checkpoint
+and move a workload. Backup is sized to what must
+survive, not to everything. That is the decision: buy
+five-nines reliability for storage and networking, and
+ordinary reliability for the rest.</p>
+<figure><img alt="The power path: from 34.5 kV to the rack" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBwb3dlciBwYXRoOiBmcm9tIDM0LjUga1YgdG8gdGhlIHJhY2s8L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI5NiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzVDNkI3QSI+U2hlbGwgMy4gU3RlcCBwb3dlciBkb3duIGluIHN0YWdlczogMzQuNSBrViB0byA0ODAgVi4gU291cmNlOiBvcmlnaW5hbCwgZnJvbSB0aGUgc2Vzc2lvbidzIGNhbXB1cyB3YWxrLjwvdGV4dD4KPGcgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIxNDgiIHdpZHRoPSIxNDQiIGhlaWdodD0iMTEyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMTIwIiB5PSIxODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPnN1YnN0YXRpb248L3RleHQ+Cjx0ZXh0IHg9IjEyMCIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5ncmlkIHBvd2VyIGluPC90ZXh0Pgo8bGluZSB4MT0iMTkyIiB5MT0iMjA0IiB4Mj0iMjIwIiB5Mj0iMjA0IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjxwb2x5Z29uIHBvaW50cz0iMjIwLDE5NiAyMzYsMjA0IDIyMCwyMTIiIGZpbGw9IiMxQjI4MzgiLz4KPHJlY3QgeD0iMjI4IiB5PSIxNDgiIHdpZHRoPSIxNDQiIGhlaWdodD0iMTEyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMzAwIiB5PSIxODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiIGZvbnQtc2l6ZT0iMTQiPnBvd2VyIGRpc3RyaWJ1dGlvbjwvdGV4dD4KPHRleHQgeD0iMzAwIiB5PSIyMTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiIGZvbnQtc2l6ZT0iMTQiPmNlbnRlcnM8L3RleHQ+Cjx0ZXh0IHg9IjMwMCIgeT0iMjM0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij4zNC41IGtWPC90ZXh0Pgo8bGluZSB4MT0iMzcyIiB5MT0iMjA0IiB4Mj0iNDAwIiB5Mj0iMjA0IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjxwb2x5Z29uIHBvaW50cz0iNDAwLDE5NiA0MTYsMjA0IDQwMCwyMTIiIGZpbGw9IiMxQjI4MzgiLz4KPHRleHQgeD0iMzg2IiB5PSIxOTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiM1QzZCN0EiPnN0ZXBzIGRvd248L3RleHQ+CjxyZWN0IHg9IjQwOCIgeT0iMTQ4IiB3aWR0aD0iMTQ0IiBoZWlnaHQ9IjExMiIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iMTg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij50cmFuc2Zvcm1lcnM8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij4zNC41IGtWIHRvIDQ4MCBWPC90ZXh0Pgo8bGluZSB4MT0iNTUyIiB5MT0iMjA0IiB4Mj0iNTgwIiB5Mj0iMjA0IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjxwb2x5Z29uIHBvaW50cz0iNTgwLDE5NiA1OTYsMjA0IDU4MCwyMTIiIGZpbGw9IiMxQjI4MzgiLz4KPHJlY3QgeD0iNTg4IiB5PSIxNDgiIHdpZHRoPSIxNDQiIGhlaWdodD0iMTEyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNjYwIiB5PSIxODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPnN3aXRjaGdlYXI8L3RleHQ+Cjx0ZXh0IHg9IjY2MCIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5yb3V0ZSBhbmQgcHJvdGVjdDwvdGV4dD4KPGxpbmUgeDE9IjczMiIgeTE9IjIwNCIgeDI9Ijc2MCIgeTI9IjIwNCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9Ijc2MCwxOTYgNzc2LDIwNCA3NjAsMjEyIiBmaWxsPSIjMUIyODM4Ii8+CjxyZWN0IHg9Ijc2OCIgeT0iMTQ4IiB3aWR0aD0iMTQ0IiBoZWlnaHQ9IjExMiIgcng9IjEyIiBmaWxsPSIjRTdGNEVGIiBzdHJva2U9IiMxRjdBNzIiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI4NDAiIHk9IjE4OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+cmFja3M8L3RleHQ+Cjx0ZXh0IHg9Ijg0MCIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUY3QTcyIiBmb250LXNpemU9IjE0Ij40ODAgViwgY2hpcC1yZWFkeTwvdGV4dD4KPCEtLSBzdXBwb3J0IHJvdyAtLT4KPHJlY3QgeD0iMjI4IiB5PSIyOTYiIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHJ4PSIxMiIgZmlsbD0iI0U3RjFGOCIgc3Ryb2tlPSIjMUU0RDhDIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSIzNzgiIHk9IjMzMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+VVBTIGJhdHRlcnk8L3RleHQ+Cjx0ZXh0IHg9IjM3OCIgeT0iMzU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5zbW9vdGhzIHRoZSBmbG93PC90ZXh0Pgo8dGV4dCB4PSIzNzgiIHk9IjM4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxMyI+YnJpZGdlcyBzZWNvbmRzIHRvIGdlbmVyYXRvcnM8L3RleHQ+CjxsaW5lIHgxPSIzNzgiIHkxPSIyOTYiIHgyPSIzNzgiIHkyPSIyNjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHBvbHlnb24gcG9pbnRzPSIzNzAsMjgwIDM3OCwyNjQgMzg2LDI4MCIgZmlsbD0iIzFCMjgzOCIvPgo8cmVjdCB4PSI1ODgiIHk9IjI5NiIgd2lkdGg9IjMwMCIgaGVpZ2h0PSI5NiIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjczOCIgeT0iMzMyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5kaWVzZWwgZ2VuZXJhdG9yczwvdGV4dD4KPHRleHQgeD0iNzM4IiB5PSIzNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmxhc3QgcmVzb3J0PC90ZXh0Pgo8dGV4dCB4PSI3MzgiIHk9IjM4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxMyI+YmFja3VwOiBzdG9yYWdlIGFuZCBuZXR3b3JrIG9ubHk8L3RleHQ+CjxsaW5lIHgxPSI3MzgiIHkxPSIyOTYiIHgyPSI3MzgiIHkyPSIyNjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI3MzAsMjgwIDczOCwyNjQgNzQ2LDI4MCIgZmlsbD0iIzFCMjgzOCIvPgo8L2c+CjxyZWN0IHg9IjQ4IiB5PSI0MTYiIHdpZHRoPSI4NjQiIGhlaWdodD0iNTYiIHJ4PSIxMiIgZmlsbD0iI0ZGRkRGOCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8dGV4dCB4PSI0ODAiIHk9IjQ1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNSIgZmlsbD0iIzFCMjgzOCI+Zml2ZSBuaW5lcyA9IDk5Ljk5OSUgdXB0aW1lLCBhYm91dCA1IG1pbnV0ZXMgYSB5ZWFyLiBCb3VnaHQgZm9yIHN0b3JhZ2UgYW5kIG5ldHdvcmtpbmcsIG5vdCBmb3IgZXZlcnl0aGluZy48L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI1MDgiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiPk9uZSBjbGFpbTogZWFjaCBzdGFnZSB0cmFkZXMgdm9sdGFnZSBmb3IgY3VycmVudCBhdCByb3VnaGx5IGNvbnN0YW50IHBvd2VyLiBCYWNrdXAgaXMgc2l6ZWQgdG8gd2hhdCBtdXN0IHN1cnZpdmUuPC90ZXh0Pgo8L3N2Zz4K"><figcaption>Plate L01-F6. Before: high-voltage grid power. Rule: step down and smooth in stages. After: chip-ready power at 480V. Shell 3. Source: original, from the session's campus walk. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-chillers-and-the-chilled-water-loop">Subchapter: chillers and the chilled water loop</h3>
+<p>Chips turn almost all their power into heat. Removing
+that heat is the second great system. The campus uses
+rows of <strong>air-cooled chillers</strong>: machines that make cold
+water, built from wound copper coils that look, the guest
+jokes, like RAM sticks. A chilled water loop runs through
+the data center. Cold water enters the rack of GPUs. A
+thermal transfer event moves heat from the energized chip
+into the water. Hot water returns to the chillers, where
+fans blow air over the copper coils and exhaust the heat.
+Cold water goes back to the racks. The loop recirculates.
+The worked limit: air cooling stays practical up to
+roughly 15-25 kW per rack. Above that, fans cannot move
+enough air to keep up (industry analyses, 2026).</p>
+<h3 id="subchapter-cdus">Subchapter: CDUs</h3>
+<p><strong>Cooling distribution units (CDUs)</strong> sit inside the data
+center and do the last step: they take water from the
+chilled water pipe and distribute it to the individual
+racks of GPUs. They are the bridge between the building&rsquo;s
+water loop and the rack&rsquo;s plumbing.</p>
+<h3 id="subchapter-direct-to-chip-liquid-cooling">Subchapter: direct-to-chip liquid cooling</h3>
+<p>Air hits a wall around 20-50 kW per rack. <strong>Direct-to-chip
+liquid cooling</strong> bolts a cold plate directly onto each
+GPU, and coolant flows through the plate carrying heat
+away at the chip. The worked numbers: direct-to-chip
+handles 100-150 kW per rack, the band where an Nvidia
+GB200 <strong>NVL72</strong> rack, about 120 kW, lives. <strong>NVL72</strong> is
+Nvidia&rsquo;s rack-scale design: 72 GPUs on one <strong>NVLink</strong> (Nvidia&rsquo;s high-speed GPU-to-GPU interconnect) domain.
+PUE runs roughly 1.05-1.15 against 1.4-1.8 for air
+(industry analyses, 2026). The physics: water conducts heat roughly 25 times
+better than still air, so the same rack that throttles on
+air runs full speed on liquid. The price: plumbing at
+every server, and CDUs sized for the higher heat flux. By
+2026 this was the dominant liquid method, about 55% of
+liquid-cooling deployments (Schneider Electric, via Data
+Center Knowledge, 2026).</p>
+<h3 id="subchapter-immersion-cooling">Subchapter: immersion cooling</h3>
+<p>Above about 175-200 kW per rack, even cold plates
+struggle. <strong>Immersion cooling</strong> removes the air entirely:
+servers sit in tanks of dielectric fluid, and the fluid
+carries the heat away, in two-phase designs by boiling
+off the chip surface. The worked numbers: 200-250+ kW
+per rack demonstrated (BitFury/Allied Control reached 250
+kW per enclosure), PUE as low as 1.02. The price: tanks
+instead of racks, expensive fluid ($50-100 per gallon for
+single-phase oils, $200+ for two-phase fluorocarbons),
+and greenfield-only retrofits. Two-phase adoption stalled
+on <strong>PFAS</strong> (per- and polyfluoroalkyl substances, the
+chemical family used in two-phase immersion coolants)
+regulation. A replacement fluid was
+qualified in early 2026, with the regulatory outcome
+pending into 2027 (Data Center Knowledge, 2026).
+Decision rule: air below about 20 kW per rack,
+direct-to-chip for the 20-150 kW AI band, immersion only
+when the rack passes about 175 kW.</p>
+<table>
+<thead>
+<tr>
+<th>Rack power</th>
+<th>Method</th>
+<th>Session numbers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>below about 20 kW</td>
+<td>air</td>
+<td>practical to roughly 15-25 kW per rack; fans cannot move enough air above it</td>
+</tr>
+<tr>
+<td>20-150 kW</td>
+<td>direct-to-chip liquid cooling</td>
+<td>100-150 kW per rack; NVL72 about 120 kW; PUE roughly 1.05-1.15; about 55% of liquid-cooling deployments in 2026</td>
+</tr>
+<tr>
+<td>above about 175-200 kW</td>
+<td>immersion cooling</td>
+<td>200-250+ kW per rack demonstrated; PUE as low as 1.02</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subchapter-hot-aisle-containment">Subchapter: hot aisle containment</h3>
+<p>The air that remains still needs managing. <strong>Hot aisle
+containment</strong> is the physical barrier, panels and
+enclosures, that keeps hot exhaust air separated from
+cold supply air so the two never mix. Without the
+barrier, exhaust mixes into the cold supply, server
+inlets run hotter, and the chillers must run colder to
+compensate: energy spent fixing the mix.</p>
+<h3 id="subchapter-fan-walls">Subchapter: fan walls</h3>
+<p><strong>Fan walls</strong> are banks of large fans: the air handling
+that moves air through the data hall. They pull cold
+supply air across the racks and push hot exhaust toward
+the return path. Containment sets the lanes. The fan
+wall drives the traffic.</p>
+<h3 id="subchapter-remote-power-panels">Subchapter: remote power panels</h3>
+<p><strong>Remote power panels</strong> are the breaker panels inside
+the data hall that feed the racks. They are the tail
+end of the power path: the last distribution and
+protection point before the racks draw their load. All
+of this, plus the plumbing, is the mechanical half of
+the factory.</p>
+<figure><img alt="The cooling path: the recirculating loop" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBjb29saW5nIHBhdGg6IHRoZSByZWNpcmN1bGF0aW5nIGxvb3A8L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI5NiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzVDNkI3QSI+U2hlbGwgMy4gV2F0ZXIgY2FycmllcyB0aGUgaGVhdCBvdXQ7IGNvbGQgd2F0ZXIgcmV0dXJucy4gU291cmNlOiBvcmlnaW5hbCwgZnJvbSB0aGUgc2Vzc2lvbidzIGNhbXB1cyB3YWxrLjwvdGV4dD4KPHRleHQgeD0iMTQ0IiB5PSIxNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiM1QzZCN0EiPmNvbGQgd2F0ZXIgaW48L3RleHQ+Cjx0ZXh0IHg9IjU5MiIgeT0iMTQ4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEzIiBmaWxsPSIjQzQ2QjJDIj5iZWZvcmU6IGhvdCBjaGlwczwvdGV4dD4KPHRleHQgeD0iODE2IiB5PSIxNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiM1QzZCN0EiPmFmdGVyOiBoZWF0IG91dDwvdGV4dD4KPGcgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIxNjAiIHdpZHRoPSIxOTIiIGhlaWdodD0iMTIwIiByeD0iMTIiIGZpbGw9IiNFN0YxRjgiIHN0cm9rZT0iIzFFNEQ4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMTQ0IiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmNoaWxsZXJzPC90ZXh0Pgo8dGV4dCB4PSIxNDQiIHk9IjIyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+bWFrZSBjb2xkIHdhdGVyPC90ZXh0Pgo8dGV4dCB4PSIxNDQiIHk9IjI1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+YWlyLWNvb2xlZCBjb2lsczwvdGV4dD4KPGxpbmUgeDE9IjI0MCIgeTE9IjIyMCIgeDI9IjI2NCIgeTI9IjIyMCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjI2NCwyMTIgMjgwLDIyMCAyNjQsMjI4IiBmaWxsPSIjMUIyODM4Ii8+CjxyZWN0IHg9IjI3MiIgeT0iMTYwIiB3aWR0aD0iMTkyIiBoZWlnaHQ9IjEyMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjM2OCIgeT0iMjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5DRFVzPC90ZXh0Pgo8dGV4dCB4PSIzNjgiIHk9IjIyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+Y29vbGluZyBkaXN0cmlidXRpb248L3RleHQ+Cjx0ZXh0IHg9IjM2OCIgeT0iMjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5mZWVkIHRoZSByYWNrczwvdGV4dD4KPGxpbmUgeDE9IjQ2NCIgeTE9IjIyMCIgeDI9IjQ4OCIgeTI9IjIyMCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjQ4OCwyMTIgNTA0LDIyMCA0ODgsMjI4IiBmaWxsPSIjMUIyODM4Ii8+CjxyZWN0IHg9IjQ5NiIgeT0iMTYwIiB3aWR0aD0iMTkyIiBoZWlnaHQ9IjEyMCIgcng9IjEyIiBmaWxsPSIjRjRFNkQ0IiBzdHJva2U9IiNDNDZCMkMiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI1OTIiIHk9IjIwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+R1BVIHJhY2tzPC90ZXh0Pgo8dGV4dCB4PSI1OTIiIHk9IjIyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIxNCI+aGVhdDogY2hpcCB0byB3YXRlcjwvdGV4dD4KPHRleHQgeD0iNTkyIiB5PSIyNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPnRoZSB0cmFuc2ZlciBldmVudDwvdGV4dD4KPGxpbmUgeDE9IjY4OCIgeTE9IjIyMCIgeDI9IjcxMiIgeTI9IjIyMCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjcxMiwyMTIgNzI4LDIyMCA3MTIsMjI4IiBmaWxsPSIjMUIyODM4Ii8+CjxyZWN0IHg9IjcyMCIgeT0iMTYwIiB3aWR0aD0iMTkyIiBoZWlnaHQ9IjEyMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjgxNiIgeT0iMjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5mYW5zPC90ZXh0Pgo8dGV4dCB4PSI4MTYiIHk9IjIyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+YmxvdyBhaXIgb3ZlciBjb2lsczwvdGV4dD4KPHRleHQgeD0iODE2IiB5PSIyNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmV4aGF1c3QgdGhlIGhlYXQ8L3RleHQ+CjwhLS0gcmV0dXJuIHBhdGggLS0+Cjxwb2x5bGluZSBwb2ludHM9IjgxNiwyODAgODE2LDMyOCAxNDQsMzI4IDE0NCwyODgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHBvbHlnb24gcG9pbnRzPSIxMzYsMzAwIDE0NCwyODQgMTUyLDMwMCIgZmlsbD0iIzFCMjgzOCIvPgo8dGV4dCB4PSI0ODAiIHk9IjMyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFGN0E3MiI+Y29sZCB3YXRlciByZXR1cm5zIHRvIHRoZSBjaGlsbGVyczwvdGV4dD4KPC9nPgo8cmVjdCB4PSI0OCIgeT0iMzY4IiB3aWR0aD0iODY0IiBoZWlnaHQ9IjcyIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSI0MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiMxQjI4MzgiPlRoZSBsb29wIGlzIGZpbGxlZCBvbmNlIGFuZCByZWNpcmN1bGF0ZXMuIEhvdCBhaXNsZSBjb250YWlubWVudCBhbmQgZmFuIHdhbGxzIGtlZXAgdGhlIGFpciBsYW5lcyBzZXBhcmF0ZS48L3RleHQ+Cjx0ZXh0IHg9IjQ4IiB5PSI0OTIiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiPk9uZSBjbGFpbTogY2hpcHMgdHVybiBhbG1vc3QgYWxsIHRoZWlyIHBvd2VyIGludG8gaGVhdC4gVGhlIGxvb3AgY2FycmllcyBpdCB0byBhaXIgYW5kIGJyaW5ncyBjb2xkIHdhdGVyIGJhY2suPC90ZXh0Pgo8L3N2Zz4K"><figcaption>Plate L01-F7. Before: hot chips. Rule: water carries the heat out. After: heat exhausted, cold water returns. Shell 3. Source: original, from the session's campus walk. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-water-the-myth-and-the-measurement">Subchapter: water, the myth and the measurement</h3>
+<p>The running public narrative is that AI data centers
+drain local water. The session&rsquo;s numbers say something
+precise and different.</p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Water in one building&rsquo;s cooling loop</td>
+<td>about 1 million gallons</td>
+</tr>
+<tr>
+<td>How often the loop is filled</td>
+<td>once; it recirculates</td>
+</tr>
+<tr>
+<td>Annual consumption</td>
+<td>about the same as one single-family home</td>
+</tr>
+</tbody>
+</table>
+<p>The guest: &ldquo;We use like zero water. We fill this system
+one time.&rdquo; In water-scarce West Texas that design choice
+is not cosmetic. It is what makes the site permittable.
+The trap is confusing the loop&rsquo;s volume with its
+consumption. The volume is large. The consumption is a
+household.</p>
+<h3 id="subchapter-steel-concrete-and-hands">Subchapter: steel, concrete, and hands</h3>
+<p>Nothing was at the Abilene site before. The buildings
+need steel, cement, and every trade that assembles them.
+Crusoe runs its own <strong>batch plant</strong> on site: concrete
+mixed on location, crews pouring 24 hours a day. Armies
+of plumbers and pipe fitters weld the big plumbing
+systems together. Site work, labor, man-hours: the
+guest&rsquo;s list is deliberately physical. This is the $4.7M
+per MW line from the bottleneck section, made concrete.</p>
+<h3 id="subchapter-the-20m-per-mw-building-stack">Subchapter: the $20M per MW building stack</h3>
+<p>Now the dollars. The guest normalized the full power
+plant plus building cost per megawatt. The total is
+roughly $20B per gigawatt, or $20M per MW.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Session number</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Labor</td>
+<td>$4.7M per MW</td>
+<td>capitalized construction wages; $4.7B per GW, not OpEx. <strong>OpEx</strong> is operating expenditure: the money spent to run the asset each year, as opposed to CapEx, the money spent to build it</td>
+</tr>
+<tr>
+<td>Gas plant</td>
+<td>$2-3M per MW</td>
+<td>on-site generation; turbine prices rose from $1M to $3M per MW</td>
+</tr>
+<tr>
+<td>Tenant fit-out</td>
+<td>~$3M per MW</td>
+<td><strong>tenant fit-out</strong> is finishing the empty shell for its occupant: here the remote power panels, hot aisle containment, fan walls, and CDUs defined in the cooling walk above</td>
+</tr>
+<tr>
+<td>Electrical equipment</td>
+<td>~$3.5-4.5M per MW [worked estimate]</td>
+<td>transformers, distribution centers, medium and low voltage switchgear, UPS, generators</td>
+</tr>
+<tr>
+<td>Mechanical equipment</td>
+<td>~$2-3M per MW [worked estimate]</td>
+<td>chillers, plumbing, air handling units, fan walls</td>
+</tr>
+<tr>
+<td>Materials</td>
+<td>~$1.5-2.5M per MW [worked estimate]</td>
+<td>steel, cement, everything structural</td>
+</tr>
+<tr>
+<td>Soft costs</td>
+<td>~$1-2M per MW [worked estimate]</td>
+<td>insurance, construction-loan financing and debt service, siting, commissioning</td>
+</tr>
+</tbody>
+</table>
+<p>Four notes on the table. First, the guest built it that
+afternoon and calls the numbers approximate: read them as
+orders of magnitude, not invoices. Second, the guest did
+not break out the last four lines. The ranges above are
+worked estimates, not session numbers. The four known lines
+sum to about $10-10.7M, leaving about $9.3-10M. Splitting
+it by 2026 industry cost shares, electrical systems the
+largest line at 40-45% of construction cost (Encor Advisors,
+2026), power infrastructure 21% of a greenfield build
+(Cushman and Wakefield, 2026), gives the ranges shown, and
+the midpoints sum back to the $20M total within rounding.
+Third, the direction is up, not down. Gas generation
+infrastructure, labor, electrical equipment: every category
+is inflating under demand. A gas turbine that cost $1M per
+MW now costs $3M. The makers are a small set: GE Vernova,
+Siemens, Mitsubishi Heavy Industries, Pratt and Whitney,
+and Caterpillar&rsquo;s Solar. They have not expanded production
+capacity much, so prices rose. The guest&rsquo;s market read:
+it has been good to be a GE Vernova shareholder. Fourth,
+the host&rsquo;s follow-up: assuming a gigawatt comes online in
+a year, the labor line alone is $4.5-5B in wages per year.
+That is CapEx, capitalized into the asset, not operating
+expense.</p>
+<h3 id="subchapter-the-rack-network-nvlink-infiniband-roce">Subchapter: the rack network: NVLink, InfiniBand, RoCE</h3>
+<p>The machine stack&rsquo;s networking line deserves its own
+subchapter. The latest Nvidia racks (GB200/GB300 class)
+are full-rack designs: 72 GPUs on one <strong>NVLink</strong> domain.
+NVLink is Nvidia&rsquo;s high-bandwidth GPU-to-GPU
+interconnect, with a copper backplane tying the 72
+together so they share memory at full speed. Racks then
+connect through a second back-end network, typically
+<strong>InfiniBand</strong> or <strong>RoCE</strong>, so thousands of GPUs share
+data at training speed. InfiniBand is the dedicated
+high-speed fabric built for this job. RoCE is RDMA over
+Converged Ethernet: it does the same job over standard
+Ethernet, where RDMA (remote direct memory access) lets
+one machine read another machine&rsquo;s memory without
+bothering its CPU. That is where the $4M goes: two
+networks, one inside the rack, one between racks.</p>
+<h3 id="subchapter-the-40m-machine-stack-the-table">Subchapter: the $40M machine stack, the table</h3>
+<p>The host asked the obvious question: where are the GPUs?
+They are the next layer. The <strong>IT CapEx</strong> is the compute
+infrastructure inside the building: roughly $40M per MW,
+forward-looking, next-generation hardware.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Session number</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPUs</td>
+<td>~$30M per MW</td>
+<td>the accelerators; &ldquo;this is why Jensen is always smiling&rdquo;</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td>~$4M per MW</td>
+<td>NVLink domains inside the rack, InfiniBand or RoCE between racks</td>
+</tr>
+<tr>
+<td>CPUs and storage</td>
+<td>~$3M per MW</td>
+<td>orchestration and data; CPUs are in shortage</td>
+</tr>
+<tr>
+<td>In-the-room fit-out</td>
+<td>~$3M per MW</td>
+<td>the tenant fit-out items from the building table, counted at the rack</td>
+</tr>
+<tr>
+<td>Deployment labor, shipping</td>
+<td>~$1M per MW</td>
+<td>getting it all installed</td>
+</tr>
+</tbody>
+</table>
+<p>The arithmetic sums to about $41M. The guest admits he
+may be double-counting the fit-out line. Read $40M as
+his rounded number.</p>
+<h3 id="subchapter-the-cpu-shortage-and-why-agents-cause-it">Subchapter: the CPU shortage, and why agents cause it</h3>
+<p>The CPU line carries a surprise. There is a massive
+shortage of CPUs, and the cause is <strong>agentic workflows</strong>:
+AI agents that loop, plan, call a tool, check the result,
+repeat. With the boom in agents, with the boom in Claude,
+every agent loop needs CPUs to orchestrate the compute
+workload. The mechanism: each loop step is small,
+sequential, and latency-sensitive, which is CPU work, not
+GPU work. Millions of loops running at once drain the CPU
+supply. The inference economy pulls CPUs the way the
+training economy pulled GPUs.</p>
+<h3 id="subchapter-crusoe-spark-the-modular-answer">Subchapter: Crusoe Spark, the modular answer</h3>
+<p>The labor bottleneck has an engineering answer. Crusoe
+designed <strong>Crusoe Spark</strong>: modular, self-contained AI
+data centers manufactured in centralized US locations,
+then deployed in fleets. Each air-cooled unit is 500 kW.
+A liquid-cooled version is 2 MW. Fleets of units open up
+sites that could never justify a gigawatt campus.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Stick-built campus</th>
+<th>Crusoe Spark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where it is built</td>
+<td>on site, 9,000 workers</td>
+<td>in a factory, then shipped</td>
+</tr>
+<tr>
+<td>Field construction time</td>
+<td>years</td>
+<td>weeks</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>baseline</td>
+<td>30-50% savings, per the guest</td>
+</tr>
+<tr>
+<td>Sizing</td>
+<td>gigawatt scale or nothing</td>
+<td>incremental: add units as demand grows</td>
+</tr>
+</tbody>
+</table>
+<p>The guest&rsquo;s claim: the $19M-per-MW-class build cost
+comes down dramatically. The strategic effect matters
+more than the number. Modular units open net new power
+opportunities: smaller stranded-power sites become
+buildable. Manufacturing centralizes the labor the field
+cannot supply.</p>
+<figure><img alt="Chapter plate: the $60M megawatt" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgOTYwIDYwMCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNTYiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPkNoYXB0ZXIgcGxhdGU6IHRoZSAkNjBNIG1lZ2F3YXR0PC90ZXh0Pgo8dGV4dCB4PSI0OCIgeT0iODYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM1QzZCN0EiPkNoYXB0ZXIgcGxhdGUuIFRoZSBtZWdhd2F0dCBpcyB0aGUgdW5pdCBwcmljZS4gU291cmNlOiBvcmlnaW5hbCBzeW50aGVzaXMgb2YgdGhlIHNlc3Npb24uPC90ZXh0Pgo8ZyBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMUIyODM4Ij4KPHRleHQgeD0iNDgiIHk9IjEyNCI+V0lUSE9VVCBtYWNoaW5lczogJDIwTS9NVzwvdGV4dD4KPHRleHQgeD0iMzI4IiB5PSIxMjQiPnRoZSBtZWdhd2F0dDogdW5pdCBwcmljZTwvdGV4dD4KPHRleHQgeD0iNjQ4IiB5PSIxMjQiPldJVEggbWFjaGluZXM6IHJldmVudWU8L3RleHQ+CjwvZz4KPGcgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIxNDAiIHdpZHRoPSIyNjQiIGhlaWdodD0iMzMwIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMTgwIiB5PSIxNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmxhYm9yICQ0LjdNPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjIxMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+Z2FzIHBsYW50ICQyLTNNPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjI1MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+Zml0LW91dCBhYm91dCAkM008L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iMjkyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5lbGVjdHJpY2FsICQzLjUtNC41TTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIzMzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiPndvcmtlZCBlc3RpbWF0ZTwvdGV4dD4KPHRleHQgeD0iMTgwIiB5PSIzNjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPm1lY2hhbmljYWwgJDItM008L3RleHQ+Cjx0ZXh0IHg9IjE4MCIgeT0iNDA0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5tYXRlcmlhbHMgJDEuNS0yLjVNPC90ZXh0Pgo8dGV4dCB4PSIxODAiIHk9IjQ0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+c29mdCBjb3N0cyAkMS0yTTwvdGV4dD4KPHJlY3QgeD0iMzI4IiB5PSIxNDAiIHdpZHRoPSIzMDQiIGhlaWdodD0iMzMwIiByeD0iMTIiIGZpbGw9IiNFN0YxRjgiIHN0cm9rZT0iIzFFNEQ4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNDgwIiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiPiQyME08L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMjI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIj5mYWN0b3J5IGFuZCBwb3dlciBwbGFudDwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSIyNjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI2MDAiPis8L3RleHQ+Cjx0ZXh0IHg9IjQ4MCIgeT0iMzE2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4IiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNjAwIj4kNDBNPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjM0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSI+bWFjaGluZXMgaW5zaWRlPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjM4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9IjYwMCI+PSAkNjBNIHBlciBNVzwvdGV4dD4KPHRleHQgeD0iNDgwIiB5PSI0MTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiPk9wRXggJDEtMk0gcGVyIE1XIHBlciB5ZWFyPC90ZXh0Pgo8dGV4dCB4PSI0ODAiIHk9IjQ0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSI+YSBnaWdhd2F0dCBjb3N0cyAkNjBCPC90ZXh0Pgo8cmVjdCB4PSI2NDgiIHk9IjE0MCIgd2lkdGg9IjI2NCIgaGVpZ2h0PSIzMzAiIHJ4PSIxMiIgZmlsbD0iI0U3RjRFRiIgc3Ryb2tlPSIjMUY3QTcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNzgwIiB5PSIxNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPkdQVXMgJDMwTTwvdGV4dD4KPHRleHQgeD0iNzgwIiB5PSIyMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPm5ldHdvcmtpbmcgJDRNPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjI1MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCI+Q1BVcyBhbmQgc3RvcmFnZSAkM008L3RleHQ+Cjx0ZXh0IHg9Ijc4MCIgeT0iMjkyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5maXQtb3V0ICQzTTwvdGV4dD4KPHRleHQgeD0iNzgwIiB5PSIzMzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPmRlcGxveSAkMU08L3RleHQ+CjxsaW5lIHgxPSI2NzIiIHkxPSIzNjAiIHgyPSI4ODgiIHkyPSIzNjAiIHN0cm9rZT0iI0Q5RDNDNyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNzgwIiB5PSIzOTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxRjdBNzIiPnJlbnQ6ICQxNU0veXIsIDQgeXJzPC90ZXh0Pgo8dGV4dCB4PSI3ODAiIHk9IjQyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFGN0E3MiI+KyBzZXJ2aWNlczogJDMwTS95ciwgMiB5cnM8L3RleHQ+CjwvZz4KPHJlY3QgeD0iNDgiIHk9IjQ4NiIgd2lkdGg9Ijg2NCIgaGVpZ2h0PSI1NiIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjQ4MCIgeT0iNTIxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE1IiBmaWxsPSIjMUIyODM4Ij5UcmFkZW9mZjogdGhlIHN0YWNrIHBheXMgYmFjayBvbmx5IGlmIHRva2VuIHJldmVudWUgcGVyIE1XIHN0YXlzIGluIHRoZSB1cHBlciByb3dzLiBUaGUgZGVwcmVjaWF0aW9uIGN1cnZlIGRlY2lkZXMuPC90ZXh0Pgo8dGV4dCB4PSI0OCIgeT0iNTc4IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjMUIyODM4Ij5PbmUgY29ubmVjdGlvbjogdGhlIG1lZ2F3YXR0IGlzIHRoZSB1bml0IHByaWNlIG9mIHRoZSB3aG9sZSBidXNpbmVzcy4gSW5wdXRzIGFuZCByZXZlbnVlIGFyZSBib3RoIHF1b3RlZCBwZXIgTVcuPC90ZXh0Pgo8L3N2Zz4K"><figcaption>Chapter plate L01-C4. Left: $20M building stack without machines. Center: the megawatt, the unit price. Right: $40M IT stack, OPEX, and the revenue that must cover them. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="the-payback-question-does-60m-per-megawatt-earn">The payback question: does $60M per megawatt earn?</h2>
+<p>$20M for the factory plus $40M for the machines is $60M
+per MW. A gigawatt cluster costs $60B. The host&rsquo;s
+question is the only one that matters: how does anybody
+make money? The guest answers with three numbers and one
+chart.</p>
+<h3 id="subchapter-the-revenue-math">Subchapter: the revenue math</h3>
+<p>OpEx, defined in the building stack above, is small for
+the campus: roughly $1-2M per MW per year. Power,
+insurance, on-site labor repairing and replacing failed
+cables and GPUs. A failed GPU gets reseated in its
+compute tray or sent back to the vendor on an <strong>RMA</strong>,
+a return merchandise authorization: the formal process
+for returning failed hardware for repair or replacement.
+The engineering workforce and corporate overhead sit
+outside this number, so read it as the plant-level figure.</p>
+<p>Revenue, if you only rent the chips: roughly $15M per MW
+per year, annualized, at then-current H100 rental
+pricing. The arithmetic:</p>
+<pre><code>capex:    $60M per MW
+revenue:  $15M per MW per year
+opex:     $1-2M per MW per year
+payback:  60 / 15 = about 4 years
+</code></pre>
+<p>The guest stresses this is a revenue-basis payback,
+stripping out OpEx. Roughly four years. Two independent
+corroborations arrived by October 2026. Nvidia CEO Jensen
+Huang said at the G20 Innovation Ministerial in Chapel
+Hill, on September 2, 2026, that a 1-gigawatt facility
+costs $50-60B to build, matching the session&rsquo;s $60M per
+MW to the dollar. And neocloud Nebius disclosed, in its
+Q2 2026 shareholder letter, $20-25M of annual contract
+value per MW on landmark deals, $40-50M per MW on
+auction and short-term capacity, with deal payback of
+1 year 10 months. The session&rsquo;s $15M base case sits
+inside that market range. The number that makes it work
+or breaks it is the depreciation curve:
+how long each bar of the stack stays valuable. That is
+the question Wall Street analysts ask, and the next
+chapter takes it apart.</p>
+<h3 id="subchapter-the-h100-price-chart">Subchapter: the H100 price chart</h3>
+<p>The guest showed a Bloomberg chart of H100 rental prices.
+The conventional wisdom said each new chip generation
+would make the old one worthless. The chart says the
+opposite. H100s debuted about three years before the
+session. Their price fell at first, then the agent boom
+drove demand back up, and the price exceeded the launch
+price. A SemiAnalysis chart for Blackwells shows the same
+shape after the late-year agent breakthrough. Old compute
+regained value because demand outran supply again.</p>
+<figure><img alt="The H100 price rebound: old chips regained value" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBIMTAwIHByaWNlIHJlYm91bmQ6IG9sZCBjaGlwcyByZWdhaW5lZCB2YWx1ZTwvdGV4dD4KPHRleHQgeD0iNDgiIHk9Ijk2IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNUM2QjdBIj5TaGVsbCAzLiBPbGQgY2hpcHMgcmVnYWluZWQgdmFsdWUgd2hlbiBhZ2VudCBkZW1hbmQgb3V0cmFuIHN1cHBseS4gU291cmNlOiBzZXNzaW9uIGNoYXJ0LCByZWFkIGZyb20gdGhlIHNsaWRlLjwvdGV4dD4KPCEtLSBheGVzIC0tPgo8bGluZSB4MT0iOTYiIHkxPSIxNDAiIHgyPSI5NiIgeTI9IjQ0MCIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8bGluZSB4MT0iOTYiIHkxPSI0NDAiIHgyPSI4ODAiIHkyPSI0NDAiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iNjAiIHk9IjI5MCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzVDNkI3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDYwIDI5MCkiPnJlbnRhbCBwcmljZTwvdGV4dD4KPHRleHQgeD0iNDg4IiB5PSI0NzAiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM1QzZCN0EiIHRleHQtYW5jaG9yPSJtaWRkbGUiPnRpbWUsIGFib3V0IHRocmVlIHllYXJzPC90ZXh0Pgo8IS0tIGRlYnV0IGxldmVsIC0tPgo8bGluZSB4MT0iOTYiIHkxPSIyMTAiIHgyPSI4ODAiIHkyPSIyMTAiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjggNiIvPgo8dGV4dCB4PSI4NzIiIHk9IjE5OCIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzVDNkI3QSIgdGV4dC1hbmNob3I9ImVuZCI+ZGVidXQgcHJpY2U8L3RleHQ+CjwhLS0gY3VydmUgLS0+Cjxwb2x5bGluZSBwb2ludHM9IjEzMCwyMTAgMjkwLDMzNSA0NzAsMzEyIDY1MCwyNTIgODMwLDE1OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8Y2lyY2xlIGN4PSIxMzAiIGN5PSIyMTAiIHI9IjUiIGZpbGw9IiMxQjI4MzgiLz4KPGNpcmNsZSBjeD0iMjkwIiBjeT0iMzM1IiByPSI1IiBmaWxsPSIjMUIyODM4Ii8+CjxjaXJjbGUgY3g9IjgzMCIgY3k9IjE1OCIgcj0iNSIgZmlsbD0iIzFGN0E3MiIvPgo8ZyBmb250LXNpemU9IjE0IiBmaWxsPSIjNUM2QjdBIj4KPHRleHQgeD0iMTMwIiB5PSI0MjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmRlYnV0PC90ZXh0Pgo8dGV4dCB4PSIyOTAiIHk9IjM2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZGlwOiBvYnNvbGVzY2VuY2UgZmVhcjwvdGV4dD4KPHRleHQgeD0iNjUwIiB5PSIyODIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmFnZW50IGJvb206IGRlbWFuZCBvdXRydW5zIHN1cHBseTwvdGV4dD4KPHRleHQgeD0iODMwIiB5PSIxNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxRjdBNzIiPmFib3ZlIGRlYnV0PC90ZXh0Pgo8L2c+Cjx0ZXh0IHg9IjQ4IiB5PSI1MDgiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIGZpbGw9IiMxQjI4MzgiPk9uZSBjbGFpbTogdGhlIHJlbnRhbCBtYXJrZXQgcHJpY2VkIG9ic29sZXNjZW5jZSBmZWFyIGZpcnN0LCB0aGVuIGFnZW50IGRlbWFuZCByZXByaWNlZCBpdC4gRXhhY3QgcHJpY2UgbGV2ZWxzIG5vdCBpbiBzb3VyY2UuPC90ZXh0Pgo8L3N2Zz4K"><figcaption>Plate L01-F8. Before: prices fall after launch. Rule: agent demand outruns supply. After: prices exceed the debut level. Shell 3. Source: session chart, read from the slide. Exact price levels not in source. Project: Stanford Frontier AI.</figcaption></figure>
+<p>One counter-reading, for honesty: the April 2026 Research
+Affiliates paper reads the same rental market the other
+way, reporting H100 hourly rates falling from scarcity
+peaks near $8 in 2024 to below $3 by late 2025 and below
+$1 in early 2026. The guest&rsquo;s chart covers what happened
+next: the agent boom drove demand back above supply, and
+the price recovered past the debut level. Read the two
+together: the rental market priced obsolescence fear
+first, then agent demand repriced it. The rebound is not
+a slide artifact: the guest says Crusoe is seeing it
+firsthand in its own cloud business.</p>
+<h3 id="subchapter-spot-pricing-defined">Subchapter: spot pricing, defined</h3>
+<p><strong>Spot pricing</strong> is the current market rental price: what
+a GPU-hour costs right now, moving with supply and
+demand, as opposed to a long-term contract rate. When the
+guest says H100 spot prices rebounded, he means the live
+rental market, not a price list.</p>
+<h3 id="subchapter-depreciation-defined">Subchapter: depreciation, defined</h3>
+<p>The chart&rsquo;s implication is about <strong>depreciation</strong>:
+spreading an asset&rsquo;s cost over its useful life. A
+$60,000 server with a six-year life books $10,000 of
+depreciation cost a year. Public companies commonly
+depreciate computers over five to six years. The guest&rsquo;s
+honest answer: Crusoe will use compute as long as it is
+valuable to someone. If the obsolescence critics are
+right, the useful life is shorter than the books assume.
+The next chapter prices both.</p>
+<h3 id="subchapter-crusoe-cloud-and-the-chip-abstraction">Subchapter: Crusoe Cloud and the chip abstraction</h3>
+<p>Crusoe Cloud abstracts the chip away: the customer does
+not know or care whether the job ran on an A100, an H100,
+or an MI300. His analogy: logging into Zoom, you do not
+ask which Intel or AMD chip runs the call. You buy the
+service. If services abstract the hardware, useful life
+may run longer than the books assume, because the
+customer buys tokens, not a chip model. The abstraction
+is the bet against the depreciation critics.</p>
+<h3 id="subchapter-the-services-uplift">Subchapter: the services uplift</h3>
+<p>Renting chips is the low-margin way to monetize a
+factory. The guest&rsquo;s vertical integration adds a layer:
+<strong>managed services</strong>. Two products sit on it. The
+managed compute cluster is for the engineer: virtual
+machines or a managed <strong>Kubernetes</strong> cluster to run a
+training workload, with the customer managing the
+infrastructure. Kubernetes is the open-source system for
+running software in containers, self-contained packages,
+across a fleet of machines: it schedules, restarts, and
+scales them. The model endpoint is for everyone
+else: Crusoe hosts the model and serves an API
+endpoint, and the customer hits it for tokens. The
+margin uplift is $5-15M per MW per year. In
+the optimistic case the stack becomes $30M per MW per
+year, and the payback halves.</p>
+<figure><img alt="The services uplift: from 4-year to 2-year payback" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTQwIiB2aWV3Qm94PSIwIDAgOTYwIDU0MCIgZm9udC1mYW1pbHk9IkFudGhyb3BpYyBTYW5zLCBJbnRlciwgJ1NvdXJjZSBTYW5zIDMnLCAnSUJNIFBsZXggU2FucycsIHNhbnMtc2VyaWYiPgo8cmVjdCB3aWR0aD0iOTYwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iI0Y3RjRFRSIvPgo8dGV4dCB4PSI0OCIgeT0iNjQiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMxQjI4MzgiPlRoZSBzZXJ2aWNlcyB1cGxpZnQ6IGZyb20gNC15ZWFyIHRvIDIteWVhciBwYXliYWNrPC90ZXh0Pgo8dGV4dCB4PSI0OCIgeT0iOTYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM1QzZCN0EiPlNoZWxsIDQuIEFkZCBzZXJ2aWNlczogJDE1TSBhbmQgNCB5ZWFycyBiZWNvbWUgJDMwTSBhbmQgMi4gU291cmNlOiBvcmlnaW5hbCwgbnVtYmVycyBmcm9tIHRoZSBzZXNzaW9uLjwvdGV4dD4KPGcgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjUwMCI+CjxyZWN0IHg9IjQ4IiB5PSIxNDAiIHdpZHRoPSIzNjAiIGhlaWdodD0iMTUwIiByeD0iMTIiIGZpbGw9IiNGRkZERjgiIHN0cm9rZT0iIzFCMjgzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPHRleHQgeD0iMjI4IiB5PSIxODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjI4MzgiPnJlbnQgdGhlIGNoaXBzPC90ZXh0Pgo8dGV4dCB4PSIyMjgiIHk9IjIxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzFCMjgzOCIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCI+JDE1TSBwZXIgTVcgcGVyIHllYXI8L3RleHQ+Cjx0ZXh0IHg9IjIyOCIgeT0iMjQyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNUM2QjdBIiBmb250LXNpemU9IjE0Ij5wYXliYWNrOiA2MCAvIDE1ID0gYWJvdXQgNCB5ZWFyczwvdGV4dD4KPGxpbmUgeDE9IjQwOCIgeTE9IjIxNSIgeDI9IjUzNiIgeTI9IjIxNSIgc3Ryb2tlPSIjMUIyODM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8cG9seWdvbiBwb2ludHM9IjUzNiwyMDcgNTUyLDIxNSA1MzYsMjIzIiBmaWxsPSIjMUIyODM4Ii8+Cjx0ZXh0IHg9IjQ3MiIgeT0iMjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMUIyODM4Ij5hZGQgbWFuYWdlZCBzZXJ2aWNlczwvdGV4dD4KPHRleHQgeD0iNDcyIiB5PSIyNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiM1QzZCN0EiPiskNSB0byAkMTVNIHBlciBNVyBwZXIgeWVhcjwvdGV4dD4KPHJlY3QgeD0iNTUyIiB5PSIxNDAiIHdpZHRoPSIzNjAiIGhlaWdodD0iMTUwIiByeD0iMTIiIGZpbGw9IiNFN0Y0RUYiIHN0cm9rZT0iIzFGN0E3MiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjczMiIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5yZW50IHBsdXMgc2VydmljZXM8L3RleHQ+Cjx0ZXh0IHg9IjczMiIgeT0iMjEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4IiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNjAwIj4kMzBNIHBlciBNVyBwZXIgeWVhcjwvdGV4dD4KPHRleHQgeD0iNzMyIiB5PSIyNDIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxRjdBNzIiIGZvbnQtc2l6ZT0iMTQiPnBheWJhY2s6IDYwIC8gMzAgPSBhYm91dCAyIHllYXJzPC90ZXh0Pgo8cmVjdCB4PSI0OCIgeT0iMzMwIiB3aWR0aD0iNDIwIiBoZWlnaHQ9IjExMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjI1OCIgeT0iMzcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5tYW5hZ2VkIGNvbXB1dGUgY2x1c3RlcjwvdGV4dD4KPHRleHQgeD0iMjU4IiB5PSIzOTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmZvciB0aGUgZW5naW5lZXI6IFZNcyBvciBLdWJlcm5ldGVzPC90ZXh0Pgo8dGV4dCB4PSIyNTgiIHk9IjQyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVDNkI3QSIgZm9udC1zaXplPSIxNCI+Y3VzdG9tZXIgcnVucyB0aGUgd29ya2xvYWQ8L3RleHQ+CjxyZWN0IHg9IjQ5MiIgeT0iMzMwIiB3aWR0aD0iNDIwIiBoZWlnaHQ9IjExMCIgcng9IjEyIiBmaWxsPSIjRkZGREY4IiBzdHJva2U9IiMxQjI4MzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjx0ZXh0IHg9IjcwMiIgeT0iMzcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMUIyODM4Ij5tb2RlbCBlbmRwb2ludDwvdGV4dD4KPHRleHQgeD0iNzAyIiB5PSIzOTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPmZvciBldmVyeW9uZSBlbHNlOiBBUEkgZm9yIHRva2VuczwvdGV4dD4KPHRleHQgeD0iNzAyIiB5PSI0MjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1QzZCN0EiIGZvbnQtc2l6ZT0iMTQiPkNydXNvZSBob3N0cyB0aGUgbW9kZWw8L3RleHQ+CjwvZz4KPHRleHQgeD0iNDgiIHk9IjQ3MCIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzVDNkI3QSI+UGF5YmFjayBvbiBhIHJldmVudWUgYmFzaXM7IE9wRXggb2YgJDEtMk0gcGVyIE1XIHBlciB5ZWFyIGV4Y2x1ZGVkLiBPcHRpbWlzdGljIGNhc2UuPC90ZXh0Pgo8dGV4dCB4PSI0OCIgeT0iNTA4IiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiBmaWxsPSIjMUIyODM4Ij5PbmUgY2xhaW06IHRoZSBmYWN0b3J5IG93bmVyIHdobyBzZWxscyB0aGUgc2VydmljZSBjYXB0dXJlcyB0aGUgcmVudCBhbmQgdGhlIG1hcmdpbi48L3RleHQ+Cjwvc3ZnPgo="><figcaption>Plate L01-F9. Before: renting chips, $15M per MW per year, 4-year payback. Rule: add the managed services layer. After: $30M per MW per year, 2-year payback. Shell 4. Source: original, numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<p>This is the answer to the host&rsquo;s other question: how
+much of the $650B goes to Crusoe? Crusoe sits between
+the hyperscalers&rsquo; CapEx and the token revenue. The
+factory owner who can also sell the service captures
+both the rent and the margin. The pure landlord gets
+only the rent.</p>
+<h3 id="subchapter-compute-commodity-or-not">Subchapter: compute, commodity or not?</h3>
+<p>The host raised the live debate: days earlier, Jensen
+Huang had argued it on the Dwarkesh Patel podcast
+(April 15, 2026), where Patel pressed him on whether
+Nvidia gets commoditized if software keeps getting
+cheaper. Huang&rsquo;s answer: &ldquo;The input is electrons, the
+output is tokens. In the middle is Nvidia.&rdquo; The guest&rsquo;s
+answer to the host&rsquo;s version of the question is
+three-way.</p>
+<table>
+<thead>
+<tr>
+<th>Kind of compute</th>
+<th>Verdict</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Older generations</td>
+<td>commoditizes</td>
+<td>falls further back as the frontier moves</td>
+</tr>
+<tr>
+<td>The newest generation</td>
+<td>commands a premium</td>
+<td>the cutting edge always does; the history of the IT industry</td>
+</tr>
+<tr>
+<td>Scale itself</td>
+<td>not a commodity</td>
+<td>operating at gigawatt scale is hard to replicate</td>
+</tr>
+</tbody>
+</table>
+<p>Capitalism compresses margins over time. The guest
+expects Nvidia&rsquo;s ~80% gross margin to drift toward a
+~60% stabilized silicon margin as competition bites.
+<strong>Gross margin</strong> is revenue minus the cost of goods,
+divided by revenue. But the newest hardware keeps a
+premium, and scale keeps a moat. Both sides of the
+debate can be right on different horizons. Decision rule:
+price the newest generation at a premium, treat older
+generations as commodities, and treat gigawatt-scale
+operations as the moat.</p>
+<h3 id="subchapter-what-breaks-the-thesis-modeled">Subchapter: what breaks the thesis, modeled</h3>
+<p>The honest price needs numbers, not adjectives. Hold the
+session&rsquo;s stack fixed and vary the revenue.</p>
+<table>
+<thead>
+<tr>
+<th>Revenue per MW per year</th>
+<th>Payback on $60M</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$30M (rent + services, optimistic)</td>
+<td>2 years</td>
+<td>thesis sings</td>
+</tr>
+<tr>
+<td>$15M (chip rental only)</td>
+<td>4 years</td>
+<td>the session&rsquo;s base case</td>
+</tr>
+<tr>
+<td>$10M (token prices fall a third)</td>
+<td>6 years</td>
+<td>depreciation race gets tight</td>
+</tr>
+<tr>
+<td>$7.5M (token prices halve)</td>
+<td>8 years</td>
+<td>needs longer asset life than the books allow</td>
+</tr>
+</tbody>
+</table>
+<p>Two variables move the rows. Utilization: a megawatt
+that sits idle earns nothing, and the $60M is already
+spent. Asset life: if hardware is economically dead in
+three years, only the top two rows survive. The entire
+CapEx chart is a bet that token revenue per megawatt
+stays in the upper rows for a decade. The bear cases
+below attack exactly that.</p>
+<h2 id="the-bear-cases-and-the-long-game">The bear cases and the long game</h2>
+<p>Every investment thesis has a falsifier, and this one is
+sharp. The entire $650 billion rests on tokens staying
+valuable: on digital labor actually substituting for human
+labor at a price that covers the factories. If the demand
+for tokens stalls, the chart is a monument to overbuild.
+The falsifier has a number: if token revenue per megawatt
+falls below about $7.5M a year, the payback stretches to
+8 years, and the thesis needs asset lives the books do
+not allow.</p>
+<h3 id="subchapter-the-three-year-obsolescence-critique">Subchapter: the three-year obsolescence critique</h3>
+<p>A 2026 Research Affiliates paper (&ldquo;When Will AI Be Both
+Powerful and Profitable?&rdquo;, April 2026) argues hyperscaler
+AI hardware has an economic productive life &ldquo;closer to
+three years than to the five-year accounting for
+depreciation.&rdquo; The mechanism: each new chip generation
+delivers sharply better compute per watt, and data
+centers face hard power ceilings. Inside a fixed power
+envelope, old chips must be swapped for new ones to hold
+capacity. Economic obsolescence precedes physical
+obsolescence by several years. The paper&rsquo;s dollar
+version: under a two-year economic life, net capital
+accumulation in 2026 would be just $125B of the $650B
+headline, so most of the spend is replacement, not
+growth. The derivation, step by step: net capital
+formation equals gross investment minus economic
+depreciation. The paper&rsquo;s Figure 1 shows that under a
+two-year economic life the net-to-gross ratio never
+exceeds 20%: more than four-fifths of every dollar is
+replacement. Twenty percent of the $650B headline is
+$130B. The paper&rsquo;s Table 2 vintage math lands at $125B.
+Under a three-year life the same figure gives about
+$215B. Michael Burry makes the harsher version: a
+two-to-three-year useful life, which he estimates would
+understate industry depreciation by about $176B over
+2026-2028 (thesis first raised November 2025, reiterated
+August-September 2026, reported by CNBC and TheStreet).
+On this view, the bulk of the CapEx is maintenance,
+replacing dead hardware, not growth. The thesis survives
+only if token revenue per megawatt stays ahead of the
+replacement treadmill. That is the race the next chapter
+prices.</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Useful life</th>
+<th>What the $730B is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Company books</td>
+<td>5-6 years</td>
+<td>mostly growth assets</td>
+</tr>
+<tr>
+<td>Research Affiliates</td>
+<td>~3 years</td>
+<td>mostly replacement; under a 2-year life only $125B of $650B is net capital growth</td>
+</tr>
+<tr>
+<td>The guest</td>
+<td>as long as it earns</td>
+<td>services abstract the chip</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subchapter-the-voltage-ladder-345-kv-to-900-v-dc">Subchapter: the voltage ladder, 345 kV to 900 V DC</h3>
+<p>The host asked for one long and one short. The short
+starts with the ladder. The stack that steps power down
+runs from 345 kV on today&rsquo;s transmission lines, soon 765
+kV on new Texas lines, through the substation and
+distribution voltages, down to the rack, where the guest
+sees a shift toward 900 V DC distribution. Every rung is
+a transformer, a breaker, a loss. The whole ladder is
+built from old technology.</p>
+<h3 id="subchapter-solid-state-transformers">Subchapter: solid-state transformers</h3>
+<p>The guest expects data centers to force innovation in
+that ladder. The headline candidate: <strong>solid-state
+transformers</strong>, which replace the century-old
+iron-and-copper transformer with power electronics:
+semiconductor switches that convert voltage with less
+bulk and finer control. Add power electronics across the
+stack, and the cost of stepping power down falls.</p>
+<pre class="ascii">before  345 kV AC on transmission lines (soon 765 kV, Texas)
+step    substation and distribution voltages
+step    34.5 kV to 480 or 415 V at the hall
+rule    solid-state transformers: power electronics, not iron and copper
+after   900 V DC distribution at the rack
+price   every rung is a transformer, a breaker, a loss
+</pre>
+<h3 id="subchapter-the-incumbents-verdict">Subchapter: the incumbents&rsquo; verdict</h3>
+<p>The guest&rsquo;s short is the legacy electrical stack: Eaton,
+Schneider, and the companies that have not innovated
+much in a century. Near term those incumbents do well.
+They are his partners and the demand is real. Long term,
+if they do not innovate, the cost of that whole layer
+falls and their position with it. He names it as the
+biggest opportunity in the room for electrical engineers:
+how do you get power from 765 kV to 900 V DC in the
+rack? Decision rule: partner with the incumbents for
+the build, bet on the disruptors for the decade.</p>
+<h3 id="subchapter-open-source-takes-share">Subchapter: open source takes share</h3>
+<p>The guest&rsquo;s other bearish call is on closed models.
+Open source will do well and take share from closed
+source model players. The mechanism is pricing power:
+if open weights keep improving, the revenue side of the
+token trade compresses, and the payback rows in the
+table above slide down. The factory owner is hedged
+either way. The model owner is not.</p>
+<h3 id="subchapter-the-starcloud-program">Subchapter: the Starcloud program</h3>
+<p>The host asked about Elon Musk&rsquo;s space data centers.
+The guest is genuinely interested, and Crusoe has a
+partnership with Starcloud, which flew the first H100s
+to space. October 2026 status: Starcloud-1 launched in
+November 2025 with an H100 and ran the first LLM training
+in orbit. Starcloud-2 was first planned for an October
+2026 launch, but slipped in August 2026 to two 8 kW
+satellites on 2027 rideshares (buying spare capacity on
+someone else&rsquo;s rocket launch, rather than a dedicated
+flight), carrying <strong>Blackwell</strong> B200s (Nvidia&rsquo;s
+Blackwell-generation AI chips, the B200 being the
+flagship) for live commercial workloads (Crusoe, AWS,
+Google Cloud, and Nvidia are named customers). Starcloud filed with the
+FCC for up to 88,000 satellites (accepted for filing in
+March 2026), and signed its first lunar data-center
+contract with Firefly in September 2026. Crusoe&rsquo;s orbital
+role is a customer one: it buys compute on Starcloud&rsquo;s
+satellites rather than operating them.</p>
+<h3 id="subchapter-what-vanishes-and-what-stays-in-space">Subchapter: what vanishes and what stays, in space</h3>
+<table>
+<thead>
+<tr>
+<th>Vanishes in space</th>
+<th>Stays in space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Concrete foundations</td>
+<td>Thermal management: vacuum sheds heat only by radiation</td>
+</tr>
+<tr>
+<td>Permitting and grid approvals</td>
+<td>Operations: no astronaut reseats a failed GPU</td>
+</tr>
+<tr>
+<td>Millions of fiber strands: optics replace copper</td>
+<td>Launch cost: needs Starship-class cost cuts, two orders of magnitude</td>
+</tr>
+<tr>
+<td>Power procurement: the sun is the generator</td>
+<td>Hardware failure: on Earth a failed GPU is reseated or RMA&rsquo;d; in orbit there is no one to do either</td>
+</tr>
+</tbody>
+</table>
+<p>Background physics adds radiation hardening and debris
+risk. Those are not from the session. Radiation
+hardening: a charged particle can flip a stored bit
+mid-computation, and Google&rsquo;s own Suncatcher tests found
+Trillium&rsquo;s HBM subsystems the most sensitive component,
+showing irregularities after 2 krad(Si) against an
+expected five-year mission dose of 750 rad(Si) (Google
+Research blog, October 2026). Debris: ESA&rsquo;s 2026 debris
+model counts 68,450 objects larger than 10 cm in orbit,
+each large enough to destroy a satellite (February 2026
+reference epoch), and Starlink satellites performed over
+300,000 collision-avoidance maneuvers in 2025.</p>
+<h3 id="subchapter-googles-project-suncatcher">Subchapter: Google&rsquo;s Project Suncatcher</h3>
+<p>Google&rsquo;s Project Suncatcher is in the race: Trillium
+TPUs in an 81-satellite formation, per Google&rsquo;s November
+2025 design paper. A <strong>TPU</strong> is Google&rsquo;s
+Tensor Processing Unit: Google&rsquo;s own AI chip, built as an
+alternative to Nvidia GPUs. Trillium is the generation.
+On October 1, 2026 the first prototype, a Planet-built
+satellite carrying four Trillium TPUs, launched on a
+SpaceX Falcon 9 rideshare. Suncatcher bets that Google&rsquo;s
+in-house silicon, not Nvidia&rsquo;s, wins the orbital round.</p>
+<h3 id="subchapter-the-launch-scarcity-constraint">Subchapter: the launch-scarcity constraint</h3>
+<p>The constraint is launch scarcity: Falcon 9 rideshare
+slots are booked out beyond late 2028. SpaceX&rsquo;s rideshare
+site lists launch opportunities only through the end of
+2027, all fully booked, and the Wall Street Journal
+reported in September 2026 that SpaceX had stopped selling
+new Falcon 9 rideshare missions beyond 2028. Starcloud raised
+$250M at a $2.3B valuation in August
+2026 to buy launch capacity. The guest&rsquo;s timeline: not
+material in five years, probably not in ten, but a major
+role over the longer run. Space removes the two scarcest
+inputs on Earth, land-adjacent power and permission, and
+keeps the two hardest problems, heat and hands.</p>
+<h3 id="subchapter-the-student-advice">Subchapter: the student advice</h3>
+<p>The host&rsquo;s last question: advice for Stanford students
+deciding what to study. The guest&rsquo;s answer is a
+philosophy, not a curriculum. Two numbers frame it: he
+has climbed five of the seven summits, and he expects
+everyone to command the workforce of a million agents
+within five years. The edge goes to learning speed.</p>
+<table>
+<thead>
+<tr>
+<th>Crusoe value</th>
+<th>The rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Think like a mountaineer</td>
+<td>plan A, plan B, and plan C to plan B (the guest has climbed five of the seven summits, including Everest)</td>
+</tr>
+<tr>
+<td>Live on the infinite growth loop</td>
+<td>nobody is a finished product; daily compounding of skill is the most valuable asset</td>
+</tr>
+</tbody>
+</table>
+<p>School content matters less than the process of
+learning, he argues. In five years everyone will have,
+in his phrase, the workforce of a million people at
+their fingertips. The edge goes to whoever learns
+fastest and wields the tools best. Decision rule: invest
+in learning speed, not in the syllabus. The syllabus
+expires. The learning rate compounds.</p>
+<h2 id="coverage-map-every-session-claim-and-where-it-lives">Coverage map: every session claim and where it lives</h2>
+<p>No transcript or captions exist for the session video, so
+segment-level mapping to timestamps is not possible. The
+table below maps every major claim from the session and
+the course-site framing to the section that covers it,
+with file line numbers. October 2026 updates are marked.</p>
+<table>
+<thead>
+<tr>
+<th>Session claim</th>
+<th>Covered in</th>
+<th>File line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hyperscaler AI CapEx chart, ~$650B framing</td>
+<td>The chart that opens the course</td>
+<td>L42</td>
+</tr>
+<tr>
+<td>$650B figure is the host&rsquo;s framing, not an audited total</td>
+<td>Coverage and sourcing; Official sources caveats</td>
+<td>L26, L1521</td>
+</tr>
+<tr>
+<td>AI production function: data, algorithms, compute, energy, data centers</td>
+<td>The AI production function</td>
+<td>L134</td>
+</tr>
+<tr>
+<td>Money concentrates on compute, energy, data centers</td>
+<td>data and algorithms, the unspent inputs</td>
+<td>L195</td>
+</tr>
+<tr>
+<td>Mercor as the data-labor market example</td>
+<td>The AI production function</td>
+<td>L134</td>
+</tr>
+<tr>
+<td>Cobb-Douglas growth equation, intuitive additive form</td>
+<td>The growth equation</td>
+<td>L218</td>
+</tr>
+<tr>
+<td>Labor was the slow term: birth rate, 20-year lead time</td>
+<td>why labor was the slow term</td>
+<td>L287</td>
+</tr>
+<tr>
+<td>Digital labor: the labor term becomes investable</td>
+<td>Digital labor: the term that became investable</td>
+<td>L303</td>
+</tr>
+<tr>
+<td>Goldman Sachs 24-fold token consumption by 2030</td>
+<td>Digital labor (demand corroboration)</td>
+<td>L352</td>
+</tr>
+<tr>
+<td>Energy-first strategy: move computers to cheap power</td>
+<td>Why energy comes first; the inversion</td>
+<td>L359, L391</td>
+</tr>
+<tr>
+<td>Northern Virginia as the crowded hub</td>
+<td>why the hubs filled first</td>
+<td>L369</td>
+</tr>
+<tr>
+<td>Abilene tax-credit overbuild and negative power prices</td>
+<td>Abilene, the tax-credit arithmetic</td>
+<td>L403</td>
+</tr>
+<tr>
+<td>Abilene substations: 200 MW and 1 GW; 2.1 GW campus</td>
+<td>Abilene, the substations</td>
+<td>L424</td>
+</tr>
+<tr>
+<td>Abilene as one coherent cluster across buildings</td>
+<td>Abilene, one coherent cluster</td>
+<td>L437</td>
+</tr>
+<tr>
+<td>Abilene construction workforce: 9,000 workers, 2,000 steady staff</td>
+<td>Abilene, the construction workforce</td>
+<td>L447</td>
+</tr>
+<tr>
+<td>Abilene 350 MW on-site gas plant</td>
+<td>Abilene, the 350 MW gas plant</td>
+<td>L458</td>
+</tr>
+<tr>
+<td>Abilene capped at 1.2 GW, March 2026 (Oct 2026 update)</td>
+<td>Abilene since the session</td>
+<td>L464</td>
+</tr>
+<tr>
+<td>450,000 GB200s; Crusoe/Blue Owl $15B; Nvidia $150M deposit; Meta talks; Microsoft expansion plan (Oct 2026 updates)</td>
+<td>Abilene since the session</td>
+<td>L464</td>
+</tr>
+<tr>
+<td>Quan, Texas: across-the-meter model</td>
+<td>across the meter, defined; Quan, the worked example</td>
+<td>L485, L499</td>
+</tr>
+<tr>
+<td>Neoclouds: CoreWeave, Nebius, Lambda, Crusoe Cloud (Oct 2026 update)</td>
+<td>what is used where, October 2026</td>
+<td>L526</td>
+</tr>
+<tr>
+<td>Moving bottleneck: chips, memory, energized shells, labor</td>
+<td>The moving bottleneck</td>
+<td>L579</td>
+</tr>
+<tr>
+<td>Vertical integration as the hedge: energy to tokens, not chips, not models</td>
+<td>vertical integration as the hedge</td>
+<td>L657</td>
+</tr>
+<tr>
+<td>Power path: distribution centers, transformers, switchgear, UPS, diesel, five nines</td>
+<td>Inside the factory (six power-path subchapters)</td>
+<td>L690-L737</td>
+</tr>
+<tr>
+<td>Cooling path: chillers, chilled water loop, CDUs, containment, fan walls, remote power panels</td>
+<td>Inside the factory (cooling subchapters)</td>
+<td>L750-L828</td>
+</tr>
+<tr>
+<td>Direct-to-chip and immersion cooling variants (Oct 2026 update)</td>
+<td>direct-to-chip liquid cooling; immersion cooling</td>
+<td>L774, L791</td>
+</tr>
+<tr>
+<td>Water: 1M gallons in the loop, one household of consumption</td>
+<td>water, the myth and the measurement</td>
+<td>L839</td>
+</tr>
+<tr>
+<td>$20M per MW building stack with labor, gas, fit-out lines</td>
+<td>the $20M per MW building stack</td>
+<td>L869</td>
+</tr>
+<tr>
+<td>NVLink/InfiniBand/RoCE rack architecture</td>
+<td>the rack network: NVLink, InfiniBand, RoCE</td>
+<td>L909</td>
+</tr>
+<tr>
+<td>$40M per MW machine stack: GPUs, networking, CPUs, fit-out, deployment</td>
+<td>the $40M machine stack, the table</td>
+<td>L927</td>
+</tr>
+<tr>
+<td>CPU shortage caused by agentic workflows</td>
+<td>the CPU shortage, and why agents cause it</td>
+<td>L946</td>
+</tr>
+<tr>
+<td>Crusoe Spark modular data centers</td>
+<td>Crusoe Spark, the modular answer</td>
+<td>L959</td>
+</tr>
+<tr>
+<td>$60M per MW payback: $15M revenue, ~4 years</td>
+<td>the revenue math</td>
+<td>L991</td>
+</tr>
+<tr>
+<td>Nebius $20-25M per MW contract value; Jensen Huang $50-60B per GW (Oct 2026 updates)</td>
+<td>the revenue math</td>
+<td>L991</td>
+</tr>
+<tr>
+<td>H100 spot price rebound chart</td>
+<td>the H100 price chart</td>
+<td>L1033</td>
+</tr>
+<tr>
+<td>Crusoe Cloud chip abstraction; Zoom analogy</td>
+<td>Crusoe Cloud and the chip abstraction</td>
+<td>L1079</td>
+</tr>
+<tr>
+<td>Managed services uplift: $5-15M per MW per year</td>
+<td>the services uplift</td>
+<td>L1090</td>
+</tr>
+<tr>
+<td>Compute commoditization three-way verdict</td>
+<td>compute, commodity or not?</td>
+<td>L1117</td>
+</tr>
+<tr>
+<td>Payback sensitivity table ($30M to $7.5M revenue rows)</td>
+<td>what breaks the thesis, modeled</td>
+<td>L1145</td>
+</tr>
+<tr>
+<td>Research Affiliates three-year obsolescence critique</td>
+<td>the three-year obsolescence critique</td>
+<td>L1177</td>
+</tr>
+<tr>
+<td>Burry $176B depreciation understatement</td>
+<td>the three-year obsolescence critique</td>
+<td>L1177</td>
+</tr>
+<tr>
+<td>Electrical stack disruption: 765 kV to 900 V DC, solid-state transformers</td>
+<td>voltage ladder; solid-state transformers; incumbents&rsquo; verdict</td>
+<td>L1217-L1238</td>
+</tr>
+<tr>
+<td>Open source takes share from closed models</td>
+<td>open source takes share</td>
+<td>L1251</td>
+</tr>
+<tr>
+<td>Starcloud orbital program; Suncatcher; launch scarcity (Oct 2026 updates)</td>
+<td>the Starcloud program; Google&rsquo;s Project Suncatcher; the launch-scarcity constraint</td>
+<td>L1261-L1313</td>
+</tr>
+<tr>
+<td>Student advice: mountaineer thinking, infinite growth loop</td>
+<td>the student advice</td>
+<td>L1328</td>
+</tr>
+<tr>
+<td>Course-site framing: biggest supercycle since PC, Internet, Mobile</td>
+<td>Coverage and sourcing; Official sources</td>
+<td>L26, L1521</td>
+</tr>
+</tbody>
+</table>
+<div class="qa"><div class="q">What is the AI production function, in plain words?</div><div class="a"><p>Five inputs make AI: data, algorithms, compute, energy, and data centers. Data is the raw material, algorithms are the process technology, GPUs are the machinery, electricity is the fuel, and data centers are the factory buildings. The guest&rsquo;s key claim is that the money concentrates on the last three. Data labeling created a real market (Scale AI and others), and algorithms live in the labs, but the CapEx chart is compute, energy, and buildings. Each of the last three is bought by the megawatt.
+Because it tells you where the spending must flow. If AI output scales with compute and energy, then every unit of AI demand converts mechanically into demand for GPUs, power plants, and data centers. The investor question becomes unit economics per megawatt, which is the next section.</p><div class="followup"><strong>Follow-up:</strong> Why would an investor care about this decomposition?</div></div></div>
+<div class="qa"><div class="q">Explain the Cobb-Douglas argument for the AI supercycle.</div><div class="a"><p>Cobb-Douglas decomposes GDP growth into three parts: change in labor, change in capital, and change in technology. Historically the labor term moved only through the birth rate, with a 20-year lead time, so it was the slow term. Digital labor breaks that: an agent doing real work is labor produced by an investment decision. For the first time, the labor term can scale the way capital always could, which is the economic case for building AI factories at gigawatt scale.
+Token demand stalling. If digital labor does not substitute for human labor at prices that cover the factories, the CapEx is overbuild. The guest&rsquo;s own bear cases point the same way: open source eroding closed-model pricing power would compress the revenue side of the trade.</p><div class="followup"><strong>Follow-up:</strong> What would falsify this thesis?</div></div></div>
+<div class="qa"><div class="q">Walk me through the 3 percent toy economy.</div><div class="a"><p>Split 3 percent annual growth into 1 point from labor, 1 from capital, and 1 from technology. The labor point is fixed by demography on any planning horizon. Now imagine investment could buy half a point of labor growth, the way capital buys its point. Total growth rises from 3 percent to 3.5 percent. Compounded over ten years, $1 grows to $1.34 at 3 percent and $1.41 at 3.5 percent: a 5 percent larger economy. The hyperscaler CapEx is a bid on that half point, not on chatbots.
+It does not need to be. The toy only needs one fact: the labor term is the one that could not move on an investment horizon. Whatever its share, making it investable is a first in economic history, which is the guest&rsquo;s whole argument.</p><div class="followup"><strong>Follow-up:</strong> Why does the toy assume the split is even?</div></div></div>
+<div class="qa"><div class="q">Walk me through the power path and the cooling path of one megawatt.</div><div class="a"><p>Power arrives at the substation at high voltage. Power distribution centers take it at 34.5 kV and feed rows of transformers that step it down to 480 or 415 volts. A UPS battery system smooths the flow, switchgear routes and protects it, and diesel generators back up only the core storage and networking. Cooling is a recirculating loop: air-cooled chillers push cold water to cooling distribution units, the CDUs feed the GPU racks, heat transfers from chip to water, and fans exhaust it over copper coils. Each building holds about a million gallons of water but consumes about one household&rsquo;s worth per year.
+Five-nines backup for the whole campus would multiply the generator and battery spend. The guest sizes backup to what must survive a grid outage: storage and networking, so the team can reach a checkpoint and move the workload. Everything else can go dark and restart.</p><div class="followup"><strong>Follow-up:</strong> Why back up only the core systems instead of everything?</div></div></div>
+<div class="qa"><div class="q">Decompose the $60M per megawatt. Where does each dollar go?</div><div class="a"><p>About $20M builds the factory and the power plant: $4.7M in capitalized labor, $2-3M for the gas plant, about $3M of tenant fit-out, plus electrical equipment, mechanical equipment, materials, and soft costs like insurance and construction-loan financing. About $40M fills it with machines: $30M for GPUs, $4M for networking (NVLink inside the rack, InfiniBand or RoCE between racks), $3M for CPUs and storage, about $3M of in-the-room fit-out, and $1M for deployment and shipping. Annual OpEx is only $1-2M per MW.
+Gas generation and labor. A gas turbine that cost $1M per MW now costs $3M because a small set of makers (GE Vernova, Siemens, Mitsubishi Heavy Industries, Pratt and Whitney, Caterpillar Solar) has not expanded capacity. Electricians&rsquo; rates rise with the competition for their time across simultaneous builds.</p><div class="followup"><strong>Follow-up:</strong> Which of these lines is inflating fastest?</div></div></div>
+<div class="qa"><div class="q">How does a $60M megawatt pay back? Show the math.</div><div class="a"><p>Renting chips earns about $15M per MW per year against $1-2M of OpEx, so $60M divided by $15M is about a 4-year payback on a revenue basis. Adding a managed services layer, hosting the model and serving API endpoints, adds $5-15M per MW per year. In the optimistic case revenue reaches $30M and payback halves to 2 years. The swing variable is the depreciation curve: the payback only works if the hardware stays valuable long enough, which is the next chapter&rsquo;s fight.
+Revenue falls to about $7.5M per MW per year and payback stretches to 8 years. At that point the thesis needs asset lives well beyond the 5-6 year book standard, and the three-year obsolescence critique becomes lethal. That is why the guest watches token demand, not chip supply.</p><div class="followup"><strong>Follow-up:</strong> Model the downside. What if token prices halve?</div></div></div>
+<div class="qa"><div class="q">Applied design: a county offers you stranded wind at 2 cents per kWh, but it is 300 miles from the nearest major fiber route and has no transmission out. Do you build a 500 MW AI factory there? Walk through the decision.</div><div class="a"><p>Run the session&rsquo;s framework. One, energy: stranded wind at 2c/kWh beats grid rates, and the Abilene logic says take the cheap electrons. Two, firming: no transmission out means the grid cannot firm you, so price your own gas plant at $2-3M per MW or batteries, about $1-1.5B on a 500 MW build. Three, fiber: training tolerates distance because moving data is cheap, but inference needs low latency to users, so build training there, not inference. Four, labor: a remote county means building the workforce from nothing, Abilene needed 9,000 workers against a town of 120,000, so price the retention incentives. Five, permitting: stranded sites permit faster, and speed to energized shells is the binding constraint. Decision rule: build when the power discount times megawatt-hours exceeds the own-generation capex plus the labor premium plus the fiber build, and only for training workloads. This is exactly the Crusoe Spark case: modular units make the small stranded site buildable.
+Latency becomes the binding constraint instead of energy. Inference revenue is tokens served to users, and 300 miles of fiber adds round-trip time to every request. The energy discount rarely covers lost inference pricing power. The refined rule: energy-first for training, latency-first for inference. That is why the gigawatt campuses near cheap power train models, while inference pushes toward population centers.</p><div class="followup"><strong>Follow-up:</strong> What changes if the workload is inference for a consumer chatbot?</div></div></div>
+<div class="qa"><div class="q">Steelman the bear case against the whole supercycle.</div><div class="a"><p>Three independent falsifiers. First, demand: digital labor must substitute for human labor at prices that cover the factories. If token demand stalls, the CapEx is overbuild. Second, asset life: if Research Affiliates is right that AI hardware is economically dead in three years, two thirds of the spend is maintenance and the payback math breaks. Third, pricing power: open source models keep improving and compress what anyone can charge per token. The bull case needs all three to fail: durable token demand, long hardware life, and pricing power at the services layer.
+Token revenue per megawatt, quarterly. It is the single number that decides whether the top rows of the payback table hold. Utilization and pricing both flow into it, and it moves before any accounting debate about depreciation.</p><div class="followup"><strong>Follow-up:</strong> Which falsifier would you watch first?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>The chart.</strong> Hyperscaler AI CapEx goes up and to the
+   right, fast. Roughly $650 billion in the session&rsquo;s
+   framing. About $730 billion in reported 2026 guidance by
+   October, up 78% from 2025. Bigger than the space
+   program, the highways, the Manhattan Project.</li>
+<li><strong>The recipe.</strong> AI needs data, algorithms, compute,
+   energy, and data centers. The money concentrates on the
+   last three, bought by the megawatt.</li>
+<li><strong>The growth equation.</strong> Cobb-Douglas: GDP growth is
+   change in labor plus change in capital plus change in
+   technology.</li>
+<li><strong>The slow term.</strong> Labor historically moved only via
+   the birth rate: a 20-year lead time. Fixed on any
+   planning horizon.</li>
+<li><strong>The toy.</strong> 3 percent growth split three ways. Buying
+   half a point of labor growth means a 5 percent larger
+   economy in ten years. The CapEx is a bid on that half
+   point.</li>
+<li><strong>Digital labor.</strong> Agents doing real work are labor
+   produced by investment. The labor term is now scalable
+   like capital. That is the $650B thesis.</li>
+<li><strong>Energy first.</strong> At scale, energy is the scarce input.
+   Move the computers to the cheap power, not the reverse.</li>
+<li><strong>Abilene.</strong> Tax credits caused renewable overbuild,
+   prices went negative. Now a 2.1 GW campus: two Denvers
+   of power, 9,000 workers on site, a 1 GW substation. The
+   grid capped growth at 1.2 GW in March 2026.</li>
+<li><strong>Quan.</strong> The playbook repeats: 3,500 workers in a
+   town of 1,500, on-site wind, the across-the-meter
+   model.</li>
+<li><strong>The moving bottleneck.</strong> Chips, then memory, now
+    energized shells, always skilled labor. Vertical
+    integration is the hedge. Not chips, not models.</li>
+<li><strong>The $60M megawatt.</strong> $20M for the factory and power
+    plant, $40M for the machines. Labor is the largest
+    factory line at $4.7M per MW. OpEx is only $1-2M.</li>
+<li><strong>The payback.</strong> $15M per MW per year renting chips:
+    4 years. Managed services can add $5-15M: 2 years.
+    The depreciation curve decides. Next: the dollar
+    anatomy.</li>
+</ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/GcCGzfKdCd0" title="Building AI Factories (MS&E 435, Chase Lochmiller)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0">Building AI Factories (MS&amp;E 435)</a></li>
+<li>The session this lesson follows, in full.</li>
+<li><a href="https://www.youtube.com/shorts/8rKGDsiQt8Q">This Isn&rsquo;t a DataCenter. It&rsquo;s an AI Factory. (Acquired, IA Summit 2025)</a></li>
+<li>Chase Lochmiller on Crusoe&rsquo;s path from flaring methane to the 1.2 GW Abilene AI factory. Matches the energy-first and Abilene sections.</li>
+</ul>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/8rKGDsiQt8Q" title="This Isn't a DataCenter. It's an AI Factory. (Acquired, IA Summit 2025)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li><a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></li>
+<li><a href="https://valueaddvc.com/blog/big-tech-ai-capex-in-2025-microsoft-google-meta-amazon-and-the-spending-race">Hyperscaler AI capex tracker, 2026</a></li>
+<li><a href="https://cryptobriefing.com/data-center-construction-record-75b-pace/">Data center construction hits $75B pace (Crypto Briefing, Sept 2026)</a></li>
+<li><a href="https://www.crusoe.ai/resources/newsroom/crusoe-announces-series-f-funding">Crusoe Series F: $3.9B at $30.9B (company announcement, Sept 2026)</a></li>
+<li><a href="https://www.datacenterdynamics.com/en/news/openai-and-oracle-to-deploy-450000-gb200-gpus-at-stargate-abilene-data-center/">Abilene to deploy 450,000 GB200 GPUs (Data Center Dynamics, Oct 2026)</a></li>
+<li><a href="https://winbuzzer.com/2026/03/09/openai-oracle-cap-texas-ai-data-center-abilene-stargate-xcxwbn/">Abilene capped at 1.2 GW (March 2026)</a></li>
+<li><a href="https://energydigital.com/news/electrons-to-tokens-crusoes-independent-ai-supply-chain">Crusoe&rsquo;s independent AI supply chain (Energy Digital, Sept 2026)</a></li>
+<li><a href="https://www.datacenterdynamics.com/en/news/crusoe-to-deploy-in-starcloud-satellite-data-center-in-late-2026-offer-limited-gpu-capacity-in-space-from-2027/">Crusoe and Starcloud: AI data centers in space (Data Center Dynamics, Oct 2025)</a></li>
+<li><a href="https://media.researchaffiliates.com/1111_when_will_ai_be_both_powerful_and_profitable_d60468d9a2.pdf">The three-year obsolescence argument (Research Affiliates, April 2026)</a></li>
+</ul>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- Building AI Factories (MS&amp;E 435, Spring 2026), guest
+  Chase Lochmiller, Crusoe: <a href="https://www.youtube.com/watch?v=GcCGzfKdCd0">link</a>
+- <a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></p>
+<p><strong>Further reading:</strong>
+- The course site&rsquo;s framing line: AI is &ldquo;the biggest
+  technology supercycle since the PC, Internet, and
+  Mobile.&rdquo;
+- Crusoe&rsquo;s own newsroom documents the company&rsquo;s path
+  from modular flare-gas compute (2018) to the sale of
+  its bitcoin mining operation to NYDIG (March 2025,
+  about 425 sites and 270 MW of generation) and the
+  pivot to AI campuses and cloud.</p>
+<p><strong>Caveats from these sources.</strong> The $650B figure is the
+host&rsquo;s framing of hyperscaler spend, not an audited total.
+The October 2026 capex numbers are analyst and press
+estimates from company guidance, not audited totals, and
+ranges differ across sources. The transcript spells the
+guest&rsquo;s name &ldquo;Lockmiller&rdquo; in places. The course site
+spells it &ldquo;Lochmiller,&rdquo; used here. One data-labeling
+company is transcribed as &ldquo;Merkur&rdquo;: the match is Mercor,
+verified against company reports (October 2026). The Cobb-Douglas treatment is the guest&rsquo;s
+intuitive version (growth as a sum of three changes), not
+the formal multiplicative production function. The formal
+version is added here as textbook background. Abilene
+&ldquo;largest campus&rdquo; and the 2.1 GW aggregate are the guest&rsquo;s
+spring-2026 claims, stated with hedging. Press reports
+cap the OpenAI/Oracle portion at 1.2 GW as of March 2026.
+The cost-stack tables are the guest&rsquo;s that-afternoon
+approximations, and he admits a possible double count in
+the IT stack. Crusoe&rsquo;s Astra training claim is the
+company&rsquo;s own statement.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS229S:</strong> the systems course prices the same stack
+  from the inside: what the GPUs cost to run, why
+  inference is memory-bound, and what FlashAttention saves.
+  Read it for the engineering behind the dollars here.</li>
+<li><strong>CS336:</strong> builds the transformer and the training
+  stack that all this infrastructure exists to serve.</li>
+<li><strong>CS329A / CS329Z:</strong> the agents course covers the
+  digital labor itself: what agents can do and where
+  they break.</li>
+<li><strong>MS&amp;E435 L02:</strong> opens the $60M megawatt and checks
+  whether the unit economics pay back.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">VIDEO</span><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Stanford MS&amp;E435 Economics of the AI Supercycle, Building AI Factories (Chase Lochmiller, Crusoe)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://mse435.stanford.edu/" target="_blank" rel="noopener">MS&amp;E 435 course site: mse435.stanford.edu</a></li></ul></section>
+      <nav class="pager"><a href="../mse435/index.html"><span class="lbl">← Previous</span>MS&amp;E 435: Economics of the AI Supercycle</a><a href="../mse435/l02-sixty-million-megawatt.html"><span class="lbl">Next →</span>Lecture 2: The $60 Million Megawatt</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

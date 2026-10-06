@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="640" viewBox="0 0 1120 640" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="640" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="30" font-weight="600" fill="#1B2838">Fluent surveys, unverified claims</text>
+<text x="40" y="80" font-size="16" fill="#5C6B7A">Three axes: synthesis, retrieval, verifiability. Lecture: no system above 19 percent.</text>
+<line x1="40" y1="96" x2="1080" y2="96" stroke="#D9D3C7" stroke-width="1.5"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1F7A72"/></marker></defs>
+<rect x="40" y="120" width="1040" height="320" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="152" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">DeepScholar-Bench scores, low everywhere</text>
+<text x="120" y="216" font-size="14" font-weight="500" fill="#1B2838">knowledge synthesis</text>
+<rect x="360" y="194" width="122" height="30" rx="6" fill="#C46B2C"/>
+<text x="492" y="216" font-size="13" fill="#5C6B7A">under 19%</text>
+<text x="120" y="288" font-size="14" font-weight="500" fill="#1B2838">retrieval quality</text>
+<rect x="360" y="266" width="122" height="30" rx="6" fill="#C46B2C"/>
+<text x="492" y="288" font-size="13" fill="#5C6B7A">under 19%</text>
+<text x="120" y="360" font-size="14" font-weight="500" fill="#1B2838">verifiability</text>
+<rect x="360" y="338" width="122" height="30" rx="6" fill="#C46B2C"/>
+<text x="492" y="360" font-size="13" fill="#5C6B7A">under 19%</text>
+<text x="560" y="420" font-size="13" fill="#5C6B7A" text-anchor="middle">document importance scores sit under 12.5 percent</text>
+<rect x="40" y="468" width="1040" height="60" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="506" font-size="14" fill="#1B2838" text-anchor="middle">Paper: geometric-mean ceiling near 31 percent. Substance agrees: verifiability is the binding constraint.</text>
+<text x="40" y="584" font-size="15" font-weight="450" fill="#1B2838">Models write fluent surveys that cite the wrong papers. Research synthesis is far from solved.</text>
+<text x="40" y="612" font-size="13" fill="#5C6B7A">Project: Stanford Frontier AI. Source: paper, DeepScholar-Bench. Shell 2.</text>
+</svg>

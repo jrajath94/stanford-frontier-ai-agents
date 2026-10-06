@@ -236,28 +236,38 @@ of the data center business.</p>
 power plant and the building, before a single GPU arrives.
 The guest breaks it out on a per-megawatt basis, and the
 bottom bar of his chart is the one he lingers on.</p>
-<p><strong>Labor: $4.7M per MW.</strong> This is capitalized construction
-labor, not operating payroll. For a 1 GW campus the
-arithmetic is 4.7 million times 1,000, which is $4.7
-billion in wages to the people pouring concrete and
-pulling cable. The guest is blunt that this is a
-bottleneck: not enough electricians, welders, plumbers,
-or construction workers, with many gigawatt projects
-competing for the same trades.</p>
-<p><strong>Soft costs.</strong> Insurance, financing (servicing the
-construction loan), siting, commissioning.</p>
-<p><strong>The gas plant: $2-3M per MW.</strong> Crusoe built a roughly
-350 MW natural gas plant at Abilene to energize the
-cluster. The striking detail is inflation: a gas turbine
-that used to cost $1M per MW now costs $3M per MW. Only a
-handful of manufacturers build them (GE Vernova, Siemens,
-Mitsubishi Heavy Industries, Pratt and Whitney,
+<figure><img alt="The full $60M per megawatt stack" src="assets/plate-l02-cost-stack.svg"><figcaption>Plate L02-F1. $20M builds the factory, $40M fills it with machines. Half the total is GPUs. Shell 2. Source: original, numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-labor-47m-per-mw">Subchapter: labor, $4.7M per MW</h3>
+<p>This is capitalized construction labor, not operating
+payroll. For a 1 GW campus the arithmetic is 4.7 million
+times 1,000, which is $4.7 billion in wages to the people
+pouring concrete and pulling cable. The guest is blunt
+that this is a bottleneck: not enough electricians,
+welders, plumbers, or construction workers, with many
+gigawatt projects competing for the same trades. It is
+the single largest bar inside the factory cost, and it
+is the one that cannot be ordered from a catalog.</p>
+<h3 id="subchapter-the-gas-plant-2-3m-per-mw">Subchapter: the gas plant, $2-3M per MW</h3>
+<p>Crusoe built a roughly 350 MW natural gas plant at Abilene
+to energize the cluster. At $3M per MW, that plant alone
+is about $1.05 billion of the factory cost. The striking
+detail is inflation: a gas turbine that used to cost $1M
+per MW now costs $3M per MW, a threefold increase. Only
+a handful of manufacturers build them (GE Vernova,
+Siemens, Mitsubishi Heavy Industries, Pratt and Whitney,
 Caterpillar&rsquo;s Solar), and they did not expand capacity as
 everyone rushed to add generation. The guest notes it has
-been good to be a GE Vernova shareholder.</p>
+been good to be a GE Vernova shareholder. When the scarce
+input is the turbine, the turbine maker prices like a
+monopolist.</p>
+<h3 id="subchapter-electrical-mechanical-materials">Subchapter: electrical, mechanical, materials</h3>
+<p><strong>Soft costs.</strong> Insurance, financing (servicing the
+construction loan), siting, commissioning.</p>
 <p><strong>Tenant fit-out.</strong> Everything inside the data hall that
 is not the computers: remote power panels, hot-aisle
-containment, fan walls, cooling distribution units.</p>
+containment, fan walls, cooling distribution units. The
+guest flags he may be double-counting this bar, and
+rounds the total anyway.</p>
 <p><strong>Electrical equipment.</strong> The full chain from high voltage
 to the rack: transformers, power distribution centers,
 medium- and low-voltage switchgear. Power arrives at the
@@ -267,7 +277,7 @@ your home breaker panel, at the scale of a city.</p>
 <p><strong>Mechanical equipment.</strong> Chillers, plumbing, air
 handlers. Each building holds about 1 million gallons of
 water in a closed recirculating loop. A common worry is
-that AI drains local water; the guest&rsquo;s number is that
+that AI drains local water. the guest&rsquo;s number is that
 annual consumption is about the same as a single-family
 home, because the loop is filled once. That matters in
 West Texas, where water is scarce.</p>
@@ -276,19 +286,6 @@ its own concrete batch plant on site, pouring 24/7.</p>
 <p>The bottom line of the bottom half: roughly <strong>$20M per
 MW</strong>, or <strong>$20 billion per gigawatt</strong>, for the power
 plant plus the building.</p>
-<p>Figure L02-F1. The factory cost stack per megawatt.
-Source: original diagram for Stanford Frontier AI,
-numbers from the session.</p>
-<pre class="ascii">$20M per MW: the factory (before any GPU)
-
-labor (construction)  $4.7M  &lt;-- the bottleneck bar
-gas plant             $2-3M  &lt;-- turbine was $1M, now $3M
-soft costs            (insurance, financing, siting)
-tenant fit-out        (panels, containment, fan walls)
-electrical            (34.5 kV --&gt; 480 V chain)
-mechanical            (chillers, 1M-gallon water loop)
-materials             (steel, concrete, site work)
-</pre>
 <h2 id="the-machines-40m-per-megawatt">The machines: $40M per megawatt</h2>
 <p>The next $40M buys the IT: the computers that go inside.
 The split, which the guest calls forward-looking, is the
@@ -301,19 +298,39 @@ CPUs + storage    $3M
 in-room fit-out   $3M
 labor/shipping    $1M
 </pre>
-<p><strong>GPUs: $30M.</strong> Three quarters of the IT CapEx goes to
-one vendor&rsquo;s chips. The newest racks hold 72 GPUs on one
-NVLink domain, a single high-speed fabric so the chips
-share data as one machine.</p>
-<p><strong>Networking: $4M.</strong> The racks must then be joined into
-one coherent cluster, typically over InfiniBand or RDMA
-over Ethernet, so a single training job can span every
-chip in every building. At Abilene this means all chips
-across all data centers operate as one workload.</p>
-<p><strong>CPUs and storage: $3M.</strong> The surprise here is a CPU
-shortage. Agentic workloads need large numbers of CPUs
-to orchestrate the GPU work, so CPU demand is surging
-alongside GPU demand.</p>
+<h3 id="subchapter-gpus-30m">Subchapter: GPUs, $30M</h3>
+<p>Three quarters of the IT CapEx goes to one vendor&rsquo;s
+chips. The newest racks hold 72 GPUs on one NVLink
+domain, a single high-speed fabric so the chips share
+data as one machine. Concentration is the point: half of
+the entire $60M per MW, $30M of $60M, is GPUs from one
+supply chain.</p>
+<p>What is used where, October 2026: the frontier cluster
+stack is Nvidia Blackwell and GB200/GB300 systems. The
+guest&rsquo;s 80 percent gross margin figure for Nvidia is the
+measure of that concentration: $24M of every $30M GPU
+bar is margin above cost. The escape valve is custom
+silicon: Google&rsquo;s TPUs, Amazon&rsquo;s Trainium, Meta&rsquo;s MTIA,
+Microsoft&rsquo;s Maia. The guest&rsquo;s own warning: a lab may one
+day spend a couple hundred billion on its own chips, 80
+percent as effective per chip but far more numerous.</p>
+<h3 id="subchapter-networking-4m">Subchapter: networking, $4M</h3>
+<p>The racks must then be joined into one coherent cluster,
+typically over InfiniBand or RDMA over Ethernet, so a
+single training job can span every chip in every building.
+At Abilene this means all chips across all data centers
+operate as one workload. Networking is only 10 percent
+of the IT spend, but it is what makes the $30M of GPUs
+behave as one machine. A cluster that cannot synchronize
+is $30M of isolated chips.</p>
+<h3 id="subchapter-cpus-and-storage-3m">Subchapter: CPUs and storage, $3M</h3>
+<p>The surprise here is a CPU shortage. Agentic workloads
+need large numbers of CPUs to orchestrate the GPU work,
+so CPU demand is surging alongside GPU demand. Agents
+do not just consume GPU tokens. They run code, call
+tools, manage state, and each of those steps spends
+CPU. The $3M bar is the footprint of the agent era
+inside the machine budget.</p>
 <p>The guest flags that he may be double-counting the
 fit-out bar, and rounds the total to <strong>$40M per MW</strong>.
 Added to the factory, the full build is roughly <strong>$60M
@@ -322,9 +339,11 @@ per MW</strong>, which is <strong>$60 billion for a 1 GW cluster</strong>.</p>
 <p>Now the accountant&rsquo;s real question. You have spent $60M
 per MW. What comes back? The guest gives three numbers:
 the operating cost, the rental revenue, and the upgrade.</p>
+<figure><img alt="The payback arithmetic: renting chips versus selling tokens" src="assets/plate-l02-payback.svg"><figcaption>Plate L02-F2. $60M at $15M a year is four years. At $30M it is two. OpEx is $1-2M. Shell 3. Source: original, numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-15m-rent-line">Subchapter: the $15M rent line</h3>
 <p><strong>OpEx: $1-2M per MW per year.</strong> Power, insurance, and
 the on-site labor that repairs and replaces failed cables
-and GPUs. The guest stresses this is limited; the big
+and GPUs. The guest stresses this is limited. the big
 money is all upfront.</p>
 <p><strong>Revenue: about $15M per MW per year</strong>, renting out
 bare chips. Divide the $60M build by $15M a year and you
@@ -333,6 +352,7 @@ before the engineering workforce and other costs the
 $1-2M omits. The guest presents it as rough, assembled
 that afternoon, but directionally the number the street
 argues about.</p>
+<h3 id="subchapter-the-30m-token-line">Subchapter: the $30M token line</h3>
 <p><strong>The upgrade: managed services.</strong> Renting chips is the
 commodity product. The guest&rsquo;s title for the deck is
 &ldquo;from electrons to tokens,&rdquo; and the margin lives in the
@@ -340,14 +360,18 @@ tokens. Add a managed layer that hosts models and serves
 an API endpoint, and revenue rises by $5-15M per MW per
 year, to roughly <strong>$30M per MW</strong> in the optimistic case.
 The payback halves: <strong>about two years</strong>.</p>
-<p>Figure L02-F2. The payback arithmetic. Source: original
-diagram for Stanford Frontier AI, numbers from the
-session.</p>
-<pre class="ascii">build:     $60M per MW  ($20M factory + $40M machines)
-OpEx:      $1-2M per MW per year
-rent chips:      $15M/MW/yr --&gt; 60/15 = ~4 year payback
-+ managed tokens: $30M/MW/yr --&gt; 60/30 = ~2 year payback
-</pre>
+<h3 id="subchapter-the-missing-costs">Subchapter: the missing costs</h3>
+<p>The guest&rsquo;s own caveat: the $1-2M OpEx omits the
+engineering workforce and other costs. By October 2026
+the financing question got louder. The five hyperscalers&rsquo;
+projected 2026 capex of roughly $800B exceeds their
+combined operating cash flow of about $707B: capex is
+113 percent of cash flow. The buildout is no longer
+self-funded. Brookings estimated the resulting
+infrastructure would need about $3.7 trillion of annual
+revenue by 2032 to produce a 10 percent unlevered
+return. The payback math in this chapter is per factory.
+The industry math adds debt.</p>
 <p>The <strong>key question</strong> of the chapter: what decides between
 the four-year and the two-year outcome? Two things.
 First, depreciation: how long each bar of the $60M stays
@@ -356,19 +380,25 @@ finished intelligence.</p>
 <h2 id="depreciation-how-long-does-a-gpu-stay-valuable">Depreciation: how long does a GPU stay valuable?</h2>
 <p><strong>Depreciation</strong> is how accountants spread a purchase
 over its useful life. A $60M asset that lasts 6 years
-costs $10M a year on the books; if it lasts 3, it costs
+costs $10M a year on the books. if it lasts 3, it costs
 $20M. For AI factories, the depreciation schedule is
 the whole debate on Wall Street.</p>
+<figure><img alt="The depreciation debate: book life versus economic life" src="assets/plate-l02-depreciation.svg"><figcaption>Plate L02-F3. A GPU that earns $36k in year 2 and loses $4.4k in year 4 cannot live six years on the books. Shell 3. Source: original, Research Affiliates figures via Fortune, April 2026. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-six-year-standard">Subchapter: the six-year standard</h3>
 <p>The host asks whether GPUs depreciate over the standard
 5 years that public companies use for computers. The
 guest answers that six is the standard, then reframes
 the question: Crusoe will use compute &ldquo;so long as it is
-valuable to us or to someone else.&rdquo; The evidence he
-offers is a pricing chart for the H100. It debuted about
-three years ago, the price fell as expected, and then,
-with the agent demand boom, the rental price rose back
-above its launch price. Blackwell pricing, via
-SemiAnalysis, shows a similar pattern.</p>
+valuable to us or to someone else.&rdquo;</p>
+<h3 id="subchapter-the-h100-evidence">Subchapter: the H100 evidence</h3>
+<p>The evidence he offers is a pricing chart for the H100.
+It debuted about three years ago, the price fell as
+expected, and then, with the agent demand boom, the
+rental price rose back above its launch price. Blackwell
+pricing, via SemiAnalysis, shows a similar pattern. Old
+chips stayed valuable because demand grew faster than
+the new supply.</p>
+<h3 id="subchapter-abstraction-as-the-defense">Subchapter: abstraction as the defense</h3>
 <p>The mechanism is <strong>abstraction</strong>. Crusoe builds services
 so the customer never knows whether the work ran on an
 A100, an H100, or an MI300. The guest&rsquo;s analogy: you do
@@ -376,15 +406,39 @@ not check which Intel or AMD chip runs your Zoom call.
 You care about the service. As applications abstract the
 hardware, older chips stay revenue-producing longer, and
 the depreciation curve stretches.</p>
-<p>The honest counterweight: nobody knows. The guest says
-so directly.</p>
+<h3 id="subchapter-the-three-year-critique-with-numbers">Subchapter: the three-year critique, with numbers</h3>
+<p>The counterweight arrived after the session. Research
+Affiliates, summarized by Fortune in April 2026, priced
+the H100&rsquo;s economic life directly: in year 2 the chip
+generated about $36,000 of annual profit (137 percent
+ROI). by year 4 it was losing about $4,400 a year
+(negative 34 percent ROI). The driver is not wear. Each
+new chip generation delivers sharply better
+compute-per-watt, and data centers face hard power
+ceilings: to hold capacity inside a fixed megawatt
+envelope, you must swap old chips for efficient new
+ones. The study&rsquo;s conclusion: roughly two thirds of
+hyperscaler AI capex is maintenance, replacing obsolete
+hardware, and the economic life of AI hardware is about
+three years, not the five to six on the books.</p>
+<p>Nobody knows which schedule is right. The guest says so
+directly, and the honest reader holds both numbers.</p>
 <h2 id="the-commodity-question">The commodity question</h2>
 <p>The host presses the debate the industry was having that
 week: is compute a commodity? The guest&rsquo;s answer splits
 by age and by scale.</p>
-<p>Old compute commoditizes. As new generations arrive,
-last year&rsquo;s chips fall down the price curve. But two
-things resist commoditization. First, <strong>the cutting
+<h3 id="subchapter-old-compute-commoditizes">Subchapter: old compute commoditizes</h3>
+<p>As new generations arrive, last year&rsquo;s chips fall down
+the price curve. The September 2026 price war is the
+evidence: OpenAI&rsquo;s GPT-6 Sol at $2/$10 per million
+tokens, Anthropic&rsquo;s Claude Opus 5.5 at $4/$20, DeepSeek
+V4.1 Flash at $0.30/$1.20, xAI&rsquo;s Grok 4.7 at $2/$6.
+Ramp&rsquo;s AI Index measured the effective enterprise price
+at $0.68 per million tokens by early September 2026,
+down 41 percent from March. The commodity logic is
+winning at the token layer.</p>
+<h3 id="subchapter-the-cutting-edge-and-scale-do-not">Subchapter: the cutting edge and scale do not</h3>
+<p>Two things resist commoditization. First, <strong>the cutting
 edge</strong>: the newest hardware always commands a premium,
 which is the history of the IT industry. Second,
 <strong>scale</strong>: operating at very large scale is hard to
@@ -398,23 +452,26 @@ a powerful force.&rdquo;</p>
 <h2 id="two-more-factories-quan-and-spark">Two more factories: Quan and Spark</h2>
 <p>The session gives two more data points that sharpen the
 unit economics.</p>
-<p><strong>Quan, Texas.</strong> A town of 1,500 people with 3,500
-workers on site, drawing labor from nearby Amarillo. The
-site pairs the data center with an on-site wind farm in
-one of the windiest parts of the United States, in an
-arrangement the guest calls <strong>across the meter</strong>: behind
-the meter is on-site power, and across the meter means
-the campus generates its own power, sells the surplus
-into the grid (lowering local ratepayers&rsquo; bills), and
-draws from the grid when the wind drops. The customer is
-undisclosed but described as very large.</p>
-<p><strong>Crusoe Spark.</strong> A modular, self-contained AI data
-center, manufactured centrally to cut the labor
-bottleneck: 500 kW air-cooled units and 2 MW
-liquid-cooled units, deployable in fleets. Claimed
-savings: <strong>30 to 50 percent</strong> on the infrastructure
-cost. This is the answer to the $4.7M/MW labor bar:
-stop building every factory by hand.</p>
+<h3 id="subchapter-quan-texas">Subchapter: Quan, Texas</h3>
+<p>A town of 1,500 people with 3,500 workers on site,
+drawing labor from nearby Amarillo. The site pairs the
+data center with an on-site wind farm in one of the
+windiest parts of the United States, in an arrangement
+the guest calls <strong>across the meter</strong>: behind the meter
+is on-site power, and across the meter means the campus
+generates its own power, sells the surplus into the grid
+(lowering local ratepayers&rsquo; bills), and draws from the
+grid when the wind drops. The customer is undisclosed
+but described as very large.</p>
+<h3 id="subchapter-crusoe-spark">Subchapter: Crusoe Spark</h3>
+<p>A modular, self-contained AI data center, manufactured
+centrally to cut the labor bottleneck: 500 kW
+air-cooled units and 2 MW liquid-cooled units,
+deployable in fleets. Claimed savings: <strong>30 to 50
+percent</strong> on the infrastructure cost. This is the
+answer to the $4.7M/MW labor bar: stop building every
+factory by hand.</p>
+<figure><img alt="Crusoe Spark: the modular answer to the labor bar" src="assets/plate-l02-spark.webp"><figcaption>Plate L02-F4. Manufactured 500 kW and 2 MW units instead of hand-built factories. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="space-data-centers-the-long-bet">Space data centers: the long bet</h2>
 <p>The final topic is the one the host clearly enjoys:
 data centers in space. The guest is genuinely engaged
@@ -436,6 +493,53 @@ not close.</p>
 <p>His verdict: not material in 5 years, probably not in
 10, but a major part of intelligent infrastructure over
 the long run.</p>
+<h2 id="october-2026-the-capex-race-by-the-numbers">October 2026: the capex race, by the numbers</h2>
+<p>Reported and analyst-estimated 2026 plans, the backdrop
+for every number in this chapter:</p>
+<table>
+<thead>
+<tr>
+<th>Company</th>
+<th>2026 CapEx plan</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon</td>
+<td>~$200-220B</td>
+<td>AWS at $42B+ quarterly revenue. largest AI cluster buyer</td>
+</tr>
+<tr>
+<td>Alphabet</td>
+<td>~$195-205B</td>
+<td>Google Cloud crossed $20B/quarter. $460B+ backlog</td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td>~$175B</td>
+<td>AI business past $37B run rate</td>
+</tr>
+<tr>
+<td>Meta</td>
+<td>~$115-135B</td>
+<td>AI capex nearly doubled year over year</td>
+</tr>
+<tr>
+<td>Oracle</td>
+<td>~$55.7B (FY2026)</td>
+<td>New hyperscaler-scale entrant</td>
+</tr>
+</tbody>
+</table>
+<p>Combined: roughly $730-800B, nearly triple the 2024
+total. Goldman Sachs projects about $1.14 trillion in
+2027. The private data-center construction pace hit $75B
+annualized in July 2026 and passed residential
+homebuilding. The $60M/MW math of this chapter is now
+being multiplied at civilizational scale, and the
+depreciation debate above is the market&rsquo;s argument about
+whether the multiplication is sane.</p>
 <h2 id="mapping-back-the-dollar-answered">Mapping back: the dollar, answered</h2>
 <table>
 <thead>
@@ -477,8 +581,13 @@ it.</p>
 The guest names gas turbines (from $1M to $3M per MW as a handful of manufacturers held capacity flat) and skilled labor (the $4.7M/MW bar, with electricians, welders, and plumbers in short supply across many simultaneous gigawatt builds). Electrical equipment is inflating too. His hedge against the labor bar is Crusoe Spark, the modular factory claiming 30-50% savings.</p><div class="followup"><strong>Follow-up:</strong> Which of these costs is inflating fastest?</div></div></div>
 <div class="qa"><div class="q">How does an AI factory pay back?</div><div class="a"><p>Spend $60M per MW upfront. Operating cost is only $1-2M per MW per year. Renting bare chips brings about $15M per MW per year, which is a four-year payback on a revenue basis. Add the managed-services layer that serves model APIs (&ldquo;from electrons to tokens&rdquo;) and revenue rises toward $30M per MW per year, which is about a two-year payback. The upgrade from renting compute to selling tokens is the whole margin story.
 The guest says so himself: the $1-2M OpEx omits the engineering workforce and other costs, and the four-year figure is on a revenue basis, not profit. The deeper variable is depreciation: the payback assumes each bar of the $60M stays valuable for years. If GPUs went obsolete fast, the math would break. His evidence against that is the H100 rental price rising above its launch price three years after debut.</p><div class="followup"><strong>Follow-up:</strong> What is missing from that payback math?</div></div></div>
+<div class="qa"><div class="q">Why is the $4.7M labor bar the hardest cost to fix?</div><div class="a"><p>Because it is people, not parts. A 1 GW campus needs 1,000 times the $4.7M/MW bar, which is $4.7 billion in construction wages, and the electricians, welders, and plumbers do not exist in the needed numbers. Gas turbines can be ordered from five manufacturers. Labor must be hired town by town: Abilene puts 9,000 workers on site daily in a town of 120,000, and Quan puts 3,500 in a town of 1,500. The industrial answer is Spark: manufacture the factory centrally and ship it.
+No, it extends it. Spark is vertical integration one level deeper: the company that owns energy and buildings now owns the factory&rsquo;s manufacturing too. The hedge against a moving bottleneck is to own the layer the bottleneck moves through.</p><div class="followup"><strong>Follow-up:</strong> Does modularity threaten the vertical-integration thesis from L01?</div></div></div>
 <div class="qa"><div class="q">Is compute a commodity?</div><div class="a"><p>The guest splits it three ways. Old compute commoditizes as new generations arrive. The cutting edge is not a commodity: the newest hardware always commands a premium. And scale is not a commodity: operating at very large scale is hard to replicate. On margins, he expects Nvidia&rsquo;s roughly 80% gross margins to compress toward standard silicon levels, around 60%, because competition is a powerful force. Both sides of the debate can be right on different horizons.
 Abstraction. If customers buy tokens through a managed API and never know which chip ran the work, chips become interchangeable inputs and pricing power moves up the stack to whoever owns the customer relationship. That is exactly the business Crusoe is building toward with its managed-services layer.</p><div class="followup"><strong>Follow-up:</strong> What would accelerate the commodity outcome?</div></div></div>
+<div class="qa"><div class="q">Walk me through the three-year obsolescence critique.</div><div class="a"><p>Research Affiliates, summarized by Fortune in April 2026, priced the H100&rsquo;s economic life directly: about $36,000 of annual profit in year 2 (137 percent ROI), turning to a $4,400 annual loss by year 4 (negative 34 percent ROI). The driver is compute-per-watt: each new generation is so much more efficient that, inside a fixed power ceiling, old chips must be swapped out to hold capacity. Their conclusion: roughly two thirds of hyperscaler capex is maintenance replacement, and true economic life is about three years, not the five to six on the books.
+That the two-year payback must finish before the three-year obsolescence. At $30M/MW/yr, $60M is recovered in two years with one year of margin left before the hardware&rsquo;s economic life ends. At $15M/MW/yr, the four-year payback runs past the obsolescence line, which means renting bare chips is the bet most exposed to the critique.</p><div class="followup"><strong>Follow-up:</strong> What does the critique imply for the two-year payback?</div></div></div>
+<div class="qa"><div class="q">What would you ask a neocloud CEO to test the unit economics?</div><div class="a"><p>First, your realized $/MW/yr: contracted, not list. Second, your time from energized shell to first revenue in months, because every idle month eats the payback. Third, your chip refresh assumption: do you underwrite three years or six, and what does the model do if the new generation slips. The first question separates price takers from price makers. The third separates investors who have read the Research Affiliates paper from those who have not.</p></div></div>
 <div class="qa"><div class="q">Why do data centers in space not work yet?</div><div class="a"><p>The attractions are real: no concrete, no permitting, no power approvals, and optical interconnect instead of millions of fiber strands. The blockers are thermal management and operations. GPUs fail constantly at scale, and in space nobody can reseat a chip or return it to the vendor, so the cluster depreciates with no repair path. The economics hinge on launch cost falling by two orders of magnitude. The guest&rsquo;s verdict: not material in 5 years, probably not in 10, but a major long-run piece of intelligent infrastructure.
 It prices the frictions. Permitting, concrete, power approvals, and fiber installation are such large parts of the $20M/MW factory cost that removing them is the main attraction of orbit. The interest in space is a backhanded measure of how expensive building on Earth has become.</p><div class="followup"><strong>Follow-up:</strong> What does the space discussion reveal about terrestrial costs?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
@@ -499,7 +608,8 @@ It prices the frictions. Permitting, concrete, power approvals, and fiber instal
    OpEx just $1-2M/MW/yr.</li>
 <li><strong>Depreciation.</strong> Six years is the standard. H100
    rental prices rose above launch three years in.
-   Abstraction stretches useful life.</li>
+   Abstraction stretches useful life. But the 2026
+   critique says economic life is three years.</li>
 <li><strong>The commodity split.</strong> Old compute commoditizes.
    The cutting edge and scale do not. Nvidia 80% margins
    compress toward 60%.</li>
@@ -508,12 +618,23 @@ It prices the frictions. Permitting, concrete, power approvals, and fiber instal
    10+ years out). Next: what makes the machines worth
    it, the models.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/GcCGzfKdCd0" title="Building AI Factories (MS&E 435, Chase Lochmiller)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0">Building AI Factories (MS&amp;E 435, second half)</a></li>
+<li>The session this lesson follows, in full.</li>
+<li><a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></li>
+<li><a href="https://techblog.comsoc.org/2026/09/24/the-ai-infrastructure-build-out-a-10-trillion-bet-on-compute-power-and-networks/">AI infrastructure build-out and the financing question (Brookings / IEEE ComSoc, Sept 2026)</a></li>
+<li><a href="https://infotechlead.com/data-center/ai-data-centre-investment-ranking-2026-amazon-google-microsoft-and-meta-lead-700-billion-infrastructure-race-98172">Hyperscaler AI capex ranking, 2026</a></li>
+</ul>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Building AI Factories (MS&amp;E 435, Spring 2026), guest
-  Chase Lochmiller, Crusoe:
-  https://www.youtube.com/watch?v=GcCGzfKdCd0
-- MS&amp;E 435 course site: https://mse435.stanford.edu/</p>
+  Chase Lochmiller, Crusoe: <a href="https://www.youtube.com/watch?v=GcCGzfKdCd0">link</a>
+- <a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></p>
 <p><strong>Further reading:</strong>
 - SemiAnalysis: the Blackwell pricing analysis the
   guest cites for the post-launch price recovery
@@ -523,10 +644,12 @@ numbers were assembled that afternoon: treat them as
 directional, and note his own flag of possible
 double-counting in the fit-out bar. &ldquo;Six is the
 standard&rdquo; for depreciation is his answer to the host&rsquo;s
-&ldquo;five years&rdquo; framing; both are stated, neither is
+&ldquo;five years&rdquo; framing. both are stated, neither is
 audited. The Star Cloud H100 launch claim is the
 guest&rsquo;s. Abilene &ldquo;largest campus&rdquo; is hedged by the
-guest himself.</p>
+guest himself. The October 2026 capex and obsolescence
+figures are analyst and press estimates, not audited
+totals.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>MS&amp;E435 L01:</strong> the demand thesis (digital labor)
@@ -540,7 +663,7 @@ guest himself.</p>
 <li><strong>MS&amp;E435 L06:</strong> where the value accrues in the
   stack, and who captures the token margin.</li>
 </ul>
-      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">VIDEO</span><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Stanford MS&amp;E435 Economics of the AI Supercycle, Building AI Factories (Chase Lochmiller, Crusoe)</a></li></ul></section>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">VIDEO</span><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Stanford MS&amp;E435 Economics of the AI Supercycle, Building AI Factories (Chase Lochmiller, Crusoe)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://mse435.stanford.edu/" target="_blank" rel="noopener">MS&amp;E 435 course site: mse435.stanford.edu</a></li></ul></section>
       <nav class="pager"><a href="../mse435/l01-electrons-to-tokens.html"><span class="lbl">← Previous</span>Lecture 1: From Electrons to Tokens</a><a href="../mse435/l03-how-models-get-smarter.html"><span class="lbl">Next →</span>Lecture 3: How Models Get Smarter</a></nav>
     </article>
     <footer class="pagefoot">

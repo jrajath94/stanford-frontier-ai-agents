@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 4: Evals, RLVR, and the Enterprise Specialization Layer — Stanford Frontier AI</title>
+<meta name="description" content="How model value reaches businesses: evals set the roadmap, RL is the eval-maxing machine, post-training costs ~5% of pre-training, and specialization is where e">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="mse435-l04" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04" class="active">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">MS&amp;E 435: Economics of the AI Supercycle</a> / Lecture 4: Evals, RLVR, and the Enterprise Specialization Layer</nav>
+      <h1>Lecture 4: Evals, RLVR, and the Enterprise Specialization Layer</h1>
+      <p class="meta-line">2026-04 · Instructor: Apoorv Agrawal · Spring 2026</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="LRGX-gTegVA"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/LRGX-gTegVA" title="Enterprise Internal Knowledge" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=LRGX-gTegVA" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=LRGX-gTegVA" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Guest: Yash Patil, Founder and CEO of Applied Compute (ex-OpenAI post-training). This lesson covers the second half: evals, RLVR economics, and enterprise specialization.</p></div><h2 id="the-problem-geniuses-that-know-nothing-about-your-business">The problem: geniuses that know nothing about your business</h2>
+<p>L03 ended with models that can reason, use tools, and
+work as co-workers. Here is the gap the guest built his
+company on. Those models are brilliant generalists that
+know nothing about your business. Inside the enterprise
+sits most of the world&rsquo;s data: proprietary, specific,
+and nothing like the internet the models trained on.
+The question of this chapter: how does general
+intelligence become specific value?</p>
+<p>The answer has three parts. First, <strong>evals</strong>: define
+what good looks like. Second, <strong>RL</strong>: optimize against
+it. Third, <strong>specialization</strong>: do it per enterprise,
+because good looks different at every company.</p>
+<h2 id="evals-set-the-roadmap">Evals set the roadmap</h2>
+<p>An <strong>eval</strong> is a benchmark: a fixed set of tasks with
+right answers, used to score a model. The guest&rsquo;s
+central claim is that evals are the most protected
+asset in the labs, and the reason is strategic: <strong>evals
+set the roadmap</strong>.</p>
+<p>The mechanism is a loop the guest states as a slogan:
+whatever hill you want to climb, first define it with
+an eval; then RL is the eval-maxing machine. Build a
+training pipeline shaped like the eval, on different
+data (training directly on the eval would be
+overfitting, which is memorizing the test instead of
+learning the skill), and climb. Then pick the next
+hill.</p>
+<p>The worked example is code. <strong>SWE-bench</strong>, an eval of
+real software engineering tasks, is what started the
+code-model race: once the hill was defined, every lab
+climbed it. The guest notes the named eval has flaws
+and better ones followed, which is itself the point:
+the eval is the steering wheel, so getting it right is
+the highest-leverage work in the lab.</p>
+<p>Figure L04-F1. The eval loop. Source: original diagram
+for Stanford Frontier AI, drawn from the session.</p>
+<pre class="ascii">define the hill          climb the hill           next hill
++-----------------+      +-----------------+      +------------+
+| eval: fixed     | ---&gt; | RL training on  | ---&gt; | new eval   |
+| tasks + answers |      | similar tasks,  |      |            |
+| (guarded asset) |      | different data  |      |            |
++-----------------+      +-----------------+      +------------+
+RL is the eval-maxing machine. Do not train on the eval itself.
+</pre>
+<h2 id="whose-good-the-tiered-eval-stack">Whose good: the tiered eval stack</h2>
+<p>Here the chapter turns enterprise. &ldquo;Good&rdquo; is not
+universal. The guest&rsquo;s example: JPMorgan and Goldman
+Sachs have different standards, different ways of
+operating, different definitions of a correct output.
+So evals stack in tiers.</p>
+<pre class="ascii">tier 1: lab evals         what the model labs optimize toward
+tier 2: enterprise evals  what each company optimizes toward
+</pre>
+<p>Applied Compute lives at tier 2: the specialization
+layer that takes frontier models and optimizes them
+against one enterprise&rsquo;s evals. The general model sets
+the floor. Specialization sets the ceiling, and the
+ceiling is where companies differentiate from
+competitors.</p>
+<h2 id="the-5-percent-number">The 5 percent number</h2>
+<p>The host asks the budget question directly: out of
+$100 of training spend, how much is pre-training and
+how much is post-training? The guest came with
+numbers.</p>
+<p><strong>DeepSeek V3</strong> pre-training: about 2.4 to 2.5 million
+H800 GPU-hours. The RL training that produced
+<strong>DeepSeek R1</strong>: about 150,000 GPU-hours. Divide:
+150,000 / 2,500,000 = 0.06, about <strong>5 to 6 percent</strong>.
+The guest rounds to 5 percent.</p>
+<p>Two readings of that number, both in the session.
+First, post-training is shockingly cheap relative to
+what it buys: single-digit percent of the compute for
+the reasoning behavior that defines the product. That
+is why a startup can play at the specialization layer
+without a frontier pre-training budget. Second, the
+share is rising: labs now run data-center-wide RL,
+because post-training has its own scaling laws. Bigger
+batches, more reasoning per attempt, better
+performance. The 5 percent is a snapshot of a growing
+share.</p>
+<p>Figure L04-F2. The training budget split. Source:
+original diagram for Stanford Frontier AI, numbers
+from the session.</p>
+<pre class="ascii">$100 of training spend (DeepSeek V3 / R1, guest's numbers)
+
+pre-training   $95  | 2.4-2.5M H800-hours | builds the representations
+post-training  $5   | ~150k GPU-hours      | buys the reasoning
+                    trend: the $5 share is growing (data-center-wide RL)
+</pre>
+<h2 id="the-doordash-worked-example">The DoorDash worked example</h2>
+<p>The chapter&rsquo;s central case study makes specialization
+concrete. <strong>DoorDash</strong> onboards more than 100,000
+merchants a year. Each merchant supplies unstructured
+material, including menu images. Turning those images
+into a DoorDash storefront is genuinely hard: the
+company has a precise style guide for how modifiers
+attach to items, what counts as an add-on versus a
+special ingredient, what can mix and match.</p>
+<p>General models failed at this, even with prompting.
+The fix was the eval loop from this chapter&rsquo;s opening.
+Take the model&rsquo;s outputs, have humans correct the
+menus, and measure the delta against ground truth.
+That delta is a reward signal: the error rate. Then
+optimize directly against reducing the error rate. No
+prompt engineering. Just define good and bad, and let
+RL climb.</p>
+<p>Three details matter. First, the model is a <strong>VLM</strong>, a
+vision-language model: a transformer that reads images
+and text together. Second, the guest&rsquo;s answer to &ldquo;why
+not wait for GPT-17&rdquo;: enterprises care about the
+frontier <strong>today</strong>, and the ROI on training now, with
+an order of magnitude less compute than pre-training,
+beats waiting years for a general model that still
+will not know your style guide. Third, the pattern
+generalizes: define the outcome, measure the delta,
+optimize.</p>
+<h2 id="the-pareto-frontier-small-fast-specialized">The Pareto frontier: small, fast, specialized</h2>
+<p>The second case study is <strong>Cognition / Windsurf</strong>.
+Imagine saving a file and, in under two seconds, a
+model tells you whether you just wrote a bug. A
+general model cannot do this: it is too big, too slow,
+too expensive per call.</p>
+<p>The guest&rsquo;s frame is the <strong>Pareto frontier</strong> of
+performance, cost, and latency. Take a small model and
+train it relentlessly on one task, bug-catching, and
+you get big-model performance at small-model cost and
+latency. The frontier is not one model. It is an
+<strong>ensemble</strong>: general models as orchestrators, fast
+specialized models as sub-agents, proprietary data
+filling the gaps the general models never saw.</p>
+<p><strong>Ramp Labs</strong> gets a mention on the same pattern: an
+RL-trained model for fast search inside spreadsheets,
+improving the product experience directly.</p>
+<p>Figure L04-F3. The ensemble pattern. Source: original
+diagram for Stanford Frontier AI, drawn from the
+session.</p>
+<div class="mermaid">flowchart LR
+  G["general model: orchestrator"]
+  S["small specialist: sub-2s bug check"]
+  D["proprietary data: out-of-distribution"]
+  G --> P["product"]
+  S --> P
+  D --> P
+</div><pre class="mermaid-fallback"><code>flowchart LR
+  G[&quot;general model: orchestrator&quot;]
+  S[&quot;small specialist: sub-2s bug check&quot;]
+  D[&quot;proprietary data: out-of-distribution&quot;]
+  G --&gt; P[&quot;product&quot;]
+  S --&gt; P
+  D --&gt; P
+</code></pre>
+<h2 id="continual-learning-the-hot-stove">Continual learning: the hot stove</h2>
+<p>L03 named continual learning as the next bottleneck.
+Here the guest shows its early shape. <strong>Continual
+learning</strong> means a deployed model that improves from
+real-world use: understand how the system is used, see
+the downstream consequences of its actions, and update
+from that.</p>
+<p>The worked example is <strong>Cursor&rsquo;s Composer</strong>: Cursor&rsquo;s
+own coding model, trained on an open-source base plus
+Cursor&rsquo;s coding data. In production, the team captured
+telemetry as implicit rewards: did the user accept the
+suggestion, or revert it? Then online training: collect
+data, take a training step, repeat. The guest&rsquo;s scale
+notes: hours per step, each step covering a huge
+batch, days to weeks of investment to see improvement.
+Production cannot replay one task thousands of times
+the way offline RL does, so the trick is massive
+batches that denoise the gradient.</p>
+<p>The guest&rsquo;s own version is <strong>context bases</strong>: use
+agents and offline compute to analyze documents and
+past human-agent traces, extract the learnings, and
+improve downstream performance at the same token
+budget. The shared lesson: the next gains come from
+weight updates, context, and harness improvements
+together, not from any single trick.</p>
+<h2 id="the-data-market-why-the-guest-is-cautious">The data market: why the guest is cautious</h2>
+<p>The host asks for a long and a short. Long: compute
+and chips, especially Nvidia, with one risk (more
+below). Short, or at least cautious: the <strong>data
+market</strong> as currently constituted.</p>
+<p>The mechanism is a squeeze. An RL data vendor sells a
+customer a task the model cannot do yet. Training
+succeeds. The model gets smarter. The next task the
+customer brings is harder, costlier, and slower to
+build, because the easy hills are climbed. The vendor
+is paid to obsolete its own product line.</p>
+<p>The escape valve is <strong>synthetic data</strong> via the
+<strong>generator-verifier gap</strong>: for code, hold out the unit
+tests, let the model attempt the task, and check the
+output automatically. No human needed. The smarter
+models get, the better these pipelines run. The
+guest&rsquo;s advice to data founders: keep pivoting to the
+next wave. Robotics data. Egocentric video. Whatever
+the models cannot yet generate for themselves.</p>
+<p>The Nvidia long carries the mirror risk. Nvidia takes
+roughly <strong>75 percent margins</strong> on its chips while labs
+spend hundreds of billions. At some point a lab may
+decide to spend a couple hundred billion on its own
+silicon: 80 percent as effective per chip, but far more
+chips. The guest stays long Nvidia, but names the
+in-house risk plainly.</p>
+<h2 id="mapping-back-from-general-to-specific">Mapping back: from general to specific</h2>
+<table>
+<thead>
+<tr>
+<th>Enterprise puzzle</th>
+<th>This chapter&rsquo;s answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How do you steer a model?</td>
+<td>Define the hill with an eval, then let RL maximize it. Evals are the guarded asset because they are the roadmap.</td>
+</tr>
+<tr>
+<td>Why is post-training cheap?</td>
+<td>DeepSeek: ~150k GPU-hours of RL versus 2.4-2.5M for pre-training, about 5%. The share is growing as RL scales.</td>
+</tr>
+<tr>
+<td>Why specialize per company?</td>
+<td>Good differs by company (JPMorgan versus Goldman). General models set the floor; specialization sets the ceiling.</td>
+</tr>
+<tr>
+<td>How did DoorDash do it?</td>
+<td>Human-corrected menus defined the error rate; RL minimized it directly. No prompting. A VLM, a style guide, a delta.</td>
+</tr>
+<tr>
+<td>What breaks the data vendors?</td>
+<td>Success: smarter models need harder tasks, which cost more to build. Synthetic data via the generator-verifier gap is the way out.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price-the-squeeze-is-structural">The honest price: the squeeze is structural</h2>
+<p>The chapter&rsquo;s price is the data-market squeeze, and it
+applies beyond vendors. Every enterprise that builds
+its evals and climbs its hills makes the general
+models stronger, which raises the bar for the next
+hill. Specialization is a treadmill: the floor rises
+under you. The defense is the one the guest gives for
+DoorDash: the ceiling is proprietary. Your style
+guide, your telemetry, your traces. Nobody else&rsquo;s
+general model will ever know them first.</p>
+<div class="qa"><div class="q">What is an eval, and why do labs guard them?</div><div class="a"><p>An eval is a fixed benchmark of tasks with right answers that scores a model. Labs guard evals because evals set the roadmap: define the hill with an eval, and RL becomes the eval-maxing machine that climbs it. SWE-bench started the entire code-model race this way. Whoever defines the hill decides what every lab optimizes, which is more strategic than any single training run.
+That is overfitting: memorizing the test instead of learning the skill. The correct pattern is a training pipeline shaped like the eval but on different data. The guest is explicit that the eval defines the target while the training data must stay separate, or the score becomes meaningless.</p><div class="followup"><strong>Follow-up:</strong> Why not just train on the eval directly?</div></div></div>
+<div class="qa"><div class="q">Explain the 5 percent number and why it matters.</div><div class="a"><p>DeepSeek V3&rsquo;s pre-training took about 2.4 to 2.5 million H800 GPU-hours. The RL stage behind R1 took about 150,000. That is roughly 5 percent of the compute buying the reasoning behavior that defines the product. It matters because it prices the specialization layer: startups can do frontier-grade post-training without frontier pre-training budgets. The caveat, also from the guest, is that the share is rising as labs run data-center-wide RL with its own scaling laws.
+Because RL steers representations it did not build. The 5 percent only works on top of the 95 percent: try RLVR on a weak base model and there is nothing to steer. Pre-training is the fixed cost of the floor; post-training is the variable cost of the ceiling. Both matter, and they are bought by different players.</p><div class="followup"><strong>Follow-up:</strong> If RL is so cheap, why does pre-training still cost billions?</div></div></div>
+<div class="qa"><div class="q">How did Applied Compute solve DoorDash&#x27;s menu problem?</div><div class="a"><p>DoorDash onboards over 100,000 merchants a year, each with unstructured menu images, and a strict style guide for modifiers and add-ons. General models failed even with prompting. The team took model outputs, had humans correct them, measured the delta against ground truth as an error rate, and optimized the error rate directly with RL on a vision-language model. Define good and bad, measure the gap, climb. No prompt engineering.
+Two reasons from the guest. First, enterprises want the frontier now, not in years. Second, no general model will ever know DoorDash&rsquo;s proprietary style guide out of the box; the ceiling is company-specific by construction. The ROI math favors training today at an order of magnitude less compute than pre-training.</p><div class="followup"><strong>Follow-up:</strong> Why not wait for the next general model to handle it?</div></div></div>
+<div class="qa"><div class="q">What is the Pareto frontier argument for small specialized models?</div><div class="a"><p>Performance, cost, and latency trade against each other, and a general model cannot be optimal on all three for every task. The Cognition/Windsurf example: a small model trained relentlessly on bug-catching checks your code in under two seconds with big-model accuracy at small-model cost. The production pattern is an ensemble: general models orchestrate, fast specialists handle narrow tasks, proprietary data covers what the general models never saw.
+A deployed model that improves from real-world use, learning from sparse rewards the way you learn a hot stove in one touch. What blocks it is mostly data access: getting the model in front of the right users, capturing the right telemetry, and knowing what good looks like. Cursor&rsquo;s Composer shows the early shape: accept/revert signals as implicit rewards, massive batches to denoise the gradient, hours per training step.</p><div class="followup"><strong>Follow-up:</strong> What is continual learning, and what blocks it?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>The gap.</strong> Frontier models are geniuses that know
+   nothing about your business. Most of the world&rsquo;s
+   data is proprietary and enterprise-held.</li>
+<li><strong>Evals.</strong> Define the hill first. RL is the
+   eval-maxing machine. SWE-bench started the code
+   race. Guard the eval; it is the roadmap.</li>
+<li><strong>Tiers.</strong> Lab evals steer the base models.
+   Enterprise evals steer specialization. JPMorgan&rsquo;s
+   good is not Goldman&rsquo;s.</li>
+<li><strong>The 5 percent.</strong> DeepSeek: ~150k GPU-hours of RL
+   on ~2.5M of pre-training. Post-training is cheap
+   and its share is growing.</li>
+<li><strong>DoorDash.</strong> 100k+ merchants a year, strict style
+   guide. Human corrections defined the error rate;
+   RL minimized it. A VLM, a delta, no prompting.</li>
+<li><strong>The Pareto frontier.</strong> Small models, trained
+   hard on one task, beat general models on cost and
+   latency. Ensemble: orchestrator plus specialists.</li>
+<li><strong>Continual learning.</strong> Cursor&rsquo;s Composer learns
+   from accept/revert telemetry, hours per step. The
+   hot-stove problem is the next bottleneck.</li>
+<li><strong>The squeeze.</strong> Data vendors train themselves out
+   of easy tasks. Synthetic data via the
+   generator-verifier gap is the escape. Next: what
+   this does to software itself.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- Enterprise Internal Knowledge (MS&amp;E 435, Spring
+  2026), guest Yash Patil, Applied Compute:
+  https://www.youtube.com/watch?v=LRGX-gTegVA
+- MS&amp;E 435 course site: https://mse435.stanford.edu/</p>
+<p><strong>Further reading:</strong>
+- Karpathy&rsquo;s write-up on RLVR, in the course
+  readings.
+- Ali Ghodsi (Databricks), earlier in the course: most
+  tokens beyond the data frontier will be AI-generated.</p>
+<p><strong>Caveats from these sources.</strong> The DeepSeek numbers
+are the guest&rsquo;s (&ldquo;I looked it up on the way here&rdquo;),
+not audited filings. &ldquo;TreeBench&rdquo; is the transcript&rsquo;s
+rendering of the eval the guest calls flawed
+[uncertain: exact name]. The Cursor training details
+(hours per step, days to weeks) are the guest&rsquo;s
+recollection. The 75 percent Nvidia margin figure is
+the guest&rsquo;s estimate in this session (80 percent in
+the Crusoe session); treat both as approximate.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>MS&amp;E435 L03:</strong> the model history this chapter
+  monetizes: pre-training, scaling laws, reasoning.</li>
+<li><strong>CS336:</strong> the technical post-training stack: SFT,
+  RLHF, and reward modeling from the inside.</li>
+<li><strong>CS329A / CS329Z:</strong> agents in production: harnesses,
+  tool use, and the orchestration layer the ensemble
+  pattern assumes.</li>
+<li><strong>MS&amp;E435 L05:</strong> what the specialization layer does
+  to the software business: when every company can
+  build its own tools, what happens to SaaS?</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">VIDEO</span><a href="https://www.youtube.com/watch?v=LRGX-gTegVA" target="_blank" rel="noopener">Stanford MS&amp;E435 Economics of the AI Supercycle, Enterprise Internal Knowledge (Yash Patil, Applied Compute)</a></li></ul></section>
+      <nav class="pager"><a href="../mse435/l03-how-models-get-smarter.html"><span class="lbl">← Previous</span>Lecture 3: How Models Get Smarter</a><a href="../mse435/l05-software-is-dead.html"><span class="lbl">Next →</span>Lecture 5: Software Is Dead, Long Live the Agent</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

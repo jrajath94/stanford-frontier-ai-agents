@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="560" fill="#F7F4EE"/>
+<text x="64" y="64" font-size="30" font-weight="600" fill="#1B2838">Crusoe Spark: the modular answer to the labor bar</text>
+<text x="64" y="96" font-size="17" fill="#5C6B7A">Manufactured 500 kW and 2 MW units, not hand-built factories. Shell 3. Source: original, session numbers.</text>
+<!-- left: before -->
+<g>
+<rect x="64" y="136" width="256" height="264" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="192" y="170" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">before: hand-built campus</text>
+<rect x="80" y="186" width="224" height="56" rx="8" fill="#F4E6D4"/>
+<text x="192" y="214" font-size="15" font-weight="500" fill="#1B2838" text-anchor="middle">labor $4.7M per MW</text>
+<text x="192" y="274" font-size="14" font-weight="500" fill="#C46B2C" text-anchor="middle">hired town by town</text>
+<text x="192" y="298" font-size="13" fill="#5C6B7A" text-anchor="middle">9,000 workers at Abilene</text>
+<text x="192" y="322" font-size="13" fill="#5C6B7A" text-anchor="middle">years to build and energize</text>
+<text x="192" y="360" font-size="13" font-weight="500" fill="#1B2838" text-anchor="middle">delay compounds the soft costs</text>
+<text x="192" y="384" font-size="13" fill="#5C6B7A" text-anchor="middle">every campus pays the bar locally</text>
+</g>
+<!-- chevron before -> rule -->
+<polygon points="328,260 344,268 328,276" fill="#1B2838"/>
+<!-- center: the rule -->
+<g>
+<rect x="352" y="136" width="256" height="264" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="170" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">the rule</text>
+<rect x="368" y="186" width="224" height="80" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="480" y="216" font-size="15" font-weight="500" fill="#1B2838" text-anchor="middle">manufacture centrally</text>
+<text x="480" y="238" font-size="15" font-weight="500" fill="#1B2838" text-anchor="middle">then ship the factory</text>
+<text x="480" y="300" font-size="14" fill="#1B2838" text-anchor="middle">Spark Factory, Brighton CO</text>
+<text x="480" y="322" font-size="14" fill="#1B2838" text-anchor="middle">352,000 sq ft, $200M+, 200+ jobs</text>
+<text x="480" y="344" font-size="13" fill="#5C6B7A" text-anchor="middle">pay the design once</text>
+<text x="480" y="384" font-size="14" font-weight="500" fill="#1F7A72" text-anchor="middle">amortize it across every unit</text>
+</g>
+<!-- chevron rule -> after -->
+<polygon points="616,260 632,268 616,276" fill="#1B2838"/>
+<!-- right: after -->
+<g>
+<rect x="640" y="136" width="256" height="264" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="768" y="170" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">after: Spark units</text>
+<rect x="656" y="186" width="224" height="56" rx="8" fill="#E7F4EF"/>
+<text x="768" y="214" font-size="15" font-weight="500" fill="#1B2838" text-anchor="middle">500 kW air / 2 MW liquid</text>
+<text x="768" y="274" font-size="14" font-weight="500" fill="#1F7A72" text-anchor="middle">delivery in months, not years</text>
+<text x="768" y="298" font-size="14" font-weight="500" fill="#1B2838" text-anchor="middle">fleets to hundreds of MW</text>
+<text x="768" y="322" font-size="13" fill="#5C6B7A" text-anchor="middle">Energy Vault: 8 MW, to 25 MW</text>
+<text x="768" y="360" font-size="13" font-weight="500" fill="#1B2838" text-anchor="middle">30-50% claimed infra savings</text>
+<text x="768" y="384" font-size="13" fill="#5C6B7A" text-anchor="middle">guest's claim, not audited</text>
+</g>
+<line x1="64" y1="452" x2="896" y2="452" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="64" y="488" font-size="16" font-weight="500" fill="#1B2838">One claim: when the bottleneck is people, manufacture the people out of the critical path.</text>
+</svg>

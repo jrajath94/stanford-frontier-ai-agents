@@ -147,7 +147,7 @@ the retriever learns to fetch passages that help the generator.
 Two variants. **RAG-Sequence** picks one passage and generates the
 whole answer with it. **RAG-Token** re-picks the passage at every token
 of the answer. Sequence is cheaper. Token is more flexible. The
-lecture's retriever is DPR: p(z|x) proportional to exp(d(z)^T q(x)),
+lecture's retriever is DPR (Dense Passage Retrieval): p(z|x) proportional to exp(d(z)^T q(x)),
 two BERT encoders, top-K by maximum inner product search. The generator
 is BART, reading the query and passage concatenated.
 
@@ -197,6 +197,59 @@ at the documents: fixed-size splitting on PDFs with tables, code, or
 headings shreds the structure the questions need. Read ten chunks by
 hand before tuning anything.
 
+### Recursive splitting: cut on real boundaries
+
+Fixed-size splitting is the floor, not the ceiling. Four upgrades,
+each fixing a different weakness.
+
+**Recursive splitting** splits on a priority order of separators:
+double newline (paragraph), then single newline, then space, then
+character. A chunk that fits after paragraph splitting stays whole.
+Only oversized pieces split further. The result: chunks that end at
+real boundaries instead of mid-sentence. This is the production
+default for prose.
+
+### Semantic chunking: cut where meaning changes
+
+**Semantic chunking** splits on meaning, not length. Embed each
+sentence, compute the similarity between consecutive sentences, and
+cut where the similarity drops: a topic change is a chunk boundary.
+The chunks vary in size, but each one is about one thing. The price
+is an embedding call per sentence at index time.
+
+### Parent-document chunking: match small, return big
+
+**Parent-document chunking** fixes the precision-recall dilemma.
+Small chunks retrieve precisely (a 100-token chunk matches the query
+tightly) but read poorly (no context around the hit). The index
+stores small chunks. Each small chunk carries its parent chunk's ID.
+Retrieval matches on the small chunk, then returns the parent.
+Worked on the queue-log toy:
+
+```ascii
+child chunk:   "Thursday 9am averages 3 waiting."
+parent chunk:  "Office hours queue log, week of Oct 6.
+               Tuesday 4pm averages 14 waiting.
+               Thursday 9am averages 3 waiting.
+               Friday 2pm averages 9 waiting."
+query:         "Which office hour this week is least crowded?"
+match:         child scores high (short, on-topic)
+return:        the parent, with all three sessions for comparison
+```
+
+The reader gets the comparison table, not one row. The cost is index
+size: children plus parents, roughly double the chunks.
+
+### Agentic chunking: the LLM places the cuts
+
+**Agentic chunking** goes furthest: an LLM decides the boundaries by
+reading the document and placing cuts where the topic changes. The
+most accurate splits, and the most expensive: one model call per
+document. Use it when the documents are few and the questions are
+hard. Use recursive splitting when they are many.
+
+![Parent-document chunking](assets/l05-parent-chunk.svg "Small child chunks match the query precisely. Retrieval returns the parent: the child 'Thursday 9am averages 3 waiting' brings the full three-session queue log. Project: Stanford Frontier AI. Source: original.")
+
 ### Embeddings: meaning becomes position
 
 A chunk is text. The retriever needs numbers. An **embedding model**
@@ -221,7 +274,9 @@ answers nearest-neighbor queries. The work splits into two phases.
 ![The vector store](assets/l05-vector-store.svg "Chunks are embedded offline. The query is embedded live. Search is distance math. Project: Stanford Frontier AI. Source: original.")
 
 Offline: split the documents, embed every chunk, build the index
-(usually an HNSW graph, the next lesson's subject). Online: embed the
+(usually an HNSW graph, a hierarchical navigable small world: a layered
+graph index whose greedy walk reaches the query in about log N hops.
+The next lesson builds it in full). Online: embed the
 query, run approximate nearest-neighbor search, return the top-K
 chunks. The index is the price of retrieval: embedding 10,000 chunks
 once beats reading them per query. And the staleness rule: update a
@@ -243,7 +298,9 @@ revenue was $314M." The prompt shows the whole document and the chunk
 and asks for one succinct situating paragraph. Now the chunk vector
 carries the answer's identity. The recipe pairs it with hybrid
 retrieval: embeddings catch meaning, BM25 catches exact terms, results
-merge. The lecture reports that contextual embeddings reduced the
+merge. BM25 is a sparse keyword scorer: it ranks a passage by how often
+the query's words appear, weighs rare words above common ones, and
+corrects for passage length so short documents do not win by default. The lecture reports that contextual embeddings reduced the
 retrieval failure rate. The cost is one LLM call and extra tokens per
 chunk at index time.
 
@@ -281,7 +338,7 @@ passages mention the original question's entities.
 ## RAPTOR and GraphRAG: when the answer is spread out
 
 Flat chunk retrieval fails when the answer is spread across a document.
-No single chunk holds it. **RAPTOR** (Sarthi et al., 2025) builds a
+No single chunk holds it. **RAPTOR** (Sarthi et al., 2024) builds a
 tree, bottom up: embed the chunks, cluster them, summarize each cluster
 with an LLM, embed the summaries, and repeat.
 
@@ -372,7 +429,7 @@ retrieval inside the loop and prices every failure.
 > Q: What is HyDE, and when does query rewriting backfire?
 > A: HyDE (hypothetical document embeddings) has the LLM write a fake answer first, then retrieves using the fake answer's embedding. The hypothetical document looks like the real documents in the index, so the distance math works even when the user's question shares no words with the evidence. It backfires when the rewrite is confidently wrong: a bad hypothetical retrieves passages for the wrong question, and the reader answers from them. Rewrite, then verify the retrieved passages mention the original question's entities.
 > Follow-up: Multi-query versus single rewrite: which and when?
-> A: Single rewrite is cheaper: one model call, one retrieval. Multi-query generates several rewrites and fuses the results, which helps when the question is ambiguous and different phrasings retrieve different evidence. The fusion needs a rule (RRF, from the methods lesson). Use multi-query when ambiguity is the failure mode. Use a single rewrite when the mismatch is just vocabulary.
+> A: Single rewrite is cheaper: one model call, one retrieval. Multi-query generates several rewrites and fuses the results, which helps when the question is ambiguous and different phrasings retrieve different evidence. The fusion needs a rule (reciprocal rank fusion, RRF). Use multi-query when ambiguity is the failure mode. Use a single rewrite when the mismatch is just vocabulary.
 
 > [!QA]
 > Q: When does RAPTOR beat flat chunk retrieval?
@@ -426,10 +483,15 @@ The story in nine steps. Each step answers the one before it.
 </div>
 - How AI Looks Things Up (RAG, Actually Explained) (the embed above): https://www.youtube.com/watch?v=YamlxX17n6Y, chunks, vectors, retrieve, augment, generate; RAG versus fine-tuning; the one honest catch.
 
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/MgZ_Egy-DXI" title="Embeddings and Chunking Strategies in RAG" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- Zero to Deployed, Embeddings and Chunking Strategies in RAG (the embed above): https://www.youtube.com/watch?v=MgZ_Egy-DXI, recursive, parent-child, semantic, and agentic chunking strategies in code.
+
 Further:
 - Anthropic, Contextual Retrieval: https://www.anthropic.com/engineering/contextual-retrieval, the prefix recipe in production.
 - Gao et al. (2024) survey of RAG variants: the full zoo this lesson samples.
-- Sarthi et al. (2025), RAPTOR: tree-structured retrieval.
+- Sarthi et al. (2024), RAPTOR: https://arxiv.org/abs/2401.18059, tree-structured retrieval.
 - Edge et al. (2024), GraphRAG: https://arxiv.org/abs/2402.08907, knowledge graphs for retrieval.
 
 ## Official sources and further reading

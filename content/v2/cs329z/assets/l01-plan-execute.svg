@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="600" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">Plan-and-execute: the plan becomes a document</text>
+<text x="40" y="82" font-size="17" fill="#5C6B7A">ReAct decides each step on the fly. Plan-and-execute writes the steps down first.</text>
+<line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="40" y="576" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: original</text>
+<text x="40" y="132" font-size="14" font-weight="600" fill="#5C6B7A" text-anchor="start">BEFORE: ReAct, one decision per turn</text>
+<g><rect x="40" y="152" width="200" height="88" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="140" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Thought 1</text>
+<text x="140" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">search the flights</text>
+</g>
+<g><rect x="40" y="256" width="200" height="88" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="140" y="290" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Act 1 + Obs 1</text>
+<text x="140" y="316" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">3 options, prices</text>
+</g>
+<g><rect x="40" y="360" width="200" height="88" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="140" y="394" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Thought 2</text>
+<text x="140" y="420" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">pick cheapest...</text>
+</g>
+<line x1="140" y1="240" x2="140" y2="256" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="140" y1="256" x2="144" y2="245" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="140" y1="256" x2="136" y2="245" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="140" y1="344" x2="140" y2="360" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="140" y1="360" x2="144" y2="349" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="140" y1="360" x2="136" y2="349" stroke="#1B2838" stroke-width="1.5"/>
+<text x="40" y="480" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">The plan lives in the</text>
+<text x="40" y="502" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">model&#x27;s head, one step</text>
+<text x="40" y="524" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">at a time.</text>
+<line x1="300" y1="300" x2="380" y2="300" stroke="#1E4D8C" stroke-width="1.5" fill="none"/>
+<line x1="380" y1="300" x2="369" y2="296" stroke="#1E4D8C" stroke-width="1.5"/>
+<line x1="380" y1="300" x2="369" y2="304" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="340" y="292" font-size="13" fill="#1E4D8C" text-anchor="middle">write the plan</text>
+<text x="440" y="132" font-size="14" font-weight="600" fill="#5C6B7A" text-anchor="start">AFTER: plan, then execute, then replan</text>
+<g><rect x="440" y="152" width="240" height="120" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Planner writes plan</text>
+<text x="560" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">1. search flights</text>
+<text x="560" y="232" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">2. compare prices</text>
+<text x="560" y="252" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">3. book cheapest</text>
+</g>
+<g><rect x="440" y="288" width="240" height="88" rx="12" fill="#E7F1F8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="322" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Executor: step 1</text>
+<text x="560" y="348" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">search[Chicago Fri]</text>
+</g>
+<g><rect x="440" y="392" width="240" height="88" rx="12" fill="#E7F1F8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="426" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Executor: step 2</text>
+<text x="560" y="452" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">compare 3 prices</text>
+</g>
+<line x1="560" y1="272" x2="560" y2="288" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="560" y1="288" x2="564" y2="277" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="560" y1="288" x2="556" y2="277" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="560" y1="376" x2="560" y2="392" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="560" y1="392" x2="564" y2="381" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="560" y1="392" x2="556" y2="381" stroke="#1B2838" stroke-width="1.5"/>
+<g><rect x="720" y="288" width="280" height="88" rx="12" fill="#F3D4D8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="860" y="322" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Step 3 fails</text>
+<text x="860" y="348" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">booking rejected</text>
+</g>
+<line x1="680" y1="332" x2="720" y2="332" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="720" y1="332" x2="709" y2="328" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="720" y1="332" x2="709" y2="336" stroke="#1B2838" stroke-width="1.5"/>
+<g><rect x="720" y="392" width="280" height="88" rx="12" fill="#F4E6D4" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="860" y="426" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Replanner revises</text>
+<text x="860" y="452" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">plan v2: try 2nd cheapest</text>
+</g>
+<line x1="860" y1="376" x2="860" y2="392" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="860" y1="392" x2="864" y2="381" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="860" y1="392" x2="856" y2="381" stroke="#1B2838" stroke-width="1.5"/>
+<text x="440" y="512" font-size="15" font-weight="600" fill="#1B2838" text-anchor="start">Long tasks get a written plan.</text>
+<text x="440" y="536" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">The executor follows it; the replanner fixes it. One claim per plate.</text>
+</svg>

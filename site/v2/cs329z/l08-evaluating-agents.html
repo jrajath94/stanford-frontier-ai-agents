@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -248,6 +245,26 @@ trace was wrong. An eval that scores outcomes alone certifies the
 lucky run. The trace is the audit trail: which tools were called, in
 what order, with what arguments.</p>
 <figure><img alt="The capability-reliability gap" src="assets/l02-capability-gap.svg"><figcaption>Agents can do the task. They cannot do it the same way twice. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<h3 id="passk-consistency-as-a-number">Pass@k: consistency as a number</h3>
+<p>Consistency needs a statistic, not just a story. <strong>Pass@k</strong> is the
+chance that at least one of k independent runs succeeds. If one run
+succeeds with probability p, pass@k = 1 - (1 - p)^k. Work it on the
+lesson toy: p = 0.7, k = 10.</p>
+<pre class="ascii">single run:        p = 0.7
+pass@10:           1 - 0.3^10 = 1 - 0.0000059 = 0.99999
+</pre>
+<p>A 70-percent agent almost surely succeeds once in ten tries. That is
+why demos lie: pass@10 is a sampling statistic, and the demo is one
+draw from it. The interview trap is to quote pass@10 as capability.
+Capability is p, measured per run. Pass@k is budget: how many tries
+you can afford. Report both, and never report pass@k without the k.
+The sibling metric, pass-hat@k (all k runs succeed, the automation
+statistic), is worked in CME295 L08. This course stays on the
+consistency side.</p>
+<figure><img alt="Pass at k" src="assets/l08-passatk.svg"><figcaption>Single run p = 0.7. Pass at 10 = 0.99999. The demo is one draw from the pass-at-k distribution, not a measurement. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>The robustness twin is the paraphrase set: the same p measured across
+rewrites of the instruction. If p drops from 0.7 to 0.4 on rephrasing,
+the agent does not understand the task. It memorized the phrasing.</p>
 <h2 id="the-key-question">The key question</h2>
 <p>How do we score an agent so the number survives contact with the
 other nine runs?</p>
@@ -288,11 +305,13 @@ long-horizon work in one environment: read the repo, find the bug,
 write the patch, do not break the tests. GAIA tests tool orchestration
 across the open world: browse, compute, read files, synthesize. An
 agent can climb one and stall on the other.</p>
-<h3 id="webarena-and-osworld-environments-as-benchmarks">WebArena and OSWorld: environments as benchmarks</h3>
-<p>SWE-bench and GAIA grade outcomes. <strong>WebArena</strong> and <strong>OSWorld</strong> grade
-behavior inside an environment. WebArena gives the agent real websites
+<h3 id="webarena-grade-behavior-on-real-websites">WebArena: grade behavior on real websites</h3>
+<p>SWE-bench and GAIA grade outcomes. <strong>WebArena</strong> grades behavior inside
+an environment. WebArena gives the agent real websites
 to navigate: the task succeeds when the environment reaches the goal
-state (the item is in the cart, the form is submitted). OSWorld gives
+state (the item is in the cart, the form is submitted).</p>
+<h3 id="osworld-grade-behavior-on-a-full-desktop">OSWorld: grade behavior on a full desktop</h3>
+<p><strong>OSWorld</strong> gives
 the agent a full desktop: screenshots in, mouse and keyboard out, the
 same computer-use loop the intro lesson&rsquo;s desktop agents run.</p>
 <p>The difference is what gets measured. Outcome benchmarks ask &ldquo;did it
@@ -503,6 +522,12 @@ A judge for tone, calibrated on human ratings of a sample: the verifiable outcom
 <li>How to Actually Evaluate &amp; Benchmark AI Agents (the embed above): https://www.youtube.com/watch?v=a90GliNJwck, the evaluation crisis, SWE-bench, WebArena, GAIA, and LLM-as-judge versus human calibration.</li>
 </ol>
 </li>
+</ul>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/zE07cZG8vHU" title="AI Coding Agents Hit 38.8 percent on Real Private Code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>theaimart, AI Coding Agents Hit 38.8% on Real Private Code (the embed above): https://www.youtube.com/watch?v=zE07cZG8vHU, public benchmarks versus private production code, contamination, and why green tests lie.</li>
 </ul>
 <p>Further:
 - Jimenez et al. (2024), SWE-bench: https://arxiv.org/abs/2310.06770, construction and grading.

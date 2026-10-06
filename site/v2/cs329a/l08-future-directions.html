@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 8: Future Research Areas — Stanford Frontier AI</title>
+<meta name="description" content="Agents debating to teach each other, verifiers checking verifiers, Absolute Zero learning with no human data at all, and the open problems: non-verifiable domai">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-l08" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08" class="active">L08 · Future Directions</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 8: Future Research Areas</nav>
+      <h1>Lecture 8: Future Research Areas</h1>
+      <p class="meta-line">Autumn 2025 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="AyO6wyu4DEg"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/AyO6wyu4DEg" title="Stanford CS329A Self-Improving AI Agents | Part 9 | Future Research Areas" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=AyO6wyu4DEg" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=AyO6wyu4DEg" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Multi-agent fine-tuning, DeepSeekMath-V2 meta-verification, Absolute Zero reinforced self-play, and open problems: non-verifiable domains, intelligence per watt, continual learning.</p></div><h2 id="the-courses-question-restated">The course&rsquo;s question, restated</h2>
+<p><em>Builds on: All seven lectures, restating the question they built machinery to answer.</em></p>
+<p>Can agents improve themselves? Seven lectures built the
+machinery: sample at test time, verify, plan, search, train on
+the winners. This lecture points at what comes next. Three
+research directions with results, then the open problems the
+field has not cracked.</p>
+<h2 id="agents-teaching-agents-multi-agent-fine-tuning">Agents teaching agents: multi-agent fine-tuning</h2>
+<p><em>Builds on: The generator-verifier loop, with the verifier externalized as a society of critics.</em></p>
+<p><strong>Multi-agent fine-tuning</strong> replaces the single model with a
+society. Several <strong>generator</strong> agents propose answers. Several
+<strong>critic</strong> agents attack them: a <strong>generator-critic</strong> society.
+The agents <strong>debate</strong>: each round, generators defend and revise, critics probe for flaws.
+Then <strong>majority-vote SFT</strong>: collect the reasoning chains the
+debate converged on and fine-tune every agent on them.</p>
+<p>The finding the lecture stresses is <strong>diversity preserved</strong>.
+Single-model self-training collapses: the model converges on
+one style and the gains stall, the entropy collapse of Lecture
+6 in social form. Debate keeps the agents different from each
+other, because each critic is rewarded for finding what the
+others missed. The system improves without collapsing into one
+voice. The lecture reports transfer to GSM8K: the debated
+reasoning patterns help on math the agents were not directly
+trained on.</p>
+<p>The mechanism is the course&rsquo;s <strong>generator-verifier loop</strong> with the
+verifier externalized. No single model judges itself. The critics are the
+verifier, and they are trained adversaries, not static tests.</p>
+<figure><img alt="Debate keeps the society diverse" src="assets/plate-l08-debate.svg"><figcaption>Generators propose. Critics attack. Debate converges. Majority-vote SFT trains all. Diversity survives. Shell 3. Source: paper, Multiagent Finetuning. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="verifiers-checking-verifiers-deepseekmath-v2">Verifiers checking verifiers: DeepSeekMath-V2</h2>
+<p><em>Builds on: Multi-agent debate&rsquo;s externalized verifier, with a meta-verifier checking the checker.</em></p>
+<p>Lecture 6&rsquo;s DeepSeekMath trained a generator with GRPO. The
+ceiling was the verifier: a learned reward model can be gamed.
+<strong>DeepSeekMath-V2</strong> answers with a <strong>meta-verifier</strong>, a system
+that checks the checker.</p>
+<p>The loop has three roles. The <strong>generator</strong> writes proofs. The
+<strong>verifier</strong> checks them. The <strong>meta-verifier</strong> checks the
+verifier&rsquo;s judgments. The lecture reports the training curve:
+over 8 iterations the proof score climbs, and with best-of-32
+sampling the system reaches about 42 percent on the <strong>IMO</strong>,
+International Mathematical Olympiad, 2024
+shortlist. Each turn, the generator faces a sharper verifier,
+and the verifier faces a sharper meta-verifier. The regress
+stops because the top of the stack is checked against formal
+proof: mathematics has a ground truth the loop cannot talk its
+way past.</p>
+<p>The published paper, November 2025, goes further than the
+lecture&rsquo;s snapshot: gold-level performance on IMO 2025 and
+118 of 120 on Putnam 2024. The lecture&rsquo;s 42 percent is the
+training-curve figure from Autumn 2025. The paper&rsquo;s medals are
+what the loop became. The direction is the point: when the
+verifier is learned, verify the verifier, and ground the top
+in something the model cannot game.</p>
+<figure><img alt="The regress stops at formal proof" src="assets/plate-l08-meta.svg"><figcaption>Generator writes proofs. Verifier checks. Meta-verifier checks the verifier. 8 iterations, best-of-32 about 42 percent on IMO 2024 shortlist. Shell 3. Source: lecture and paper, DeepSeekMath-V2. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="absolute-zero-no-human-data-at-all">Absolute Zero: no human data at all</h2>
+<p><em>Builds on: Every method so far, which needed human data somewhere, asking what happens with none.</em></p>
+<p>Every method so far needed human data somewhere: problems,
+answers, constitutions, preferences. <strong>Absolute Zero</strong> asks
+what happens with none. Two roles, both played by the model: a
+<strong>proposer-solver</strong> pair. The <strong>proposer</strong> invents reasoning tasks.
+The <strong>solver</strong> tries to solve them. That is <strong>self-play</strong>: the
+model plays both roles, proposer and solver improving by training
+against each other with no human data. The proposer is rewarded for tasks the solver
+solves about half the time: the reward is 1 minus the average
+success rate, except an average success rate of exactly 0 pays
+0 instead of 1, so trivial tasks and impossible tasks both pay
+nothing. The sweet spot is the frontier of the solver&rsquo;s
+ability.</p>
+<p>The tasks come in three kinds. <strong>Deduction</strong>: given rules, draw
+the conclusion. <strong>Abduction</strong>: given observations, find the
+rules. <strong>Induction</strong>: given examples, find the pattern. The
+proposer draws from a <strong>task buffer</strong>, a curriculum of past
+tasks that keeps the difficulty matched to the solver. The
+result the lecture reports: state of the art on reasoning
+benchmarks with zero human data. No problems written by
+people. No answers. No preferences. The loop bootstraps from
+the model&rsquo;s own inventions.</p>
+<p>The worked toy for the reward: solver success rate 0.0, reward
+0, too hard. Success rate 1.0, reward 0, too easy. Success
+rate 0.4, reward 0.6, the frontier. The proposer learns to live
+at 0.5.</p>
+<figure><img alt="The proposer lives at the frontier" src="assets/plate-l08-absolute-zero.svg"><figcaption>Proposer invents tasks. Solver attempts. Reward 1 minus success rate, 0 when success is 0. Sweet spot at 0.5. Zero human data. Shell 3. Source: paper, Absolute Zero. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="open-endedness-alphaevolve-recapped">Open-endedness: AlphaEvolve, recapped</h2>
+<p><em>Builds on: Absolute Zero&rsquo;s self-play, with the verifier as the world and no fixed task at all.</em></p>
+<p>The lecture recaps <strong>AlphaEvolve</strong>, DeepMind&rsquo;s coding agent for
+scientific discovery, as the open-ended direction. The system
+evolves code: propose a change, run it, keep what works, repeat
+over thousands of generations. The results the lecture cites:
+a 4x4 complex matrix multiplication in 48 scalar multiplications,
+the first improvement over Strassen&rsquo;s algorithm in 56 years,
+plus data-center scheduling gains and hardware circuit
+simplifications. The full lecture on it is not in this course&rsquo;s
+sources. The recap here is the lecture&rsquo;s own. The idea earns
+its place: evolution is the self-improvement loop with the
+verifier as the world and no fixed task at all.</p>
+<h2 id="non-verifiable-domains-where-the-loop-has-no-anchor">Non-verifiable domains: where the loop has no anchor</h2>
+<p><em>Builds on: the verifier regress, which stops at ground truth
+in math but has nowhere to stop elsewhere.</em></p>
+<p>The lecture closes with problems, not results.</p>
+<p><strong>Non-verifiable domains.</strong> The whole loop assumes a verifier:
+tests, proofs, answer keys. Chip design, wet-lab biology,
+creative work: the feedback is slow, expensive, or subjective.
+The lecture names this as the boundary of everything the
+course taught. Extending the loop past verification is the
+field&rsquo;s hardest problem.</p>
+<h2 id="intelligence-per-watt-and-hybrid-routing">Intelligence per watt and hybrid routing</h2>
+<p><em>Builds on: non-verifiable domains, the capability boundary,
+with the economics boundary alongside it.</em></p>
+<p><strong>Intelligence per watt.</strong> Capability is not the only metric.
+The lecture reports a striking measurement: local models with
+20 billion or fewer active parameters handle 88.7 percent of a
+million sampled ChatGPT queries. Over two years, 3.1 times the
+accuracy times 1.7 times the hardware efficiency gave 5.3
+times the intelligence per watt. Meanwhile demand exploded:
+Google&rsquo;s token volume went from 160 trillion in February to 1.3
+quadrillion in October, and total demand rose 1,200 times. The
+future the lecture sketches is <strong>hybrid routing</strong>: small local
+models for the easy 88.7 percent, frontier models in the cloud
+for the rest, with the router as the new research problem.</p>
+<h2 id="continual-learning-the-loop-that-never-stops">Continual learning: the loop that never stops</h2>
+<p><em>Builds on: intelligence per watt, the economics of running the
+loop, with the missing capability that would let the loop run
+forever.</em></p>
+<p><strong>Continual learning.</strong> Models train once and freeze. The world
+does not. The lecture names continual learning, absorbing new
+knowledge without forgetting the old, as the missing piece of
+the self-improving agent. Every loop in the course runs in
+episodes. None runs forever.</p>
+<h2 id="test-time-infrastructure-serving-the-loop">Test-time infrastructure: serving the loop</h2>
+<p><em>Builds on: continual learning, the open capability problem,
+with the open systems problem underneath it.</em></p>
+<p><strong>Test-time infrastructure.</strong> The lecture names two systems,
+Hydrogen and Tokamak [uncertain: no public corroboration found
+for these as AI serving infrastructure], as the coming
+infrastructure for test-time compute: serving stacks built for
+sampling, searching, and verifying at scale. The loop&rsquo;s
+economics depend on it.</p>
+<div class="qa"><div class="q">Why does debate preserve diversity when self-training collapses it?</div><div class="a"><p>Self-training rewards agreement with the model&rsquo;s own best
+outputs. Every round pulls the distribution toward its own
+center, and the tails die: entropy collapse. Debate rewards
+disagreement: each critic scores by finding flaws the others
+missed. The generators must then cover the critics&rsquo; attacks,
+which keeps multiple reasoning styles alive. The verifier is
+adversarial, so convergence means surviving attacks, not
+copying the majority.
+Collusion. If the critics learn to trade easy approvals,
+the adversarial pressure dies and the society collapses like
+a single model. The method needs the critics&rsquo; incentives to
+stay opposed. Mechanism design, not just training.</p><div class="followup"><strong>Follow-up:</strong> What breaks the debate?</div></div></div>
+<div class="qa"><div class="q">Where does the verifier regress stop?</div><div class="a"><p>At ground truth the model cannot argue with. In
+DeepSeekMath-V2 the top of the stack is formal proof:
+mathematics with machine-checkable correctness. The
+meta-verifier can be gamed in principle, but the formal
+checker cannot be talked into accepting a wrong proof. The
+lecture&rsquo;s general point: every learned verifier needs a
+non-learned anchor, or the regress never ends.
+That is the open problem. Code has tests. Math has proof.
+Chip design has simulation, slow but honest. Creative work
+has no anchor at all. The lecture lists non-verifiable
+domains as the boundary precisely because the regress has
+nowhere to stop there.</p><div class="followup"><strong>Follow-up:</strong> What is the anchor for non-math domains?</div></div></div>
+<div class="qa"><div class="q">Work the Absolute Zero proposer reward.</div><div class="a"><p>The solver attempts the proposed task several times. The
+success rate is the fraction solved. The proposer&rsquo;s reward
+is 1 minus that rate, except the extremes pay nothing:
+success 0.0 means the task is impossible, reward 0. Success
+1.0 means it is trivial, reward 0. Success 0.4 gives reward
+0.6. The proposer maximizes reward by proposing tasks at the
+solver&rsquo;s frontier, near 0.5. The curriculum emerges: as the
+solver improves, yesterday&rsquo;s frontier becomes trivial, and
+the proposer must invent harder tasks.
+Nothing in the math. The proposer could invent tasks with
+hidden backdoors the solver knows. The lecture does not
+address this. The honest answer: the benchmark results are
+the check. If the pair colluded, the solver would fail on
+real benchmarks. It does not, so the curriculum is real.
+But the vulnerability is structural.</p><div class="followup"><strong>Follow-up:</strong> What stops the proposer and solver from colluding?</div></div></div>
+<div class="qa"><div class="q">Explain the 5.3x intelligence-per-watt figure.</div><div class="a"><p>Two multiplicative gains over two years. Accuracy per
+parameter rose 3.1 times: smaller models do more. Hardware
+efficiency rose 1.7 times: each watt does more. Multiply:
+3.1 times 1.7 is about 5.3. Intelligence per watt, useful
+work per unit energy, rose more than fivefold. The
+companion fact: 88.7 percent of a million sampled ChatGPT
+queries are handleable by local models at or under 20
+billion active parameters. Most queries do not need the
+frontier.
+Jevons paradox. Cheaper intelligence gets used more, not
+less. The 1,200-fold demand rise swallows the 5.3-fold
+efficiency gain. The lecture&rsquo;s hybrid future, local for the
+easy 88.7 percent, cloud for the rest, is the response: put
+each query on the cheapest intelligence that can handle it.</p><div class="followup"><strong>Follow-up:</strong> Why does demand still explode 1,200x?</div></div></div>
+<div class="qa"><div class="q">Why is continual learning the missing piece?</div><div class="a"><p>Every loop in the course runs in episodes: sample, verify,
+train, stop. The world keeps moving after training ends.
+New facts arrive, old facts decay, and the frozen model goes
+stale. Continual learning would make the loop permanent:
+absorb the new without forgetting the old. The blocker is
+catastrophic forgetting: gradient updates on new data
+overwrite old knowledge. The lecture names it as open, with
+no method presented.
+Not yet. The loop improves capability on a fixed task
+distribution. Continual learning changes the distribution
+underneath the model. The loop is a better student. Continual
+learning is a student who never graduates.</p><div class="followup"><strong>Follow-up:</strong> Is the self-improvement loop continual learning?</div></div></div>
+<div class="qa"><div class="q">The lecture says AlphaEvolve improved on Strassen after 56 years. Why does that matter for this course?</div><div class="a"><p>Because the verifier was the world, not a benchmark.
+Matrix multiplication speed is measured, not judged. The
+evolution loop, propose, test, keep, ran for thousands of
+generations with no human in it and found what 56 years of
+humans missed. It is the course&rsquo;s loop at maximum
+open-endedness: no fixed dataset, no answer key, just a
+measurable objective and time.
+Measurability. Matrix multiplication has a clean
+objective. Most interesting problems do not. AlphaEvolve
+works where the world gives a number. The lecture&rsquo;s
+non-verifiable domains are the same boundary from the other
+side.</p><div class="followup"><strong>Follow-up:</strong> What is the catch?</div></div></div>
+<div class="qa"><div class="q">Put the whole course in one loop.</div><div class="a"><p>Generate: sample, plan, search, debate, propose tasks.
+Verify: tests, proofs, judges, critics, meta-verifiers, the
+world. Train: SFT on winners, RL on rewards, STaR on
+rationales, GRPO on groups. Repeat: the better model
+generates better data. The course&rsquo;s eight lectures are one
+flywheel with eight stations. The tax at every station is
+verification. The open problems are where verification does
+not exist.
+The verifier. Every lecture moved the bottleneck there:
+the generation-verification gap, the selection bottleneck,
+learned scorers, meta-verifiers, non-verifiable domains.
+Whoever builds the honest cheap verifier owns the loop.</p><div class="followup"><strong>Follow-up:</strong> What would you work on?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>Societies beat selves.</strong> Multi-agent fine-tuning: debate,
+   then majority-vote SFT. Diversity survives. Transfers to
+   GSM8K.</li>
+<li><strong>Check the checker.</strong> DeepSeekMath-V2: generator, verifier,
+   meta-verifier. 8 iterations, best-of-32 about 42 percent on
+   IMO 2024 shortlist. Papers report gold IMO 2025.</li>
+<li><strong>Zero human data.</strong> Absolute Zero: proposer and solver in
+   self-play. Reward 1 minus success rate. Frontier at 0.5.
+   Deduction, abduction, induction.</li>
+<li><strong>Evolve in the world.</strong> AlphaEvolve: 48 mults for 4x4
+   complex matmul, first over Strassen in 56 years. The loop
+   with the world as verifier.</li>
+<li><strong>The boundary.</strong> Non-verifiable domains: no anchor, no
+   loop. The field&rsquo;s hardest problem.</li>
+<li><strong>The economics.</strong> 5.3x intelligence per watt in two years.
+   88.7 percent of queries fit local models. Demand up
+   1,200x. Hybrid routing is the future.</li>
+<li><strong>The missing piece.</strong> Continual learning: the loop that
+   never stops. Catastrophic forgetting blocks it.</li>
+</ol>
+<h2 id="used-where-as-of-october-2026">Used where, as of October 2026</h2>
+<ul>
+<li><strong>DeepSeekMath-V2 (November 2025):</strong> gold-level IMO 2025,
+  118 of 120 on Putnam 2024. The meta-verification loop in
+  production research.</li>
+<li><strong>Absolute Zero lineage:</strong> zero-data self-play is the
+  extreme of the 2025-2026 trend toward synthetic curricula.</li>
+<li><strong>AlphaEvolve (Google DeepMind, 2025):</strong> open-ended
+  evolution as a discovery method, now a template for
+  scientific agents.</li>
+<li><strong>Hybrid serving:</strong> Perplexity&rsquo;s hybrid local-server
+  inference orchestrator (Computex 2026) routes tasks between
+  on-device and cloud models automatically, the local-cloud
+  routing the lecture sketches: small models at the edge,
+  frontier models behind the router.</li>
+</ul>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- CS329A Part 9: Future Research Areas (Autumn 2025).
+  https://www.youtube.com/watch?v=AyO6wyu4DEg</p>
+<p><strong>Further reading:</strong>
+- Subramaniam et al., &ldquo;Multiagent Finetuning&rdquo; (2025).
+  https://arxiv.org/abs/2501.05707
+- DeepSeek-AI, &ldquo;DeepSeekMath-V2&rdquo; (2025).
+  https://arxiv.org/abs/2511.22570
+- Zhao et al., &ldquo;Absolute Zero&rdquo; (2025).
+  https://arxiv.org/abs/2505.03335
+- AlphaEvolve (2025). https://arxiv.org/abs/2506.13131</p>
+<p><strong>Caveats from these sources.</strong> The DeepSeekMath-V2 lecture
+figures are the Autumn 2025 training-curve snapshot. The
+paper&rsquo;s published results are stronger. The AlphaEvolve recap
+is the lecture&rsquo;s own. The full lecture is not in this course&rsquo;s
+sources. The intelligence-per-watt and demand figures are the
+lecture&rsquo;s measurements as presented.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS329Z:</strong> multi-agent systems from the builder side:
+  orchestration, debate patterns, and serving hybrid
+  model fleets.</li>
+<li><strong>CS336:</strong> what scaling the base model still buys: the
+  pretraining axis the loop never replaces.</li>
+<li><strong>MSE435:</strong> the economics of AI systems: cost, energy, and
+  the intelligence-per-watt framing.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=AyO6wyu4DEg" target="_blank" rel="noopener">CS329A Part 9: Future Research Areas (Autumn 2025, taught 2025-12-05, published 2026-08)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2501.05707" target="_blank" rel="noopener">Subramaniam et al., Multiagent Finetuning: Self Improvement with Diverse Reasoning Chains (2025)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2511.22570" target="_blank" rel="noopener">DeepSeek-AI, DeepSeekMath-V2: Towards Self-Verifiable Mathematical Reasoning (2025)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2505.03335" target="_blank" rel="noopener">Zhao et al., Absolute Zero: Reinforced Self-play Reasoning with Zero Data (2025)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2506.13131" target="_blank" rel="noopener">AlphaEvolve: A coding agent for scientific and algorithmic discovery (2025)</a></li></ul></section>
+      <nav class="pager"><a href="../cs329a/l07-agentic-evaluations.html"><span class="lbl">← Previous</span>Lecture 7: Measuring Agents on Long-Horizon Tasks</a><span></span></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

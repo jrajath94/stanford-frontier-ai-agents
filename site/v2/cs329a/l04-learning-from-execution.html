@@ -219,7 +219,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 4: Learning from Execution: The RLEF Loop</nav>
       <h1>Lecture 4: Learning from Execution: The RLEF Loop</h1>
       <p class="meta-line">2025-10-08 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
-      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h2 id="the-problem-coding-agents-need-a-teacher">The problem: coding agents need a teacher</h2>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="Lxh9RF5S-K0"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/Lxh9RF5S-K0" title="CS329A Part 4: Learning from Feedback with Tools and Code (Autumn 2025)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Aakanksha Chowdhery on RLEF: public tests to iterate against, private tests to score on, and execution feedback that makes edits targeted.</p></div><h2 id="the-problem-coding-agents-need-a-teacher">The problem: coding agents need a teacher</h2>
 <p>Lecture 3 gave the agent hands: it can write code and run it.
 Now a harder question: how does the agent get better at writing
 code? Human feedback is slow. But code has a built-in teacher:
@@ -231,6 +231,15 @@ model, called the <strong>policy</strong>, takes actions. The world returns a
 <strong>reward</strong>, a number saying how good the outcome was. The policy
 updates toward actions that earned high reward. Here the actions
 are generated programs, and the reward comes from executing them.</p>
+<h3 id="subchapter-the-rl-loop-in-one-paragraph">Subchapter: the RL loop in one paragraph</h3>
+<p>Three objects, one cycle. The <strong>policy</strong> is the model that acts.
+The <strong>environment</strong> is whatever responds: here, a code executor
+running tests. The <strong>reward</strong> is the number the environment
+returns: 1 for pass, 0 for fail. The update nudges the policy&rsquo;s
+probabilities toward actions that earned reward. Repeat
+thousands of times. The policy that once guessed now writes
+code that passes, because passing is the only behavior the
+update ever reinforced.</p>
 <h2 id="the-toy-a-palindrome-fix-step-by-step">The toy: a palindrome fix, step by step</h2>
 <p>The lecture&rsquo;s example: write code that finds palindrome
 substrings, strings that read the same forwards and backwards.
@@ -250,20 +259,43 @@ timeout. The model reads that feedback and writes a faster
 version. This is the <strong>inference-time feedback loop</strong>: try, run,
 read the failure, try again. No weights change yet. The model is
 just iterating with the compiler as its critic.</p>
+<figure><img alt="Two loops: exploit now, learn later" src="assets/plate-l04-two-loops.svg"><figcaption>Inference-time: try, run, retry. Train-time: PPO on the outcomes. Shell 3. Source: original. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-inference-time-loop-step-by-step">Subchapter: the inference-time loop, step by step</h3>
 <p>Then comes the training step. Collect the trajectories that ended
 in passing solutions. Give them reward 1, failures reward 0, a
 <strong>binary reward</strong>. Update the policy with RL so that
 pass-producing behavior becomes more likely. This is the
-<strong>train-time loop</strong>: the policy itself improves. The lecture
-names the algorithm family as PPO, a standard policy-gradient
-method, and stresses the two phases: exploit the current policy
-with inference-time retries, then update the policy on the
-execution results.</p>
+<strong>train-time loop</strong>: the policy itself improves.</p>
+<p>The lecture names the algorithm family as PPO, a standard
+policy-gradient method, and stresses the two phases: exploit the
+current policy with inference-time retries, then update the
+policy on the execution results.</p>
+<h3 id="subchapter-ppo-in-one-paragraph">Subchapter: PPO in one paragraph</h3>
+<p><strong>PPO</strong> (proximal policy optimization) is the workhorse
+policy-gradient algorithm. It estimates which actions were
+better than average, the <strong>advantage</strong>, and nudges the policy
+toward them, but clips the nudge: no single update may move the
+policy too far. The clip is the whole idea. Without it, one
+lucky batch of rewards can yank the policy into a region where
+everything it learned breaks. With it, learning is boring and
+stable, which is what you want when each update costs a training
+run.</p>
+<h3 id="subchapter-the-feedback-the-model-reads">Subchapter: the feedback the model reads</h3>
+<p>The loop works because the feedback is informative, not just a
+number.</p>
+<figure><img alt="The feedback the model actually reads" src="assets/plate-l04-feedback.svg"><figcaption>Failures arrive as assertion errors with runtime values, not as a bare 0. Shell 2. Source: paper: RLEF. Project: Stanford Frontier AI.</figcaption></figure>
+<p>The paper&rsquo;s template shows assertion errors with runtime values,
+which tests timed out, and which passed. &ldquo;Got 14, expected 10&rdquo;
+tells the model what to fix. A bare 0 would not. The
+inference-time loop is only as smart as the failure text it
+reads.</p>
 <h2 id="the-trick-that-makes-it-honest-two-tiers-of-tests">The trick that makes it honest: two tiers of tests</h2>
 <p>Here is the failure the paper&rsquo;s design prevents. If the model
 practices on the same tests it is graded on, it can memorize the
-expected outputs instead of learning to code. The fix is a
-<strong>two-tier test strategy</strong>:</p>
+expected outputs instead of learning to code.</p>
+<figure><img alt="Public tests guide. Private tests grade." src="assets/plate-l04-two-tiers.svg"><figcaption>The model sees public tests during generation. Private tests decide the reward, unseen. Shell 3. Source: paper: RLEF. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-two-tiers-deep">Subchapter: the two tiers, deep</h3>
+<p>The fix is a <strong>two-tier test strategy</strong>:</p>
 <ul>
 <li><strong>Public tests</strong>: a small set, visible during generation. Fast
   iteration. The model sees failures here and retries.</li>
@@ -276,29 +308,56 @@ tests, the only way to earn reward 1 reliably is to write
 actually correct code. The lecture calls this out as a key
 innovation of the self-improvement loop: the model gets execution
 feedback without getting the answers.</p>
+<h3 id="subchapter-why-memorization-is-the-threat">Subchapter: why memorization is the threat</h3>
+<p>A model that sees the grading tests can pass by storing
+input-output pairs, the way a student passes by memorizing the
+answer key. The behavior looks like coding skill on the
+benchmark and collapses on any new problem. The two-tier split
+is a train-test split applied to the reward itself: the public
+tests are the training signal the model may adapt to, the
+private tests are the held-out check it cannot. Any self-training
+loop needs this split, or it trains a memorizer.</p>
 <h2 id="a-subtlety-who-gets-the-credit">A subtlety: who gets the credit</h2>
 <p>The policy writes code one token at a time, so the finest control
 is per token. But the reward arrives per turn: the whole program
-either passes or fails. The paper computes the <strong>value function</strong>,
-the model&rsquo;s estimate of future reward, at the turn level, using
-the last token of the response, and assigns a single advantage
-number to all tokens in the turn. Every token in a passing
-program shares the credit equally.</p>
+either passes or fails.</p>
+<figure><img alt="One advantage for the whole program" src="assets/plate-l04-credit.svg"><figcaption>The reward exists per turn. Every token in the program shares one advantage value. Shell 3. Source: paper: RLEF. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-why-per-token-credit-is-impossible-here">Subchapter: why per-token credit is impossible here</h3>
+<p>The paper computes the <strong>value function</strong>, the model&rsquo;s estimate
+of future reward, at the turn level, using the last token of the
+response, and assigns a single advantage number to all tokens in
+the turn. Every token in a passing program shares the credit
+equally.</p>
 <p>The lecture notes this is close in spirit to GSPO-style updates:
 reward the whole sequence, not individual tokens. It is honest
 about the tradeoff. Per-token credit would be more precise but
 the signal does not exist: no test says &ldquo;this semicolon was the
 problem&rdquo;. Turn-level credit is coarse but matches what the world
 actually reports.</p>
+<h3 id="subchapter-what-turn-level-credit-loses">Subchapter: what turn-level credit loses</h3>
+<p>All localization. A program that is perfect except one wrong line
+gets the same per-token update as a program that is wrong
+everywhere, since both earn reward 0. The model cannot learn
+&ldquo;everything except line 7 was fine&rdquo;. This is the price of
+outcome-only feedback, and it motivates process-level rewards in
+later work.</p>
 <h2 id="where-it-breaks-part-1-the-signal-is-sparse">Where it breaks, part 1: the signal is sparse</h2>
-<p>Binary reward is a blunt instrument. A program that fails 9 of
-10 tests gets the same reward, 0, as one that fails all 10, and
-the same 0 as one with a syntax error on line 1. The model learns
-nothing from near misses. Work the consequence: early in
-training, when almost everything fails, almost every trajectory
-carries reward 0, and the policy has no gradient to climb. The
-loop needs the model to be good enough already that some
-trajectories pass. Bootstrapping from zero is the hard part.</p>
+<p>Binary reward is a blunt instrument.</p>
+<figure><img alt="Binary reward is honest and sparse" src="assets/plate-l04-sparse.svg"><figcaption>9 of 10 tests pass: reward 0. Syntax error on line 1: reward 0. All pass: reward 1. Shell 2. Source: original toy. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-sparsity-worked">Subchapter: sparsity, worked</h3>
+<p>A program that fails 9 of 10 tests gets the same reward, 0, as
+one that fails all 10, and the same 0 as one with a syntax error
+on line 1. The model learns nothing from near misses. Work the
+consequence: early in training, when almost everything fails,
+almost every trajectory carries reward 0, and the policy has no
+gradient to climb. The loop needs the model to be good enough
+already that some trajectories pass. Bootstrapping from zero is
+the hard part.</p>
+<p>The decision rule this forces: never start RLEF from a model
+that cannot pass anything. The paper trains Llama 3.1 models
+that already write plausible code, then lets execution feedback
+sharpen them. The base model must clear the first bar on its
+own, or the loop has nothing to amplify.</p>
 <h2 id="where-it-breaks-part-2-negatives-teach-little">Where it breaks, part 2: negatives teach little</h2>
 <p>The lecture is candid: learning from negative examples is not
 nailed. The loop keeps the winners and drops the losers, so the
@@ -308,12 +367,25 @@ which step went wrong, but the binary reward discards it. Later
 lectures return to this gap: process-level feedback, judging
 intermediate steps, is an active research area precisely because
 outcome-only reward wastes so much signal.</p>
+<h3 id="subchapter-the-shaping-temptation">Subchapter: the shaping temptation</h3>
+<p>The obvious fix is shaped rewards: 0.7 for passing 7 of 10
+tests, partial credit for partial progress. It densifies the
+signal, and it changes the objective. The model learns to pass
+easy tests while ignoring hard ones, because the reward says
+easy tests are worth nearly as much. Shaped rewards invite
+gaming. The paper&rsquo;s binary choice keeps the objective clean at
+the cost of sparsity. There is no free option here, only the
+choice of which failure you prefer.</p>
 <h2 id="the-key-question-answered">The key question, answered</h2>
 <p>Can a coding agent improve with no human labels? Yes, where
 execution is the teacher: public tests for iteration, hidden
 tests for reward, RL to absorb the wins. The lecture reports this
 as one of the first demonstrations that execution feedback alone
-can drive large gains in coding models.</p>
+can drive large gains in coding models. The paper&rsquo;s headline
+result: Llama 3.1 8B and 70B models trained with RLEF on
+CodeContests compete with GPT-4-class systems across sampling
+budgets. [uncertain: exact solve-rate numbers are read from the
+paper&rsquo;s Figure 1. the lecture does not quote them.]</p>
 <h2 id="mapping-back">Mapping back</h2>
 <table>
 <thead>
@@ -355,12 +427,30 @@ strong enough to pass sometimes. A model that never passes never
 learns. RLEF closes the loop for code. The next chapters ask how
 far the same idea reaches: planning over many attempts, sampling
 at massive scale, and training on reasoning itself.</p>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/PEssdKXOobU" title="How AI agents actually work: one loop, tested on real models" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li>How AI agents actually work, one loop tested on real models: execution-feedback loops measured on planted bugs, with failure modes (context rot, bad stop rules) the lecture names. https://www.youtube.com/watch?v=PEssdKXOobU</li>
+<li>RLEF: Grounding Code LLMs in Execution Feedback with Reinforcement Learning: the two-tier test strategy and hybrid token/turn-level policy details. https://arxiv.org/abs/2410.02089</li>
+<li>Schulman et al., PPO (2017): the policy-gradient algorithm family the paper builds on. https://arxiv.org/abs/1706.03761</li>
+</ul>
 <div class="qa"><div class="q">What is RLEF in one paragraph?</div><div class="a"><p>Reinforcement Learning from Execution Feedback. A coding agent generates a program, runs it against public tests, reads the failure output, and retries. Programs that pass earn reward 1 on a hidden set of private tests. Failures earn 0. An RL update, PPO in the paper, then shifts the policy toward pass-producing behavior. Two loops: inference-time retries exploit the current policy, train-time updates improve it.
 To block memorization. If the model saw the grading tests during generation, it could learn their expected outputs by heart instead of learning to code. Public tests are for fast iteration. Private tests, hidden until grading, decide the reward. The only reliable way to earn reward 1 is genuinely correct code.</p><div class="followup"><strong>Follow-up:</strong> Why two sets of tests instead of one?</div></div></div>
+<div class="qa"><div class="q">Walk me through the two loops on one problem.</div><div class="a"><p>Problem: write a function that passes hidden tests. Inference-time loop, weights fixed: the model writes version 1, runs public tests, reads &ldquo;timeout on input of length 500&rdquo;, writes a faster version 2, public tests pass. Train-time loop, weights change: version 2 runs against hidden private tests. If it passes, the trajectory earns reward 1 and PPO nudges the policy toward version-2-like behavior. Next problem, the policy writes version-1 code that is already closer to version 2. The first loop exploits. The second loop learns.
+The inference-time loop converges to code that passes weak tests and fails hidden ones: reward 0, no learning. Weak public tests waste the retry budget on the wrong target. The private tests stay honest, but the loop never reaches them with anything good. Test quality gates the whole method.</p><div class="followup"><strong>Follow-up:</strong> What happens if the public tests are weak?</div></div></div>
 <div class="qa"><div class="q">Why is the value function computed at the turn level rather than per token?</div><div class="a"><p>Because the reward exists only at the turn level: the whole program passes or fails. No test reports which token caused the failure, so per-token credit would be invented precision. The paper assigns one advantage value, computed from the last token of the response, to every token in the turn. Coarse, but honest about what the world reports.
 All localization. A program that is perfect except one wrong line gets the same per-token update as a program that is wrong everywhere, since both earn reward 0. The model cannot learn &ldquo;everything except line 7 was fine&rdquo;. This is the price of outcome-only feedback, and it motivates process-level rewards in later work.</p><div class="followup"><strong>Follow-up:</strong> What is lost by doing that?</div></div></div>
+<div class="qa"><div class="q">What does PPO&#x27;s clipping actually do?</div><div class="a"><p>It caps how far one update may move the policy. PPO estimates each action&rsquo;s advantage, how much better it was than average, and shifts probability toward good actions, but the shift per update is clipped to a small range. Without the clip, one lucky batch, a few fluke passes, could yank the policy somewhere its previous learning breaks. The clip trades speed for stability: many small safe steps instead of a few large risky ones.
+Because the reward is binary and sparse. Most batches are mostly zeros with a few ones. An unclipped update would chase those few ones aggressively and collapse the policy onto whatever accidentally passed. The clip keeps the policy near what already works while it absorbs the wins slowly.</p><div class="followup"><strong>Follow-up:</strong> Why does RLEF need that stability in particular?</div></div></div>
 <div class="qa"><div class="q">What does &quot;learning from negatives is not nailed&quot; mean?</div><div class="a"><p>The loop trains on winners and discards losers. A failed trajectory, which test failed and why, carries information the binary reward throws away. Some papers try to learn from failures, but the lecture reports no settled method. In practice this means the loop is sample-hungry: it needs enough passes to learn from, and it learns nothing from the far more numerous failures.
 You could, and that densifies the signal, but it changes what is being optimized: the model may learn to pass easy tests while ignoring hard ones. Shaped rewards invite gaming. The paper&rsquo;s binary choice keeps the objective clean at the cost of sparsity. There is no free option here.</p><div class="followup"><strong>Follow-up:</strong> Could you just reward partial progress, like 7 of 10 tests?</div></div></div>
+<div class="qa"><div class="q">Why is the execution-feedback template load-bearing?</div><div class="a"><p>Because the inference-time loop reasons from the failure text, not the reward number. &ldquo;AssertionError: got 14, expected 10&rdquo; tells the model the output is wrong and by how much. &ldquo;Execution took too long&rdquo; says the algorithm is slow, not wrong. A bare pass/fail would leave the model guessing what to change. Informative failures make retries targeted instead of random.
+Misleading retries. A stack trace from the test harness instead of the program sends the model fixing the wrong code. A timeout with no input size gives no clue about the complexity bug. Teams building these loops spend real effort on feedback formatting, because the model&rsquo;s retry quality is bounded by what the failure text says.</p><div class="followup"><strong>Follow-up:</strong> What is the failure mode of bad feedback text?</div></div></div>
+<div class="qa"><div class="q">You want RLEF for a SQL agent. What breaks?</div><div class="a"><p>The verifier. RLEF needs executable tests with known correct outputs for every training problem. For SQL, that means a database with fixed contents and gold queries whose result sets define correctness. Two problems: result-set equality is stricter than semantic correctness (two different valid queries can return the same rows, and order may differ), and the database contents are the private tests, which must stay hidden while the agent iterates. Build the gold result sets first, freeze the database, and accept that some correct queries will earn 0. The loop still works, but the reward is noisier than in code.
+Public: a small set of example queries with visible outputs for iteration. Private: the full gold result sets, hidden until grading. Same anti-memorization logic: the agent must write queries that are actually correct, not queries that parrot the examples.</p><div class="followup"><strong>Follow-up:</strong> What is the analog of the two-tier split?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
 <ol>
 <li><strong>Code has a free teacher.</strong> Run the program. Tests pass or
@@ -372,29 +462,31 @@ You could, and that densifies the signal, but it changes what is being optimized
 <li><strong>Two tiers.</strong> Public tests for iteration, private hidden
    tests for the reward. Memorization blocked.</li>
 <li><strong>Binary reward.</strong> Pass is 1, fail is 0. Simple, honest,
-   sparse.</li>
+   sparse. Never start from a model that passes nothing.</li>
 <li><strong>Turn-level credit.</strong> One advantage value for all tokens in
    the program. Matches what the world reports. Loses
    localization.</li>
 <li><strong>Sparse signal.</strong> Near misses earn 0 like total failures.
-   The model must already pass sometimes to learn at all.</li>
+   Shaped rewards densify but invite gaming. Pick your poison.</li>
 <li><strong>Negatives wasted.</strong> Failures are discarded, not diagnosed.
    Learning from them is an open problem.</li>
 </ol>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
-- CS329A Lecture 3, second half (Autumn 2025): the lecture this
-  chapter follows. https://www.youtube.com/watch?v=Lxh9RF5S-K0</p>
+- CS329A Part 4: Learning from Feedback with Tools and Code
+  (Autumn 2025): the lecture this chapter follows. <a href="https://www.youtube.com/watch?v=Lxh9RF5S-K0">link</a>
+- RLEF: Grounding Code LLMs in Execution Feedback with
+  Reinforcement Learning. https://arxiv.org/abs/2410.02089</p>
 <p><strong>Further reading:</strong>
-- RLEF paper: the two-tier test strategy and hybrid
-  token/turn-level policy details.
 - Schulman et al., PPO (2017): the policy-gradient algorithm
-  family the paper builds on.</p>
+  family the paper builds on. https://arxiv.org/abs/1706.03761</p>
 <p><strong>Caveats from these sources.</strong> Algorithmic details (the exact
 PPO variant, the hybrid policy formulation) are summarized from
 the lecture, not re-derived. Read the paper for the equations.
 The &ldquo;first demonstration&rdquo; framing is the lecture&rsquo;s, for coding
-LLMs with execution feedback in this form.</p>
+LLMs with execution feedback in this form. RLEF solve-rate
+comparisons are read from the paper&rsquo;s figures, not quoted in
+the lecture.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS329A L03:</strong> the inference-time half of this chapter: the
@@ -407,7 +499,7 @@ LLMs with execution feedback in this form.</p>
 <li><strong>CS329Z:</strong> building the harnesses: sandboxed code execution
   and test infrastructure for agents.</li>
 </ul>
-      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">CS329A Lecture 3, second paper: RLEF (Autumn 2025)</a></li><li><span class="src-tag">PAPER</span>RLEF: Reinforcement Learning from Execution Feedback</li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">CS329A Part 4: Learning from Feedback with Tools and Code (Autumn 2025)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2410.02089" target="_blank" rel="noopener">RLEF: Grounding Code LLMs in Execution Feedback with Reinforcement Learning</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/1706.03761" target="_blank" rel="noopener">Schulman et al., Proximal Policy Optimization (2017)</a></li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
       <nav class="pager"><a href="../cs329a/l03-agents-that-act.html"><span class="lbl">← Previous</span>Lecture 3: Agents That Act: Reason, Act, Observe</a><a href="../cs329a/l05-planning-with-search.html"><span class="lbl">Next →</span>Lecture 5: Planning with Search: The LATS Tree</a></nav>
     </article>
     <footer class="pagefoot">

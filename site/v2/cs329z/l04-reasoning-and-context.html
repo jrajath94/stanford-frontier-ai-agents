@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -290,6 +287,15 @@ wrong AND over the budget:    reward = -1
 answer that also burned the budget scores -1: worse than being wrong
 cheaply. The model learns two lessons at once: be right, and do not
 spend effort where it does not pay. That is the dial, learned.</p>
+<p>The K3 technical report (Moonshot AI, &ldquo;Reasoning Effort RL&rdquo;) describes
+the full scheme: each problem x gets a token budget b0(x) estimated
+from the cold-start model, and any trajectory whose total token cost
+T(y) exceeds a scaled threshold tau times b0(x) has its task reward
+overridden to -1. Training anneals tau from large to small, producing
+max, high, and low effort experts that are distilled into one model
+which reads the effort level as an instruction. The lesson&rsquo;s +1/0/-1
+table is the scheme&rsquo;s shape at one tau. The report adds the annealing
+that turns one dial into three gears.</p>
 <p>The agent lesson: set effort per step, not per agent. A file lookup
 gets low effort. A tricky bug gets high effort. The loop already knows
 which steps are hard: the ones that failed before.</p>
@@ -380,7 +386,7 @@ is semantics. The output parses but can still be wrong: a valid tool
 call with the wrong arguments, a well-formed plan that misunderstands
 the goal. The grammar constrains shape, not meaning. Meaning needs the
 check step.</p>
-<p><strong>DSPy</strong> declares the contract one level up. A <strong>signature</strong> names the
+<p><strong>DSPy</strong> (Declarative Self-improving Python) declares the contract one level up. A <strong>signature</strong> names the
 input and output fields of a model call, and DSPy compiles the prompt
 that implements it. The lecture&rsquo;s example extracts contact info:</p>
 <pre class="ascii">input:  &quot;I'm Sarah (sarah@acme.co). Meet Thursday?&quot;
@@ -412,14 +418,22 @@ ingredients: the system prompt, the message history, memories, tool
 call results, and attached files.</p>
 <figure><img alt="What goes in the context" src="assets/l04-context-parts.svg"><figcaption>System prompt, message history, retrieved memories, tool results, attached files. Every token costs bandwidth per decode step. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
 <p>Three practical rules from the lecture. <strong>Avoid bloat:</strong> a few tools
-beat fifty. Pi ships with four: read, write, edit, bash. <strong>Retrieve on
+beat fifty. Pi (Mario Zechner&rsquo;s minimal terminal coding agent,
+defined in the compound-systems lesson) ships with four: read, write, edit, bash. <strong>Retrieve on
 demand:</strong> fetch the relevant memories and files when needed instead of
 stuffing them in. <strong>Evaluate empirically:</strong> set up a small eval set and
 test each context choice. There is no one right context. The context is
 a design surface, not a dumping ground.</p>
 <h3 id="where-stuffing-breaks-context-rot">Where stuffing breaks: context rot</h3>
-<p>More context is not more understanding. OOLONG (2025) measures long
-context reasoning and aggregation: as the context fills with
+<p>More context is not more understanding. <strong>OOLONG</strong> (Bertsch et al.,
+2025, arXiv:2511.02817) measures long-context reasoning and
+aggregation: tasks that require analyzing chunks of text at the atomic
+level and then aggregating the analyses into distributional answers.
+The headline number: GPT-5, Claude Sonnet 4, and Gemini 2.5 Pro all
+score below 50 percent accuracy on both task splits at 128K tokens.
+Needle-in-a-haystack lets the model ignore almost the whole context
+as noise. OOLONG forbids that, because the answer depends on nearly
+every line. As the context fills with
 distractors, the model&rsquo;s reasoning degrades. The lecture calls this
 <strong>context rot</strong>.</p>
 <figure><img alt="Context rot" src="assets/l04-context-rot.svg"><figcaption>Stuff everything: reasoning degrades. Curate and retrieve: the signal survives. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
@@ -455,17 +469,30 @@ discovered, and the current plan. Drop stale tool outputs, superseded
 plans, and dead-end attempts. The summary is a new perceive step for a
 fresh loop.</p>
 <h3 id="recursive-lms-a-different-philosophy">Recursive LMs: a different philosophy</h3>
-<p><strong>Recursive language models</strong> (2025) reject the giant context. Instead
-of stuffing the document into one context, the model calls itself on
-chunks: summarize this part, then the top call reasons over the
-summaries.</p>
+<p><strong>Recursive language models</strong> (Zhang, Kraska, and Khattab, MIT
+CSAIL, arXiv:2512.24601, December 2025) reject the giant context.
+Instead of loading the document into the context window, the long
+context is held in a REPL environment as a variable. The root model
+never sees the full text. It writes small code blocks that peek at
+slices, grep for keywords, and chunk the document, and it calls
+sub-LMs on the chunks with questions: summarize this part, extract
+the dates from this part. The top call reasons over the sub-call
+results.</p>
 <figure><img alt="Recursive LMs" src="assets/l04-rlm.svg"><figcaption>The top call delegates chunks to sub-calls. Each call sees a small context. Depth replaces width. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
 <p>Each call sees a small context, so there is no rot and no quadratic
-blowup. The tradeoff: detail is lost in the summaries, and errors in a
-sub-call propagate silently upward. Compare with RAG: RAG retrieves
-chunks into one context. RLM recurses over chunks with separate calls.
-Both fight the same enemy, the O(n^2) context. RAG is retrieval plus
-one reader. RLM is divide and conquer with the model as the divider.</p>
+blowup. The paper&rsquo;s reported numbers are strong: an RLM on GPT-5
+scores 91.3 percent on BrowseComp+ (reasoning over up to 11 million
+tokens of documents) against 70.5 percent for a summary-agent
+baseline, and improves OOLONG scores substantially. The tradeoff:
+detail is lost in the summaries, errors in a sub-call propagate
+silently upward, and a reproduction study flags over-recursion
+latency and non-termination on ambiguous prompts. Calibrate the
+recursion depth.</p>
+<p>Compare with RAG: RAG retrieves chunks into one context. RLM recurses
+over chunks with separate calls, and the model itself decides the
+chunking strategy in code. Both fight the same enemy, the O(n^2)
+context. RAG is retrieval plus one reader. RLM is divide and conquer
+with the model as the divider.</p>
 <h2 id="what-is-used-where-inference-time-in-production">What is used where: inference-time in production</h2>
 <table>
 <thead>
@@ -596,7 +623,7 @@ The goal, the open loops (what is still undone), the key facts discovered, and t
    0.3 model. Outcome reward checks the answer. Process reward checks
    each step. Checking is the scarce resource.</li>
 <li><strong>Force the shape.</strong> Constrained decoding masks forbidden tokens.
-   output always parses. DSPy signatures declare the contract. Shape,
+   Output always parses. DSPy signatures declare the contract. Shape,
    not meaning.</li>
 <li><strong>Engineer the context.</strong> Five ingredients. Defenses against rot:
    few tools, retrieve on demand, compact. Append, never edit: the KV
@@ -612,6 +639,12 @@ The goal, the open loops (what is still undone), the key facts discovered, and t
 <ul>
 <li>Why &ldquo;Thinking&rdquo; AI Models Are Different (the embed above): https://www.youtube.com/watch?v=DTuhy_EGnBY, chain of thought, test-time compute, how thinking models are trained with RL, and the honest caveats.</li>
 </ul>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/sjhCFYpT3Mo" title="How AI Reasoning Chains Work - Making AI Think Step by Step" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>Mini Leviathan, How AI Reasoning Chains Work (the embed above): https://www.youtube.com/watch?v=sjhCFYpT3Mo, chain-of-thought, tree-of-thought, and self-consistency walked through on reasoning tasks.</li>
+</ul>
 <p>Further:
 - Anthropic, Effective context engineering for AI agents: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, the five ingredients in production form.
 - Yao et al., Tree of Thoughts (2023): https://arxiv.org/abs/2305.10601, deliberate search over reasoning steps.
@@ -624,7 +657,8 @@ The goal, the open loops (what is still undone), the key facts discovered, and t
 <p><strong>Further reading:</strong>
 - Wei et al., Chain-of-Thought (2022): https://arxiv.org/abs/2201.11903.
 - DSPy documentation: signatures and compilation.
-- OOLONG paper (2025): long-context reasoning and aggregation.
+- OOLONG (Bertsch et al., 2025): https://arxiv.org/abs/2511.02817, long-context reasoning and aggregation; frontier models below 50 percent at 128K.
+- Recursive Language Models (Zhang, Kraska, and Khattab, 2025): https://arxiv.org/abs/2512.24601, the REPL-and-sub-call mechanism behind the recursive philosophy.
 - Recursive Language Models paper (2025): the recursion philosophy.</p>
 <p><strong>Caveats from these sources.</strong> The slides cite blog and paper figures
 for several claims. The plates here are original. Effort-level

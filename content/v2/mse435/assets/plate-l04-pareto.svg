@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="Inter, 'Source Sans 3', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
 <rect width="960" height="540" fill="#F7F4EE"/>
 <text x="48" y="60" font-size="30" font-weight="600" fill="#1B2838">The Pareto frontier: small, fast, specialized</text>
 <text x="48" y="92" font-size="17" fill="#5C6B7A">One task, trained relentlessly: big-model performance at small-model cost. Shell 3. Source: original, drawn from the session.</text>
@@ -22,7 +22,7 @@
 <rect x="344" y="364" width="280" height="80" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="1.5"/>
 <text x="484" y="398" text-anchor="middle" fill="#1B2838">specialists</text>
 <text x="484" y="422" text-anchor="middle" fill="#5C6B7A" font-size="14">fast models execute</text>
-<rect x="640" y="364" width="272" height="80" rx="12" fill="#F6E7A8" stroke="#1B2838" stroke-width="1.5"/>
+<rect x="640" y="364" width="272" height="80" rx="12" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5"/>
 <text x="776" y="398" text-anchor="middle" fill="#1B2838">proprietary data</text>
 <text x="776" y="422" text-anchor="middle" fill="#5C6B7A" font-size="14">fills the gaps</text>
 </g>

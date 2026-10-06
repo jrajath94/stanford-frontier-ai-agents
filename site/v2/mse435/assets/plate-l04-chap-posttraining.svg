@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the post-training family</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. Where the reward comes from decides what the model becomes. Source: original synthesis of the session.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT a verifier</text>
+<text x="404" y="124">the rule: a verifiable reward</text>
+<text x="648" y="124">WITH a verifier</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">SFT teaches the format</text>
+<text x="190" y="212" text-anchor="middle" fill="#5C6B7A" font-size="14">imitate 10k-100k examples</text>
+<text x="190" y="256" text-anchor="middle" fill="#1B2838">RLHF climbs the taste</text>
+<text x="190" y="284" text-anchor="middle" fill="#5C6B7A" font-size="14">reward model agrees 70-75%</text>
+<text x="190" y="328" text-anchor="middle" fill="#C46B2C" font-size="14">price: human label budgets,</text>
+<text x="190" y="352" text-anchor="middle" fill="#C46B2C" font-size="14">gamed proxies, the boat</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">a rule decides pass</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">or fail: 1 or 0</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">math: the answer matches</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">code: the tests pass</text>
+<text x="490" y="324" text-anchor="middle" fill="#1E4D8C" font-size="14">the checker is free,</text>
+<text x="490" y="348" text-anchor="middle" fill="#1E4D8C" font-size="14">exact, and ungameable</text>
+<text x="490" y="392" text-anchor="middle" fill="#5C6B7A" font-size="14">GRPO: the group average</text>
+<text x="490" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">is the free baseline</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">RLVR climbs the checker</text>
+<text x="780" y="212" text-anchor="middle" fill="#5C6B7A" font-size="14">1,000 problems, 8 tries</text>
+<text x="780" y="236" text-anchor="middle" fill="#5C6B7A" font-size="14">8,000 graded attempts</text>
+<text x="780" y="280" text-anchor="middle" fill="#1B2838">distillation shrinks it</text>
+<text x="780" y="308" text-anchor="middle" fill="#5C6B7A" font-size="14">most of the reasoning,</text>
+<text x="780" y="332" text-anchor="middle" fill="#5C6B7A" font-size="14">a fraction of the serving cost</text>
+<text x="780" y="376" text-anchor="middle" fill="#1F7A72" font-size="14">about 5% of the compute</text>
+<text x="780" y="400" text-anchor="middle" fill="#1F7A72" font-size="14">scales with compute,</text>
+<text x="780" y="424" text-anchor="middle" fill="#1F7A72" font-size="14">not with label budgets</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: verifiers only cover what a rule can check. Taste, writing, and judgment still need humans.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">And humans still set the data-market price: success obsoletes the easy tasks first.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: post-training is where a startup competes without a pre-training budget.</text>
+</svg>

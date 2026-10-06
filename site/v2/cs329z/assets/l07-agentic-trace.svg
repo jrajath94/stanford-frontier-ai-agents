@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="640" viewBox="0 0 1120 640" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="640" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">Agentic retrieval: the second query is born mid-loop</text>
+<text x="40" y="82" font-size="17" fill="#5C6B7A">One-shot RAG asks once. The agent asks, reads, and asks again with what it learned.</text>
+<line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="40" y="616" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: original</text>
+<g><rect x="40" y="160" width="220" height="96" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="150" y="194" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Thought 1</text>
+<text x="150" y="220" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">need the CEO&#x27;s</text>
+<text x="150" y="240" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">start year first</text>
+</g>
+<g><rect x="300" y="160" width="220" height="96" rx="12" fill="#E7F1F8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="410" y="194" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">search 1</text>
+<text x="410" y="220" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">&quot;ACME CEO took</text>
+<text x="410" y="240" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">office year&quot;</text>
+</g>
+<g><rect x="560" y="160" width="220" height="96" rx="12" fill="#E7F4EF" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="670" y="194" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Obs 1</text>
+<text x="670" y="220" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">&quot;CEO since 2019.&quot;</text>
+</g>
+<line x1="260" y1="208" x2="300" y2="208" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="300" y1="208" x2="289" y2="204" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="300" y1="208" x2="289" y2="212" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="520" y1="208" x2="560" y2="208" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="560" y1="208" x2="549" y2="204" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="560" y1="208" x2="549" y2="212" stroke="#1B2838" stroke-width="1.5"/>
+<g><rect x="300" y="300" width="220" height="96" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="410" y="334" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Thought 2</text>
+<text x="410" y="360" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">now the World Series</text>
+<text x="410" y="380" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">host for 2019</text>
+</g>
+<g><rect x="560" y="300" width="220" height="96" rx="12" fill="#E7F1F8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="670" y="334" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">search 2</text>
+<text x="670" y="360" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">&quot;World Series</text>
+<text x="670" y="380" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">host 2019&quot;</text>
+</g>
+<g><rect x="820" y="300" width="220" height="96" rx="12" fill="#E7F4EF" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="930" y="334" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Obs 2</text>
+<text x="930" y="360" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">&quot;Washington</text>
+<text x="930" y="380" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">Nationals.&quot;</text>
+</g>
+<line x1="670" y1="256" x2="670" y2="300" stroke="#1E4D8C" stroke-width="1.5" fill="none"/>
+<line x1="670" y1="300" x2="674" y2="289" stroke="#1E4D8C" stroke-width="1.5"/>
+<line x1="670" y1="300" x2="666" y2="289" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="670" y="270" font-size="13" fill="#1E4D8C" text-anchor="middle">the year unlocks</text>
+<line x1="520" y1="348" x2="560" y2="348" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="560" y1="348" x2="549" y2="344" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="560" y1="348" x2="549" y2="352" stroke="#1B2838" stroke-width="1.5"/>
+<g><rect x="560" y="440" width="220" height="96" rx="12" fill="#1F7A72" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="670" y="474" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Answer</text>
+<text x="670" y="500" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">&quot;Washington, D.C.&quot;</text>
+</g>
+<line x1="670" y1="396" x2="670" y2="440" stroke="#1B2838" stroke-width="1.5" fill="none"/>
+<line x1="670" y1="440" x2="674" y2="429" stroke="#1B2838" stroke-width="1.5"/>
+<line x1="670" y1="440" x2="666" y2="429" stroke="#1B2838" stroke-width="1.5"/>
+<text x="820" y="200" font-size="14" font-weight="600" fill="#1E4D8C" text-anchor="start">Query 2 did not exist</text>
+<text x="820" y="222" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">until Obs 1 arrived.</text>
+<text x="40" y="580" font-size="15" font-weight="600" fill="#1B2838" text-anchor="start">Retrieval follows the reasoning instead of preceding it. That is the whole difference.</text>
+</svg>

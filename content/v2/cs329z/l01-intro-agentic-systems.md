@@ -316,9 +316,12 @@ what the last step found (debug the outage: each clue changes the plan).
 
 The orchestrator generalizes debate into teamwork. One coordinator
 routes subtasks to specialist agents: a web agent, a code agent, a file
-agent. Magentic-One from Microsoft Research is the lecture's example.
-The orchestrator is itself an agent running the same five-step loop,
-with "delegate to specialist" as one of its actions.
+agent. Magentic-One from Microsoft Research is the lecture's example:
+one Orchestrator leads four specialists (WebSurfer for the browser,
+FileSurfer for files, Coder for Python, ComputerTerminal for the
+shell), tracks a task ledger of facts and plans, and replans when
+progress stalls. The orchestrator is itself an agent running the same
+five-step loop, with "delegate to specialist" as one of its actions.
 
 ![Handoff](assets/l01-handoff.svg "The triage agent does not do the work. It hands the conversation to a specialist. Project: Stanford Frontier AI. Source: original.")
 
@@ -332,7 +335,32 @@ off when one agent's instructions would need two jobs' worth of
 context. A specialist with a short prompt beats a generalist with a
 long one.
 
-### Reflection patterns: Reflexion, debate, self-consistency
+### Guardrails: the check runs beside the agent
+
+An **input guardrail** validates the request before the loop runs.
+An **output guardrail** validates the answer before the user sees it.
+Both sit beside the loop, not inside it: the agent never grades its
+own work, which is the weakest termination exit from the loop lesson.
+
+Work a toy. A billing triage agent carries handoff tools and a refund
+tool. The input guardrail checks the incoming request against a named
+list of supported intents: billing question, yes. Medical advice, no.
+The unsupported request never reaches the loop. The output guardrail
+checks the final answer against a different list: no account numbers,
+no social security numbers, no refund amounts above a threshold
+without human approval. A pattern match for `\d{3}-\d{2}-\d{4}` blocks
+the answer before it is sent.
+
+Guardrails edit the check, the same way handoffs edit the action set.
+The OpenAI Agents SDK runs them as separate functions alongside the
+Runner, so a guardrail failure is not a model opinion. It is a hard
+stop. The failure mode they do not fix: a guardrail that the agent
+can rewrite or route around is decoration. Keep guardrails outside
+the model's reach, in code the agent cannot edit.
+
+![Guardrails](assets/l01-guardrails.svg "Input guardrail checks the request before the loop. Output guardrail checks the answer before the user. Both sit beside the loop, never inside it. Project: Stanford Frontier AI. Source: original.")
+
+### Reflexion: failure becomes a stored hint
 
 **Reflexion** (Shinn et al., 2023) adds a reflection step. The agent
 runs the task, fails, and receives a feedback signal: test results, an
@@ -343,6 +371,8 @@ re-read.
 
 ![Reflexion: learn from the failed run](assets/l01-reflexion.svg "Run, fail, reflect in words, store the reflection, retry with the hint. Project: Stanford Frontier AI. Source: paper.")
 
+### Multi-agent debate: parallelize the correction
+
 **Multi-agent debate** (Du et al., 2023) parallelizes the correction.
 Several agents propose answers, argue, and revise. A judge picks the
 winner. Debate catches errors that one agent's blind spots hide. It
@@ -351,6 +381,8 @@ different blind spots beat one strong agent with one blind spot. If all
 agents share the same weakness, debate amplifies it.
 
 ![Multi-agent debate](assets/l01-debate.svg "Three agents argue about the answer. A judge picks the winner. Project: Stanford Frontier AI. Source: paper.")
+
+### Self-consistency: majority vote over reasoning paths
 
 **Self-consistency** (Wang et al., 2023) is the no-tool, no-verifier
 option. Prompt with chain-of-thought, generate many reasoning paths,
@@ -381,7 +413,7 @@ how does the agent remember, and what checks the work.
 | System | Loop shape | Memory | The check | Best for |
 |---|---|---|---|---|
 | OpenAI Agents SDK (2025) | Runner drives Thought/Act; handoffs route to specialists | Sessions persist conversation history | input/output guardrails run alongside the agent | triage to specialists; OpenAI-centric stacks |
-| Claude Agent SDK (Anthropic) | subagents with isolated context windows | per-subagent context; MCP tools for files | permission-gated tool use | deep environment work: coding, files, long-horizon tasks |
+| Claude Agent SDK (Anthropic) | subagents with isolated context windows | per-subagent context; Model Context Protocol (MCP) tools for files | permission-gated tool use | deep environment work: coding, files, long-horizon tasks |
 | LangGraph | the loop is a graph: nodes, edges, cycles | checkpointing to SQLite/Postgres; resume after crash | human-in-the-loop interrupts; time-travel debugging | long-running, auditable production workflows |
 | CrewAI | crews of role-based agents, sequential or hierarchical | task outputs pass between roles | role prompts constrain each agent | fast multi-agent prototypes |
 | Microsoft Agent Framework (2026) | Sequential, Concurrent, Handoff, Group Chat, Magentic patterns | workflow state with checkpointing | enterprise telemetry and policy | .NET/Azure shops; governed multi-agent work |
@@ -467,6 +499,12 @@ serious agent project spends its hardest design hours on the check.
 > A: Reflexion changes no weights. The lesson from a failed run is stored as text in memory and read on the next attempt: fast, local to one task, no training run. Fine-tuning changes the weights and needs a dataset and a training run: slow, but the lesson generalizes across tasks. Pick Reflexion when the feedback is verbal and the task recurs in similar form. Pick fine-tuning when you have many failures and want the fix baked into the model.
 > Follow-up: Why would debate beat a single stronger model?
 > A: Uncorrelated errors. Three medium agents with different blind spots catch more than one strong agent with one blind spot, because the judge sees three independent attempts. But if all agents share the model's weakness, debate just amplifies it three times. Diversity of failure is the resource. The judge is only as good as the disagreement.
+
+> [!QA]
+> Q: What is a guardrail, and why does it sit outside the loop?
+> A: An input guardrail validates the request before the loop runs: is this a billing question or a medical question for a billing agent? An output guardrail validates the answer before the user sees it: no account numbers, no unapproved refunds. It sits outside the loop because the loop grading itself is the weakest termination exit: the model grading its own work. A guardrail is code the agent cannot rewrite, a hard stop rather than a model opinion.
+> Follow-up: Give a concrete guardrail that actually blocked something.
+> A: A social-security pattern match on the output: the agent answers a billing question correctly but includes the account holder's SSN from the retrieved record. The output guardrail matches the digit pattern, blocks the answer, and returns a redacted version. The agent did its job. The guardrail did its different job: the answer was right and unsafe at the same time.
 
 > [!QA]
 > Q: Design an agent that books the cheapest flight. Name the check, the budget, and the termination exits.

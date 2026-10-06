@@ -241,7 +241,7 @@ this passage 0, though it is exactly relevant. Synonyms, paraphrases,
 and different phrasings are invisible to word counting.</p>
 <p><strong>Crack 2: dense vectors miss rare literals.</strong> Query: &ldquo;ERR_0x7F3A&rdquo;.
 The passage contains that exact error code. A dense model trained on
-ordinary text has no good vector for a code it never saw; the meaning
+ordinary text has no good vector for a code it never saw. The meaning
 match is noise. Exact strings, product IDs, and names need exact
 matching. The two approaches fail differently, which is why the course
 ends with both.</p>
@@ -279,11 +279,30 @@ f = 10:  22 / 11.2  = 1.96
 <p>Ten times the mentions, less than twice the score. Keyword stuffing
 cannot win. The length term (b x |D|/avgdl) stops long documents from
 winning just by containing more words.</p>
-<figure><img alt="BM25: saturation and rarity" src="assets/l06-bm25.svg"><figcaption>Two ideas: repeated terms matter less each time; rare terms matter more. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<figure><img alt="BM25: saturation and rarity" src="assets/l06-bm25.svg"><figcaption>Two ideas: repeated terms matter less each time. Rare terms matter more. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
 <p>BM25 needs no training, no vectors, no labels. Its index is an
 inverted index: term to document list. Query latency: 62 ms on the
 lecture&rsquo;s MS MARCO setup. Its weakness is crack 1: paraphrase is
 invisible to it.</p>
+<h3 id="tf-idf-the-ancestor">TF-IDF: the ancestor</h3>
+<p>Before BM25 there was <strong>TF-IDF</strong>: term frequency times inverse
+document frequency, no saturation, no length normalization. TF-IDF
+scores a term by how often it appears in the document times how rare
+it is across the collection. BM25 is TF-IDF grown up: the saturation
+curve (k1) stops keyword stuffing, and the length term (b) stops long
+documents from winning on word count. The defaults everyone uses:
+k1 = 1.2, b = 0.75. They are defaults because they work, not because
+they are optimal: tune them on your eval set if BM25 is your final
+retriever, not your first stage.</p>
+<h3 id="learned-sparse-splade">Learned sparse: SPLADE</h3>
+<p>Dense vectors are not the only learned game. <strong>SPLADE</strong> learns a sparse
+vector over the vocabulary: each passage gets weights on the terms it
+contains <em>and</em> terms it should have contained (expansion). &ldquo;Car&rdquo; gets
+weight on &ldquo;automobile&rdquo; without ever containing the word. The index
+stays an inverted index, so it is fast like BM25, but the weights are
+learned like DPR. The honest position: SPLADE is the bridge for teams
+that want dense-like quality on sparse infrastructure. It does not
+replace either. It gives you a third point on the tradeoff curve.</p>
 <h2 id="dpr-meaning-as-a-dot-product">DPR: meaning as a dot product</h2>
 <p><strong>Dense Passage Retrieval</strong> (Karpukhin et al., 2020) encodes meaning
 into vectors. Two BERT encoders: one for the query, one for the
@@ -297,7 +316,7 @@ doc A   d = [0.9, 0.4]   dot = 0.72 + 0.24 = 0.96
 doc B   d = [0.1, 0.9]   dot = 0.08 + 0.54 = 0.62
 winner: doc A
 </pre>
-<p>The query points mostly along the first axis; doc A points the same
+<p>The query points mostly along the first axis. Doc A points the same
 way. &ldquo;Car&rdquo; and &ldquo;automobile&rdquo; land near each other in vector space, so
 the paraphrase that scored zero under BM25 now scores high. Top-K
 retrieval is <strong>maximum inner product search (MIPS)</strong> over the passage
@@ -309,8 +328,17 @@ negatives</strong> reuse the other queries&rsquo; passages in the batch as free
 negatives. <strong>BM25 hard negatives</strong> add passages that word-match but
 are wrong: the exact cases where dense must beat sparse. The results:
 DPR beats BM25 on 4 of 5 datasets, and 1,000 QA pairs are enough to
-beat BM25. No extra pretraining needed. DPR needs labeled pairs;
+beat BM25. No extra pretraining needed. DPR needs labeled pairs.
 BM25 needs nothing. That is the price of meaning.</p>
+<h3 id="embedding-models-the-quality-ladder">Embedding models: the quality ladder</h3>
+<p>DPR used BERT. The field moved on. <strong>E5</strong> and <strong>BGE</strong> trained
+contrastively on web-scale pairs and beat BERT-based DPR out of the
+box. Instruction-tuned embedders take a task prefix (&ldquo;query:&rdquo;, &ldquo;passage:&rdquo;)
+and adapt the geometry per task. The practical reading: the embedder
+is the retriever&rsquo;s eyes, and upgrading it is the cheapest retrieval
+win. Before tuning BM25&rsquo;s k1 or adding a reranker, try a newer
+embedder on your eval set. A better geometry beats a better pipeline
+on a bad geometry.</p>
 <h2 id="colbert-score-tokens-not-documents">ColBERT: score tokens, not documents</h2>
 <p>DPR compresses each passage into one vector. <strong>ColBERT</strong> (Khattab and
 Zaharia, 2020) keeps one vector per token and interacts late: encode
@@ -372,12 +400,20 @@ method loves. The k = 60 constant dampens the difference between rank
 tools. <strong>IVF</strong> (inverted file index): cluster the index, probe only
 the nearest centroids. <strong>PQ</strong> (product quantization): compress each
 vector into a short code. <strong>HNSW</strong> (hierarchical navigable small
-world): a multi-layer proximity graph. All vectors sit at the bottom
-layer, thinner samples above. Search starts at the top, greedy-hops
-toward the query, and drops a layer when stuck: about log N hops with
-high recall. The graph is built by inserting one vector at a time,
-linking M nearest neighbors per layer plus a heuristic long-range link
-so the greedy walk cannot get trapped.</p>
+world): a multi-layer proximity graph.</p>
+<h3 id="hnsw-the-graph-behind-the-search">HNSW: the graph behind the search</h3>
+<p>All vectors sit at the bottom layer, thinner samples above. Search
+starts at the top, greedy-hops toward the query, and drops a layer
+when stuck: about log N hops with high recall. The graph is built by
+inserting one vector at a time, linking M nearest neighbors per layer
+plus a heuristic long-range link so the greedy walk cannot get trapped.</p>
+<figure><img alt="HNSW" src="assets/l06-hnsw.svg"><figcaption>Few long jumps on top, many short hops below. The greedy walk descends to the answer in about log N hops. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>The price is a little recall: the true nearest neighbor can hide from
+the greedy walk. The tuning knobs: M (links per node: more links,
+better recall, bigger index) and ef (search breadth: wider search,
+slower query, better recall). For agent workloads, HNSW is the default
+because it needs no training (unlike IVF) and queries in milliseconds
+at billion-vector scale. Every managed vector store runs it underneath.</p>
 <h2 id="scoring-the-retriever-what-each-metric-rewards">Scoring the retriever: what each metric rewards</h2>
 <p>Same top-5 list, different questions about it. The figure&rsquo;s list has
 relevant passages at ranks 1 and 3.</p>
@@ -402,8 +438,55 @@ Failed@k = 1 - Hit@k: queries with nothing relevant in the top k
 <p>Hit@k asks &ldquo;did we find anything&rdquo;. MRR asks &ldquo;how far down did the
 user scroll&rdquo;. Recall asks &ldquo;did we find all of it&rdquo;. nDCG asks &ldquo;how good
 is the whole ordering&rdquo;. Pick the metric that matches the reader: a
-reader that reads one passage wants MRR; a reader that synthesizes
+reader that reads one passage wants MRR. A reader that synthesizes
 many wants recall.</p>
+<h2 id="what-is-used-where-the-retrieval-stack-in-production">What is used where: the retrieval stack in production</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>System</th>
+<th>The choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keyword</td>
+<td>Elasticsearch, OpenSearch</td>
+<td>BM25 as the default scorer</td>
+<td>62 ms, no training, exact terms</td>
+</tr>
+<tr>
+<td>Vector</td>
+<td>Pinecone, Weaviate, Qdrant, pgvector</td>
+<td>HNSW over E5/BGE embeddings</td>
+<td>managed ANN; the embedder is the ceiling</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>Elasticsearch RRF retriever, Weaviate hybrid</td>
+<td>BM25 + dense fused by rank</td>
+<td>the two failures are complementary</td>
+</tr>
+<tr>
+<td>Rerank</td>
+<td>Cohere Rerank, bge-reranker</td>
+<td>cross-encoder on the top 100</td>
+<td>the slow judge where accuracy pays</td>
+</tr>
+<tr>
+<td>Late interaction</td>
+<td>ColBERTv2, PLAID</td>
+<td>MaxSim with compressed indexes</td>
+<td>token evidence at near-DPR speed</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern: production stacks are all hybrid. Nobody ships pure BM25
+or pure dense anymore: the failure modes are complementary, RRF fusion
+is seven lines, and the reranker sits on top where the budget allows.
+The lecture&rsquo;s latency table is the price list for each layer.</p>
 <h2 id="mapping-back-what-each-retriever-fixes">Mapping back: what each retriever fixes</h2>
 <table>
 <thead>
@@ -423,6 +506,11 @@ many wants recall.</p>
 <td>One vector blurs evidence</td>
 <td>ColBERT</td>
 <td>MaxSim keeps token-level matches</td>
+</tr>
+<tr>
+<td>Sparse has no learning</td>
+<td>SPLADE</td>
+<td>Learned sparse weights on an inverted index</td>
 </tr>
 <tr>
 <td>Fast retrieval is rough</td>
@@ -485,6 +573,7 @@ so treat cross-method gaps as magnitudes):</p>
 </tr>
 </tbody>
 </table>
+<figure><img alt="The retriever ladder" src="assets/l06-ladder.svg"><figcaption>62 ms to 10,700 ms per 1,000 docs. Accuracy rises with latency. Each rung buys the next. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
 <p>Every row is a tradeoff with a number. BM25 is fast, exact, and free
 of training data. DPR is fast and semantic, but needs 1,000+ labeled
 pairs and misses rare strings. ColBERT keeps token evidence at a 7x
@@ -495,14 +584,20 @@ your pipeline can pay.</p>
 <h2 id="interview-qa">Interview Q&amp;A</h2>
 <div class="qa"><div class="q">Walk me through the BM25 formula and explain the two ideas that matter.</div><div class="a"><p>Score(D,Q) sums over query terms: IDF(qi) times a saturated term-frequency factor f x (k1+1) / (f + k1 x (1 - b + b x |D|/avgdl)). Idea one, IDF rewards rarity: on a 1,000-doc corpus, &ldquo;ACME&rdquo; in 3 docs gives IDF ln(285) = 5.65 while &ldquo;revenue&rdquo; in 50 docs gives 2.93, so the rare term discriminates nearly twice as hard. Idea two, term frequency saturates: at k1 = 1.2, one mention scores 1.00 and ten mentions score 1.96, so keyword stuffing cannot win. The length term stops long documents from winning on word count alone.
 It needs no training, no vectors, and no labeled data, and it answers in 62 ms off an inverted index. For exact terms like error codes and product IDs it is unbeatable. Its blind spot is paraphrase, which is why production systems pair it with a dense retriever and fuse with RRF.</p><div class="followup"><strong>Follow-up:</strong> Why is BM25 still the most widely used retriever?</div></div></div>
-<div class="qa"><div class="q">How does DPR training work, and why do the negatives matter so much?</div><div class="a"><p>Two BERT encoders produce the query and passage vectors; the score is the dot product, trained contrastively to pull the query toward its true passage and push it away from negatives. In-batch negatives reuse other queries&rsquo; passages as free negatives. BM25 hard negatives are the crucial addition: passages that word-match but are wrong, the exact cases where dense must beat sparse. With good negatives, 1,000 QA pairs are enough to beat BM25, and DPR wins on 4 of 5 datasets with no extra pretraining.
+<div class="qa"><div class="q">How does DPR training work, and why do the negatives matter so much?</div><div class="a"><p>Two BERT encoders produce the query and passage vectors. The score is the dot product, trained contrastively to pull the query toward its true passage and push it away from negatives. In-batch negatives reuse other queries&rsquo; passages as free negatives. BM25 hard negatives are the load-bearing addition: passages that word-match but are wrong, the exact cases where dense must beat sparse. With good negatives, 1,000 QA pairs are enough to beat BM25, and DPR wins on 4 of 5 datasets with no extra pretraining.
 On rare literals: error codes, product IDs, unusual names. The dense model never learned a good vector for a string it rarely saw, while BM25 matches it exactly. This is the standard argument for hybrid search: the two methods fail differently, so run both and fuse.</p><div class="followup"><strong>Follow-up:</strong> When does DPR lose to BM25?</div></div></div>
 <div class="qa"><div class="q">Explain ColBERT&#x27;s MaxSim and when you would pay its price.</div><div class="a"><p>ColBERT keeps one vector per token instead of one per passage. At scoring time, each query token takes its maximum dot product over all document tokens, and the maxima sum: S(q,d) = sum_i max_j (qi . dj). The toy: query tokens [1,0] and [0,1] against doc A&rsquo;s [1,0], [0.2,0.2], [0,1] give 1 + 1 = 2, beating doc B&rsquo;s 1. Token-level evidence survives that a single passage vector would blur. The price: the index is per-token, much larger, and end-to-end latency is 458 ms versus tens of ms for DPR. Pay it when token-level evidence decides relevance and the corpus fits the index budget.
 The cross-encoder runs the query and passage through the model together with full attention, so it judges relevance best, but nothing is precomputed and it costs 10,700 ms per 1,000 passages: it cannot scan a corpus. The bi-encoder precomputes passage vectors and scans in tens of ms but judges roughly. The two-stage design uses each where it wins: bi-encoder retrieves the top 100, cross-encoder reranks the shortlist.</p><div class="followup"><strong>Follow-up:</strong> Bi-encoder versus cross-encoder: why do we need both?</div></div></div>
-<div class="qa"><div class="q">Work through RRF on two documents and explain why ranks beat scores.</div><div class="a"><p>Doc A ranks 1st in BM25 and 4th in DPR; doc B ranks 2nd in both. RRF with k = 60: RRF(A) = 1/61 + 1/64 = 0.0320, RRF(B) = 1/62 + 1/62 = 0.0323. Doc B wins by consensus. Ranks beat scores because raw scores from different methods live on incomparable scales: a BM25 score of 14.2 and a dot product of 0.96 cannot be added meaningfully. Ranks are already normalized, the k = 60 dampens rank-1 versus rank-2 gaps, and the method needs no per-corpus tuning and works with any number of retrievers.
+<div class="qa"><div class="q">Work through RRF on two documents and explain why ranks beat scores.</div><div class="a"><p>Doc A ranks 1st in BM25 and 4th in DPR. Doc B ranks 2nd in both. RRF with k = 60: RRF(A) = 1/61 + 1/64 = 0.0320, RRF(B) = 1/62 + 1/62 = 0.0323. Doc B wins by consensus. Ranks beat scores because raw scores from different methods live on incomparable scales: a BM25 score of 14.2 and a dot product of 0.96 cannot be added meaningfully. Ranks are already normalized, the k = 60 dampens rank-1 versus rank-2 gaps, and the method needs no per-corpus tuning and works with any number of retrievers.
 MRR. Hit@k ignores position, but a one-passage reader only sees the top result, so rank 1 versus rank 3 is the whole game. MRR scores 1 for rank 1 and 1/3 for rank 3, which matches the reader&rsquo;s experience. For a reader that synthesizes many passages, report recall instead.</p><div class="followup"><strong>Follow-up:</strong> Which metric do you report for a reader that reads exactly one passage?</div></div></div>
+<div class="qa"><div class="q">How does HNSW find the nearest neighbor in about log N hops?</div><div class="a"><p>The index is a layered graph. All vectors sit at the bottom layer. Thinner samples sit on the layers above, with longer links. Search enters at the top, greedy-hops toward the query (always moving to the neighbor closest to the query), and drops a layer when no neighbor is closer. Each layer narrows the search exponentially, so the total is about log N hops for N vectors. The build inserts one vector at a time, linking M nearest neighbors per layer plus a heuristic long-range link so the walk cannot get trapped. The price is a little recall: the true nearest neighbor can hide from the greedy walk.
+M is links per node: more links, better recall, bigger index. ef is the search breadth: a wider candidate list per hop, slower queries, better recall. Tune them against your recall target on an eval set: raise ef until recall@k stops improving, then stop, because every extra millisecond is paid per query.</p><div class="followup"><strong>Follow-up:</strong> What do the M and ef knobs do?</div></div></div>
+<div class="qa"><div class="q">Your hybrid pipeline returns great passages but the answers are wrong. Where do you look?</div><div class="a"><p>At the reader, not the retriever. If recall@k is healthy and the top passages contain the evidence, the failure is downstream: the reader ignores the passages, or the passages disagree and the reader picks wrong. Check faithfulness: do the answer&rsquo;s claims appear in the retrieved passages? The retriever&rsquo;s miss is the reader&rsquo;s ceiling, but a good retriever with a bad reader still fails. Measure each stage separately before touching the pipeline.
+Price each stage. The cross-encoder on 100 passages is the usual suspect at about a second. Cut the shortlist to 30, or distill the reranker, or drop reranking for queries where the hybrid score gap is already decisive. The latency table is the budget: spend it where the errors are.</p><div class="followup"><strong>Follow-up:</strong> And if the passages are great but the latency is 2 seconds?</div></div></div>
+<div class="qa"><div class="q">Design the retrieval stack for a support bot over 2M technical docs with error codes and paraphrased questions. Name each layer.</div><div class="a"><p>BM25 first for the error codes: exact terms like ERR_0x7F3A are its home turf, 62 ms, no training. Dense (E5/BGE) second for the paraphrased questions: meaning as vectors where BM25 scores zero. Fuse with RRF: consensus across the two lists, no score tuning. Cross-encoder rerank on the top 50 where accuracy pays: about half a second, acceptable for support. HNSW underneath the dense index for millisecond ANN at 2M vectors. Metrics: MRR for the one-passage answers, recall for the multi-doc syntheses, Failed@k to catch the queries with nothing retrieved.
+The dense index rebuild. HNSW rebuilds are expensive at 2M vectors, so use a tiered index: a small fresh index for the last hour&rsquo;s docs searched alongside the big one, merged at query time. BM25&rsquo;s inverted index updates cheaply by comparison. Staleness is the price of the dense tier: measure how fast new docs must be searchable and size the fresh tier to it.</p><div class="followup"><strong>Follow-up:</strong> The corpus updates hourly. What breaks?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
-<p>The story in eight steps. Each step answers the one before it.</p>
+<p>The story in nine steps. Each step answers the one before it.</p>
 <ol>
 <li><strong>The job: score passages against the query.</strong> Ten thousand
    chunks, one question. The reader cannot recover what the
@@ -514,34 +609,47 @@ MRR. Hit@k ignores position, but a one-passage reader only sees the top result, 
    &ldquo;ERR_0x7F3A&rdquo; is noise to a dense model (rare literals).</li>
 <li><strong>BM25: rarity and saturation.</strong> IDF 5.65 for &ldquo;ACME&rdquo; vs 2.93
    for &ldquo;revenue&rdquo;. Ten mentions score 1.96, not 10. 62 ms, no
-   training.</li>
+   training. TF-IDF is the ancestor. SPLADE is the learned bridge.</li>
 <li><strong>DPR: meaning as a dot product.</strong> Two encoders, MIPS over
    precomputed vectors. Beats BM25 on 4 of 5 datasets with 1,000
-   QA pairs. Needs labels; misses rare strings.</li>
+   QA pairs. Needs labels. Misses rare strings. Newer embedders
+   (E5, BGE) are the cheapest upgrade.</li>
 <li><strong>ColBERT: MaxSim over tokens.</strong> Each query token takes its best
-   match; the maxima sum. Token-sized index, 458 ms.</li>
+   match. The maxima sum. Token-sized index, 458 ms.</li>
 <li><strong>Rerank the shortlist.</strong> Cross-encoder judges with full
    attention: 10,700 ms per 1k passages. Stage 1 retrieves 100,
    stage 2 judges them.</li>
-<li><strong>Fuse with RRF; measure with the right metric.</strong> RRF(B) =
-   0.0323 beats RRF(A) = 0.0320: consensus wins. MRR for
-   one-passage readers, recall for synthesizers.</li>
+<li><strong>Fuse with RRF. Search with HNSW.</strong> RRF(B) = 0.0323 beats
+   RRF(A) = 0.0320: consensus wins. HNSW: log N hops, M and ef
+   trade recall for speed.</li>
+<li><strong>Measure with the right metric.</strong> MRR for one-passage readers,
+   recall for synthesizers, Failed@k for the queries with nothing.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/t5zTNqe0Jck" title="Hybrid Search And RRF" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>Hybrid Search And RRF (the embed above): https://www.youtube.com/watch?v=t5zTNqe0Jck, why dense misses rare terms, BM25 misses meaning, and RRF fuses ranks in seven lines of Python.</li>
+</ul>
+<p>Further:
+- Karpukhin et al. (2020), DPR: https://arxiv.org/abs/2004.04906, training with in-batch and BM25 hard negatives.
+- Khattab and Zaharia (2020), ColBERT: https://arxiv.org/abs/2004.12832, late interaction.
+- Humeau et al. (2020): bi-encoders versus cross-encoders.
+- HNSW paper (Malkov and Yashunin): the multi-layer graph behind fast ANN search.</p>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Lecture 3 slides (local: sources/agents/cs329z/lecture03.pdf).
 - Course site: http://web.stanford.edu/class/cs329z.</p>
 <p><strong>Further reading:</strong>
-- Karpukhin et al. (2020), DPR: training with in-batch and BM25
-  hard negatives.
-- Khattab and Zaharia (2020), ColBERT: late interaction.
-- Humeau et al. (2020): bi-encoders versus cross-encoders.
-- HNSW paper: the multi-layer graph behind fast ANN search.</p>
+- SPLADE: learned sparse retrieval on inverted indexes.
+- Elasticsearch RRF retriever documentation: hybrid search in production.</p>
 <p><strong>Caveats from these sources.</strong> Latency figures are the lecture&rsquo;s,
 measured on MS MARCO with DPR on different hardware: treat
 cross-method gaps as magnitudes, not exact ratios. The toy
 computations (IDF, saturation, RRF, metrics) are worked arithmetic on
-small examples, not measurements. No video ID is on record.</p>
+small examples, not measurements. No lecture video is on record. The
+embed above is a third-party explainer, verified live.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS336 L01:</strong> the embeddings and token vectors the dense methods
@@ -550,7 +658,7 @@ small examples, not measurements. No video ID is on record.</p>
   and ColBERT papers.</li>
 <li><strong>This course, RAG pipeline:</strong> the retriever-reader framework this
   lesson&rsquo;s zoo plugs into.</li>
-<li><strong>This course, indexing:</strong> chunking decides what one vector covers;
+<li><strong>This course, indexing:</strong> chunking decides what one vector covers.
   this lesson decides how vectors are scored.</li>
 <li><strong>This course, agentic retrieval:</strong> the retriever becomes an action
   inside the loop, and its misses become the agent&rsquo;s failures.</li>

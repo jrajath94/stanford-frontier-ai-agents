@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 2: The $60 Million Megawatt — Stanford Frontier AI</title>
+<meta name="description" content="Where the CapEx dollar goes: $20M/MW for the factory, $40M/MW for the machines inside, $15M/MW a year to rent the chips, and the payback math that decides wheth">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="mse435-l02" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02" class="active">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">MS&amp;E 435: Economics of the AI Supercycle</a> / Lecture 2: The $60 Million Megawatt</nav>
+      <h1>Lecture 2: The $60 Million Megawatt</h1>
+      <p class="meta-line">2026-04 · Instructor: Apoorv Agrawal · Spring 2026</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="GcCGzfKdCd0"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/GcCGzfKdCd0" title="Building AI Factories" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Guest: Chase Lochmiller, Co-Founder and CEO of Crusoe. This lesson covers the second half of the session: the full cost stack and unit economics.</p></div><h2 id="the-question-from-l01">The question from L01</h2>
+<p>L01 ended with the thesis: $650 billion of CapEx is a bet
+on digital labor. This chapter asks the accountant&rsquo;s
+version of the same question. If you had $100 of spend,
+where does it go? The guest answers with the full cost
+stack, normalized per megawatt, and every number below is
+his, from the session.</p>
+<p>A <strong>megawatt</strong> (MW) is a million watts of power draw. It
+is the natural unit for pricing AI factories because
+everything in the building, from the substation to the
+cooling, scales with power. Think of it as the &ldquo;per seat&rdquo;
+of the data center business.</p>
+<h2 id="the-factory-20m-per-megawatt">The factory: $20M per megawatt</h2>
+<p>The first $20M of the $60M buys the factory itself: the
+power plant and the building, before a single GPU arrives.
+The guest breaks it out on a per-megawatt basis, and the
+bottom bar of his chart is the one he lingers on.</p>
+<p><strong>Labor: $4.7M per MW.</strong> This is capitalized construction
+labor, not operating payroll. For a 1 GW campus the
+arithmetic is 4.7 million times 1,000, which is $4.7
+billion in wages to the people pouring concrete and
+pulling cable. The guest is blunt that this is a
+bottleneck: not enough electricians, welders, plumbers,
+or construction workers, with many gigawatt projects
+competing for the same trades.</p>
+<p><strong>Soft costs.</strong> Insurance, financing (servicing the
+construction loan), siting, commissioning.</p>
+<p><strong>The gas plant: $2-3M per MW.</strong> Crusoe built a roughly
+350 MW natural gas plant at Abilene to energize the
+cluster. The striking detail is inflation: a gas turbine
+that used to cost $1M per MW now costs $3M per MW. Only a
+handful of manufacturers build them (GE Vernova, Siemens,
+Mitsubishi Heavy Industries, Pratt and Whitney,
+Caterpillar&rsquo;s Solar), and they did not expand capacity as
+everyone rushed to add generation. The guest notes it has
+been good to be a GE Vernova shareholder.</p>
+<p><strong>Tenant fit-out.</strong> Everything inside the data hall that
+is not the computers: remote power panels, hot-aisle
+containment, fan walls, cooling distribution units.</p>
+<p><strong>Electrical equipment.</strong> The full chain from high voltage
+to the rack: transformers, power distribution centers,
+medium- and low-voltage switchgear. Power arrives at the
+Abilene substation and steps down from 34.5 kV (34,500
+volts) to 480 or 415 volts at the rack. The guest&rsquo;s image:
+your home breaker panel, at the scale of a city.</p>
+<p><strong>Mechanical equipment.</strong> Chillers, plumbing, air
+handlers. Each building holds about 1 million gallons of
+water in a closed recirculating loop. A common worry is
+that AI drains local water; the guest&rsquo;s number is that
+annual consumption is about the same as a single-family
+home, because the loop is filled once. That matters in
+West Texas, where water is scarce.</p>
+<p><strong>Materials.</strong> Steel, concrete, site work. Crusoe runs
+its own concrete batch plant on site, pouring 24/7.</p>
+<p>The bottom line of the bottom half: roughly <strong>$20M per
+MW</strong>, or <strong>$20 billion per gigawatt</strong>, for the power
+plant plus the building.</p>
+<p>Figure L02-F1. The factory cost stack per megawatt.
+Source: original diagram for Stanford Frontier AI,
+numbers from the session.</p>
+<pre class="ascii">$20M per MW: the factory (before any GPU)
+
+labor (construction)  $4.7M  &lt;-- the bottleneck bar
+gas plant             $2-3M  &lt;-- turbine was $1M, now $3M
+soft costs            (insurance, financing, siting)
+tenant fit-out        (panels, containment, fan walls)
+electrical            (34.5 kV --&gt; 480 V chain)
+mechanical            (chillers, 1M-gallon water loop)
+materials             (steel, concrete, site work)
+</pre>
+<h2 id="the-machines-40m-per-megawatt">The machines: $40M per megawatt</h2>
+<p>The next $40M buys the IT: the computers that go inside.
+The split, which the guest calls forward-looking, is the
+most concentrated cost picture in the course.</p>
+<pre class="ascii">$40M per MW: the machines inside the factory
+
+GPUs              $30M   (three quarters of the IT spend)
+networking        $4M    (NVLink, InfiniBand)
+CPUs + storage    $3M
+in-room fit-out   $3M
+labor/shipping    $1M
+</pre>
+<p><strong>GPUs: $30M.</strong> Three quarters of the IT CapEx goes to
+one vendor&rsquo;s chips. The newest racks hold 72 GPUs on one
+NVLink domain, a single high-speed fabric so the chips
+share data as one machine.</p>
+<p><strong>Networking: $4M.</strong> The racks must then be joined into
+one coherent cluster, typically over InfiniBand or RDMA
+over Ethernet, so a single training job can span every
+chip in every building. At Abilene this means all chips
+across all data centers operate as one workload.</p>
+<p><strong>CPUs and storage: $3M.</strong> The surprise here is a CPU
+shortage. Agentic workloads need large numbers of CPUs
+to orchestrate the GPU work, so CPU demand is surging
+alongside GPU demand.</p>
+<p>The guest flags that he may be double-counting the
+fit-out bar, and rounds the total to <strong>$40M per MW</strong>.
+Added to the factory, the full build is roughly <strong>$60M
+per MW</strong>, which is <strong>$60 billion for a 1 GW cluster</strong>.</p>
+<h2 id="the-payback-does-it-earn">The payback: does it earn?</h2>
+<p>Now the accountant&rsquo;s real question. You have spent $60M
+per MW. What comes back? The guest gives three numbers:
+the operating cost, the rental revenue, and the upgrade.</p>
+<p><strong>OpEx: $1-2M per MW per year.</strong> Power, insurance, and
+the on-site labor that repairs and replaces failed cables
+and GPUs. The guest stresses this is limited; the big
+money is all upfront.</p>
+<p><strong>Revenue: about $15M per MW per year</strong>, renting out
+bare chips. Divide the $60M build by $15M a year and you
+get a <strong>four-year payback</strong>, on a revenue basis and
+before the engineering workforce and other costs the
+$1-2M omits. The guest presents it as rough, assembled
+that afternoon, but directionally the number the street
+argues about.</p>
+<p><strong>The upgrade: managed services.</strong> Renting chips is the
+commodity product. The guest&rsquo;s title for the deck is
+&ldquo;from electrons to tokens,&rdquo; and the margin lives in the
+tokens. Add a managed layer that hosts models and serves
+an API endpoint, and revenue rises by $5-15M per MW per
+year, to roughly <strong>$30M per MW</strong> in the optimistic case.
+The payback halves: <strong>about two years</strong>.</p>
+<p>Figure L02-F2. The payback arithmetic. Source: original
+diagram for Stanford Frontier AI, numbers from the
+session.</p>
+<pre class="ascii">build:     $60M per MW  ($20M factory + $40M machines)
+OpEx:      $1-2M per MW per year
+rent chips:      $15M/MW/yr --&gt; 60/15 = ~4 year payback
++ managed tokens: $30M/MW/yr --&gt; 60/30 = ~2 year payback
+</pre>
+<p>The <strong>key question</strong> of the chapter: what decides between
+the four-year and the two-year outcome? Two things.
+First, depreciation: how long each bar of the $60M stays
+valuable. Second, whether the product is raw compute or
+finished intelligence.</p>
+<h2 id="depreciation-how-long-does-a-gpu-stay-valuable">Depreciation: how long does a GPU stay valuable?</h2>
+<p><strong>Depreciation</strong> is how accountants spread a purchase
+over its useful life. A $60M asset that lasts 6 years
+costs $10M a year on the books; if it lasts 3, it costs
+$20M. For AI factories, the depreciation schedule is
+the whole debate on Wall Street.</p>
+<p>The host asks whether GPUs depreciate over the standard
+5 years that public companies use for computers. The
+guest answers that six is the standard, then reframes
+the question: Crusoe will use compute &ldquo;so long as it is
+valuable to us or to someone else.&rdquo; The evidence he
+offers is a pricing chart for the H100. It debuted about
+three years ago, the price fell as expected, and then,
+with the agent demand boom, the rental price rose back
+above its launch price. Blackwell pricing, via
+SemiAnalysis, shows a similar pattern.</p>
+<p>The mechanism is <strong>abstraction</strong>. Crusoe builds services
+so the customer never knows whether the work ran on an
+A100, an H100, or an MI300. The guest&rsquo;s analogy: you do
+not check which Intel or AMD chip runs your Zoom call.
+You care about the service. As applications abstract the
+hardware, older chips stay revenue-producing longer, and
+the depreciation curve stretches.</p>
+<p>The honest counterweight: nobody knows. The guest says
+so directly.</p>
+<h2 id="the-commodity-question">The commodity question</h2>
+<p>The host presses the debate the industry was having that
+week: is compute a commodity? The guest&rsquo;s answer splits
+by age and by scale.</p>
+<p>Old compute commoditizes. As new generations arrive,
+last year&rsquo;s chips fall down the price curve. But two
+things resist commoditization. First, <strong>the cutting
+edge</strong>: the newest hardware always commands a premium,
+which is the history of the IT industry. Second,
+<strong>scale</strong>: operating at very large scale is hard to
+replicate, and the guest calls it &ldquo;absolutely not a
+commodity.&rdquo;</p>
+<p>On margins, he is specific. Nvidia commands roughly
+<strong>80% gross margins</strong> today. His expectation: competition
+does its work over time, and margins settle toward
+standard silicon levels, call it <strong>60%</strong>. &ldquo;Capitalism is
+a powerful force.&rdquo;</p>
+<h2 id="two-more-factories-quan-and-spark">Two more factories: Quan and Spark</h2>
+<p>The session gives two more data points that sharpen the
+unit economics.</p>
+<p><strong>Quan, Texas.</strong> A town of 1,500 people with 3,500
+workers on site, drawing labor from nearby Amarillo. The
+site pairs the data center with an on-site wind farm in
+one of the windiest parts of the United States, in an
+arrangement the guest calls <strong>across the meter</strong>: behind
+the meter is on-site power, and across the meter means
+the campus generates its own power, sells the surplus
+into the grid (lowering local ratepayers&rsquo; bills), and
+draws from the grid when the wind drops. The customer is
+undisclosed but described as very large.</p>
+<p><strong>Crusoe Spark.</strong> A modular, self-contained AI data
+center, manufactured centrally to cut the labor
+bottleneck: 500 kW air-cooled units and 2 MW
+liquid-cooled units, deployable in fleets. Claimed
+savings: <strong>30 to 50 percent</strong> on the infrastructure
+cost. This is the answer to the $4.7M/MW labor bar:
+stop building every factory by hand.</p>
+<h2 id="space-data-centers-the-long-bet">Space data centers: the long bet</h2>
+<p>The final topic is the one the host clearly enjoys:
+data centers in space. The guest is genuinely engaged
+(Crusoe has a partnership with Star Cloud, which he says
+has launched the first H100s into space
+[uncertain: the guest&rsquo;s claim]) and runs the trade
+honestly.</p>
+<p>The attractions are the costs the $20M/MW stack would
+skip: no concrete foundations, no permitting, no power
+approvals, and optical interconnect instead of millions
+of strands of fiber. The problems are thermal management
+and operations. In a terrestrial data center, GPUs fail
+and technicians reseat or return them. In space there is
+no astronaut to pull a chip and send it back, so the
+cluster suffers natural depreciation with no repair
+path. Everything rides on launch cost: unless payload
+costs fall by two orders of magnitude, the math does
+not close.</p>
+<p>His verdict: not material in 5 years, probably not in
+10, but a major part of intelligent infrastructure over
+the long run.</p>
+<h2 id="mapping-back-the-dollar-answered">Mapping back: the dollar, answered</h2>
+<table>
+<thead>
+<tr>
+<th>L01 puzzle</th>
+<th>This chapter&rsquo;s answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where does the $100 go?</td>
+<td>$20M/MW factory (labor $4.7M, gas plant $2-3M, electrical, mechanical, materials) plus $40M/MW machines ($30M GPUs, $4M network, $3M CPU/storage). $60B per GW.</td>
+</tr>
+<tr>
+<td>Does it pay back?</td>
+<td>$15M/MW/yr renting chips: ~4 years. $30M/MW/yr with managed tokens: ~2 years. OpEx only $1-2M/MW/yr.</td>
+</tr>
+<tr>
+<td>What could break it?</td>
+<td>Short depreciation (GPUs obsolete fast) or compute commoditization. The defense: H100 prices rose above launch, and abstraction stretches useful life.</td>
+</tr>
+<tr>
+<td>What moves the cost?</td>
+<td>Labor ($4.7M/MW bar, trades shortage), gas turbines ($1M to $3M/MW), and modular build (Spark: 30-50% savings).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price-every-number-is-moving">The honest price: every number is moving</h2>
+<p>The guest&rsquo;s own warning closes the chapter. Ask whether
+the $20M/MW is going up or down, and the answer is up:
+gas generation, labor, and electrical equipment are all
+inflating under demand. The $60M/MW is a snapshot, not a
+law. The payback math only works while token demand
+grows faster than the cost stack. That demand is the
+subject of the rest of the course: the models (L03-L04)
+that create it and the applications (L05-L06) that sell
+it.</p>
+<div class="qa"><div class="q">Walk me through the $60M per megawatt.</div><div class="a"><p>Two halves. About $20M per MW builds the factory: the power plant and the building, with construction labor alone at $4.7M per MW, the gas plant at $2-3M per MW, plus electrical, mechanical, and materials. About $40M per MW fills it with machines: $30M in GPUs, $4M in networking, $3M in CPUs and storage, and the rest in fit-out and deployment. That is $60 billion for a 1 GW cluster. The concentration to remember: half the total, $30M of $60M, is GPUs.
+The guest names gas turbines (from $1M to $3M per MW as a handful of manufacturers held capacity flat) and skilled labor (the $4.7M/MW bar, with electricians, welders, and plumbers in short supply across many simultaneous gigawatt builds). Electrical equipment is inflating too. His hedge against the labor bar is Crusoe Spark, the modular factory claiming 30-50% savings.</p><div class="followup"><strong>Follow-up:</strong> Which of these costs is inflating fastest?</div></div></div>
+<div class="qa"><div class="q">How does an AI factory pay back?</div><div class="a"><p>Spend $60M per MW upfront. Operating cost is only $1-2M per MW per year. Renting bare chips brings about $15M per MW per year, which is a four-year payback on a revenue basis. Add the managed-services layer that serves model APIs (&ldquo;from electrons to tokens&rdquo;) and revenue rises toward $30M per MW per year, which is about a two-year payback. The upgrade from renting compute to selling tokens is the whole margin story.
+The guest says so himself: the $1-2M OpEx omits the engineering workforce and other costs, and the four-year figure is on a revenue basis, not profit. The deeper variable is depreciation: the payback assumes each bar of the $60M stays valuable for years. If GPUs went obsolete fast, the math would break. His evidence against that is the H100 rental price rising above its launch price three years after debut.</p><div class="followup"><strong>Follow-up:</strong> What is missing from that payback math?</div></div></div>
+<div class="qa"><div class="q">Is compute a commodity?</div><div class="a"><p>The guest splits it three ways. Old compute commoditizes as new generations arrive. The cutting edge is not a commodity: the newest hardware always commands a premium. And scale is not a commodity: operating at very large scale is hard to replicate. On margins, he expects Nvidia&rsquo;s roughly 80% gross margins to compress toward standard silicon levels, around 60%, because competition is a powerful force. Both sides of the debate can be right on different horizons.
+Abstraction. If customers buy tokens through a managed API and never know which chip ran the work, chips become interchangeable inputs and pricing power moves up the stack to whoever owns the customer relationship. That is exactly the business Crusoe is building toward with its managed-services layer.</p><div class="followup"><strong>Follow-up:</strong> What would accelerate the commodity outcome?</div></div></div>
+<div class="qa"><div class="q">Why do data centers in space not work yet?</div><div class="a"><p>The attractions are real: no concrete, no permitting, no power approvals, and optical interconnect instead of millions of fiber strands. The blockers are thermal management and operations. GPUs fail constantly at scale, and in space nobody can reseat a chip or return it to the vendor, so the cluster depreciates with no repair path. The economics hinge on launch cost falling by two orders of magnitude. The guest&rsquo;s verdict: not material in 5 years, probably not in 10, but a major long-run piece of intelligent infrastructure.
+It prices the frictions. Permitting, concrete, power approvals, and fiber installation are such large parts of the $20M/MW factory cost that removing them is the main attraction of orbit. The interest in space is a backhanded measure of how expensive building on Earth has become.</p><div class="followup"><strong>Follow-up:</strong> What does the space discussion reveal about terrestrial costs?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>The unit.</strong> A megawatt is the &ldquo;per seat&rdquo; of AI
+   factories. Everything scales with power.</li>
+<li><strong>The factory: $20M/MW.</strong> Labor $4.7M (the bottleneck
+   bar), gas plant $2-3M (turbines tripled to $3M/MW),
+   electrical (34.5 kV to 480 V), mechanical (1M-gallon
+   water loop, home-scale annual use), materials.</li>
+<li><strong>The machines: $40M/MW.</strong> GPUs $30M, networking $4M
+   (one coherent cluster), CPUs and storage $3M (CPUs
+   now scarce too).</li>
+<li><strong>The total: $60M/MW.</strong> $60 billion per gigawatt.
+   Half of it is GPUs.</li>
+<li><strong>The return.</strong> $15M/MW/yr renting chips: ~4-year
+   payback. $30M/MW/yr selling tokens: ~2-year payback.
+   OpEx just $1-2M/MW/yr.</li>
+<li><strong>Depreciation.</strong> Six years is the standard. H100
+   rental prices rose above launch three years in.
+   Abstraction stretches useful life.</li>
+<li><strong>The commodity split.</strong> Old compute commoditizes.
+   The cutting edge and scale do not. Nvidia 80% margins
+   compress toward 60%.</li>
+<li><strong>The frontier.</strong> Quan (across-the-meter wind),
+   Spark (modular, 30-50% cheaper), space (real physics,
+   10+ years out). Next: what makes the machines worth
+   it, the models.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- Building AI Factories (MS&amp;E 435, Spring 2026), guest
+  Chase Lochmiller, Crusoe:
+  https://www.youtube.com/watch?v=GcCGzfKdCd0
+- MS&amp;E 435 course site: https://mse435.stanford.edu/</p>
+<p><strong>Further reading:</strong>
+- SemiAnalysis: the Blackwell pricing analysis the
+  guest cites for the post-launch price recovery
+  pattern.</p>
+<p><strong>Caveats from these sources.</strong> The guest warns the
+numbers were assembled that afternoon: treat them as
+directional, and note his own flag of possible
+double-counting in the fit-out bar. &ldquo;Six is the
+standard&rdquo; for depreciation is his answer to the host&rsquo;s
+&ldquo;five years&rdquo; framing; both are stated, neither is
+audited. The Star Cloud H100 launch claim is the
+guest&rsquo;s. Abilene &ldquo;largest campus&rdquo; is hedged by the
+guest himself.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>MS&amp;E435 L01:</strong> the demand thesis (digital labor)
+  that this chapter&rsquo;s payback math must justify.</li>
+<li><strong>CS229S:</strong> the engineering cost curves behind these
+  dollars: GPU execution, memory walls, and why
+  inference economics look the way they do.</li>
+<li><strong>MS&amp;E435 L03:</strong> the model layer: why the machines
+  keep getting more valuable instead of commoditizing
+  away.</li>
+<li><strong>MS&amp;E435 L06:</strong> where the value accrues in the
+  stack, and who captures the token margin.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">VIDEO</span><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Stanford MS&amp;E435 Economics of the AI Supercycle, Building AI Factories (Chase Lochmiller, Crusoe)</a></li></ul></section>
+      <nav class="pager"><a href="../mse435/l01-electrons-to-tokens.html"><span class="lbl">← Previous</span>Lecture 1: From Electrons to Tokens</a><a href="../mse435/l03-how-models-get-smarter.html"><span class="lbl">Next →</span>Lecture 3: How Models Get Smarter</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

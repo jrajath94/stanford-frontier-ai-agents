@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 3: Learning from Feedback with Tools and Code — Stanford Frontier AI</title>
+<meta name="description" content="ReAct interleaves thought, action, and observation. RLEF grounds code models in execution feedback with reinforcement learning on two-tier tests. Constitutional">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-l03" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03" class="active">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 3: Learning from Feedback with Tools and Code</nav>
+      <h1>Lecture 3: Learning from Feedback with Tools and Code</h1>
+      <p class="meta-line">Autumn 2025 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="Lxh9RF5S-K0"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/Lxh9RF5S-K0" title="Stanford CS329A Self-Improving AI Agents | Part 4 | Learning from Feedback with Tools and Code" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">ReAct for tool use, RLEF for grounding code models in execution feedback, and Constitutional AI for harmlessness without mass human labeling.</p></div><h2 id="acting-beats-answering">Acting beats answering</h2>
+<p><em>Builds on: Lecture 1&rsquo;s agent definition and Lecture 2&rsquo;s verifiers.</em></p>
+<p>A model that only answers is stuck with what it knows. A model
+that can act can look things up, run code, and check its work.
+The shift from answering to acting is the shift from Lecture 1&rsquo;s
+chatbot to Lecture 1&rsquo;s agent. This lecture studies three ways to
+make action work: a prompting pattern that interleaves thought
+and action, reinforcement learning that grounds code in execution
+feedback, and a method that teaches harmlessness without armies
+of human labelers.</p>
+<h2 id="react-think-act-observe">ReAct: think, act, observe</h2>
+<p><em>Builds on: The shift from answering to acting, with the prompting pattern that interleaves thought and action.</em></p>
+<p><strong>ReAct</strong> is a <strong>thought-action-observation</strong> loop: a prompting
+pattern that interleaves reasoning and acting. The model writes a
+thought, takes an action, reads the observation the environment
+returns, and repeats. A thought is a
+reasoning trace. An action is a tool call, such as a search or a
+lookup. An observation is what the tool returns.</p>
+<p>The lecture walks through the paper&rsquo;s HotpotQA example. The
+question asks which film&rsquo;s director also directed a given movie.
+The model thinks: I need to find the director. It acts: searches
+for the film. It observes: the search results. It thinks: now I
+need the director&rsquo;s other films. It acts: looks up the director&rsquo;s
+page. The observation contains &ldquo;Front Row&rdquo;, the answer. In the
+paper&rsquo;s second example the model chases the film &ldquo;Apple Remote&rdquo;
+through the same loop. Each action grounds the next thought in
+facts outside the model&rsquo;s weights.</p>
+<p>The results: on HotpotQA, <strong>FEVER</strong>, Fact Extraction and
+VERification, a fact-checking benchmark, and WebShop, ReAct beats
+reasoning-only and acting-only baselines. WebShop is a shopping
+task where the agent buys items from instructions. ReAct scores
+66.6 percent against a human expert&rsquo;s 82.1. Two design facts
+matter. The action space is <strong>validity-constrained</strong>: the model
+can only take actions the environment accepts, so it cannot
+hallucinate a tool. And the failure mode is <strong>compounding
+error</strong>: one wrong action poisons the observations that follow,
+so long chains drift. Acting beats answering, but every action
+is a chance to leave the rails.</p>
+<figure><img alt="Think, act, observe" src="assets/plate-l03-react-loop.svg"><figcaption>Thought plans. Action calls a tool. Observation feeds the next thought. WebShop 66.6 vs human expert 82.1. Shell 3. Source: paper, ReAct. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="rlef-grounding-code-in-execution">RLEF: grounding code in execution</h2>
+<p><em>Builds on: ReAct&rsquo;s tool use, training the model to use tools well through execution feedback.</em></p>
+<p>ReAct gives the model tools. <strong>RLEF</strong>, reinforcement learning
+from execution feedback, teaches the model to use them well for
+code. The problem: a model can write code that looks right and
+fails. The fix: train on what the code does when run.</p>
+<p>The design has <strong>two-tier tests</strong>. <strong>Public tests</strong> are visible
+to the model during the episode: it writes code, runs the public
+tests, reads the failures, and revises. <strong>Private tests</strong> are
+hidden and used only for the reward: the model&rsquo;s final code is
+scored against them. The split stops the model from gaming the
+visible tests at the expense of real correctness. The lecture&rsquo;s
+example is a palindrome check that times out on the public tests:
+the model sees the timeout, finds the quadratic loop, and ships a
+linear fix.</p>
+<p>The learning algorithm is <strong>PPO</strong>, proximal policy optimization,
+a reinforcement learning method that updates the model in small
+steps so it does not forget what it already knows. The design
+choice the lecture stresses: a <strong>token-level policy</strong> paired with
+a <strong>turn-level value</strong>. The policy chooses each token of code.
+The value estimates the worth of the whole turn. One
+<strong>advantage</strong> signal, how much better this turn was than expected,
+trains both. The lecture reports training on <strong>CodeContests</strong> with a
+Llama 3.1 model: solve rate rises on a log scale of attempts, the
+10-at-K metric climbing as the model learns from execution.</p>
+<figure><img alt="Two tiers of tests" src="assets/plate-l03-two-tiers.svg"><figcaption>Public tests drive revision in the episode. Private tests drive the reward. The split stops test-gaming. Shell 3. Source: paper, RLEF. Project: Stanford Frontier AI.</figcaption></figure>
+<p>The lecture draws the general lesson. For math and code, the
+environment gives free, honest feedback: the answer is right or
+wrong, the code runs or crashes. Wherever feedback is automatic,
+reinforcement learning can close the loop without human labels.
+Where it is not, the next section shows what replaces the
+human.</p>
+<h2 id="constitutional-ai-feedback-without-the-crowd">Constitutional AI: feedback without the crowd</h2>
+<p><em>Builds on: RLEF&rsquo;s execution feedback, asking what replaces the human where execution feedback does not exist.</em></p>
+<p><strong>Constitutional AI</strong> asks whether a model can teach itself to be
+harmless. The method, from Anthropic&rsquo;s 2022 paper, has two
+phases.</p>
+<p>Phase one: give the model a <strong>constitution</strong>, a list of
+principles, 16 in the original paper. The model generates a
+response to a harmful prompt, then <strong>self-critiques</strong>: it reads
+its own response against the constitution, finds the violation,
+and performs <strong>self-revision</strong>. The revised pairs become supervised training
+data. No human wrote the labels. The model did.</p>
+<p>Phase two: <strong>RLAIF</strong>, reinforcement learning from AI feedback.
+The model compares pairs of responses and a <strong>preference model</strong>
+learns which the constitution prefers. Then reinforcement
+learning steers the model toward preferred responses. The
+preference model is the RLAIF counterpart of RLHF&rsquo;s reward model,
+but its labels come from a model, not from human raters.</p>
+<p>The results, reported as <strong>Elo</strong> scores from human evaluations:
+the method moved the helpfulness-versus-harmlessness frontier
+outward. <strong>Helpfulness</strong> is how well the model serves the user:
+correct, specific, complete answers. Before, safer meant less
+helpful. After, the model got safer without getting dumber. Two honest footnotes from the
+lecture. Post-training, all of this, is about 5 percent of the
+total compute. The base model&rsquo;s knowledge comes from
+pretraining. And <strong>unlearning</strong>, removing knowledge the model
+already has, remains an open problem: teaching the model not to
+say something is easier than making it not know it.</p>
+<div class="qa"><div class="q">Trace one ReAct episode on the Apple Remote question.</div><div class="a"><p>Thought: the question asks about the film Apple Remote, so I
+need to search for it. Action: search Apple Remote film.
+Observation: results mention a 2005 documentary. Thought: the
+question asks for the director&rsquo;s other work. Action: look up
+the director. Observation: the director page lists Front Row.
+Thought: I have the answer. Action: answer Front Row. Each
+observation grounds the next thought. If the first search had
+returned nothing, the thought would have pivoted to a
+different query.
+At the first action. A bad search query returns irrelevant
+results, the next thought reasons about the wrong film, and
+every step after inherits the mistake. The trace has no way to
+know it went wrong except a later observation that fails to
+cohere. Longer chains mean more chances to derail.</p><div class="followup"><strong>Follow-up:</strong> Where does compounding error enter this trace?</div></div></div>
+<div class="qa"><div class="q">Why split RLEF&#x27;s tests into public and private?</div><div class="a"><p>The model needs feedback during the episode, so some tests
+must be visible. But if the reward used the same visible
+tests, the model would optimize for them specifically: pass the
+known tests, fail the general case. Hidden private tests make
+the reward measure real correctness. The public tests teach
+revision. The private tests keep it honest.
+In spirit, yes, with one twist: the &ldquo;train&rdquo; tests are
+interactive. The model runs them, reads failures, and revises
+inside the episode. A static split only scores. The two-tier
+split scores and teaches.</p><div class="followup"><strong>Follow-up:</strong> Is this just train-test split with extra steps?</div></div></div>
+<div class="qa"><div class="q">What does the turn-level value buy in RLEF?</div><div class="a"><p>Credit assignment. The policy writes tokens. Some tokens are
+load-bearing, most are scaffolding. The turn-level value
+estimates the whole attempt&rsquo;s worth, and the single advantage
+signal tells the policy which turns were better than expected.
+Without it, the model would not know whether the fix came from
+the loop rewrite or the variable rename.
+Tokens in code have meaning only in context. Scoring each
+token in isolation is noisy and expensive. The turn is the
+natural unit: the code either passes or fails.</p><div class="followup"><strong>Follow-up:</strong> Why not a token-level value?</div></div></div>
+<div class="qa"><div class="q">How does Constitutional AI avoid just teaching the model to hide bad behavior?</div><div class="a"><p>It might not fully. The honest answer: the constitution is
+enforced through the model&rsquo;s own judgments, so the method&rsquo;s
+ceiling is the model&rsquo;s current moral competence. The paper&rsquo;s
+evidence is behavioral: human evaluators rated the outputs as
+both safer and not less helpful, and the Elo frontier moved
+outward. Whether the model internalized the principles or
+learned to perform them is not measured.
+Adversarial probing: prompts designed to make the safe
+behavior fail, especially in distribution shifts the
+constitution never mentions. The lecture flags unlearning as
+the open problem: the knowledge behind the bad behavior is
+still in the weights.</p><div class="followup"><strong>Follow-up:</strong> What would measure it?</div></div></div>
+<div class="qa"><div class="q">Post-training is 5 percent of compute. Why does it matter so much?</div><div class="a"><p>Because pretraining teaches what the model knows and
+post-training teaches how it behaves. A base model that knows
+everything but answers like a document is useless as an agent.
+Instruction tuning, RLHF, RLAIF, RLEF: all of them are the
+final 5 percent that turns a text predictor into something
+that follows instructions, uses tools, and avoids harm. The
+payoff is behavioral, not factual.
+No. The lecture&rsquo;s later evidence says the opposite: for the
+hardest problems, bigger pretrained models still win. The 5
+percent steers the ship. The 95 percent builds it.</p><div class="followup"><strong>Follow-up:</strong> Does that mean pretraining is over-engineered?</div></div></div>
+<div class="qa"><div class="q">Design a verifier for a ReAct shopping agent. What breaks?</div><div class="a"><p>The verifier checks the bought item against the instruction:
+right product, right price bound, right quantity. WebShop&rsquo;s
+66.6 percent versus the human 82.1 shows the headroom. What
+breaks: ambiguous instructions the verifier cannot judge, and
+compounding error, where one bad search poisons the chain.
+The validity-constrained action space stops hallucinated
+tools but cannot stop bad reasoning with real tools.
+Split the feedback: visible checks during the episode, such
+as price bounds and attribute matches, and a hidden reward on
+final purchase correctness. The model learns to revise from
+the visible checks without gaming them.</p><div class="followup"><strong>Follow-up:</strong> How would RLEF-style training help here?</div></div></div>
+<div class="qa"><div class="q">When is AI feedback better than human feedback?</div><div class="a"><p>When the feedback is cheap, fast, and consistent, and the
+task is well-specified. RLAIF scales to millions of
+comparisons where human labeling stalls. Execution feedback
+is better than both when it exists: a compiler does not have
+opinions. AI feedback is worse when the judgment is genuinely
+human: taste, values, what counts as helpful. The lecture&rsquo;s
+map: use execution where it exists, AI feedback where it
+scales, humans where judgment is the product.
+Shared blind spots. The labeler and the learner are the
+same species of model, so the same weaknesses hide in both.
+The feedback amplifies what the model already believes. Human
+labels, for all their cost, are an independent check.</p><div class="followup"><strong>Follow-up:</strong> What is the failure mode of AI feedback?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>Act, do not just answer.</strong> ReAct loops thought, action,
+   observation. WebShop: 66.6 against a human 82.1.</li>
+<li><strong>Actions compound.</strong> One wrong tool call poisons the chain.
+   Validity-constrained actions stop fake tools, not bad
+   reasoning.</li>
+<li><strong>Execution is honest feedback.</strong> RLEF trains code models on
+   what runs. Public tests teach revision. Private tests keep
+   the reward honest.</li>
+<li><strong>Credit per turn.</strong> Token-level policy, turn-level value, one
+   advantage signal. The unit of learning is the attempt.</li>
+<li><strong>Constitutions replace crowds.</strong> Self-critique plus revision
+   makes the training data. RLAIF makes the preference model.
+   The helpfulness-harmlessness frontier moves outward.</li>
+<li><strong>Five percent steers.</strong> Post-training is a sliver of compute
+   with outsized behavioral effect. Unlearning stays open.</li>
+</ol>
+<h2 id="used-where-as-of-october-2026">Used where, as of October 2026</h2>
+<ul>
+<li><strong>Claude Code, Codex:</strong> Anthropic&rsquo;s agent guidance defines an
+  agent as an LLM using tools in a loop on environmental feedback
+  (Anthropic, December 2024). Codex runs that loop on coding tasks:
+  it writes and edits code, executes commands, runs tests, and
+  inspects files (Wikipedia, October 2026). The ReAct shape,
+  thought, tool call, observation, is the visible loop of these
+  production coding agents.</li>
+<li><strong>RL on verifiable rewards (RLVR):</strong> the RLEF idea generalized.
+  DeepSeek-R1&rsquo;s training used execution-style rewards on math and
+  code, and the recipe spread across labs in 2025.</li>
+<li><strong>Constitutional AI in production:</strong> Anthropic rewrote
+  Claude&rsquo;s constitution in January 2026 (reported September
+  2026), and the constitutional training methodology remains the
+  documented basis of Claude&rsquo;s alignment (Anthropic, 2022). The
+  RLAIF pattern, models writing the preference labels, is now
+  the standard hybrid: most production systems combine RLAIF for
+  scale with RLHF for quality validation.</li>
+<li><strong>WebShop-style evaluation:</strong> the tool-use benchmark lineage
+  continues in tau-bench (Sierra, June 2024), tau-2-bench (2025),
+  and tau-3-bench (March 2026), all listed as current tool-use
+  agent benchmarks (Wikipedia, October 2026).</li>
+</ul>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- CS329A Part 4: Learning from Feedback with Tools and Code
+  (Autumn 2025). https://www.youtube.com/watch?v=Lxh9RF5S-K0</p>
+<p><strong>Further reading:</strong>
+- Yao et al., &ldquo;ReAct&rdquo; (2022).
+  https://arxiv.org/abs/2210.03629
+- Gehring et al., &ldquo;RLEF&rdquo; (ICML 2025).
+  https://arxiv.org/abs/2410.02089
+- Bai et al., &ldquo;Constitutional AI&rdquo; (2022).
+  https://arxiv.org/abs/2212.08073</p>
+<p><strong>Caveats from these sources.</strong> The ReAct numbers are from the
+2022 paper&rsquo;s benchmarks. The RLEF results are as reported in the
+lecture from the ICML 2025 paper. The 5 percent post-training
+figure is the lecture&rsquo;s estimate of compute share.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS329Z:</strong> the builder&rsquo;s view of tool use: function calling,
+  agent loops, and how ReAct is implemented in practice. This
+  lecture adds the learning theory on top.</li>
+<li><strong>CS329H:</strong> preference models, reward models, and the RLHF
+  machinery that Constitutional AI&rsquo;s RLAIF mirrors.</li>
+<li><strong>CS336:</strong> pretraining versus post-training: where the 95
+  percent goes and why the last 5 percent has outsized
+  behavioral effect.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=Lxh9RF5S-K0" target="_blank" rel="noopener">CS329A Part 4: Learning from Feedback with Tools and Code (Autumn 2025, published 2026-08)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao et al., ReAct: Synergizing Reasoning and Acting in Language Models (2022)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2410.02089" target="_blank" rel="noopener">Gehring et al., RLEF: Grounding Code LLMs in Execution Feedback with Reinforcement Learning (ICML 2025)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2212.08073" target="_blank" rel="noopener">Bai et al., Constitutional AI: Harmlessness from AI Feedback (2022)</a></li></ul></section>
+      <nav class="pager"><a href="../cs329a/l02-test-time-scaling.html"><span class="lbl">← Previous</span>Lecture 2: Test-Time Compute Scaling</a><a href="../cs329a/l04-planning-multistep-reasoning.html"><span class="lbl">Next →</span>Lecture 4: Planning and Multi-Step Reasoning</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

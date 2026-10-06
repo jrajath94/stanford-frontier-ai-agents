@@ -1,67 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
-<rect width="1120" height="600" fill="#F7F4EE"/>
-<text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">No stopping rule: the budget does the stopping</text>
-<text x="40" y="82" font-size="17" fill="#5C6B7A">Each retrieval round burns about 2,000 tokens. Without a rule, the loop spends until it is broke.</text>
-<line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/>
-<text x="40" y="576" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: original</text>
-<text x="40" y="132" font-size="14" font-weight="600" fill="#5C6B7A" text-anchor="start">BEFORE: retrieve until the budget dies</text>
-<g><rect x="40" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif"><rect width="1120" height="600" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">No stopping rule: the budget does the stopping</text><text x="40" y="82" font-size="17" fill="#5C6B7A">Each retrieval round burns about 2,000 tokens. Without a rule, the loop spends until it is broke.</text><line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="40" y="132" font-size="14" font-weight="600" fill="#5C6B7A">BEFORE: retrieve until the budget dies</text>
+<rect x="40" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="105" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">round 1</text>
 <text x="105" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">2,000 tokens</text>
-</g>
 <line x1="170" y1="192" x2="190" y2="192" stroke="#1B2838" stroke-width="1.5" fill="none"/>
 <line x1="190" y1="192" x2="179" y2="188" stroke="#1B2838" stroke-width="1.5"/>
 <line x1="190" y1="192" x2="179" y2="196" stroke="#1B2838" stroke-width="1.5"/>
-<g><rect x="190" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="190" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="255" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">round 2</text>
 <text x="255" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">2,000 tokens</text>
-</g>
 <line x1="320" y1="192" x2="340" y2="192" stroke="#1B2838" stroke-width="1.5" fill="none"/>
 <line x1="340" y1="192" x2="329" y2="188" stroke="#1B2838" stroke-width="1.5"/>
 <line x1="340" y1="192" x2="329" y2="196" stroke="#1B2838" stroke-width="1.5"/>
-<g><rect x="340" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="340" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="405" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">round 3</text>
 <text x="405" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">2,000 tokens</text>
-</g>
 <line x1="470" y1="192" x2="490" y2="192" stroke="#1B2838" stroke-width="1.5" fill="none"/>
 <line x1="490" y1="192" x2="479" y2="188" stroke="#1B2838" stroke-width="1.5"/>
 <line x1="490" y1="192" x2="479" y2="196" stroke="#1B2838" stroke-width="1.5"/>
-<g><rect x="490" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="490" y="152" width="130" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="555" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">round 4</text>
 <text x="555" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">2,000 tokens</text>
-</g>
 <line x1="620" y1="192" x2="640" y2="192" stroke="#1B2838" stroke-width="1.5" fill="none"/>
 <line x1="640" y1="192" x2="629" y2="188" stroke="#1B2838" stroke-width="1.5"/>
 <line x1="640" y1="192" x2="629" y2="196" stroke="#1B2838" stroke-width="1.5"/>
-<g><rect x="640" y="152" width="130" height="80" rx="12" fill="#F3D4D8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="640" y="152" width="130" height="80" rx="12" fill="#F3D4D8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="705" y="186" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">round 5</text>
 <text x="705" y="212" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">2,000 tokens</text>
-</g>
-<text x="800" y="192" font-size="16" font-weight="600" fill="#1B2838" text-anchor="start">... x 25</text>
-<text x="40" y="280" font-size="16" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">25 rounds x 2,000 tokens = 50,000 tokens burned.</text>
-<text x="40" y="340" font-size="14" font-weight="600" fill="#5C6B7A" text-anchor="start">AFTER: stop when the evidence answers the question</text>
-<g><rect x="40" y="360" width="300" height="96" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="800" y="192" font-size="16" font-weight="600" fill="#1B2838">... x 25</text>
+<text x="40" y="280" font-size="16" font-weight="450" fill="#1B2838" font-family="'IBM Plex Mono', ui-monospace, monospace">25 rounds x 2,000 tokens = 50,000 tokens burned.</text>
+<text x="40" y="340" font-size="14" font-weight="600" fill="#5C6B7A">AFTER: stop when the evidence answers the question</text>
+<rect x="40" y="360" width="300" height="96" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="190" y="394" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">evidence check</text>
 <text x="190" y="420" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">does this answer</text>
 <text x="190" y="440" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">the question?</text>
-</g>
-<g><rect x="400" y="360" width="260" height="96" rx="12" fill="#E7F4EF" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="400" y="360" width="260" height="96" rx="12" fill="#E7F4EF" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="530" y="394" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">yes: stop, answer</text>
 <text x="530" y="420" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">the rule is a design</text>
 <text x="530" y="440" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">decision, not emergent</text>
-</g>
-<g><rect x="720" y="360" width="260" height="96" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="720" y="360" width="260" height="96" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
 <text x="850" y="394" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">no: one more round</text>
 <text x="850" y="420" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">bounded by a max</text>
 <text x="850" y="440" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">the budget is the backstop</text>
-</g>
 <line x1="340" y1="408" x2="400" y2="408" stroke="#1F7A72" stroke-width="1.5" fill="none"/>
 <line x1="400" y1="408" x2="389" y2="404" stroke="#1F7A72" stroke-width="1.5"/>
 <line x1="400" y1="408" x2="389" y2="412" stroke="#1F7A72" stroke-width="1.5"/>
 <text x="370" y="400" font-size="13" fill="#1F7A72" text-anchor="middle">pass</text>
-<line x1="340" y1="432" x2="720" y2="408" stroke="#C46B2C" stroke-width="1.5" fill="none"/>
-<line x1="720" y1="408" x2="708" y2="405" stroke="#C46B2C" stroke-width="1.5"/>
-<line x1="720" y1="408" x2="709" y2="413" stroke="#C46B2C" stroke-width="1.5"/>
-<text x="454" y="417" font-size="13" fill="#C46B2C" text-anchor="middle">fail</text>
-<text x="40" y="520" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">Say what &quot;answers&quot; means before the loop runs. The stopping rule is written, not hoped for.</text>
+<g stroke="#C46B2C" stroke-width="1.5" fill="none">
+<line x1="340" y1="432" x2="340" y2="492"/>
+<line x1="340" y1="492" x2="850" y2="492"/>
+<line x1="850" y1="492" x2="850" y2="456"/>
+<line x1="850" y1="456" x2="840" y2="466"/>
+<line x1="850" y1="456" x2="860" y2="466"/>
+</g>
+<text x="595" y="484" font-size="13" fill="#C46B2C" text-anchor="middle">fail</text>
+<text x="40" y="520" font-size="14" font-weight="450" fill="#5C6B7A">Say what "answers" means before the loop runs. The stopping rule is written, not hoped for.</text>
+<text x="40" y="576" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: original</text>
 </svg>

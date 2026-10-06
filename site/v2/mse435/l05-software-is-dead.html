@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -225,9 +222,16 @@ models. Follow that to its conclusion and an
 uncomfortable question appears for the software
 industry. If every company can generate its own tools,
 what happens to the companies that sell software? This
-chapter is the SaaS reckoning, told by Guillermo Rauch,
-founder and CEO of Vercel, a $9.3 billion company that
-sits exactly where the reckoning lands.</p>
+chapter is the SaaS (software as a service) reckoning,
+told by Guillermo Rauch, founder and CEO of Vercel,
+a $9.3 billion company that sits exactly where the
+reckoning lands. Three mechanisms drive the
+reckoning: the creator pool explodes from millions
+to anyone, the cost of a tailored interface collapses
+from engineers to prompts, and the meter moves from
+seats to tokens. The decision rule: follow the
+deploy, not the code. The scarce step is the one
+that puts running software in front of a user.</p>
 <p>His background matters to the argument. Rauch grew up
 in a suburb of Buenos Aires, taught himself to code,
 learned English from software manuals, and bet his
@@ -236,6 +240,97 @@ tools he could access as a teenager. Vercel&rsquo;s founding
 obsession was <strong>developer experience</strong>: deploying a
 website on the clouds of the day took a seasoned
 engineer weeks, and Rauch decided that was absurd.</p>
+<h2 id="vercel-in-three-generations">Vercel in three generations</h2>
+<p>Rauch&rsquo;s company reorganized itself around the agent
+era in 2026, and its own history explains why. Three
+generations. First, 2015 to 2020: unify fragmented
+web operations, CI/CD (continuous integration and
+delivery), CDN (content delivery network),
+serverless functions,
+through Next.js deployment. Second, 2023 to 2025:
+unify model integration through the AI SDK, which
+reached 3 million weekly downloads (Vercel, Series F
+announcement, September 2025). The claim that it
+ranks second only to OpenAI&rsquo;s own package is
+[uncertain]: no dated ranking was verified. Third,
+starting in 2025:
+unify the infrastructure that agent applications run
+on: model routing, isolated compute, task
+orchestration, observability, one platform. The
+session sits at the start of generation three.</p>
+<table>
+<thead>
+<tr>
+<th>Generation</th>
+<th>Years</th>
+<th>What Vercel unified</th>
+<th>Proof</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2015 to 2020</td>
+<td>web operations: CI/CD, CDN, serverless through Next.js</td>
+<td>the deployment obsession</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2023 to 2025</td>
+<td>model integration through the AI SDK</td>
+<td>3 million weekly downloads (Series F, September 2025)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>from 2025</td>
+<td>agentic infrastructure: routing, sandboxes, orchestration, observability</td>
+<td>the agent era</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subchapter-the-agent-share-of-deployments-worked">Subchapter: the agent share of deployments, worked</h3>
+<p>The number that forced the reorganization: at the
+start of 2026, fewer than 3 percent of deployments
+on Vercel&rsquo;s platform were triggered by coding
+agents (programs that write software toward a goal,
+using tools, without a human at every step). By June 2026, agents accounted for more than
+half of all commits (company disclosures, June
+2026). Token requests through the AI Gateway jumped
+from 2 trillion to 20 trillion a month in the same
+span. The tool that eats your lunch is also the tool
+that makes you bigger, as long as you are the one
+selling the shovels. Rauch&rsquo;s triangle is the product
+map of that realization.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Start of 2026</th>
+<th>June 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployments triggered by coding agents</td>
+<td>under 3 percent</td>
+<td>more than half of all commits</td>
+</tr>
+<tr>
+<td>AI Gateway token requests</td>
+<td>2 trillion a month</td>
+<td>20 trillion a month, a 10x jump</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subchapter-the-raise-that-priced-the-bet">Subchapter: the raise that priced the bet</h3>
+<p>In August 2025 Bloomberg reported Vercel raising
+hundreds of millions led by Accel at about a $9
+billion valuation, nearly triple its $250 million
+raise the previous May. The market priced the
+company on the agent thesis before the session was
+filmed. The host&rsquo;s $9.3 billion intro figure is in
+that range. The valuation is a bet that deployment
+is the scarce step in an agent-written world.</p>
 <h2 id="the-tam-explodes">The TAM explodes</h2>
 <p><strong>TAM</strong> is total addressable market: everyone who could
 ever buy your product. Rauch&rsquo;s original TAM math was
@@ -259,7 +354,8 @@ order of magnitude.</p>
 is the biggest wave: anyone who can describe what they
 want can now create software. The numbers moved fast.
 Starting around October 2025, with the arrival of
-strong coding models (the guest names Opus 4.5),
+strong coding models (the guest names Opus 4.5,
+launched November 24, 2025),
 deployments on Vercel surged. His metaphor: coding
 agents are the peanut butter being spread across the
 whole world, and Vercel is the jelly: the deployment
@@ -274,6 +370,7 @@ comes from agents writing, repairing, and securing
 software around the clock. The marginal creator is no
 longer a person with a salary. It is an agent with a
 token budget.</p>
+<figure><img alt="Chapter plate: the TAM explosion" src="assets/plate-l05-chap-tam.svg"><figcaption>Chapter plate L05-C1. Left: cloud demand capped by programmer headcount. Center: agents write around the clock; the marginal creator is an agent with a token budget. Right: anyone who can describe it creates; 2T to 20T tokens a month. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="writing-code-is-not-special-deploying-is">Writing code is not special. Deploying is.</h2>
 <p>Rauch&rsquo;s sharpest line is a redefinition of where value
 lives. &ldquo;Writing code does not make you special.
@@ -301,19 +398,168 @@ Services but <strong>Amazon Agent Services</strong>, because the
 entity people now ship is the agent, not the page.
 The infrastructure primitives are being rebuilt for
 that entity, which is the next chapter&rsquo;s subject.
-Value moved from the artifact (code) to the outcome
-(running software in front of customers).</p>
+The decision rule: when the shippable entity
+changes, the primitives get rebuilt. EC2 was built
+for human-written code, with cloud revenue capped by
+programmer headcount. The agent era needs the
+agent&rsquo;s own computer and the agent&rsquo;s own delivery
+network, metered in tokens. Value moved from the
+artifact (code) to the outcome (running software in
+front of customers).</p>
+<figure><img alt="Chapter plate: deploying is the scarce step" src="assets/plate-l05-chap-deploy.svg"><figcaption>Chapter plate L05-C2. Left: the dead-software pile, code that never runs. Center: follow the deploy, not the code. Right: agents deploy compulsively; value moved from artifact to outcome. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="coding-agents-from-zero">Coding agents, from zero</h2>
+<p>The ladder has four rungs, and each rung changes who
+does what. The definition from the chapter&rsquo;s opening
+still holds: a coding agent is a program that writes
+software toward a goal, using tools, without a human
+at every step.</p>
+<h3 id="subchapter-rung-one-autocomplete">Subchapter: rung one, autocomplete</h3>
+<p>The model completes the line you are typing. GitHub
+Copilot made this standard in 2021. You stay in
+charge. The model guesses the next tokens. Latency
+budget: a few hundred milliseconds, or it breaks
+flow. This is assistance, not agency: the human
+plans, the model types.</p>
+<h3 id="subchapter-rung-two-chat">Subchapter: rung two, chat</h3>
+<p>The model answers questions and writes code blocks
+in a chat panel. You copy the code into your
+project. The human still integrates. The unit of
+work is one answer. Toy it: one answer costs about
+$0.01 in tokens and 30 seconds of the human&rsquo;s
+copy-and-integrate time. A task that needs 40
+answers costs $0.40 in tokens and 20 minutes of the
+human&rsquo;s time: 40 times 30 seconds is 1,200 seconds.
+The human is still the integrator, and the
+integrator is the bottleneck. This is where most
+developers met AI coding, and it is already obsolete
+as the frontier.</p>
+<h3 id="subchapter-rung-three-the-agent">Subchapter: rung three, the agent</h3>
+<p>The model gets tools: read files, run tests, edit
+code, open a terminal. You give it a goal, &ldquo;fix the
+failing tests in the auth module,&rdquo; and it plans the
+steps, executes them, and adapts when a step fails.
+<strong>Claude Code</strong> and <strong>Codex</strong> live here. The unit of
+work is a finished task. Toy it: one finished task
+burns about 500,000 tokens across its tool calls,
+roughly four input tokens for every output token.
+Assume $2 per million input tokens and $10 per
+million output tokens. Then 400,000 input tokens
+cost $0.80 and 100,000 output tokens cost $1.00:
+$1.80 for the task, against 10 minutes of human
+review. The agent does the doing. The human does the
+judging. This is the rung the whole chapter is
+about: the agent is the entity that ships, which is
+why the cloud must be rebuilt around it.</p>
+<h3 id="subchapter-rung-four-the-fleet">Subchapter: rung four, the fleet</h3>
+<p>Many agents work in parallel, coordinated by a
+router. Cursor&rsquo;s cloud agents, Vercel&rsquo;s internal
+fleet of 100+ agents, Cognition&rsquo;s Devin swarms.
+The unit of work is a project. The human sets
+direction. The economics flip here: the marginal
+programmer is an agent with a token budget, and the
+constraint is orchestration, not headcount.</p>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>Name</th>
+<th>Unit of work</th>
+<th>Who integrates</th>
+<th>Economics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Autocomplete</td>
+<td>the line</td>
+<td>the human types</td>
+<td>a few hundred milliseconds, or it breaks flow</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Chat</td>
+<td>one answer</td>
+<td>the human integrates</td>
+<td>$0.01 per answer; 40 answers cost $0.40 and 20 minutes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The agent</td>
+<td>one finished task</td>
+<td>the agent does; the human judges</td>
+<td>about 500,000 tokens, $1.80, against 10 minutes of review</td>
+</tr>
+<tr>
+<td>4</td>
+<td>The fleet</td>
+<td>one project</td>
+<td>the router; the human directs</td>
+<td>the constraint is orchestration, not headcount</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Chapter plate: the coding-agent ladder" src="assets/plate-l05-chap-ladder.svg"><figcaption>Chapter plate L05-C3. Left: chat, where the human is the integrator, $0.40 and 20 minutes for 40 answers. Center: give the model tools. Right: the agent does the doing at $1.80 per task; the fleet takes projects. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="the-three-sided-triangle">The three-sided triangle</h2>
 <p><strong>Agentic infrastructure</strong>, Rauch&rsquo;s term for the
 rebuild, has three sides.</p>
-<figure><img alt="The agentic infrastructure triangle" src="assets/plate-l05-triangle.webp"><figcaption>Plate L05-F2. Infrastructure for agents, to build agents, automated by agents. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
+<figure><img alt="The agentic infrastructure triangle" src="assets/plate-l05-triangle.svg"><figcaption>Plate L05-F2. Infrastructure for agents, to build agents, automated by agents. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
 <h3 id="subchapter-side-1-for-coding-agents">Subchapter: side 1, for coding agents</h3>
 <p>The peanut butter needs the jelly. When you use Claude
-Code, Codex, or v0, the agent writes software that must
+Code, Codex, or v0 (Vercel&rsquo;s prompt-to-app product),
+the agent writes software that must
 deploy somewhere. That somewhere, with domains, CDN,
 and scaling handled, is side one. The economics:
 every agent-written app is a deployment customer. The
 more agents write, the more side one earns.</p>
+<h3 id="subchapter-v0s-business-the-loop-priced">Subchapter: v0&rsquo;s business, the loop priced</h3>
+<p><strong>v0</strong>, named above, closes the loop: describe an
+interface, get working code, deploy it on the same
+platform. The pricing is usage-based (metered by use,
+not by seat): the free plan
+includes $5 in monthly generation credits, paid team
+access starts at $30 per user per month, business at
+$100, enterprise custom. Credits are a prepaid dollar
+balance, and models charge by input and output
+tokens including chat history and source files.</p>
+<p>The loop is the product. Generation without
+deployment is a demo. v0 closes it: prompt, generate,
+deploy, observe, iterate, all on one platform. The
+parking-lot CEO and the Salesforce rebuild both ran
+this loop. The moat is not the generator. Every lab
+has one. The moat is the shortest path from prompt
+to a URL a customer can open.</p>
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Price</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free</td>
+<td>$0</td>
+<td>$5 in monthly generation credits</td>
+</tr>
+<tr>
+<td>Team</td>
+<td>$30 per user per month</td>
+<td>paid generation access</td>
+</tr>
+<tr>
+<td>Business</td>
+<td>$100 per user per month</td>
+<td>business tier</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>custom</td>
+<td>enterprise tier</td>
+</tr>
+</tbody>
+</table>
 <h3 id="subchapter-side-2-to-build-your-own-agents">Subchapter: side 2, to build your own agents</h3>
 <p>The guest&rsquo;s example: a founder pitching an AI-native
 school. The product is not a set of web pages. It is
@@ -333,6 +579,93 @@ total: an agent that configures, monitors, and
 optimizes everything, then reports back (&ldquo;I made your
 software twice as fast, here is the PR, conversion is
 up&rdquo;).</p>
+<h3 id="subchapter-the-eve-fleet-the-vision-running">Subchapter: the Eve fleet, the vision running</h3>
+<p>In June 2026 Vercel open-sourced <strong>Eve</strong>, its agent
+framework, and published the fleet it runs
+internally: more than 100 agents. Six are named.
+<strong>d0</strong>, a data-analysis agent any employee can query
+in Slack, handles more than 30,000 questions a month
+and enforces data permissions automatically. The
+<strong>Lead Agent</strong> is an autonomous sales-development
+representative that works inbound leads the moment
+they arrive: it costs about $5,000 a year to run and
+returns about 32 times that, maintained part-time by
+one engineer. <strong>Vertex</strong>, the support agent, resolves
+92 percent of incoming tickets without escalation.
+<strong>Athena</strong>, a sales cockpit built by the RevOps team
+without engineering involvement, answers pipeline
+questions from Snowflake and Salesforce in plain
+language, assembled in six weeks. At the top sits
+<strong>V</strong>, a router that receives every inbound Slack
+message and directs it to the right specialist. Side
+three is not a vision deck. It is a production
+fleet with measured returns. The 92 percent is the
+June 2026 press figure for Vertex, the named fleet
+agent. The 93 percent earlier is the session&rsquo;s own
+internal metric for the same support role. They are
+two separate measurements from two sources.</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>What it does</th>
+<th>Measured return</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d0</td>
+<td>data-analysis agent any employee can query in Slack</td>
+<td>more than 30,000 questions a month; enforces data permissions</td>
+</tr>
+<tr>
+<td>Lead Agent</td>
+<td>autonomous sales-development representative</td>
+<td>about $5,000 a year to run; returns about 32 times that; maintained part-time by one engineer</td>
+</tr>
+<tr>
+<td>Vertex</td>
+<td>support agent</td>
+<td>resolves 92 percent of tickets without escalation</td>
+</tr>
+<tr>
+<td>Athena</td>
+<td>sales cockpit built on Snowflake and Salesforce</td>
+<td>assembled in six weeks without engineering involvement</td>
+</tr>
+<tr>
+<td>V</td>
+<td>router for every inbound Slack message</td>
+<td>directs each message to the right specialist</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subchapter-agent-to-agent-commerce">Subchapter: agent-to-agent commerce</h3>
+<p>The fleet changes who the customer is. Vercel&rsquo;s
+support now serves customers who have never heard of
+Vercel: their agent brought them there, and the
+support ticket is the customer&rsquo;s agent&rsquo;s transcript,
+read like a flight recorder. Push this one step
+further and agents buy from agents: one agent
+discovers the API, another negotiates the terms,
+neither is human. The software company of the agent
+era sells to programs first and people second. That
+is why Rauch&rsquo;s long is companies with instant
+signup, consumption pricing, and agent-ready
+interfaces: the buyer is now a token budget with a
+goal.</p>
+<div class="mermaid">flowchart LR
+  a[Customer agent] --> d[Discovers the API]
+  d --> n[Negotiates terms]
+  n --> p[Provider agent]
+  p --> t[Transacts with token budget]
+</div><pre class="mermaid-fallback"><code>flowchart LR
+  a[Customer agent] --&gt; d[Discovers the API]
+  d --&gt; n[Negotiates terms]
+  n --&gt; p[Provider agent]
+  p --&gt; t[Transacts with token budget]
+</code></pre>
+<figure><img alt="Chapter plate: agentic infrastructure" src="assets/plate-l05-chap-triangle.svg"><figcaption>Chapter plate L05-C4. Left: EC2 built for human-written code. Center: the shippable entity changed from page to agent. Right: for agents, to build agents, automated by agents. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="saas-was-the-lowest-common-denominator">SaaS was the lowest common denominator</h2>
 <p>Now the reckoning proper. <strong>SaaS</strong>, software as a
 service, was built on a compromise. Smart product
@@ -350,6 +683,10 @@ a product. The compromise is not a choice. It is
 arithmetic. When generation gets cheap, the arithmetic
 flips: tailored interfaces cost prompts, not
 engineers.</p>
+<pre class="ascii">shared    $2M to build; 1,000 customers; $2,000 each
+tailored  1,000 interfaces; $2B
+rule      the cost of a tailored interface flips: prompts, not engineers
+</pre>
 <h3 id="subchapter-the-parking-lot">Subchapter: the parking lot</h3>
 <p>Rauch&rsquo;s claim: that compromise is ending, because the
 cost of a tailored interface collapsed. Two exhibits
@@ -360,7 +697,10 @@ money. How many brilliant Palo Alto companies were
 ever going to build great parking software? None. An
 entire category of mediocre software existed only
 because building the good version was not worth
-anyone&rsquo;s time. Now it is one or two prompts away.</p>
+anyone&rsquo;s time. Now it is one or two prompts away.
+The decision rule: if a CEO can rebuild your
+category in an afternoon with v0, your category was
+the compromise, not the product.</p>
 <h3 id="subchapter-the-salesforce-rebuild">Subchapter: the Salesforce rebuild</h3>
 <p><strong>The Salesforce rebuild.</strong> Inside Vercel, a team of
 two rebuilt all of Salesforce for internal use:
@@ -378,7 +718,72 @@ top of the system of record, tuned to each business.
 The split is not SaaS versus agents. SaaS keeps the system of record and grows an
 agent-shaped surface.</p>
 <figure><img alt="What goes plastic and what holds: the SaaS split" src="assets/plate-l05-split.svg"><figcaption>Plate L05-F3. The presentation layer goes plastic. The system of record holds. Shell 3. Source: original, drawn from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<figure><img alt="Chapter plate: the SaaS reckoning" src="assets/plate-l05-chap-saas.svg"><figcaption>Chapter plate L05-C5. Left: one interface for the most customers, $2M to build, $2,000 each. Center: the cost of a tailored interface collapses. Right: the parking lot and the Salesforce rebuild. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h2 id="pricing-variants-seat-usage-outcome">Pricing variants: seat, usage, outcome</h2>
+<p>If software goes plastic, the seat must die with the
+compromise that created it. Three pricing models,
+each with worked numbers.</p>
+<h3 id="subchapter-the-seat-worked">Subchapter: the seat, worked</h3>
+<p>The classic SaaS meter: $20 per user per month,
+1,000 users, $20,000 a month. The customer pays for
+access whether anyone logs in or not. The seat was
+insurance: the vendor&rsquo;s costs were mostly fixed, so
+it charged for the right to use, not the use. It
+worked when humans were the users, because humans
+are countable and their usage is bounded by the
+workday.</p>
+<h3 id="subchapter-usage-worked">Subchapter: usage, worked</h3>
+<p>The token-era meter: pay per unit of work. $2 per
+million input tokens. A support agent handling
+10,000 conversations a month at 5,000 tokens each
+burns 50 million tokens: $100 of input. Heavy users
+pay more, light users pay less, and the vendor&rsquo;s
+revenue scales with the value delivered. The seat
+was a flat tax. Usage is a utility bill. Every
+company on Rauch&rsquo;s long list prices this way:
+consumption-based, metered, no sales call required.</p>
+<h3 id="subchapter-outcome-worked">Subchapter: outcome, worked</h3>
+<p>The emerging meter: pay per result. The Lead Agent
+costs $5,000 a year and returns 32 times that in
+pipeline: the customer is buying qualified leads,
+not tokens. Outcome pricing aligns the vendor with
+the buyer completely, but it needs a measurable
+outcome and a vendor confident enough to guarantee
+it. Expect it where the task is narrow: leads,
+resolved tickets, caught bugs. The seat priced
+access. Usage prices work. Outcome prices results.</p>
+<table>
+<thead>
+<tr>
+<th>Meter</th>
+<th>Worked number</th>
+<th>What it prices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seat</td>
+<td>$20 per user per month; 1,000 users, $20,000 a month</td>
+<td>access, whether users work or sleep</td>
+</tr>
+<tr>
+<td>Usage</td>
+<td>$2 per million input tokens; 10,000 chats at 5,000 tokens: $100 of input</td>
+<td>work; heavy users pay more</td>
+</tr>
+<tr>
+<td>Outcome</td>
+<td>the Lead Agent: $5,000 a year, returns 32x in pipeline</td>
+<td>results; the vendor guarantees the outcome</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Chapter plate: the pricing ladder" src="assets/plate-l05-chap-pricing.svg"><figcaption>Chapter plate L05-C6. Left: the seat, $20 per user per month whether users work or sleep. Center: the meter moves to work. Right: usage at $100 for 50M tokens; outcome at $5,000 a year returning 32x. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="throwaway-software-and-reflexivity">Throwaway software and reflexivity</h2>
+<p><strong>Reflexivity</strong> is the engine of this section:
+once you know you are one prompt away from
+high-fidelity software, you never go back. The term
+is Shopify CEO Tobi Lutke&rsquo;s, quoted by Rauch.</p>
 <p>Push the logic one step further and software becomes
 disposable. Rauch reports customers buying Vercel and
 v0 so sales engineers can walk into a prospect meeting
@@ -395,16 +800,23 @@ Toy the math: 100 generated apps, 90 die in a week,
 cheap. The question is not whether most generated
 software dies. It is whether the survivors are worth
 more than the total cost of generation. At prompt
-prices, they are.</p>
+prices, they are. The decision rule: measure
+Wednesday-morning retention, not Saturday-morning
+generation. Generation is the cheap input. Retention
+is the product.</p>
+<pre class="ascii">100 generated apps -&gt; 90 die in a week -&gt; 10 become workflows
+the 90 were cheap; the 10 compound
+rule  measure Wednesday-morning retention, not Saturday-morning generation
+</pre>
 <h3 id="subchapter-reflexivity">Subchapter: reflexivity</h3>
 <p>His summary line: &ldquo;software is basically now free.&rdquo;
-But free drives engagement, through what Shopify&rsquo;s
-Tobi Lutke calls the <strong>reflexivity of AI</strong>. Once you
-know you are one prompt away from communicating with
-high-fidelity software, you never go back. Rauch wrote
+But free drives engagement. That is reflexivity at
+work: the demand-side engine of the whole chapter.
+Rauch wrote
 years ago that it is hard to forego efficiency. the
 coding-agent era is that essay coming true. Engineers
 tell him they could never code the old way again.</p>
+<figure><img alt="Chapter plate: retention, not generation" src="assets/plate-l05-chap-retention.svg"><figcaption>Chapter plate L05-C7. Left: Saturday-morning generation, 90 of 100 apps die in a week. Center: measure Wednesday-morning retention. Right: reflexivity multiplies engagement. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="what-stays-hard">What stays hard</h2>
 <p>A common misunderstanding is that all software work
 collapses to prompting. Rauch, who runs a company
@@ -430,26 +842,73 @@ log of another machine&rsquo;s reasoning.</p>
 <ul>
 <li><strong>Claude Code (Anthropic)</strong> is the enterprise coding
   standard: roughly 54 percent of the enterprise
-  coding market in early 2026, a multi-billion-dollar
-  revenue line, and the default model inside Cursor.
+  coding market (Menlo Ventures, late 2025), about
+  $2.5 billion in annualized revenue roughly a year
+  after launch (Anthropic disclosure, February 2026,
+  reported by MarketWatch), and the default model
+  inside Cursor.
   This is the agent Rauch&rsquo;s triangle is built for.</li>
 <li><strong>Codex (OpenAI)</strong> is the challenger: OpenAI&rsquo;s
   agentic coding product, priced on the GPT-6 ladder.
   In enterprise coding share it sits near 21 percent,
   well behind Claude Code.</li>
 <li><strong>Cursor</strong> is the distribution proof: the editor
-  that made agents the default way to write code, with
-  Claude as the default model and its own Composer
-  model showing the continual-learning pattern from
-  L04.</li>
+  that made agents the default way to write code,
+  reaching $1 billion in annual recurring revenue in
+  24 months, the fastest in B2B SaaS history, on more
+  than 400 million AI requests a day. Claude is the
+  default model, and its own Composer model shows
+  the continual-learning pattern from L04.</li>
 <li><strong>v0 (Vercel)</strong> is the generation-to-deployment
   loop: the product in the parking-lot and Salesforce
   exhibits, generating interfaces from prompts and
-  deploying them on the same platform.</li>
-<li><strong>Windsurf / Cognition</strong> is the specialist bet: the
-  small-model, sub-two-second feedback loop from L04&rsquo;s
-  Pareto frontier, now an enterprise product category.</li>
+  deploying them on the same platform. Pricing is
+  usage-based: $5 in monthly credits free, team
+  access from $30 per user per month.</li>
+<li><strong>Windsurf / Cognition</strong> is the specialist bet:
+  Cognition acquired Windsurf in July 2025 after
+  Google&rsquo;s $2.4B reverse-acquihire, shipped Windsurf
+  2.0 in April 2026, and reported $492M in annualized
+  revenue at a $26B valuation in May 2026. The small-
+  model, fast-feedback loop from L04&rsquo;s Pareto
+  frontier is now an enterprise product category.</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Position, October 2026</th>
+<th>Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Code (Anthropic)</td>
+<td>the enterprise coding standard</td>
+<td>about 54 percent share; about $2.5B annualized revenue</td>
+</tr>
+<tr>
+<td>Codex (OpenAI)</td>
+<td>the challenger</td>
+<td>about 21 percent of enterprise coding share</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>the distribution proof</td>
+<td>$1B ARR in 24 months; 400M AI requests a day</td>
+</tr>
+<tr>
+<td>v0 (Vercel)</td>
+<td>the generation-to-deployment loop</td>
+<td>$5 free credits; team from $30 per user per month</td>
+</tr>
+<tr>
+<td>Windsurf / Cognition</td>
+<td>the specialist bet</td>
+<td>$492M annualized revenue; $26B valuation (May 2026)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="mapping-back-the-saas-question-answered">Mapping back: the SaaS question, answered</h2>
 <table>
 <thead>
@@ -465,7 +924,7 @@ log of another machine&rsquo;s reasoning.</p>
 </tr>
 <tr>
 <td>What happens to SaaS companies?</td>
-<td>The system of record survives. the presentation layer goes plastic. Winners expose agent interfaces: MCP, CLIs, APIs, consumption pricing.</td>
+<td>The system of record survives. the presentation layer goes plastic. Winners expose agent interfaces: MCP (Model Context Protocol), CLIs, APIs, consumption pricing.</td>
 </tr>
 <tr>
 <td>Is anything defensible?</td>
@@ -496,7 +955,7 @@ next chapter prices what replaces it.</p>
 <div class="qa"><div class="q">What does &quot;writing code does not make you special&quot; mean?</div><div class="a"><p>It means the scarce step was never authoring text. it was putting running software in front of a user. The world is full of repositories nobody can run. The learning starts when a user confronts the working version. Coding agents forced this redefinition because they deploy compulsively, without the human bias toward keeping code safe on a laptop. Value moved from the artifact (code) to the outcome (running software in front of customers).
 At the deployment and distribution layer, not the generation layer. Generation is commoditizing. every model writes code. The jelly in Rauch&rsquo;s metaphor, the layer that takes agent-written code and puts it in front of users with domains, scaling, and security, is where the durable position sits. That is the Vercel bet restated.</p><div class="followup"><strong>Follow-up:</strong> What does this imply for where a founder should build?</div></div></div>
 <div class="qa"><div class="q">Walk me through the TAM math, before and after agents.</div><div class="a"><p>Before: roughly 20 million developers in the world could create front-end projects, and Vercel sold them deployment superpowers. Cloud revenue was bounded by programmer headcount: one human, one salary, one budget of code. After: anyone who can describe what they want can create software, and agents write around the clock. The marginal creator is an agent with a token budget, not a person with a salary. The cap on how much software gets made, and how much compute it consumes, is gone.
-In the deployment surge starting October 2025 with strong coding models (the guest names Opus 4.5): daily deployments doubled since January, and the company 3x&rsquo;d in months on machinery it already operated. The peanut butter spread, and the jelly was already on the shelf.</p><div class="followup"><strong>Follow-up:</strong> How does the TAM expansion show up in Vercel&#x27;s numbers?</div></div></div>
+In the deployment surge starting October 2025 with strong coding models (the guest names Opus 4.5): agents went from under 3 percent of deployments to more than half of all commits, and AI Gateway token requests jumped from 2 trillion to 20 trillion a month. The peanut butter spread, and the jelly was already on the shelf.</p><div class="followup"><strong>Follow-up:</strong> How does the TAM expansion show up in Vercel&#x27;s numbers?</div></div></div>
 <div class="qa"><div class="q">Is SaaS dead?</div><div class="a"><p>Rauch&rsquo;s answer is precise: undifferentiated SaaS is dead, the system of record is not. SaaS was a compromise: one interface designed to make the most customers happy, because building software was expensive. With generation cheap, the presentation layer becomes plastic and tailored per business. What survives is the database, the access controls, the workflows, and the trust underneath. His two exhibits: a CEO replacing parking software with v0, and two people rebuilding Salesforce&rsquo;s surface inside Vercel while keeping Salesforce&rsquo;s data layer.
 The ones that expose themselves to agents: MCP interfaces, CLIs, APIs, consumption-based pricing, instant signup. Agents want the raw signal, not a three-month enterprise sales process. Companies built on &ldquo;code is scarce,&rdquo; like drag-and-drop builders, or on static content aggregation, face the hardest path. Rauch is long anyone moving at the speed of tokens.</p><div class="followup"><strong>Follow-up:</strong> Which SaaS companies survive the transition?</div></div></div>
 <div class="qa"><div class="q">What is the three-sided agentic infrastructure triangle?</div><div class="a"><p>Side one is infrastructure for coding agents: somewhere for agent-written code to deploy. Side two is infrastructure to build your own agents: the tools to ship agents as products, like Vercel&rsquo;s support agent that answers 93 percent of inquiries. Side three is infrastructure automated by agents: the self-driving cloud that configures, monitors, and optimizes itself, then reports back with a PR. The triangle is Rauch&rsquo;s map of where the cloud is being rebuilt.
@@ -505,7 +964,191 @@ Because the shippable entity changed. EC2 was built for human-written code, and 
 The host&rsquo;s challenge: Saturday-morning toy versus Wednesday-morning need. If generated software is disposable, usage may not compound. Rauch&rsquo;s honest answer is that both exist: one-call throwaway demos alongside deeply embedded workflows. His bet is that reflexivity wins on average, but he does not claim every generated app retains. Retention, not generation, is the metric to watch.</p><div class="followup"><strong>Follow-up:</strong> What is the retention risk?</div></div></div>
 <div class="qa"><div class="q">Who wins the coding-agent market as of October 2026, and why?</div><div class="a"><p>Claude Code leads enterprise coding at about 54 percent share, a multi-billion-dollar revenue line and the default model in Cursor. OpenAI&rsquo;s Codex is the challenger near 21 percent. Cursor is the distribution proof that agents are the default way to write code. Vercel&rsquo;s v0 closes the generation-to-deployment loop. The winner&rsquo;s trait is not the best model alone. It is the tightest loop: generate, deploy, observe, iterate, which is exactly Rauch&rsquo;s triangle as a product.
 The September 2026 price war: OpenAI cut GPT-6 Sol to $2/$10 and Anthropic cut Opus 5.5 to $4/$20 within ninety minutes of each other. When the generation layer commoditizes, the agent&rsquo;s model becomes swappable and the moat moves to distribution and data. The leader&rsquo;s risk is that the loop matters more than the model, and someone else owns the loop.</p><div class="followup"><strong>Follow-up:</strong> What is the bear case for the leader?</div></div></div>
-<div class="qa"><div class="q">What would you ask a SaaS CEO to test the reckoning thesis?</div><div class="a"><p>Three questions. First, what share of your interface is now generated per customer versus shared: the plastic share. Second, your agent surface: do you expose MCP, a CLI, and consumption pricing, or is an agent still stuck at your sales form. Third, your system of record: what data or workflow would a two-person team with v0 fail to reproduce. The first measures how far the reckoning has reached you. The third measures what is actually defensible.</p></div></div>
+<div class="qa"><div class="q">What would you ask a SaaS CEO to test the reckoning thesis?</div><div class="a"><p>Three questions. First, what share of your interface is now generated per customer versus shared: the plastic share. Second, your agent surface: do you expose MCP, a CLI, and consumption pricing, or is an agent still stuck at your sales form. Third, your system of record: what data or workflow would a two-person team with v0 fail to reproduce. The first measures how far the reckoning has reached you. The third measures what is actually defensible.
+A named asset a two-person team cannot regenerate. The passing answer sounds like this: twenty years of audited transaction records with regulatory provenance, plus access-control lists wired into three banks&rsquo; compliance systems. What fails: &ldquo;our data.&rdquo; The test is specific: name the dataset, the workflow, or the trust relationship that prompts cannot rebuild. If the CEO can only point at the interface, the interface is already plastic.</p><div class="followup"><strong>Follow-up:</strong> What answer to the third question counts as defensible?</div></div></div>
+<h2 id="coverage-map-every-session-claim-and-where-it-lives">Coverage map: every session claim and where it lives</h2>
+<p>No transcript or captions exist for the session
+video, so segment-level mapping of claims to
+timestamps is not possible. The table below maps
+every major claim from the session to the section
+that covers it, with file line numbers. October
+2026 updates are marked.</p>
+<table>
+<thead>
+<tr>
+<th>Session claim</th>
+<th>Covered in</th>
+<th>File line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rauch&rsquo;s background: Buenos Aires, self-taught, open source bet</td>
+<td>The question from L04</td>
+<td>L23</td>
+</tr>
+<tr>
+<td>Developer experience as the founding obsession</td>
+<td>The question from L04</td>
+<td>L23</td>
+</tr>
+<tr>
+<td>TAM: 20 million developers who can create front-end projects</td>
+<td>The TAM explodes</td>
+<td>L96</td>
+</tr>
+<tr>
+<td>The access ladder: mainframes to bootcamps</td>
+<td>the access ladder, with numbers</td>
+<td>L108</td>
+</tr>
+<tr>
+<td>Coding agents break the cap: anyone who can describe it can create</td>
+<td>the agents break the cap</td>
+<td>L119</td>
+</tr>
+<tr>
+<td>Elastic compute&rsquo;s broken cap: demand no longer bounded by headcount</td>
+<td>elastic compute&rsquo;s broken cap</td>
+<td>L132</td>
+</tr>
+<tr>
+<td>&ldquo;Writing code does not make you special. Deploying does&rdquo;</td>
+<td>Writing code is not special. Deploying is.</td>
+<td>L144</td>
+</tr>
+<tr>
+<td>The dead-software pile: GitHub full of code that never runs</td>
+<td>the dead-software pile</td>
+<td>L151</td>
+</tr>
+<tr>
+<td>Agents deploy compulsively</td>
+<td>agents deploy compulsively</td>
+<td>L160</td>
+</tr>
+<tr>
+<td>&ldquo;Amazon Agent Services&rdquo;: the shippable entity is the agent</td>
+<td>where value moved</td>
+<td>L170</td>
+</tr>
+<tr>
+<td>The three-sided agentic infrastructure triangle</td>
+<td>The three-sided triangle</td>
+<td>L248</td>
+</tr>
+<tr>
+<td>Side 1: infrastructure for coding agents</td>
+<td>side 1, for coding agents</td>
+<td>L255</td>
+</tr>
+<tr>
+<td>Side 2: infrastructure to build your own agents; the school example; the support agent at 93 percent of inquiries</td>
+<td>side 2, to build your own agents</td>
+<td>L285</td>
+</tr>
+<tr>
+<td>Side 3: infrastructure automated by agents; the ducks anecdote</td>
+<td>side 3, automated by agents</td>
+<td>L296</td>
+</tr>
+<tr>
+<td>SaaS was the lowest common denominator</td>
+<td>SaaS was the lowest common denominator</td>
+<td>L347</td>
+</tr>
+<tr>
+<td>The compromise mechanism: one interface for the most customers</td>
+<td>the compromise mechanism, worked</td>
+<td>L357</td>
+</tr>
+<tr>
+<td>The parking lot: CEO vibe-coded the parking software</td>
+<td>the parking lot</td>
+<td>L368</td>
+</tr>
+<tr>
+<td>The Salesforce rebuild by a team of two</td>
+<td>the Salesforce rebuild</td>
+<td>L384</td>
+</tr>
+<tr>
+<td>The system of record stays; the presentation layer goes plastic</td>
+<td>the system of record stays</td>
+<td>L393</td>
+</tr>
+<tr>
+<td>Throwaway software: custom demos per sales call</td>
+<td>Throwaway software and reflexivity</td>
+<td>L447</td>
+</tr>
+<tr>
+<td>Retention: the host&rsquo;s Wednesday-morning question</td>
+<td>the retention question, worked</td>
+<td>L462</td>
+</tr>
+<tr>
+<td>Reflexivity of AI (Tobi Lutke); &ldquo;Software is basically now free&rdquo;</td>
+<td>reflexivity</td>
+<td>L477</td>
+</tr>
+<tr>
+<td>The single-line quorum: three agents plus humans on one line</td>
+<td>the single-line quorum</td>
+<td>L495</td>
+</tr>
+<tr>
+<td>Agent-to-agent support: debugging via transcript</td>
+<td>agent-to-agent support</td>
+<td>L504</td>
+</tr>
+<tr>
+<td>Rauch&rsquo;s long and short: anyone moving at the speed of tokens; static content, code-is-scarce builders, closed firms</td>
+<td>Mapping back</td>
+<td>L549</td>
+</tr>
+<tr>
+<td>Vercel&rsquo;s three generations; Eve fleet (Oct 2026 updates)</td>
+<td>Vercel in three generations; the Eve fleet</td>
+<td>L50, L308</td>
+</tr>
+<tr>
+<td>Agent share of deployments: under 3% to over half (Oct 2026 update)</td>
+<td>the agent share of deployments, worked</td>
+<td>L70</td>
+</tr>
+<tr>
+<td>AI Gateway 2T to 20T tokens a month (Oct 2026 update)</td>
+<td>the agent share of deployments, worked</td>
+<td>L70</td>
+</tr>
+<tr>
+<td>v0 pricing: credits and tiers (Oct 2026 update)</td>
+<td>v0&rsquo;s business, the loop priced</td>
+<td>L265</td>
+</tr>
+<tr>
+<td>Agent-to-agent commerce (Oct 2026 update)</td>
+<td>agent-to-agent commerce</td>
+<td>L331</td>
+</tr>
+<tr>
+<td>Pricing variants: seat, usage, outcome (Oct 2026 update)</td>
+<td>Pricing variants</td>
+<td>L406</td>
+</tr>
+<tr>
+<td>Coding-agent ladder: autocomplete to fleet (textbook build)</td>
+<td>Coding agents, from zero</td>
+<td>L187</td>
+</tr>
+<tr>
+<td>Cursor $1B ARR; Cognition $492M ARR (Oct 2026 updates)</td>
+<td>What is used where</td>
+<td>L514</td>
+</tr>
+</tbody>
+</table>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
 <ol>
 <li><strong>The TAM explodes.</strong> From mainframe priesthood to
@@ -518,24 +1161,35 @@ The September 2026 price war: OpenAI cut GPT-6 Sol to $2/$10 and Anthropic cut O
 <li><strong>Deploying is the scarce step.</strong> Code that never
    runs teaches nothing. Agents deploy compulsively.
    Value moved from artifact to outcome.</li>
+<li><strong>The agent ladder.</strong> Autocomplete, chat, agent,
+   fleet. Each rung moves the unit of work up: from
+   a line, to an answer, to a task, to a project.</li>
 <li><strong>The triangle.</strong> Infrastructure for agents, to
    build agents, automated by agents. The cloud is
    being rebuilt around the agent as the unit.</li>
+<li><strong>The Eve fleet.</strong> Vercel runs 100+ agents in
+   production: d0 answers 30,000 questions a month,
+   the Lead Agent returns 32x its cost, Vertex
+   resolves 92 percent of tickets. Side three is
+   measured, not imagined.</li>
 <li><strong>SaaS was a compromise.</strong> One interface for the
    most customers, because building was expensive.
    The expense is gone.</li>
 <li><strong>Two exhibits.</strong> A CEO vibe-coded the parking
    software. Two people rebuilt Salesforce&rsquo;s surface.
    The system of record stayed in both cases.</li>
+<li><strong>Pricing.</strong> The seat priced access. Usage prices
+   work. Outcome prices results. Agents buy with
+   token budgets, not seats.</li>
 <li><strong>Throwaway software.</strong> Custom demos per sales
-   call, dead by Wednesday. &ldquo;Software is basically
-   now free.&rdquo;</li>
+    call, dead by Wednesday. &ldquo;Software is basically
+    now free.&rdquo;</li>
 <li><strong>Reflexivity.</strong> Once you know the efficiency, you
-   never forego it. Free software multiplies
-   engagement instead of killing it.</li>
+    never forego it. Free software multiplies
+    engagement instead of killing it.</li>
 <li><strong>What stays hard.</strong> Systems of record, trust,
-   distribution, taste, and the infrastructure
-   plumbing. Next: pricing the token economy.</li>
+    distribution, taste, and the infrastructure
+    plumbing. Next: pricing the token economy.</li>
 </ol>
 <h2 id="go-deeper">Go deeper</h2>
 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
@@ -547,7 +1201,9 @@ The September 2026 price war: OpenAI cut GPT-6 Sol to $2/$10 and Anthropic cut O
 <li>The session this lesson follows, in full.</li>
 <li><a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></li>
 <li><a href="https://www.aboutchromebooks.com/enterprise-llm-vendor-market-share-statistics/">Enterprise LLM vendor market share, 2026</a></li>
-<li>Mitchell Hashimoto on the &ldquo;block economy&rdquo;: search &ldquo;Mitchell Hashimoto block economy&rdquo; for the current writeup.</li>
+<li><a href="https://www.star-history.com/blog/building-blocks/">The Building Block Economy (Star History, on Mitchell Hashimoto&rsquo;s April 2026 essay)</a></li>
+<li>Ghostty&rsquo;s libghostty as the receipt: the block outgrew the product it was born from, five times faster.</li>
+<li><a href="https://www.techtimes.com/articles/318642/20260618/vercel-eve-launches-open-source-agent-framework-backed-its-own-production-fleet.htm">Vercel&rsquo;s agentic infrastructure: Eve, Agent Stack, and the fleet (June 2026)</a></li>
 </ul>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
@@ -561,14 +1217,21 @@ The September 2026 price war: OpenAI cut GPT-6 Sol to $2/$10 and Anthropic cut O
 - Rauch&rsquo;s essay &ldquo;it is hard to forego efficiency,&rdquo;
   referenced in the session.</p>
 <p><strong>Caveats from these sources.</strong> The $9.3B valuation
-is the host&rsquo;s intro figure. The 20M-developer TAM is
-Rauch&rsquo;s estimate. The Opus 4.5 deployment surge is
-dated &ldquo;since October last year&rdquo; in the session
-[uncertain: October 2025]. The 93 percent support
-figure is Vercel&rsquo;s internal metric. &ldquo;Two people
-rebuilt Salesforce&rdquo; is Rauch&rsquo;s characterization of an
-internal project. The October 2026 market shares are
-press and vendor-reported survey estimates.</p>
+is the host&rsquo;s intro figure. Bloomberg reported a
+raise at about $9B in August 2025. The 20M-developer
+TAM is Rauch&rsquo;s estimate. The Opus 4.5 deployment
+surge is dated &ldquo;since October last year&rdquo; in the
+session. Opus 4.5 itself launched November 24, 2025
+(auditor-verified). The 93 percent
+support figure is Vercel&rsquo;s internal metric from the
+session. June 2026 press on the Eve fleet reports
+92 percent for the Vertex agent. &ldquo;Two people rebuilt
+Salesforce&rdquo; is Rauch&rsquo;s characterization of an
+internal project. The agent-deployment share (under
+3 percent to over half) and the 2T-to-20T gateway
+figures are Vercel&rsquo;s June 2026 disclosures. The
+October 2026 market shares are press and vendor-
+reported survey estimates.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>MS&amp;E435 L04:</strong> the specialization layer that lets

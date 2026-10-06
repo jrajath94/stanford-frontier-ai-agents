@@ -62,6 +62,33 @@ what order, with what arguments.
 
 ![The capability-reliability gap](assets/l02-capability-gap.svg "Agents can do the task. They cannot do it the same way twice. Project: Stanford Frontier AI. Source: source.")
 
+### Pass@k: consistency as a number
+
+Consistency needs a statistic, not just a story. **Pass@k** is the
+chance that at least one of k independent runs succeeds. If one run
+succeeds with probability p, pass@k = 1 - (1 - p)^k. Work it on the
+lesson toy: p = 0.7, k = 10.
+
+```ascii
+single run:        p = 0.7
+pass@10:           1 - 0.3^10 = 1 - 0.0000059 = 0.99999
+```
+
+A 70-percent agent almost surely succeeds once in ten tries. That is
+why demos lie: pass@10 is a sampling statistic, and the demo is one
+draw from it. The interview trap is to quote pass@10 as capability.
+Capability is p, measured per run. Pass@k is budget: how many tries
+you can afford. Report both, and never report pass@k without the k.
+The sibling metric, pass-hat@k (all k runs succeed, the automation
+statistic), is worked in CME295 L08. This course stays on the
+consistency side.
+
+![Pass at k](assets/l08-passatk.svg "Single run p = 0.7. Pass at 10 = 0.99999. The demo is one draw from the pass-at-k distribution, not a measurement. Project: Stanford Frontier AI. Source: original.")
+
+The robustness twin is the paraphrase set: the same p measured across
+rewrites of the instruction. If p drops from 0.7 to 0.4 on rephrasing,
+the agent does not understand the task. It memorized the phrasing.
+
 ## The key question
 
 How do we score an agent so the number survives contact with the
@@ -112,12 +139,16 @@ write the patch, do not break the tests. GAIA tests tool orchestration
 across the open world: browse, compute, read files, synthesize. An
 agent can climb one and stall on the other.
 
-### WebArena and OSWorld: environments as benchmarks
+### WebArena: grade behavior on real websites
 
-SWE-bench and GAIA grade outcomes. **WebArena** and **OSWorld** grade
-behavior inside an environment. WebArena gives the agent real websites
+SWE-bench and GAIA grade outcomes. **WebArena** grades behavior inside
+an environment. WebArena gives the agent real websites
 to navigate: the task succeeds when the environment reaches the goal
-state (the item is in the cart, the form is submitted). OSWorld gives
+state (the item is in the cart, the form is submitted).
+
+### OSWorld: grade behavior on a full desktop
+
+**OSWorld** gives
 the agent a full desktop: screenshots in, mouse and keyboard out, the
 same computer-use loop the intro lesson's desktop agents run.
 
@@ -323,6 +354,11 @@ The story in nine steps. Each step answers the one before it.
 <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/a90GliNJwck" title="How to Actually Evaluate and Benchmark AI Agents" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 - 17. How to Actually Evaluate & Benchmark AI Agents (the embed above): https://www.youtube.com/watch?v=a90GliNJwck, the evaluation crisis, SWE-bench, WebArena, GAIA, and LLM-as-judge versus human calibration.
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/zE07cZG8vHU" title="AI Coding Agents Hit 38.8 percent on Real Private Code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- theaimart, AI Coding Agents Hit 38.8% on Real Private Code (the embed above): https://www.youtube.com/watch?v=zE07cZG8vHU, public benchmarks versus private production code, contamination, and why green tests lie.
 
 Further:
 - Jimenez et al. (2024), SWE-bench: https://arxiv.org/abs/2310.06770, construction and grading.

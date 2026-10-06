@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="60" font-size="30" font-weight="600" fill="#1B2838">The AI gateway: a CDN for tokens</text>
+<text x="48" y="92" font-size="17" fill="#5C6B7A">Observe, fail over, cache by meaning, balance. Shell 3. Source: original, drawn from the session.</text>
+<g font-size="15" font-weight="500">
+<text x="48" y="148" font-size="17" font-weight="600" fill="#1B2838">naive: every request wakes the flagship</text>
+<rect x="48" y="164" width="180" height="64" rx="32" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="138" y="204" text-anchor="middle" fill="#1B2838">"thanks"</text>
+<line x1="228" y1="196" x2="280" y2="196" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="280,188 296,196 280,204" fill="#1B2838"/>
+<rect x="296" y="164" width="260" height="64" rx="12" fill="#F4E6D4" stroke="#C46B2C" stroke-width="2"/>
+<text x="426" y="204" text-anchor="middle" fill="#1B2838">about 300 GPUs</text>
+<line x1="556" y1="196" x2="608" y2="196" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="608,188 624,196 608,204" fill="#1B2838"/>
+<rect x="624" y="164" width="288" height="64" rx="32" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="768" y="204" text-anchor="middle" fill="#1B2838">"you are welcome"</text>
+<text x="48" y="292" font-size="17" font-weight="600" fill="#1B2838">gateway: cache by meaning, route to the cheapest capable model</text>
+<rect x="48" y="308" width="160" height="64" rx="32" fill="#FFFDF8" stroke="#1F7A72" stroke-width="1.5"/>
+<text x="128" y="348" text-anchor="middle" fill="#1B2838">"thanks"</text>
+<line x1="208" y1="340" x2="256" y2="340" stroke="#1F7A72" stroke-width="1.5"/>
+<polygon points="256,332 272,340 256,348" fill="#1F7A72"/>
+<rect x="272" y="308" width="220" height="64" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="382" y="336" text-anchor="middle" fill="#1B2838">cache by meaning</text>
+<text x="382" y="360" text-anchor="middle" fill="#5C6B7A" font-size="14">"thanks" = "thank you"</text>
+<line x1="492" y1="340" x2="540" y2="340" stroke="#1F7A72" stroke-width="1.5"/>
+<polygon points="540,332 556,340 540,348" fill="#1F7A72"/>
+<rect x="556" y="308" width="160" height="64" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="1.5"/>
+<text x="636" y="336" text-anchor="middle" fill="#1B2838">small model</text>
+<text x="636" y="360" text-anchor="middle" fill="#5C6B7A" font-size="14">flagship stands down</text>
+<line x1="716" y1="340" x2="764" y2="340" stroke="#1F7A72" stroke-width="1.5"/>
+<polygon points="764,332 780,340 764,348" fill="#1F7A72"/>
+<rect x="780" y="308" width="132" height="64" rx="32" fill="#FFFDF8" stroke="#1F7A72" stroke-width="1.5"/>
+<text x="846" y="348" text-anchor="middle" fill="#1B2838" font-size="13">"you are welcome"</text>
+</g>
+<rect x="48" y="408" width="864" height="104" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="76" y="444" font-size="16" fill="#1B2838"><tspan font-weight="600">Worked margin:</tspan> 1M "thanks"-class requests a day, 20 tokens each: 20M tokens.</text>
+<text x="76" y="470" font-size="16" fill="#1B2838">Flagship output at $50/M: $1,000 a day. Small model at $0.50/M: $10 a day.</text>
+<text x="76" y="496" font-size="16" fill="#1F7A72" font-weight="600">The gateway keeps $990 a day on politeness alone.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One claim: semantic caching stands down 300 GPUs for a trivial request. Routing is the business.</text>
+</svg>

@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -312,6 +309,33 @@ first (reshape), truncation second (cut), sampling third (draw).</p>
 top-p gives a flat draw among the leaders: diverse but sane. Low
 temperature with loose top-p is nearly greedy: the dial does nothing.
 Set them as a pair, not as two dials.</p>
+<h3 id="beam-search-worked-by-hand">Beam search, worked by hand</h3>
+<p>Beam search trades sampling for search. Keep a beam of k hypotheses,
+extend each with every candidate token, keep the k best-scoring
+extensions, repeat. Worked with k = 2 on a three-token vocabulary
+(&ldquo;to&rdquo;, &ldquo;as&rdquo;, &ldquo;the&rdquo;), scores given as probabilities:</p>
+<pre class="ascii">step 1:  start with the empty hypothesis
+  candidates: to (0.32), as (0.05), the (0.04)
+  beam:       [to: 0.32], [as: 0.05]
+
+step 2:  extend each hypothesis
+  from &quot;to&quot;:  &quot;to be&quot; (0.32 x 0.15 = 0.048),
+              &quot;to begin&quot; (0.32 x 0.09 = 0.0288)
+  from &quot;as&quot;:  &quot;as the&quot; (0.05 x 0.20 = 0.010)
+  beam:       [to be: 0.048], [to begin: 0.0288]
+
+step 3:  the beam keeps only the two best paths
+  winner: &quot;to be&quot; at 0.048, not the greedy &quot;to the&quot;
+</pre>
+<p>The greedy path picks &ldquo;to&rdquo; then the single best next token. The beam
+kept &ldquo;as&rdquo; alive at step 1, which let it check whether &ldquo;as the&rdquo; beats
+&ldquo;to begin&rdquo;. The price: k hypotheses, k times the memory and roughly k
+times the time, per step. Agents rarely run beam search per token:
+the loop already samples diverse plans at the action level, where the
+branching matters more than the token level. Beam search wins on
+constrained outputs (translation, summarization) where the single
+best sequence is the goal and the budget allows the k multiplier.</p>
+<figure><img alt="Beam search" src="assets/l03-beam-search.svg"><figcaption>Beam of 2: 'to be' at 0.048 beats the greedy 'to the'. Each step keeps the k best hypotheses. Cost: k times the memory and time. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
 <h2 id="the-decoder-stack-built-from-zero">The decoder stack, built from zero</h2>
 <p>Modern LLMs are <strong>decoder-only transformers</strong>: they read tokens left
 to right and predict the next one. The stack, bottom to top:</p>
@@ -411,11 +435,12 @@ times, over the corpus.</p>
 <p>The corpus sets the ceiling. The training <strong>ladder</strong> has four stages,
 each changing the data mix:</p>
 <figure><img alt="The training ladder" src="assets/l03-training-ladder.svg"><figcaption>Pretrain on web text. Midtrain toward target domains. Post-train with SFT, RLHF/DPO, RLVR. Train agents on agent data. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
-<h3 id="pretraining-and-midtraining-the-data-sets-the-ceiling">Pretraining and midtraining: the data sets the ceiling</h3>
+<h3 id="pretraining-web-scale-text-sets-the-ceiling">Pretraining: web-scale text sets the ceiling</h3>
 <p><strong>Pretraining:</strong> web-scale text, next-token loss. The pipeline:
 extract text from HTML, deduplicate, identify languages, apply rule and
 quality filters, mix the data. Scale markers from the lecture: The
 Pile at 800 GB, Nemotron-CC-Math at 133 billion tokens of math.</p>
+<h3 id="midtraining-shift-the-mix-toward-the-target">Midtraining: shift the mix toward the target</h3>
 <p><strong>Midtraining:</strong> shift the mix toward target domains like math and
 code. Mixing target data into pretraining helps: the model that will
 write code should read code early. The agent reading: a coding agent
@@ -429,10 +454,12 @@ SFT is cheap and fast, and it is the first thing that makes a base
 model usable as an agent core. Its limit: it teaches the format, not
 the judgment. A model can emit perfect tool-call JSON and still call
 the wrong tool.</p>
-<h3 id="rlhf-and-dpo-learn-from-preferences">RLHF and DPO: learn from preferences</h3>
+<h3 id="rlhf-learn-from-human-taste">RLHF: learn from human taste</h3>
 <p><strong>RLHF</strong> learns from human taste. Sample responses, have humans rank
 them, train a reward model on the rankings, optimize the policy against
-the reward model. <strong>DPO</strong> is the direct variant: skip the reward model
+the reward model.</p>
+<h3 id="dpo-skip-the-reward-model">DPO: skip the reward model</h3>
+<p><strong>DPO</strong> is the direct variant: skip the reward model
 and optimize the preference pair directly (prompt, chosen, rejected).</p>
 <p>Human feedback has traps. Annotators are unreliable. Preferences differ
 across people. The incentives go wrong: sycophancy and

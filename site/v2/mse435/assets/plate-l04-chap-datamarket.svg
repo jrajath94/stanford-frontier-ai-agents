@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the data-market squeeze</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. Success obsoletes the easy tasks first. Synthetic data is the escape valve.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT the escape</text>
+<text x="404" y="124">the rule: the gap</text>
+<text x="648" y="124">WITH the gap</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">paid to obsolete</text>
+<text x="190" y="208" text-anchor="middle" fill="#1B2838">your own product line</text>
+<text x="190" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">task 1: $10k to build,</text>
+<text x="190" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">trains for a week</text>
+<text x="190" y="324" text-anchor="middle" fill="#C46B2C" font-size="14">task 5: $100k to build,</text>
+<text x="190" y="348" text-anchor="middle" fill="#C46B2C" font-size="14">trains for a month</text>
+<text x="190" y="392" text-anchor="middle" fill="#5C6B7A" font-size="14">the easy hills are climbed;</text>
+<text x="190" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">the next are harder</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">generating is hard,</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">checking is cheap</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">hold out the unit tests,</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">let the model attempt,</text>
+<text x="490" y="308" text-anchor="middle" fill="#5C6B7A" font-size="14">check automatically</text>
+<text x="490" y="352" text-anchor="middle" fill="#1E4D8C" font-size="14">holds for code with tests,</text>
+<text x="490" y="376" text-anchor="middle" fill="#1E4D8C" font-size="14">math with answers, games</text>
+<text x="490" y="400" text-anchor="middle" fill="#1E4D8C" font-size="14">with win conditions</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">12 verified examples</text>
+<text x="780" y="208" text-anchor="middle" fill="#1B2838">for about $1.10</text>
+<text x="780" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">a human labeler: $5 to $20</text>
+<text x="780" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">for one verified example</text>
+<text x="780" y="324" text-anchor="middle" fill="#1F7A72" font-size="14">the flywheel compounds:</text>
+<text x="780" y="348" text-anchor="middle" fill="#1F7A72" font-size="14">smarter models make better</text>
+<text x="780" y="372" text-anchor="middle" fill="#1F7A72" font-size="14">synthetic data, which makes</text>
+<text x="780" y="396" text-anchor="middle" fill="#1F7A72" font-size="14">smarter models</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: the gap fails where checking needs taste. Writing, design, and judgment still need humans.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">Survivors sell verifiers the models cannot yet build: physical-world data, robotics traces, egocentric video.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: the smarter the models get, the better these pipelines run. The flywheel eats the vendor.</text>
+</svg>

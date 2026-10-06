@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the TAM explosion</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. Cloud demand was capped by programmer headcount. Agents break the cap.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT agents</text>
+<text x="416" y="124">the rule: the cap breaks</text>
+<text x="648" y="124">WITH agents</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">elastic compute, built</text>
+<text x="190" y="208" text-anchor="middle" fill="#1B2838">for human-written code</text>
+<text x="190" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">how much compute you can sell</text>
+<text x="190" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">is capped by how many</text>
+<text x="190" y="304" text-anchor="middle" fill="#5C6B7A" font-size="14">programmers exist</text>
+<text x="190" y="348" text-anchor="middle" fill="#C46B2C" font-size="14">the marginal creator is a person</text>
+<text x="190" y="372" text-anchor="middle" fill="#C46B2C" font-size="14">with a salary: one human,</text>
+<text x="190" y="396" text-anchor="middle" fill="#C46B2C" font-size="14">one budget of code</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">agents write, repair,</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">and secure around the clock</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">strong coding models arrive</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">around October 2025;</text>
+<text x="490" y="304" text-anchor="middle" fill="#5C6B7A" font-size="14">deployments surge</text>
+<text x="490" y="348" text-anchor="middle" fill="#1E4D8C" font-size="14">the marginal creator is an</text>
+<text x="490" y="372" text-anchor="middle" fill="#1E4D8C" font-size="14">agent with a token budget</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">anyone who can describe</text>
+<text x="780" y="208" text-anchor="middle" fill="#1B2838">what they want can create</text>
+<text x="780" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">agent share of deployments:</text>
+<text x="780" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">under 3% to over half</text>
+<text x="780" y="304" text-anchor="middle" fill="#5C6B7A" font-size="14">of all commits</text>
+<text x="780" y="348" text-anchor="middle" fill="#1F7A72" font-size="14">AI Gateway tokens: 2T</text>
+<text x="780" y="372" text-anchor="middle" fill="#1F7A72" font-size="14">to 20T a month, 10x</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: the tool that eats your lunch is the tool that makes you bigger, if you sell the shovels.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">Vercel tripled in months on machinery it already operated: a demand shock for compute, not a rebuild.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: the biggest TAM expansion in software history is a demand shock for compute.</text>
+</svg>

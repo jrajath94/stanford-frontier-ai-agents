@@ -128,6 +128,16 @@ answer that also burned the budget scores -1: worse than being wrong
 cheaply. The model learns two lessons at once: be right, and do not
 spend effort where it does not pay. That is the dial, learned.
 
+The K3 technical report (Moonshot AI, "Reasoning Effort RL") describes
+the full scheme: each problem x gets a token budget b0(x) estimated
+from the cold-start model, and any trajectory whose total token cost
+T(y) exceeds a scaled threshold tau times b0(x) has its task reward
+overridden to -1. Training anneals tau from large to small, producing
+max, high, and low effort experts that are distilled into one model
+which reads the effort level as an instruction. The lesson's +1/0/-1
+table is the scheme's shape at one tau. The report adds the annealing
+that turns one dial into three gears.
+
 The agent lesson: set effort per step, not per agent. A file lookup
 gets low effort. A tricky bug gets high effort. The loop already knows
 which steps are hard: the ones that failed before.
@@ -206,7 +216,7 @@ call with the wrong arguments, a well-formed plan that misunderstands
 the goal. The grammar constrains shape, not meaning. Meaning needs the
 check step.
 
-**DSPy** declares the contract one level up. A **signature** names the
+**DSPy** (Declarative Self-improving Python) declares the contract one level up. A **signature** names the
 input and output fields of a model call, and DSPy compiles the prompt
 that implements it. The lecture's example extracts contact info:
 
@@ -247,7 +257,8 @@ call results, and attached files.
 ![What goes in the context](assets/l04-context-parts.svg "System prompt, message history, retrieved memories, tool results, attached files. Every token costs bandwidth per decode step. Project: Stanford Frontier AI. Source: source.")
 
 Three practical rules from the lecture. **Avoid bloat:** a few tools
-beat fifty. Pi ships with four: read, write, edit, bash. **Retrieve on
+beat fifty. Pi (Mario Zechner's minimal terminal coding agent,
+defined in the compound-systems lesson) ships with four: read, write, edit, bash. **Retrieve on
 demand:** fetch the relevant memories and files when needed instead of
 stuffing them in. **Evaluate empirically:** set up a small eval set and
 test each context choice. There is no one right context. The context is
@@ -255,8 +266,15 @@ a design surface, not a dumping ground.
 
 ### Where stuffing breaks: context rot
 
-More context is not more understanding. OOLONG (2025) measures long
-context reasoning and aggregation: as the context fills with
+More context is not more understanding. **OOLONG** (Bertsch et al.,
+2025, arXiv:2511.02817) measures long-context reasoning and
+aggregation: tasks that require analyzing chunks of text at the atomic
+level and then aggregating the analyses into distributional answers.
+The headline number: GPT-5, Claude Sonnet 4, and Gemini 2.5 Pro all
+score below 50 percent accuracy on both task splits at 128K tokens.
+Needle-in-a-haystack lets the model ignore almost the whole context
+as noise. OOLONG forbids that, because the answer depends on nearly
+every line. As the context fills with
 distractors, the model's reasoning degrades. The lecture calls this
 **context rot**.
 
@@ -304,19 +322,33 @@ fresh loop.
 
 ### Recursive LMs: a different philosophy
 
-**Recursive language models** (2025) reject the giant context. Instead
-of stuffing the document into one context, the model calls itself on
-chunks: summarize this part, then the top call reasons over the
-summaries.
+**Recursive language models** (Zhang, Kraska, and Khattab, MIT
+CSAIL, arXiv:2512.24601, December 2025) reject the giant context.
+Instead of loading the document into the context window, the long
+context is held in a REPL environment as a variable. The root model
+never sees the full text. It writes small code blocks that peek at
+slices, grep for keywords, and chunk the document, and it calls
+sub-LMs on the chunks with questions: summarize this part, extract
+the dates from this part. The top call reasons over the sub-call
+results.
 
 ![Recursive LMs](assets/l04-rlm.svg "The top call delegates chunks to sub-calls. Each call sees a small context. Depth replaces width. Project: Stanford Frontier AI. Source: paper.")
 
 Each call sees a small context, so there is no rot and no quadratic
-blowup. The tradeoff: detail is lost in the summaries, and errors in a
-sub-call propagate silently upward. Compare with RAG: RAG retrieves
-chunks into one context. RLM recurses over chunks with separate calls.
-Both fight the same enemy, the O(n^2) context. RAG is retrieval plus
-one reader. RLM is divide and conquer with the model as the divider.
+blowup. The paper's reported numbers are strong: an RLM on GPT-5
+scores 91.3 percent on BrowseComp+ (reasoning over up to 11 million
+tokens of documents) against 70.5 percent for a summary-agent
+baseline, and improves OOLONG scores substantially. The tradeoff:
+detail is lost in the summaries, errors in a sub-call propagate
+silently upward, and a reproduction study flags over-recursion
+latency and non-termination on ambiguous prompts. Calibrate the
+recursion depth.
+
+Compare with RAG: RAG retrieves chunks into one context. RLM recurses
+over chunks with separate calls, and the model itself decides the
+chunking strategy in code. Both fight the same enemy, the O(n^2)
+context. RAG is retrieval plus one reader. RLM is divide and conquer
+with the model as the divider.
 
 ## What is used where: inference-time in production
 
@@ -419,7 +451,7 @@ The story in nine steps. Each step answers the one before it.
    0.3 model. Outcome reward checks the answer. Process reward checks
    each step. Checking is the scarce resource.
 7. **Force the shape.** Constrained decoding masks forbidden tokens.
-   output always parses. DSPy signatures declare the contract. Shape,
+   Output always parses. DSPy signatures declare the contract. Shape,
    not meaning.
 8. **Engineer the context.** Five ingredients. Defenses against rot:
    few tools, retrieve on demand, compact. Append, never edit: the KV
@@ -434,6 +466,11 @@ The story in nine steps. Each step answers the one before it.
 <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/DTuhy_EGnBY" title="Why Thinking AI Models Are Different" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 - Why "Thinking" AI Models Are Different (the embed above): https://www.youtube.com/watch?v=DTuhy_EGnBY, chain of thought, test-time compute, how thinking models are trained with RL, and the honest caveats.
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/sjhCFYpT3Mo" title="How AI Reasoning Chains Work - Making AI Think Step by Step" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- Mini Leviathan, How AI Reasoning Chains Work (the embed above): https://www.youtube.com/watch?v=sjhCFYpT3Mo, chain-of-thought, tree-of-thought, and self-consistency walked through on reasoning tasks.
 
 Further:
 - Anthropic, Effective context engineering for AI agents: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, the five ingredients in production form.
@@ -450,7 +487,8 @@ Further:
 **Further reading:**
 - Wei et al., Chain-of-Thought (2022): https://arxiv.org/abs/2201.11903.
 - DSPy documentation: signatures and compilation.
-- OOLONG paper (2025): long-context reasoning and aggregation.
+- OOLONG (Bertsch et al., 2025): https://arxiv.org/abs/2511.02817, long-context reasoning and aggregation; frontier models below 50 percent at 128K.
+- Recursive Language Models (Zhang, Kraska, and Khattab, 2025): https://arxiv.org/abs/2512.24601, the REPL-and-sub-call mechanism behind the recursive philosophy.
 - Recursive Language Models paper (2025): the recursion philosophy.
 
 **Caveats from these sources.** The slides cite blog and paper figures

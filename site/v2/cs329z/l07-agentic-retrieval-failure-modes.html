@@ -255,16 +255,6 @@ intro lesson: perceive the partial answer, decide the next search.</p>
 a stopping rule: stop when the evidence answers the question, not
 when the context is full. Without one, the loop retrieves until the
 budget runs out.</p>
-<p>Three frameworks from the slides. <strong>Self-RAG</strong> adds reflection tokens:
-the model emits retrieve/no-retrieve, isRel/isSupp/isUse markers as it
-goes, and a critic model trains those decisions with segment-level
-scores. Retrieval is a generated decision, not a pipeline stage.
-<strong>CRAG</strong> (corrective RAG) adds a correctness loop: an evaluator scores
-the retrieved documents, triggers web search when they fail, and
-refines them into knowledge strips. Retrieval can repair itself.
-<strong>Search-R1</strong> trains the loop with reinforcement learning: the model
-generates its own search queries mid-reasoning and learns from the
-outcome reward. The query policy is learned, not hand-written.</p>
 <pre class="ascii">agentic trace, the 2-hop question:
 
 Thought 1: Need the CEO's start year first.
@@ -279,6 +269,48 @@ Final:     &quot;Washington, D.C.&quot;
 <p>The second query did not exist until the first observation arrived.
 That is the whole difference: retrieval follows the reasoning instead
 of preceding it.</p>
+<figure><img alt="Agentic retrieval" src="assets/l07-agentic-trace.svg"><figcaption>Query 2 is born from observation 1. Retrieval follows the reasoning instead of preceding it. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<h3 id="self-rag-the-model-decides-to-retrieve">Self-RAG: the model decides to retrieve</h3>
+<p><strong>Self-RAG</strong> (Asai et al., 2023) makes retrieval a generated decision.
+As the model writes, it emits reflection tokens: <code>[Retrieve]</code> yes or
+no at each segment, then <code>isRel</code> (is the passage relevant?), <code>isSupp</code>
+(is the answer supported?), <code>isUse</code> (is the segment useful overall?).
+A critic model trains those tokens with segment-level scores.</p>
+<figure><img alt="Self-RAG" src="assets/l07-selfrag.svg"><figcaption>The model emits retrieve or no-retrieve as it writes. A critic trains those calls. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>Read what changes. In one-shot RAG, retrieval is a pipeline stage
+that runs once, always. In Self-RAG, retrieval is a choice the model
+makes per segment: retrieve for the CEO&rsquo;s start year, skip for the
+arithmetic that follows. The price is the critic&rsquo;s labels:
+segment-level supervision (relevant? supported? useful?) is expensive
+to write, and the quality of the reflection tokens is bounded by the
+quality of those labels.</p>
+<h3 id="crag-repair-the-retrieval">CRAG: repair the retrieval</h3>
+<p><strong>CRAG</strong> (corrective RAG) adds a correctness loop around retrieval. An
+evaluator scores the retrieved documents: correct, incorrect, or
+ambiguous. Correct documents go to the reader. Incorrect ones trigger
+web search as a fallback. Ambiguous ones are decomposed and refined
+into knowledge strips: short, filtered statements with the noise cut.</p>
+<p>The idea is repair, not retry. A failed retrieval is not just tried
+again. It is diagnosed (which documents failed and why), escalated
+(web search when the corpus has nothing), and refined (strips instead
+of raw chunks). The cost is the evaluator and the fallback: every
+correction is latency and tokens. The decision rule: add the
+correctness loop when retrieval misses are the dominant failure on
+your eval set. If the reader is the problem, CRAG buys nothing.</p>
+<h3 id="search-r1-and-flare-retrieve-mid-reasoning">Search-R1 and FLARE: retrieve mid-reasoning</h3>
+<p><strong>Search-R1</strong> (Jin et al., 2025) trains the loop with reinforcement
+learning. The model generates its own search queries mid-reasoning and
+learns the query policy from the outcome reward: did the final answer
+come out right? No hand-written query templates, no heuristics. The
+query policy is learned, not designed.</p>
+<p><strong>FLARE</strong> (forward-looking active retrieval) takes a different angle:
+predict the next sentence, and retrieve when the model&rsquo;s confidence in
+the prediction is low. <strong>IRCoT</strong> interleaves retrieval with
+chain-of-thought: each reasoning step can trigger a retrieval for the
+fact it needs. The family shares one idea: retrieval fires when the
+reasoning needs it, not on a schedule. The price is control: the
+retrieval pattern is learned or confidence-gated, which makes it
+harder to bound the token budget than a fixed pipeline.</p>
 <h2 id="mapping-back-what-the-loop-buys">Mapping back: what the loop buys</h2>
 <table>
 <thead>
@@ -314,14 +346,56 @@ of preceding it.</p>
 <td>Correction</td>
 <td>CRAG re-scores, re-searches, refines</td>
 </tr>
+<tr>
+<td>The query policy is hand-written</td>
+<td>Search-R1</td>
+<td>Learn it from the outcome reward</td>
+</tr>
 </tbody>
 </table>
+<h2 id="what-is-used-where-agentic-retrieval-in-production">What is used where: agentic retrieval in production</h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>The loop it runs</th>
+<th>The check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perplexity</td>
+<td>retrieve, read, cite, repeat; answers carry sources</td>
+<td>citations: every claim points at a page</td>
+</tr>
+<tr>
+<td>ChatGPT Deep Research</td>
+<td>plans a research outline, browses dozens of pages, synthesizes</td>
+<td>the report: sections map to the plan</td>
+</tr>
+<tr>
+<td>Devin-style code search</td>
+<td>search the repo, read, test, repeat</td>
+<td>the tests: green means done</td>
+</tr>
+<tr>
+<td>Claude Agent SDK</td>
+<td>subagents retrieve with isolated context</td>
+<td>the parent&rsquo;s synthesis over subagent outputs</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern: every production system pairs the retrieval loop with an
+artifact the user can check. Citations, reports, green tests. The loop
+is trusted exactly as far as its artifact is checkable.</p>
 <h2 id="the-honest-price-nine-failure-modes-priced">The honest price: nine failure modes, priced</h2>
 <p>Agentic retrieval multiplies the moving parts, and each part fails
-with numbers. Barnett et al. (2024) catalog the failure points; the
-lecture organizes them. Worked one by one.</p>
+with numbers. Barnett et al. (2024) catalog the failure points. The
+lecture organizes them. Worked one by one, in three groups.</p>
+<h3 id="group-1-the-loops-own-math">Group 1: the loop&rsquo;s own math</h3>
 <p><strong>1. Compounding error.</strong> Each hop can fail, and the failures
 multiply. If each step is right with probability 0.95:</p>
+<figure><img alt="Compounding error" src="assets/l07-compounding.svg"><figcaption>0.95^2 = 0.90. 0.95^5 = 0.77. 0.95^20 = 0.36. Reliable steps, unreliable chains. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
 <pre class="ascii">2 hops:   0.95^2  = 0.90
 5 hops:   0.95^5  = 0.77
 20 hops:  0.95^20 = 0.36
@@ -331,28 +405,35 @@ is 95 percent reliable. The fix is the intro lesson&rsquo;s fix: verify at
 each hop, keep chains short, prefer fewer hops with stronger evidence.</p>
 <p><strong>2. No stopping rule.</strong> Each retrieval round burns about 2,000 tokens
 of passages plus a search call. Without a stopping rule, a 25-turn
-loop burns 50,000 tokens before the budget does the stopping. The
-stopping rule is a design decision, not an emergent behavior: stop
-when the evidence answers the question, and say what &ldquo;answers&rdquo; means.</p>
+loop burns 50,000 tokens before the budget does the stopping.</p>
+<figure><img alt="No stopping rule" src="assets/l07-stopping.svg"><figcaption>25 rounds x 2,000 tokens = 50,000 tokens. The stopping rule is written, not hoped for. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>The stopping rule is a design decision, not an emergent behavior: stop
+when the evidence answers the question, and say what &ldquo;answers&rdquo; means.
+The budget is the backstop, not the plan.</p>
 <p><strong>3. Injection.</strong> Retrieved text is untrusted input. The slides&rsquo; case:
 a pop-up window during web retrieval that hijacks the agent. Retrieved
 passages can carry instructions (&ldquo;ignore your task and do X&rdquo;), and the
 model reads them as part of its context. The builders lesson priced
-this at 87 percent attack success. In an agentic loop the injected
-text steers the next retrieval, so the corruption compounds across
-hops. Treat retrieved content as data, never as instructions.</p>
+this at 87 percent attack success.</p>
+<figure><img alt="Injection" src="assets/l07-injection.svg"><figcaption>One passage carries instructions. The poisoned Thought steers the next search. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>In an agentic loop the injected text steers the next retrieval, so the
+corruption compounds across hops. Treat retrieved content as data,
+never as instructions.</p>
+<h3 id="group-2-the-index-and-the-permissions">Group 2: the index and the permissions</h3>
 <p><strong>4. Recall ceiling.</strong> The reader cannot use what the retriever never
 found. If the retriever&rsquo;s recall@10 is 0.8, the agent&rsquo;s end-to-end
 accuracy is capped at 0.8 on questions needing that passage, no matter
-how good the reasoning is. Agentic retrieval raises the ceiling with
-rewritten queries and multiple rounds, but each round inherits the
-same bound. Measure retriever recall separately: it is the ceiling of
-the whole system.</p>
+how good the reasoning is.</p>
+<figure><img alt="Recall ceiling" src="assets/l07-recall-ceiling.svg"><figcaption>Retriever recall@10 = 0.8 caps the whole system at 0.8. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>Agentic retrieval raises the ceiling with rewritten queries and
+multiple rounds, but each round inherits the same bound. Measure
+retriever recall separately: it is the ceiling of the whole system.</p>
 <p><strong>5. Stale index.</strong> The index is a snapshot. Documents change, and the
 agent answers from last month&rsquo;s rows with this month&rsquo;s confidence.
 The RAG lesson&rsquo;s staleness argument returns: the fix is index refresh
 discipline, and a freshness check on retrieved passages for
-time-sensitive questions.</p>
+time-sensitive questions. For fast corpora, size the refresh to the
+question&rsquo;s half-life: hourly docs need hourly rebuilds or a fresh tier.</p>
 <p><strong>6. Permission leak.</strong> Retrieval crosses permission boundaries the
 user cannot see. The agent retrieves a document the user is not
 allowed to read, and the answer leaks it: a salary figure from a
@@ -360,88 +441,115 @@ private HR doc, summarized helpfully in a chat the user can quote.
 The retriever must respect access control at retrieval time, not
 filter at generation time: by the time the model sees the passage,
 the leak is one paraphrase away.</p>
+<h3 id="group-3-the-readers-failures">Group 3: the reader&rsquo;s failures</h3>
 <p><strong>7. Lost in the middle.</strong> Long retrieved contexts degrade: the model
 attends to the start and the end and loses the middle. Ten passages
 in, the key evidence at position 5 is effectively invisible. The
 defense is the RAG lesson&rsquo;s defense: fewer, better passages, and
-rerank so the critical evidence sits where the model looks.</p>
-<p><strong>8. Distraction.</strong> Irrelevant passages do not just waste tokens; they
+rerank so the critical evidence sits where the model looks. Position
+is a retrieval decision, not just a reader property.</p>
+<p><strong>8. Distraction.</strong> Irrelevant passages do not just waste tokens. They
 mislead. A passage about the wrong year&rsquo;s World Series pulls the
 answer off course. More retrieval is not more evidence: each added
 passage is a chance to distract. This is context rot from the
-reasoning lesson, wearing a retrieval costume.</p>
+reasoning lesson, wearing a retrieval costume. The fix is the same:
+retrieve less, but better.</p>
 <p><strong>9. Evidence conflict.</strong> Two retrieved passages disagree: one says
 the CEO took office in 2019, another says 2018. The one-shot pipeline
 picks by position. The agent must resolve the conflict: prefer the
-newer source, prefer the primary source, or retrieve a tiebreaker.
-Conflict resolution is a decision the pipeline never makes and the
-loop must.</p>
+newer source, prefer the primary source, or retrieve a tiebreaker.</p>
+<figure><img alt="Evidence conflict" src="assets/l07-conflict.svg"><figcaption>Same fact, two values. Resolve: prefer newer, prefer primary, or retrieve a tiebreaker. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>Conflict resolution is a decision the pipeline never makes and the
+loop must. Log which source won and why: the trace is the audit trail.</p>
 <p>The pattern across all nine: retrieval failures are agent failures
 now. In one-shot RAG the pipeline fails once, visibly. In agentic
 retrieval the loop fails across hops, quietly, and each hop&rsquo;s error
 feeds the next hop&rsquo;s query.</p>
 <h2 id="interview-qa">Interview Q&amp;A</h2>
 <div class="qa"><div class="q">When does one-shot RAG fail but agentic retrieval succeed? Work an example.</div><div class="a"><p>On multi-hop questions where no single passage contains the answer. &ldquo;Which city hosted the World Series the year the current ACME CEO took office?&rdquo; One-shot RAG retrieves for the full question and gets CEO biography chunks plus World Series history chunks, with no bridge between them. The agentic trace: search &ldquo;ACME CEO took office year&rdquo;, observe &ldquo;CEO since 2019&rdquo;, then search &ldquo;World Series host 2019&rdquo;, observe &ldquo;Washington Nationals&rdquo;, answer &ldquo;Washington, D.C.&rdquo; The second query did not exist until the first observation arrived. Retrieval follows the reasoning instead of preceding it.
-Whether to retrieve (some steps need no search; skipping saves a round trip), what to retrieve (rewrite the query for the missing piece, not the original question), and when to stop (stop when the evidence answers the question, not when the context fills). The stopping rule is the one teams forget: without it, the loop retrieves until the budget runs out.</p><div class="followup"><strong>Follow-up:</strong> What are the three retrieval decisions the loop owns?</div></div></div>
+Whether to retrieve (some steps need no search. Skipping saves a round trip), what to retrieve (rewrite the query for the missing piece, not the original question), and when to stop (stop when the evidence answers the question, not when the context fills). The stopping rule is the one teams forget: without it, the loop retrieves until the budget runs out.</p><div class="followup"><strong>Follow-up:</strong> What are the three retrieval decisions the loop owns?</div></div></div>
+<div class="qa"><div class="q">Self-RAG versus CRAG: what does each add, and what does each cost?</div><div class="a"><p>Self-RAG makes retrieval a generated decision: the model emits retrieve/no-retrieve reflection tokens per segment (isRel, isSupp, isUse), trained by a critic with segment-level scores. It buys selective retrieval: no search where none is needed. CRAG adds a correctness loop: an evaluator scores retrieved documents, triggers web search when they fail, and refines them into knowledge strips. It buys repair: bad retrieval is diagnosed and fixed, not just retried. Self-RAG costs segment-level labels for the critic. CRAG costs the evaluator plus the fallback on every correction.
+When the query policy is the bottleneck and you have outcome rewards to learn from. Search-R1 learns the query policy with RL from final-answer success: no templates, no heuristics. It wins where human query intuition is weak: novel domains, adversarial corpora. It loses where the budget must be bounded tightly, because a learned policy&rsquo;s retrieval count is harder to cap than a fixed pipeline&rsquo;s.</p><div class="followup"><strong>Follow-up:</strong> When would you pick Search-R1 over hand-written query templates?</div></div></div>
 <div class="qa"><div class="q">Work the compounding-error arithmetic for a retrieval chain.</div><div class="a"><p>If each hop is right with probability 0.95, two hops give 0.90, five give 0.77, and twenty give 0.36. A twenty-hop chain is wrong two times in three even though every step looks reliable. The fixes: keep chains short, verify at each hop against evidence, and prefer fewer hops with stronger evidence. This is the same 0.9^4 = 0.66 survival math from the intro lesson, now applied to retrieval rounds instead of tool calls.
-Because it caps the whole system below the retriever. If retriever recall@10 is 0.8, end-to-end accuracy on evidence-needing questions cannot exceed 0.8 no matter how good the reasoning is. Agentic retrieval raises the ceiling with rewritten queries and more rounds, but each round inherits the same bound. Teams that only benchmark the final answer never see the ceiling; measure retriever recall separately.</p><div class="followup"><strong>Follow-up:</strong> Why is recall ceiling the most depressing of the nine?</div></div></div>
+Because it caps the whole system below the retriever. If retriever recall@10 is 0.8, end-to-end accuracy on evidence-needing questions cannot exceed 0.8 no matter how good the reasoning is. Agentic retrieval raises the ceiling with rewritten queries and more rounds, but each round inherits the same bound. Teams that only benchmark the final answer never see the ceiling. Measure retriever recall separately.</p><div class="followup"><strong>Follow-up:</strong> Why is recall ceiling the most depressing of the nine?</div></div></div>
 <div class="qa"><div class="q">A retrieved document contains instructions to ignore the user&#x27;s task. Why is this worse in an agentic loop than in one-shot RAG?</div><div class="a"><p>In one-shot RAG, the injected text influences one answer. In an agentic loop, it steers the next retrieval: the corrupted step writes the next query, fetches more corrupted content, and the corruption compounds across hops. The builders lesson priced prompt injection at 87 percent attack success for the pop-up case. The defense is architectural: treat retrieved content as data, never as instructions, and the permission check at retrieval time matters too, since a leaked private document is one paraphrase away from disclosure once the model has seen it.
-Resolve, do not average. Prefer the newer source for time-sensitive facts, prefer the primary source over the secondary one, or retrieve a tiebreaker passage. The one-shot pipeline picks by position; the loop must make the conflict an explicit decision. Log which source won and why: the trace is the audit trail.</p><div class="followup"><strong>Follow-up:</strong> How do you handle two retrieved passages that disagree?</div></div></div>
+Resolve, do not average. Prefer the newer source for time-sensitive facts, prefer the primary source over the secondary one, or retrieve a tiebreaker passage. The one-shot pipeline picks by position. The loop must make the conflict an explicit decision. Log which source won and why: the trace is the audit trail.</p><div class="followup"><strong>Follow-up:</strong> How do you handle two retrieved passages that disagree?</div></div></div>
+<div class="qa"><div class="q">Your agentic RAG agent retrieves 10 passages per round for 5 rounds. The answers are getting worse as you add rounds. Diagnose.</div><div class="a"><p>Two suspects from the nine. Distraction: each added passage is a chance to mislead, and a passage about the wrong year&rsquo;s World Series pulls the answer off course. More retrieval is not more evidence. Lost in the middle: with 50 passages across rounds, the key evidence sits where the model does not look. The fix is fewer, better passages per round, a rerank so critical evidence sits at the edges, and a stopping rule so the loop stops when the evidence answers instead of when the budget dies.
+Check whether the right passages were retrieved at all. If the evidence is in the retrieved set and the answer is still wrong, it is distraction or lost-in-the-middle: a reader-side failure. If the evidence never arrived, it is recall ceiling: a retriever-side failure. The fix lives on opposite sides of the handoff, so measure each side separately.</p><div class="followup"><strong>Follow-up:</strong> How do you tell distraction from a recall problem?</div></div></div>
+<div class="qa"><div class="q">The agent has a private HR document in its corpus. A user asks about salaries. What is the failure, and where is the fix?</div><div class="a"><p>Permission leak: retrieval crosses a permission boundary the user cannot see, and the answer leaks a salary figure the user is not allowed to read. The fix is at retrieval time, not generation time: the retriever must respect access control when it searches, so the private document never enters the candidate set. Filtering at generation time is too late: by the time the model sees the passage, the leak is one paraphrase away. This is failure mode 6, and it is an architecture decision, not a prompt.
+Then the chunking broke the permission boundary. Re-chunk along permission lines, or tag each chunk with its document&rsquo;s ACL and filter at retrieval. A chunk that mixes public and private text is unretrievable safely: split it. Permissions are a property of the index, not just the documents.</p><div class="followup"><strong>Follow-up:</strong> The permission system is per-document but the chunks are shared. What now?</div></div></div>
+<div class="qa"><div class="q">Design the stopping rule for a research agent. What does &quot;answers the question&quot; mean, concretely?</div><div class="a"><p>Three parts. First, the evidence test: every claim the answer will make has a retrieved passage supporting it, checked by an entailment pass or a critic. Second, the coverage test: the question&rsquo;s sub-questions (from the plan) each have at least one supporting passage. Third, the budget backstop: max 10 rounds, max 20,000 tokens of passages, whichever comes first. The rule is written before the loop runs: stop when the evidence answers, not when the context is full. Log the stop reason per run: answered, budget, or model-declared-done.
+The evidence test. The agent declared &ldquo;answered&rdquo; without supporting passages for each claim: the stopping rule checked the model&rsquo;s confidence instead of the evidence. The fix: the stop decision reads the retrieved set, not the model&rsquo;s tone. Confidence is not evidence, and a stopping rule that trusts confidence is a loop that stops at the first plausible answer.</p><div class="followup"><strong>Follow-up:</strong> The agent stops early with a confident wrong answer. What failed?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
-<p>The story in eight steps. Each step answers the one before it.</p>
+<p>The story in nine steps. Each step answers the one before it.</p>
 <ol>
 <li><strong>The job: no single passage answers.</strong> The CEO&rsquo;s year lives in
-   one chunk; the World Series host in another. One-shot retrieval
+   one chunk. The World Series host in another. One-shot retrieval
    finds both piles and guesses across the gap.</li>
 <li><strong>The loop owns three decisions.</strong> Whether to retrieve, what
    query to write, when to stop. Each was hard-coded before.</li>
-<li><strong>The trace shows it.</strong> &ldquo;CEO since 2019&rdquo; arrives; then &ldquo;World
+<li><strong>The trace shows it.</strong> &ldquo;CEO since 2019&rdquo; arrives. Then &ldquo;World
    Series host 2019&rdquo; is written. Query 2 is born from observation 1.</li>
 <li><strong>Frameworks name the machinery.</strong> Self-RAG decides
    retrieve/no-retrieve with reflection tokens. CRAG repairs bad
-   retrieval. Search-R1 learns the query policy by reward.</li>
+   retrieval. Search-R1 learns the query policy by reward. FLARE
+   retrieves when confidence drops.</li>
 <li><strong>Errors compound.</strong> 0.95^20 = 0.36. Twenty reliable hops are
    wrong twice in three. Verify per hop, keep chains short.</li>
 <li><strong>The loop has no brakes by default.</strong> 2,000 tokens a round x
    25 rounds = 50,000 tokens. The stopping rule is a design
-   decision.</li>
+   decision: evidence test, coverage test, budget backstop.</li>
 <li><strong>Retrieval is untrusted input.</strong> Injection steers the next hop.
    Permission leaks happen at retrieval time. Stale indexes answer
    with last month&rsquo;s confidence.</li>
 <li><strong>The reader is bounded by the retriever.</strong> Recall ceiling caps
    the system. Lost-in-the-middle and distraction waste the good
    passages. Conflicts must be resolved, not averaged.</li>
+<li><strong>Every production loop pairs with an artifact.</strong> Perplexity&rsquo;s
+   citations, Deep Research&rsquo;s report, Devin&rsquo;s green tests. The loop
+   is trusted as far as its artifact is checkable.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/hwxmYqh_ykY" title="Agentic RAG: Query Planning, Iterative Retrieval, and Knowledge Graphs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>Agentic RAG: Query Planning, Iterative Retrieval, and Knowledge Graphs (the embed above): https://www.youtube.com/watch?v=hwxmYqh_ykY, the one-shot limit, retrieval as a tool, the agentic loop, query decomposition, and knowledge-graph RAG.</li>
+</ul>
+<p>Further:
+- Asai et al., Self-RAG (2023): https://arxiv.org/abs/2310.11511, retrieve, generate, and critique through self-reflection.
+- Jin et al., Search-R1 (2025): https://arxiv.org/abs/2503.09516, learning to search with RL.
+- Barnett et al. (2024): https://arxiv.org/abs/2401.05856, seven failure points of RAG engineering.</p>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Lecture 3 slides (local: sources/agents/cs329z/lecture03.pdf).
 - Course site: http://web.stanford.edu/class/cs329z.</p>
 <p><strong>Further reading:</strong>
-- Barnett et al. (2024), seven failure points of RAG.
-- Jin et al. (2025), Search-R1: learning to search with RL.
 - Self-RAG and CRAG papers: reflection tokens and corrective
-  retrieval.</p>
+  retrieval.
+- FLARE and IRCoT: confidence-gated and interleaved retrieval.</p>
 <p><strong>Caveats from these sources.</strong> The nine failure modes synthesize the
-slides with Barnett et al.; the worked numbers (0.95^20, 2,000 tokens
+slides with Barnett et al.. The worked numbers (0.95^20, 2,000 tokens
 x 25 rounds, 87 percent injection) are toy or cited-from-earlier
 arithmetic, not new measurements. Framework details (Self-RAG tokens,
-CRAG strips) are summarized from the slides&rsquo; treatment. No video ID
-is on record.</p>
+CRAG strips) are summarized from the slides&rsquo; treatment. No lecture
+video is on record. The embed above is a third-party explainer,
+verified live.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS329A:</strong> studies agentic retrieval as a research subject
   (learned search policies, retrieval for self-improvement). This
   course engineers the loop and prices its failures.</li>
 <li><strong>This course, intro lesson:</strong> the agent loop that retrieval now
-  lives inside; compounding error derived there, applied here.</li>
+  lives inside. Compounding error derived there, applied here.</li>
 <li><strong>This course, RAG pipeline:</strong> the one-shot system this lesson
-  upgrades; the retriever-reader handoff becomes a loop joint.</li>
+  upgrades. The retriever-reader handoff becomes a loop joint.</li>
 <li><strong>This course, retrieval methods:</strong> the retriever zoo that the
-  loop calls; recall ceiling is that lesson&rsquo;s metrics, weaponized.</li>
+  loop calls. Recall ceiling is that lesson&rsquo;s metrics, weaponized.</li>
 <li><strong>This course, evaluation:</strong> the next lesson scores these agents,
   including the failure modes priced here.</li>
 </ul>
-      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">SLIDES</span>Lecture 3 slides: RAG + Agents (local: sources/agents/cs329z/lecture03.pdf)</li><li><span class="src-tag">SUPPLEMENT</span><a href="https://arxiv.org/abs/2401.05856" target="_blank" rel="noopener">Barnett et al., Seven Failure Points When Engineering a Retrieval Augmented Generation Solution (2024)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://arxiv.org/abs/2503.09516" target="_blank" rel="noopener">Jin et al., Search-R1: Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning (2025)</a></li></ul></section>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">SLIDES</span>Lecture 3 slides: RAG + Agents (local: sources/agents/cs329z/lecture03.pdf)</li><li><span class="src-tag">SUPPLEMENT</span><a href="https://arxiv.org/abs/2401.05856" target="_blank" rel="noopener">Barnett et al., Seven Failure Points When Engineering a Retrieval Augmented Generation Solution (2024)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://arxiv.org/abs/2503.09516" target="_blank" rel="noopener">Jin et al., Search-R1: Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning (2025)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://arxiv.org/abs/2310.11511" target="_blank" rel="noopener">Asai et al., Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection (2023)</a></li></ul></section>
       <nav class="pager"><a href="../cs329z/l06-retrieval-methods.html"><span class="lbl">← Previous</span>Lecture 3B: BM25, Dense Retrieval, and the Retriever Zoo</a><a href="../cs329z/l08-evaluating-agents.html"><span class="lbl">Next →</span>Lecture 4: Evaluating Agents with Numbers</a></nav>
     </article>
     <footer class="pagefoot">

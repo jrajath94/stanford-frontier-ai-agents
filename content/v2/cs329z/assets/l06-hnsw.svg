@@ -52,10 +52,10 @@
 <text x="920" y="410" font-size="14" font-weight="600" fill="#1B2838" text-anchor="start">query</text>
 <circle cx="960" cy="440" r="16" fill="#C46B2C" stroke="#C46B2C" stroke-width="1.5"/>
 <text x="960" y="446" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">q</text>
-<line x1="150" y1="226" x2="220" y2="360" stroke="#1F7A72" stroke-width="1.5" fill="none" stroke-dasharray="6 4"/>
-<line x1="220" y1="360" x2="218" y2="348" stroke="#1F7A72" stroke-width="1.5"/>
-<line x1="220" y1="360" x2="211" y2="352" stroke="#1F7A72" stroke-width="1.5"/>
-<text x="185" y="285" font-size="13" fill="#1F7A72" text-anchor="middle">descend</text>
+<line x1="560" y1="226" x2="581" y2="387" stroke="#1F7A72" stroke-width="1.5" fill="none" stroke-dasharray="6 4"/>
+<line x1="581" y1="387" x2="573" y2="377" stroke="#1F7A72" stroke-width="1.5"/>
+<line x1="581" y1="387" x2="569" y2="381" stroke="#1F7A72" stroke-width="1.5"/>
+<text x="618" y="310" font-size="13" fill="#1F7A72" text-anchor="middle">descend</text>
 <text x="40" y="540" font-size="15" font-weight="600" fill="#1B2838" text-anchor="start">Search: enter at the top, greedy-hop toward the query, drop a layer when stuck.</text>
 <text x="40" y="564" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">About log N hops for N vectors. The price is a little recall: the true nearest neighbor can hide.</text>
 </svg>

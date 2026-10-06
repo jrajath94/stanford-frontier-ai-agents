@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="640" viewBox="0 0 1120 640" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="640" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="30" font-weight="600" fill="#1B2838">Search when the trace hesitates</text>
+<text x="40" y="80" font-size="16" fill="#5C6B7A">Hedging words mark the knowledge gap. Search fires. Reason-in-documents extracts.</text>
+<line x1="40" y1="96" x2="1080" y2="96" stroke="#D9D3C7" stroke-width="1.5"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1F7A72"/></marker></defs>
+<rect x="40" y="120" width="1040" height="300" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="80" y="190" width="280" height="140" rx="12" fill="#F4E6D4" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="220.0" y="228.0" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">reasoning trace</text>
+<text x="220.0" y="252.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">"perhaps..."</text>
+<text x="220.0" y="274.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">"alternatively..."</text>
+<text x="220.0" y="296.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">"wait..."</text>
+<line x1="384" y1="260" x2="452" y2="260" stroke="#1F7A72" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="375.8" y="234.0" width="84.39999999999999" height="20" rx="4" fill="#F7F4EE"/>
+<text x="418.0" y="249.0" font-size="13" font-weight="500" fill="#1F7A72" text-anchor="middle">gap found</text>
+<rect x="476" y="190" width="240" height="140" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="2.5"/>
+<text x="596.0" y="239.0" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">agentic search</text>
+<text x="596.0" y="263.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">model decides when,</text>
+<text x="596.0" y="285.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">what, and what to read</text>
+<line x1="740" y1="260" x2="808" y2="260" stroke="#1F7A72" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="750.8" y="234.0" width="46.4" height="20" rx="4" fill="#F7F4EE"/>
+<text x="774.0" y="249.0" font-size="13" font-weight="500" fill="#1F7A72" text-anchor="middle">read</text>
+<rect x="832" y="190" width="208" height="140" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2.5"/>
+<text x="936.0" y="239.0" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">reason-in-documents</text>
+<text x="936.0" y="263.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">extract exactly</text>
+<text x="936.0" y="285.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">what the trace needs</text>
+<text x="560" y="400" font-size="13" fill="#5C6B7A" text-anchor="middle">the loop is the ReAct shape, but the tool is search and the trigger is uncertainty</text>
+<rect x="40" y="448" width="1040" height="80" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="498" font-size="15" font-weight="500" fill="#1B2838" text-anchor="middle">GPQA: competitive with human experts. HotpotQA, 2WikiMultiHopQA, Bamboogle: state of the art.</text>
+<text x="40" y="584" font-size="15" font-weight="450" fill="#1B2838">Sampling solves problems the model almost knows. Search-o1 solves ones it knows it does not know.</text>
+<text x="40" y="612" font-size="13" fill="#5C6B7A">Project: Stanford Frontier AI. Source: paper, Search-o1. Shell 3.</text>
+</svg>

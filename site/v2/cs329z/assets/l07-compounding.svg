@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="600" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">Compounding error: reliable steps, unreliable chains</text>
+<text x="40" y="82" font-size="17" fill="#5C6B7A">Each hop is 95% reliable. The chain is not.</text>
+<line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="40" y="576" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: original</text>
+<text x="40" y="160" font-size="18" font-weight="600" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">P(chain right) = 0.95^n</text>
+<text x="40" y="234" font-size="15" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">n = 2 hops</text>
+<rect x="220" y="200" width="505" height="48" rx="8" fill="#E7F4EF" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="796" y="230" font-size="15" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">0.95^2 = 0.90</text>
+<text x="40" y="344" font-size="15" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">n = 5 hops</text>
+<rect x="220" y="310" width="433" height="48" rx="8" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="796" y="340" font-size="15" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">0.95^5 = 0.77</text>
+<text x="40" y="454" font-size="15" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">n = 20 hops</text>
+<rect x="220" y="420" width="201" height="48" rx="8" fill="#F3D4D8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="796" y="450" font-size="15" font-weight="450" fill="#1B2838" text-anchor="start" font-family="'IBM Plex Mono', ui-monospace, monospace">0.95^20 = 0.36</text>
+<text x="220" y="496" font-size="14" font-weight="600" fill="#C46B2C" text-anchor="start">wrong 2 times in 3</text>
+<text x="40" y="540" font-size="14" font-weight="450" fill="#5C6B7A" text-anchor="start">Fix: verify at each hop, keep chains short, prefer fewer hops with stronger evidence.</text>
+</svg>

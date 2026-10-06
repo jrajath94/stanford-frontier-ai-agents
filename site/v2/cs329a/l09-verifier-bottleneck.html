@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 9: The Verifier Bottleneck: Who Judges the Judge — Stanford Frontier AI</title>
+<meta name="description" content="Every loop in this course leans on a verifier. Outcome checks miss broken reasoning, and LLM judges certify bad proofs. DeepSeek-Math V2 answers with a meta-ver">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-l09" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09" class="active">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 9: The Verifier Bottleneck: Who Judges the Judge</nav>
+      <h1>Lecture 9: The Verifier Bottleneck: Who Judges the Judge</h1>
+      <p class="meta-line">2025-11-05 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="AyO6wyu4DEg"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/AyO6wyu4DEg" title="Lecture 9: The Verifier Bottleneck: Who Judges the Judge" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=AyO6wyu4DEg" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=AyO6wyu4DEg" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Original Stanford lecture. Timestamps in the text link to the exact moment.</p></div><h2 id="the-problem-the-judge-is-the-load-bearing-wall">The problem: the judge is the load-bearing wall</h2>
+<p>Every chapter so far leans on the same part. Lecture 2 needs a
+verifier to pick winning samples. Lecture 4 needs hidden tests
+to grade code. Lecture 6 needs example tests to filter programs.
+Lecture 8 needs answer keys to keep rationales. Remove the
+verifier and every loop collapses.</p>
+<p>So ask the uncomfortable question: how good are our verifiers?
+Two kinds exist. An <strong>outcome reward</strong> checks the final answer:
+does it match, do the tests pass. A <strong>process reward</strong> checks
+the steps: is each reasoning step valid. Outcome rewards are
+cheap and available. Process rewards are expensive and mostly
+do not exist. The course has been running on outcome rewards
+throughout. This chapter shows what that costs.</p>
+<h2 id="first-failure-demonstrated-right-answer-wrong-reasoning">First failure, demonstrated: right answer, wrong reasoning</h2>
+<p>A model proves a theorem. The final line matches the expected
+result. The outcome verifier approves. But step 4 of the proof
+does not follow from step 3: there is a gap, a leap the proof
+does not earn. The verifier cannot see it. It only checked the
+ending.</p>
+<p>Train on this proof, as Lecture 8&rsquo;s loop would, and the model
+learns that gaps are acceptable. The loop hill-climbs on the
+metric, correct final answers, while the unmeasured thing,
+valid reasoning, decays. The lecture&rsquo;s warning is general:
+saturating benchmarks with outcome rewards does not mean the
+reasoning got better. It means the answers match.</p>
+<h2 id="second-failure-demonstrated-the-judge-certifies-nonsense">Second failure, demonstrated: the judge certifies nonsense</h2>
+<p>If outcome checks are blind, use the model itself as judge:
+<strong>LLM-as-judge</strong>, ask the model whether a proof is valid. The
+lecture reports the embarrassing result in theorem proving:
+models trained on quantitative reasoning routinely claim that
+mathematically invalid proofs are valid. The judge is
+confident and wrong. Expert humans spot the gaps instantly.
+The model judge does not. A verifier that approves bad proofs
+is worse than no verifier: it actively teaches bad reasoning.</p>
+<h2 id="the-key-question">The key question</h2>
+<p>If verifiers bottleneck everything, and outcome checks are
+blind while model judges are gullible, how do we build a
+verifier we can trust?</p>
+<h2 id="the-new-idea-the-meta-verifier">The new idea: the meta-verifier</h2>
+<p><strong>DeepSeek-Math V2</strong> adds one level. Keep the generator that
+writes proofs and the verifier that judges them, but add a
+<strong>meta-verifier</strong> that judges the judge.</p>
+<p>The construction, step by step:</p>
+<ol>
+<li>Humans examine proofs and mark the real issues, with no
+   reference solutions: &ldquo;step 4 does not follow from step 3.&rdquo;</li>
+<li>Train an LLM on those annotations to do the same: find
+   issues in proofs, then score the proof from 0 to 1 based
+   on the issues found.</li>
+<li>The meta-verifier reviews the verifier&rsquo;s analysis: do the
+   claimed issues actually exist? Does the score follow from
+   the issues? Experts annotate the quality of this review,
+   and the meta-verifier learns from that.</li>
+<li>Close the loop: the verifier&rsquo;s scores train the generator.
+   the generator produces harder proofs. Harder proofs train
+   a sharper verifier. Each side lifts the other.</li>
+</ol>
+<pre class="ascii">generator --proofs--&gt; verifier --issues + score--&gt; meta-verifier
+    ^                      |                          |
+    |                      v                          v
+    +---- harder proofs &lt;--+--- sharper judging &lt;----+
+</pre>
+<p>The numbers the lecture reports: over 8 iterations of this
+loop, proof scores keep climbing. With best-of-32 selection,
+picking the top proof out of 32 generated, the system reaches
+42 percent proof score on the IMO 2024 shortlist. The point is
+not the number. The point is the hill keeps climbing without
+new human labels after seeding: the loop manufactures its own
+ever-harder training signal.</p>
+<p>Why does the meta level help? Because the failure it targets
+is specific: verifiers that invent issues, or miss real ones,
+or assign scores their own analysis does not support. The
+meta-verifier checks the work of the judge the way a senior
+reviewer checks a junior&rsquo;s grading. One level of &ldquo;show your
+work&rdquo; applied to evaluation itself.</p>
+<h2 id="the-diversity-problem-and-the-multi-agent-answer">The diversity problem, and the multi-agent answer</h2>
+<p>The recap lecture raises a second bottleneck: <strong>diversity</strong>.
+Self-improvement needs varied reasoning chains to learn from.
+But fine-tuning a single agent collapses diversity: the model
+converges on its favorite patterns, and later rounds have
+nothing new to select from. The lecture shows the symptom as
+accuracy that collapses, or stalls, under continued
+single-agent fine-tuning.</p>
+<p>The fix it presents is <strong>multi-agent debate fine-tuning</strong>.
+Several generator agents, fine-tuned from the same base but
+diverging, each produce an answer. Their answers are
+summarized together. A critic model critiques the combined
+set. Then a second round: every generator writes an updated
+answer informed by the critique, and majority vote plus
+summarization produces the final. The trajectories, initial
+answers, critiques, revisions, become fine-tuning data.</p>
+<p>Two results the lecture highlights. First, with multi-agent
+fine-tuning, performance keeps rising across iterations where
+single-agent fine-tuning collapses. Second, the responses stay
+diverse: measured by embedding dissimilarity, the agents keep
+disagreeing productively instead of converging. Diversity is
+not a starting condition that decays. The debate structure
+maintains it. And the gains transfer: fine-tuned on math, the
+agents improve on adjacent domains like GSM8K too.</p>
+<p>The lecture&rsquo;s summary line: if you want self-improvement, the
+reasoning chains feeding it must stay diverse, and multiple
+agents are a practical way to keep them that way.</p>
+<h2 id="where-it-breaks-verification-has-a-speed-limit">Where it breaks: verification has a speed limit</h2>
+<p>Step back and the deepest bottleneck appears. The whole
+edifice, sampling, RL, meta-verification, multi-agent debate,
+assumes verifiers that are fast. RL loops need thousands of
+iterations. Test-time scaling needs judgments per question.
+The lecture names the domains where this fails: chip design,
+where one simulation takes days. Wet-lab chemistry, where one
+experiment takes weeks. Creative work, where no objective
+verifier exists at all.</p>
+<p>The workaround is a learned stand-in: train a reward model to
+predict the slow simulator&rsquo;s verdict, and put the fast model
+in the loop. But now the loop optimizes the stand-in, not the
+world, and any inaccuracy is an invitation to <strong>reward
+hacking</strong>: the model learns to please the predictor rather
+than solve the problem. The lecture is blunt that this is an
+open problem. Verification is the bottleneck of the entire
+research program, and for slow or subjective domains there is
+no good answer yet.</p>
+<h2 id="mapping-back-what-each-idea-fixes">Mapping back: what each idea fixes</h2>
+<table>
+<thead>
+<tr>
+<th>Verification failure</th>
+<th>Answer</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Outcome checks miss broken reasoning</td>
+<td>Process-level judging</td>
+<td>Score the steps, not just the ending. DeepSeek-Math V2&rsquo;s verifier finds issues per step.</td>
+</tr>
+<tr>
+<td>LLM judges certify invalid proofs</td>
+<td>Meta-verifier</td>
+<td>Judge the judge: check that claimed issues exist and scores follow from them.</td>
+</tr>
+<tr>
+<td>Single-agent fine-tuning collapses</td>
+<td>Multi-agent debate</td>
+<td>Generators plus critic keep chains diverse. Performance climbs where single-agent stalls.</td>
+</tr>
+<tr>
+<td>Gains do not transfer</td>
+<td>Diverse debate data</td>
+<td>Fine-tuned on math, agents improve on adjacent GSM8K too.</td>
+</tr>
+<tr>
+<td>Slow real-world verifiers</td>
+<td>Learned reward stand-ins</td>
+<td>Fast predictor replaces slow simulation. Price is reward hacking risk.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price">The honest price</h2>
+<p>Meta-verification needs humans to seed the issue-finding data:
+expert annotators marking proof flaws with no reference
+solutions. That seed is expensive and domain-specific. The
+generator-verifier loop can then run on its own, but it
+hill-climbs inside the seeded notion of correctness. Multi-agent
+debate multiplies inference cost by the number of agents and
+rounds. And none of it touches the slow-verifier domains, where
+the loop cannot turn at all. The verifier bottleneck is not
+solved. It is pushed one level up, and the top level still
+needs humans.</p>
+<div class="qa"><div class="q">Why are outcome rewards not enough?</div><div class="a"><p>They check the ending, not the reasoning. A proof with a gap at step 4 and the right final line passes. Training on such proofs teaches the model that gaps are fine, so benchmark scores saturate while reasoning quality decays. The lecture&rsquo;s verdict: outcome rewards enabled the field&rsquo;s progress and now limit it. Process-level judgment, scoring the steps, is the direction.
+It needs step-level labels: which step is wrong and why. Humans can do it but slowly and expensively. Models asked to do it, LLM-as-judge, certify invalid proofs as valid. DeepSeek-Math V2&rsquo;s answer is to train the step-judge on human-marked proof issues, then add a meta level that audits the judge. Each level costs human seeding.</p><div class="followup"><strong>Follow-up:</strong> Why is process reward so hard to build?</div></div></div>
+<div class="qa"><div class="q">What does the meta-verifier actually check?</div><div class="a"><p>The verifier&rsquo;s work, not the proof directly. Given a proof and the verifier&rsquo;s analysis, the meta-verifier asks: do the claimed issues really exist in the proof, and does the 0-to-1 score follow from those issues? It catches fabricated errors and unsupported scores. Experts annotate review quality to train it. Then the improved verifier trains a better generator, which writes harder proofs, which sharpen the verifier further.
+In the reported result, yes for the 8 climbing iterations: the seed data trains the issue-finder, and automation takes over labeling from there. But the seed defines correctness, and the loop cannot outgrow it. Humans set the standard. The loop scales it.</p><div class="followup"><strong>Follow-up:</strong> Does the loop run without humans after seeding?</div></div></div>
+<div class="qa"><div class="q">Why does multi-agent fine-tuning beat single-agent fine-tuning?</div><div class="a"><p>Diversity. A single agent fine-tuned repeatedly converges on its favorite reasoning patterns. Later rounds select from a shrinking pool and accuracy collapses. Multiple generators plus a critic keep producing genuinely different chains: embedding dissimilarity stays high across iterations, and performance keeps climbing. The debate structure manufactures the disagreement that selection needs.
+No. Ensembling votes once. Here the agents interact: summarize, critique, revise, vote, and the whole trajectory becomes training data for the next round. The product is not a better vote but better agents, and the gains transfer to adjacent domains the debate never trained on.</p><div class="followup"><strong>Follow-up:</strong> Is this just ensembling?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>The load-bearing wall.</strong> Every loop in the course needs a
+   verifier. Ask how good the verifiers are.</li>
+<li><strong>Right answer, wrong reasoning.</strong> Outcome checks approve
+   proofs with gaps at step 4. Training on them teaches gaps.</li>
+<li><strong>The gullible judge.</strong> LLM-as-judge certifies invalid
+   proofs as valid. Worse than no verifier.</li>
+<li><strong>The key question.</strong> How do we build a verifier we can
+   trust?</li>
+<li><strong>Meta-verifier.</strong> Judge the judge: do the claimed issues
+   exist, does the score follow. Generator and verifier then
+   lift each other.</li>
+<li><strong>The numbers.</strong> 8 iterations climbing. Best-of-32 reaches
+   42% proof score on the IMO 2024 shortlist.</li>
+<li><strong>Diversity collapse.</strong> Single-agent fine-tuning converges
+   and stalls. Multi-agent debate, generators plus critic,
+   keeps chains diverse and climbing, and transfers to new
+   domains.</li>
+<li><strong>The honest price.</strong> Human-seeded standards, multiplied
+   inference cost, and no answer for slow-verifier domains.
+   The bottleneck moves up one level. The top still needs
+   humans.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- CS329A Lecture 7 (Autumn 2025): the lecture this chapter
+  follows. https://www.youtube.com/watch?v=AyO6wyu4DEg
+- DeepSeek-Math V2: the meta-verifier architecture and the
+  IMO shortlist result.</p>
+<p><strong>Further reading:</strong>
+- Multi-agent debate fine-tuning literature: the generator,
+  summarizer, critic loop the lecture summarizes.
+- Christiano et al., RLHF (2017): learned reward models, the
+  ancestors of the stand-ins discussed here.</p>
+<p><strong>Caveats from these sources.</strong> DeepSeek-Math V2 details are
+the lecture&rsquo;s summary. The 42% figure is best-of-32 on the
+IMO 2024 shortlist, not pass@1. The multi-agent debate paper
+is unnamed in the lecture. Treat the description as the
+lecturers&rsquo; summary. Slow-domain examples (chip sims, wet labs)
+are the lecturers&rsquo; illustrations of the general point.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS329A L02:</strong> the verifier this chapter interrogates is
+  the one Lecture 2 assumed as an oracle.</li>
+<li><strong>CS329A L08:</strong> STaR&rsquo;s leak, unfiltered rationales, is what
+  process-level judging is built to fix.</li>
+<li><strong>CS329A L04:</strong> learned stand-in rewards are the
+  generalization of RLEF&rsquo;s hidden tests to domains without
+  tests.</li>
+<li><strong>CS329Z:</strong> evaluation chapters: building outcome
+  benchmarks, and why they saturate.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=AyO6wyu4DEg" target="_blank" rel="noopener">CS329A Lecture 7: quarter recap, verification, multi-agent fine-tuning (Autumn 2025)</a></li><li><span class="src-tag">PAPER</span>DeepSeek-Math V2: self-verification loops for theorem proving</li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
+      <nav class="pager"><a href="../cs329a/l08-teaching-reason.html"><span class="lbl">← Previous</span>Lecture 8: Teaching the Model to Reason: STaR</a><a href="../cs329a/l10-measuring-agents.html"><span class="lbl">Next →</span>Lecture 10: Measuring Agents and the Road Ahead</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

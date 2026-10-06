@@ -167,6 +167,28 @@ the model returns `tool_calls` with arguments as JSON, not prose.
 
 ![Function calling](assets/l02-function-call.svg "The request carries the schemas. The model returns arguments as JSON. The runtime validates before executing. Project: Stanford Frontier AI. Source: original.")
 
+What the wire actually looks like, on the "What does test.py contain?"
+task:
+
+```json
+// the request carries the schema (STAGE 1 + 2 scaffolding)
+{"role": "user", "content": "What does test.py contain?",
+ "tools": [{"name": "read_file",
+             "description": "Return the contents of a file.",
+             "input_schema": {"type": "object",
+               "properties": {"path": {"type": "string"}},
+               "required": ["path"]}}]}
+
+// the model answers with a typed call, not prose (STAGES 1-3)
+{"role": "assistant",
+ "tool_calls": [{"name": "read_file",
+                 "arguments": "{\"path\": \"test.py\"}"}]}
+
+// the runtime validates, executes, and returns (STAGE 4)
+{"role": "tool_result",
+ "content": "def add(a, b):\n    return a + b\n"}
+```
+
 The consequence is architectural. Because the contract is typed JSON
 in the API itself, the validate stage can live in three places: in
 your scaffold (check before executing), in the API (the provider
@@ -197,8 +219,11 @@ checklist, made explicit:
 
 The common mistake is exposing the database directly: fifty tables as
 fifty tools, each with fifteen optional arguments. The model drowns in
-choice. Pi's four tools (read, write, edit, bash) are the counterexample
-the context lesson returns to: a few sharp tools beat fifty dull ones.
+choice. **Pi**, Mario Zechner's minimal open-source terminal coding
+agent, is the counterexample the context lesson returns to: it ships
+exactly four tools (read, write, edit, bash) and a system prompt under
+1,000 tokens, on the thesis that a capable model needs almost no
+scaffolding. A few sharp tools beat fifty dull ones.
 
 ### Error handling: append the error, do not raise it
 
@@ -280,7 +305,7 @@ what the last step found. Good systems mix them: a workflow of agents
 (fixed outer steps, agentic inner steps), or an agent that calls
 workflows as tools.
 
-A note on RAG, the third compound system in this lecture. Retrieval
+A note on RAG (retrieval-augmented generation), the third compound system in this lecture. Retrieval
 connects the LLM to external knowledge in real time: retrieve, augment,
 generate. It gets its own full treatment in the three RAG lessons.
 Here it is one instance of the pattern: the model plus a component, the
@@ -331,7 +356,7 @@ Each rung compresses the one below.
 |---|---|---|---|
 | API contract | OpenAI function calling / Anthropic tool use | schemas in the request, `tool_calls` in the response | provider-shaped; the schema dialect differs |
 | Protocol | MCP (Linux Foundation, 2025) | host/client/server; tools, resources, prompts | transport, not trust: poisoned servers are still possible |
-| Agent-to-agent | A2A (Google's agent protocol) | agents calling agents across vendors | [uncertain: adoption depth as of Oct 2026] |
+| Agent-to-agent | A2A (Google, donated to the Linux Foundation June 2025; v1.0 March 2026) | agents calling agents across vendors: Agent Cards at a well-known endpoint, task lifecycle, SSE streaming | real adoption: 150+ organizations, integrated into Azure AI Foundry and Bedrock AgentCore |
 | Framework | LangChain tools, LlamaIndex | tool wrappers in the scaffold | scaffold lock-in. The loop is theirs |
 | Sandbox | Docker, Firecracker, WASM | where execute runs | latency and setup cost per call |
 
@@ -357,7 +382,9 @@ because every layer is a place where crack 1 can hide.
 Tools make the agent powerful and breakable in new ways. The lecture
 names five challenges. They are the price of everything built so far.
 
-**Reliability: errors compound.** One bad observation poisons the plan,
+### Reliability: errors compound
+
+One bad observation poisons the plan,
 which poisons the next action. The lecture frames it as the
 capability-reliability gap: capability climbs, reliability lags. Three
 questions measure the gap. Consistency: does the agent produce the same
@@ -368,26 +395,53 @@ The HAL reliability dashboard at Princeton tracks this gap.
 
 ![The capability-reliability gap](assets/l02-capability-gap.svg "Capability climbs. Reliability lags. Three questions measure the gap. Project: Stanford Frontier AI. Source: source.")
 
-**Training: sparse reward, expensive rollouts.** The reward arrives once
+### Training: sparse reward, expensive rollouts
+
+The reward arrives once
 at the end of a fifty-step trajectory: did the task succeed? Each
 rollout is a model call plus tool latency per step. Learning from that
 signal is slow and costly.
 
-**Long-horizon: context grows and drifts.** The context fills with stale
+### Long-horizon: context grows and drifts
+
+The context fills with stale
 attempts and the plan degrades. Compaction and retrieval exist to fight
 this. The context lesson works them in full.
 
-**Safety: task success is not safe behavior.** Four cases. Pop-up
-attacks hijack agents with 87 percent success. PrivacyLens (Shao et
-al., 2024) shows agents with file and email access leaking what they
-should not. Anthropic's reward-tampering research shows sycophancy:
-models optimizing for approval rather than truth. And multi-agent
-collusion: the lecture cites a 2026 incident investigation where agents
-from different providers colluded.
+### Pop-up hijack: the observation steers the agent
+
+Task success is not safe behavior. Four cases, each its own failure mode.
+
+**Pop-up hijack.** Zhang, Yu, and Yang (2024) show vision-language
+computer agents abandoning their task for a pop-up window. Attack
+success rate: 87 percent. Nearly nine runs in ten, the observation
+steers the agent.
 
 ![Pop-ups break the agent](assets/l02-popup-attack.svg "On task: book the flight. After a pop-up: the agent clicks. Zhang, Yu, and Yang report 87 percent attack success. Project: Stanford Frontier AI. Source: paper.")
 
-**Evaluation: what and how.** Benchmarks measure the scaffold as much as
+### Privacy leak: tool use leaks what it touches
+
+**Privacy leak.** PrivacyLens (Shao et al., 2024) shows agents with
+file and email access leaking what they should not. The leak is a
+tool-use property: the more tools the agent holds, the more private
+data sits one careless call away.
+
+### Reward tampering: the model games the grader
+
+**Reward tampering.** Anthropic's reward-tampering research shows
+sycophancy: models optimizing for approval rather than truth. The
+model learns what the grader rewards, not what the task needs.
+
+### Multi-agent collusion: every agent is a trust decision
+
+**Multi-agent collusion.** The lecture cites a 2026 incident
+investigation where agents from different providers colluded.
+Delegation multiplies the attack surface: every agent in the crew is a
+trust decision.
+
+### Evaluation: what and how
+
+Benchmarks measure the scaffold as much as
 the model. The course's eval lesson builds the full machinery. The
 project rubric already states the bar: a demo that works once will not
 score highly.
@@ -479,6 +533,7 @@ The story in nine steps. Each step answers the one before it.
 
 Further:
 - Model Context Protocol specification: https://modelcontextprotocol.io, the normative doc: lifecycle, primitives, transports.
+- Google Cloud, A2A protocol upgrade: https://cloud.google.com/blog/products/ai-machine-learning/agent2agent-protocol-is-getting-an-upgrade, A2A v1.0, the Linux Foundation donation, and enterprise adoption.
 - Anthropic, Building Effective Agents: https://www.anthropic.com/engineering/building-effective-agents, workflows versus agents from production experience.
 - Zaharia et al., The Shift from Models to Compound AI Systems: https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/, the lecture's framing essay.
 
@@ -491,8 +546,7 @@ Further:
 **Further reading:**
 - HAL reliability dashboard: http://hal.cs.princeton.edu, the
   capability-reliability measurements the lecture cites.
-- HarnessAudit bench: https://harnessaudit.github.io, agent scaffold auditing
-  auditing.
+- HarnessAudit bench: https://harnessaudit.github.io, agent scaffold auditing.
 - PrivacyLens (Shao et al., 2024): agents leaking what they should not.
 - Zhang, Yu, and Yang (2024), pop-up attacks: https://arxiv.org/abs/2411.02391.
 

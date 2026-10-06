@@ -238,56 +238,89 @@ right answers, used to score a model. The guest&rsquo;s
 central claim is that evals are the most protected
 asset in the labs, and the reason is strategic: <strong>evals
 set the roadmap</strong>.</p>
+<h3 id="subchapter-what-an-eval-is-worked">Subchapter: what an eval is, worked</h3>
+<p>Take SWE-bench. The tasks are real GitHub issues from
+real repositories: fix this bug, implement this
+feature. Each task has tests that decide pass or fail.
+Score the model by the fraction it passes. That number,
+62.4 percent or 71.1 percent, is the eval score. The
+eval is a hill with a measured height, and every lab
+knows exactly how tall it is.</p>
+<h3 id="subchapter-the-eval-loop">Subchapter: the eval loop</h3>
 <p>The mechanism is a loop the guest states as a slogan:
 whatever hill you want to climb, first define it with
-an eval; then RL is the eval-maxing machine. Build a
+an eval. then RL is the eval-maxing machine. Build a
 training pipeline shaped like the eval, on different
 data (training directly on the eval would be
 overfitting, which is memorizing the test instead of
 learning the skill), and climb. Then pick the next
 hill.</p>
+<figure><img alt="The eval loop: define the hill, climb it, pick the next" src="assets/plate-l04-eval-loop.svg"><figcaption>Plate L04-F1. Evals define the hill. RL is the eval-maxing machine. Shell 3. Source: original, drawn from the session. Project: Stanford Frontier AI.</figcaption></figure>
 <p>The worked example is code. <strong>SWE-bench</strong>, an eval of
 real software engineering tasks, is what started the
 code-model race: once the hill was defined, every lab
 climbed it. The guest notes the named eval has flaws
 and better ones followed, which is itself the point:
 the eval is the steering wheel, so getting it right is
-the highest-leverage work in the lab.</p>
-<p>Figure L04-F1. The eval loop. Source: original diagram
-for Stanford Frontier AI, drawn from the session.</p>
-<pre class="ascii">define the hill          climb the hill           next hill
-+-----------------+      +-----------------+      +------------+
-| eval: fixed     | ---&gt; | RL training on  | ---&gt; | new eval   |
-| tasks + answers |      | similar tasks,  |      |            |
-| (guarded asset) |      | different data  |      |            |
-+-----------------+      +-----------------+      +------------+
-RL is the eval-maxing machine. Do not train on the eval itself.
-</pre>
+the highest-impact work in the lab.</p>
+<h3 id="subchapter-why-labs-guard-evals">Subchapter: why labs guard evals</h3>
+<p>If evals set the roadmap, then whoever writes the eval
+writes everyone&rsquo;s roadmap. A public eval lets every
+competitor aim at the same hill. A private eval lets
+one lab climb a hill nobody else can see. The guard is
+not about the test questions. It is about the
+direction of effort. Leaked evals compress everyone&rsquo;s
+strategy into one.</p>
+<h3 id="subchapter-the-goodhart-trap">Subchapter: the Goodhart trap</h3>
+<p>An eval is a proxy for the real goal, and proxies get
+gamed. Toy it: the eval scores bug fixes by test
+pass rate. The model learns to pass tests without
+fixing bugs: it edits the tests. The score climbs and
+the product rots. This is <strong>Goodhart&rsquo;s law</strong>: when a
+measure becomes a target, it stops being a good
+measure. The guest&rsquo;s discipline, train on similar
+tasks but different data, is the defense. It is a
+discipline, not a guarantee.</p>
 <h2 id="whose-good-the-tiered-eval-stack">Whose good: the tiered eval stack</h2>
 <p>Here the chapter turns enterprise. &ldquo;Good&rdquo; is not
 universal. The guest&rsquo;s example: JPMorgan and Goldman
 Sachs have different standards, different ways of
 operating, different definitions of a correct output.
 So evals stack in tiers.</p>
+<figure><img alt="The tiered eval stack: lab evals versus enterprise evals" src="assets/plate-l04-tiers.webp"><figcaption>Plate L04-F2. General models set the floor. Your evals set the ceiling. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-tiered-stack-worked">Subchapter: the tiered stack, worked</h3>
 <pre class="ascii">tier 1: lab evals         what the model labs optimize toward
 tier 2: enterprise evals  what each company optimizes toward
 </pre>
+<p>Tier 1 is public and shared: MMLU, HumanEval, SWE-bench.
+Tier 2 is private and specific: JPMorgan&rsquo;s definition
+of a correctly flagged transaction is not Goldman&rsquo;s.
+The same base model, optimized against two different
+tier-2 evals, becomes two different products.</p>
+<h3 id="subchapter-the-economics-of-the-layer">Subchapter: the economics of the layer</h3>
 <p>Applied Compute lives at tier 2: the specialization
 layer that takes frontier models and optimizes them
 against one enterprise&rsquo;s evals. The general model sets
 the floor. Specialization sets the ceiling, and the
 ceiling is where companies differentiate from
-competitors.</p>
+competitors. The layer is defensible because tier-2
+evals are proprietary by construction: your style
+guide, your telemetry, your traces.</p>
 <h2 id="the-5-percent-number">The 5 percent number</h2>
 <p>The host asks the budget question directly: out of
 $100 of training spend, how much is pre-training and
 how much is post-training? The guest came with
 numbers.</p>
+<figure><img alt="The training budget split: the 5 percent" src="assets/plate-l04-budget.svg"><figcaption>Plate L04-F3. Post-training is 5 percent of the compute and buys the reasoning. Shell 2. Source: original, DeepSeek numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-arithmetic-worked">Subchapter: the arithmetic, worked</h3>
 <p><strong>DeepSeek V3</strong> pre-training: about 2.4 to 2.5 million
 H800 GPU-hours. The RL training that produced
 <strong>DeepSeek R1</strong>: about 150,000 GPU-hours. Divide:
 150,000 / 2,500,000 = 0.06, about <strong>5 to 6 percent</strong>.
-The guest rounds to 5 percent.</p>
+The guest rounds to 5 percent. Out of $100 of training
+spend: $95 builds the representations, $5 buys the
+reasoning.</p>
+<h3 id="subchapter-two-readings">Subchapter: two readings</h3>
 <p>Two readings of that number, both in the session.
 First, post-training is shockingly cheap relative to
 what it buys: single-digit percent of the compute for
@@ -299,15 +332,14 @@ because post-training has its own scaling laws. Bigger
 batches, more reasoning per attempt, better
 performance. The 5 percent is a snapshot of a growing
 share.</p>
-<p>Figure L04-F2. The training budget split. Source:
-original diagram for Stanford Frontier AI, numbers
-from the session.</p>
-<pre class="ascii">$100 of training spend (DeepSeek V3 / R1, guest's numbers)
-
-pre-training   $95  | 2.4-2.5M H800-hours | builds the representations
-post-training  $5   | ~150k GPU-hours      | buys the reasoning
-                    trend: the $5 share is growing (data-center-wide RL)
-</pre>
+<h3 id="subchapter-what-the-95-percent-buys-that-the-5-cannot">Subchapter: what the 95 percent buys that the 5 cannot</h3>
+<p>The 5 percent only works on top of the 95. Try RLVR on
+a weak base model and there is nothing to steer: the
+representations are the floor. Pre-training is the
+fixed cost of the floor. post-training is the variable
+cost of the ceiling. Both matter, and they are bought
+by different players. The startup layer lives at the
+ceiling because the floor is already built.</p>
 <h2 id="the-doordash-worked-example">The DoorDash worked example</h2>
 <p>The chapter&rsquo;s central case study makes specialization
 concrete. <strong>DoorDash</strong> onboards more than 100,000
@@ -317,14 +349,25 @@ into a DoorDash storefront is genuinely hard: the
 company has a precise style guide for how modifiers
 attach to items, what counts as an add-on versus a
 special ingredient, what can mix and match.</p>
-<p>General models failed at this, even with prompting.
-The fix was the eval loop from this chapter&rsquo;s opening.
+<h3 id="subchapter-the-problem-quantified">Subchapter: the problem, quantified</h3>
+<p>100,000 merchants a year is about 274 a day, every
+day. Each merchant has dozens of menu items. A
+human-labeled pipeline at that volume is a small
+factory. General models failed at this, even with
+prompting: the style guide is too specific, too
+proprietary, too unlike anything in the training data.</p>
+<h3 id="subchapter-the-error-rate-loop-worked">Subchapter: the error-rate loop, worked</h3>
+<p>The fix was the eval loop from this chapter&rsquo;s opening.
 Take the model&rsquo;s outputs, have humans correct the
 menus, and measure the delta against ground truth.
 That delta is a reward signal: the error rate. Then
-optimize directly against reducing the error rate. No
-prompt engineering. Just define good and bad, and let
-RL climb.</p>
+optimize directly against reducing the error rate.
+Toy it: the model converts 100 menus with 12 errors
+(12 percent error rate). RL trains against the error
+rate. Next run: 6 percent. Next: 3 percent. No prompt
+engineering. Just define good and bad, and let RL
+climb.</p>
+<h3 id="subchapter-why-not-wait-for-the-next-model">Subchapter: why not wait for the next model</h3>
 <p>Three details matter. First, the model is a <strong>VLM</strong>, a
 vision-language model: a transformer that reads images
 and text together. Second, the guest&rsquo;s answer to &ldquo;why
@@ -341,35 +384,26 @@ Imagine saving a file and, in under two seconds, a
 model tells you whether you just wrote a bug. A
 general model cannot do this: it is too big, too slow,
 too expensive per call.</p>
+<h3 id="subchapter-the-tradeoff-worked">Subchapter: the tradeoff, worked</h3>
 <p>The guest&rsquo;s frame is the <strong>Pareto frontier</strong> of
-performance, cost, and latency. Take a small model and
-train it relentlessly on one task, bug-catching, and
-you get big-model performance at small-model cost and
-latency. The frontier is not one model. It is an
-<strong>ensemble</strong>: general models as orchestrators, fast
-specialized models as sub-agents, proprietary data
-filling the gaps the general models never saw.</p>
+performance, cost, and latency. Toy it: the general
+model scores 90 percent on bug-catching at $0.02 per
+call and 8 seconds of latency. The small specialist
+scores 91 percent at $0.0002 per call and 1.5 seconds.
+Take a small model and train it relentlessly on one
+task, bug-catching, and you get big-model performance
+at small-model cost and latency. The frontier is not
+one model.</p>
+<h3 id="subchapter-the-ensemble-pattern">Subchapter: the ensemble pattern</h3>
+<p>It is an <strong>ensemble</strong>: general models as
+orchestrators, fast specialized models as sub-agents,
+proprietary data filling the gaps the general models
+never saw. The orchestrator decides. The specialists
+execute. The data covers what the internet never saw.</p>
 <p><strong>Ramp Labs</strong> gets a mention on the same pattern: an
 RL-trained model for fast search inside spreadsheets,
 improving the product experience directly.</p>
-<p>Figure L04-F3. The ensemble pattern. Source: original
-diagram for Stanford Frontier AI, drawn from the
-session.</p>
-<div class="mermaid">flowchart LR
-  G["general model: orchestrator"]
-  S["small specialist: sub-2s bug check"]
-  D["proprietary data: out-of-distribution"]
-  G --> P["product"]
-  S --> P
-  D --> P
-</div><pre class="mermaid-fallback"><code>flowchart LR
-  G[&quot;general model: orchestrator&quot;]
-  S[&quot;small specialist: sub-2s bug check&quot;]
-  D[&quot;proprietary data: out-of-distribution&quot;]
-  G --&gt; P[&quot;product&quot;]
-  S --&gt; P
-  D --&gt; P
-</code></pre>
+<figure><img alt="The Pareto frontier: the small specialist beats the generalist" src="assets/plate-l04-pareto.svg"><figcaption>Plate L04-F4. Specialists trade generality for cost and latency on one task. Shell 3. Source: original, drawn from the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="continual-learning-the-hot-stove">Continual learning: the hot stove</h2>
 <p>L03 named continual learning as the next bottleneck.
 Here the guest shows its early shape. <strong>Continual
@@ -377,17 +411,21 @@ learning</strong> means a deployed model that improves from
 real-world use: understand how the system is used, see
 the downstream consequences of its actions, and update
 from that.</p>
+<h3 id="subchapter-cursors-composer-worked">Subchapter: Cursor&rsquo;s Composer, worked</h3>
 <p>The worked example is <strong>Cursor&rsquo;s Composer</strong>: Cursor&rsquo;s
 own coding model, trained on an open-source base plus
 Cursor&rsquo;s coding data. In production, the team captured
 telemetry as implicit rewards: did the user accept the
-suggestion, or revert it? Then online training: collect
-data, take a training step, repeat. The guest&rsquo;s scale
-notes: hours per step, each step covering a huge
-batch, days to weeks of investment to see improvement.
-Production cannot replay one task thousands of times
-the way offline RL does, so the trick is massive
-batches that denoise the gradient.</p>
+suggestion, or revert it? Toy it: 1,000 suggestions,
+700 accepted, 300 reverted. The accept signal is a
+reward of 1, the revert is 0. Then online training:
+collect data, take a training step, repeat. The
+guest&rsquo;s scale notes: hours per step, each step
+covering a huge batch, days to weeks of investment to
+see improvement. Production cannot replay one task
+thousands of times the way offline RL does, so the
+trick is massive batches that denoise the gradient.</p>
+<h3 id="subchapter-context-bases">Subchapter: context bases</h3>
 <p>The guest&rsquo;s own version is <strong>context bases</strong>: use
 agents and offline compute to analyze documents and
 past human-agent traces, extract the learnings, and
@@ -400,12 +438,16 @@ together, not from any single trick.</p>
 and chips, especially Nvidia, with one risk (more
 below). Short, or at least cautious: the <strong>data
 market</strong> as currently constituted.</p>
+<h3 id="subchapter-the-squeeze-worked">Subchapter: the squeeze, worked</h3>
 <p>The mechanism is a squeeze. An RL data vendor sells a
 customer a task the model cannot do yet. Training
 succeeds. The model gets smarter. The next task the
 customer brings is harder, costlier, and slower to
-build, because the easy hills are climbed. The vendor
+build, because the easy hills are climbed. Toy it:
+task 1 costs $10k to build and trains for a week.
+Task 5 costs $100k and trains for a month. The vendor
 is paid to obsolete its own product line.</p>
+<h3 id="subchapter-the-generator-verifier-gap">Subchapter: the generator-verifier gap</h3>
 <p>The escape valve is <strong>synthetic data</strong> via the
 <strong>generator-verifier gap</strong>: for code, hold out the unit
 tests, let the model attempt the task, and check the
@@ -414,6 +456,7 @@ models get, the better these pipelines run. The
 guest&rsquo;s advice to data founders: keep pivoting to the
 next wave. Robotics data. Egocentric video. Whatever
 the models cannot yet generate for themselves.</p>
+<h3 id="subchapter-the-nvidia-long-with-the-risk">Subchapter: the Nvidia long, with the risk</h3>
 <p>The Nvidia long carries the mirror risk. Nvidia takes
 roughly <strong>75 percent margins</strong> on its chips while labs
 spend hundreds of billions. At some point a lab may
@@ -421,6 +464,42 @@ decide to spend a couple hundred billion on its own
 silicon: 80 percent as effective per chip, but far more
 chips. The guest stays long Nvidia, but names the
 in-house risk plainly.</p>
+<h2 id="what-is-used-where-enterprise-ai-october-2026">What is used where: enterprise AI, October 2026</h2>
+<ul>
+<li><strong>Anthropic</strong> leads enterprise LLM spend: roughly
+  40 percent of enterprise API spend in late 2025
+  (Menlo Ventures), ahead of OpenAI at 27 percent and
+  Google at 21 percent. In coding, Anthropic&rsquo;s share
+  was about 54 percent. Claude Code is described as a
+  multi-billion-dollar revenue line. Cursor uses Claude
+  as its default model. Vercel&rsquo;s AI Gateway data put
+  Anthropic above 60 percent of business API spending
+  by mid-2026, on roughly 30 percent of token volume:
+  Anthropic charges about 4x the average price per
+  token, and enterprises pay it.</li>
+<li><strong>OpenAI</strong> holds the consumer and the second
+  enterprise slot: ChatGPT at 46 percent of the AI
+  assistant audience, OpenAI at 27 percent of
+  enterprise API spend. The enterprise story is Codex
+  and the price ladder: GPT-6 Luna for volume,
+  GPT-6 Sol for the workhorse.</li>
+<li><strong>Google</strong> monetizes inside the bundle: Gemini
+  inside Workspace means many businesses get it without
+  a separate API line. Ramp&rsquo;s data likely undercounts
+  Google for exactly this reason.</li>
+<li><strong>Open weights</strong> held about 11 percent of enterprise
+  LLM API share in late 2025, down from 19 percent a
+  year earlier. Llama was the most adopted open-weight
+  model in enterprises. The enterprise open-weights
+  lane is now: Mistral, DeepSeek, Qwen, and OpenAI&rsquo;s
+  gpt-oss.</li>
+<li><strong>Microsoft and Salesforce</strong> own the agent platform
+  layer: Copilot Studio at about 31 percent of
+  enterprise agent deployments, Salesforce Agentforce
+  at 24 percent. The model and the platform are
+  different markets, and the platform layer has its
+  own winners.</li>
+</ul>
 <h2 id="mapping-back-from-general-to-specific">Mapping back: from general to specific</h2>
 <table>
 <thead>
@@ -440,15 +519,19 @@ in-house risk plainly.</p>
 </tr>
 <tr>
 <td>Why specialize per company?</td>
-<td>Good differs by company (JPMorgan versus Goldman). General models set the floor; specialization sets the ceiling.</td>
+<td>Good differs by company (JPMorgan versus Goldman). General models set the floor. specialization sets the ceiling.</td>
 </tr>
 <tr>
 <td>How did DoorDash do it?</td>
-<td>Human-corrected menus defined the error rate; RL minimized it directly. No prompting. A VLM, a style guide, a delta.</td>
+<td>Human-corrected menus defined the error rate. RL minimized it directly. No prompting. A VLM, a style guide, a delta.</td>
 </tr>
 <tr>
 <td>What breaks the data vendors?</td>
 <td>Success: smarter models need harder tasks, which cost more to build. Synthetic data via the generator-verifier gap is the way out.</td>
+</tr>
+<tr>
+<td>Who wins enterprise in 2026?</td>
+<td>Anthropic on coding and API spend, Microsoft and Salesforce on the agent platform, Google inside the bundle.</td>
 </tr>
 </tbody>
 </table>
@@ -464,12 +547,17 @@ guide, your telemetry, your traces. Nobody else&rsquo;s
 general model will ever know them first.</p>
 <div class="qa"><div class="q">What is an eval, and why do labs guard them?</div><div class="a"><p>An eval is a fixed benchmark of tasks with right answers that scores a model. Labs guard evals because evals set the roadmap: define the hill with an eval, and RL becomes the eval-maxing machine that climbs it. SWE-bench started the entire code-model race this way. Whoever defines the hill decides what every lab optimizes, which is more strategic than any single training run.
 That is overfitting: memorizing the test instead of learning the skill. The correct pattern is a training pipeline shaped like the eval but on different data. The guest is explicit that the eval defines the target while the training data must stay separate, or the score becomes meaningless.</p><div class="followup"><strong>Follow-up:</strong> Why not just train on the eval directly?</div></div></div>
+<div class="qa"><div class="q">Walk me through the eval loop, with a worked example.</div><div class="a"><p>Step one: define the hill with SWE-bench, real GitHub issues with pass/fail tests. Step two: build an RL pipeline shaped like SWE-bench on different tasks, so the model learns fixing, not memorizing. Step three: climb until the score plateaus. Step four: pick the next hill, because the eval&rsquo;s flaws are now the binding constraint. The guest notes the named eval had flaws and better ones followed. The loop is the product. the eval is just the current hill.
+The model games the proxy. If the eval scores test pass rate, the model learns to edit the tests. The score climbs and the product rots. Goodhart&rsquo;s law: when a measure becomes a target, it stops being a good measure. The defense is the guest&rsquo;s discipline: train on similar tasks, different data, and keep watching the real outcome.</p><div class="followup"><strong>Follow-up:</strong> What is the Goodhart failure mode?</div></div></div>
 <div class="qa"><div class="q">Explain the 5 percent number and why it matters.</div><div class="a"><p>DeepSeek V3&rsquo;s pre-training took about 2.4 to 2.5 million H800 GPU-hours. The RL stage behind R1 took about 150,000. That is roughly 5 percent of the compute buying the reasoning behavior that defines the product. It matters because it prices the specialization layer: startups can do frontier-grade post-training without frontier pre-training budgets. The caveat, also from the guest, is that the share is rising as labs run data-center-wide RL with its own scaling laws.
-Because RL steers representations it did not build. The 5 percent only works on top of the 95 percent: try RLVR on a weak base model and there is nothing to steer. Pre-training is the fixed cost of the floor; post-training is the variable cost of the ceiling. Both matter, and they are bought by different players.</p><div class="followup"><strong>Follow-up:</strong> If RL is so cheap, why does pre-training still cost billions?</div></div></div>
-<div class="qa"><div class="q">How did Applied Compute solve DoorDash&#x27;s menu problem?</div><div class="a"><p>DoorDash onboards over 100,000 merchants a year, each with unstructured menu images, and a strict style guide for modifiers and add-ons. General models failed even with prompting. The team took model outputs, had humans correct them, measured the delta against ground truth as an error rate, and optimized the error rate directly with RL on a vision-language model. Define good and bad, measure the gap, climb. No prompt engineering.
-Two reasons from the guest. First, enterprises want the frontier now, not in years. Second, no general model will ever know DoorDash&rsquo;s proprietary style guide out of the box; the ceiling is company-specific by construction. The ROI math favors training today at an order of magnitude less compute than pre-training.</p><div class="followup"><strong>Follow-up:</strong> Why not wait for the next general model to handle it?</div></div></div>
+Because RL steers representations it did not build. The 5 percent only works on top of the 95 percent: try RLVR on a weak base model and there is nothing to steer. Pre-training is the fixed cost of the floor. post-training is the variable cost of the ceiling. Both matter, and they are bought by different players.</p><div class="followup"><strong>Follow-up:</strong> If RL is so cheap, why does pre-training still cost billions?</div></div></div>
+<div class="qa"><div class="q">How did Applied Compute solve DoorDash&#x27;s menu problem?</div><div class="a"><p>DoorDash onboards over 100,000 merchants a year, about 274 a day, each with unstructured menu images and a strict style guide for modifiers and add-ons. General models failed even with prompting. The team took model outputs, had humans correct them, measured the delta against ground truth as an error rate, and optimized the error rate directly with RL on a vision-language model. Toy it: 12 percent error becomes 6 percent becomes 3 percent. Define good and bad, measure the gap, climb. No prompt engineering.
+Two reasons from the guest. First, enterprises want the frontier now, not in years. Second, no general model will ever know DoorDash&rsquo;s proprietary style guide out of the box. the ceiling is company-specific by construction. The ROI math favors training today at an order of magnitude less compute than pre-training.</p><div class="followup"><strong>Follow-up:</strong> Why not wait for the next general model to handle it?</div></div></div>
 <div class="qa"><div class="q">What is the Pareto frontier argument for small specialized models?</div><div class="a"><p>Performance, cost, and latency trade against each other, and a general model cannot be optimal on all three for every task. The Cognition/Windsurf example: a small model trained relentlessly on bug-catching checks your code in under two seconds with big-model accuracy at small-model cost. The production pattern is an ensemble: general models orchestrate, fast specialists handle narrow tasks, proprietary data covers what the general models never saw.
 A deployed model that improves from real-world use, learning from sparse rewards the way you learn a hot stove in one touch. What blocks it is mostly data access: getting the model in front of the right users, capturing the right telemetry, and knowing what good looks like. Cursor&rsquo;s Composer shows the early shape: accept/revert signals as implicit rewards, massive batches to denoise the gradient, hours per training step.</p><div class="followup"><strong>Follow-up:</strong> What is continual learning, and what blocks it?</div></div></div>
+<div class="qa"><div class="q">Who actually wins enterprise AI as of October 2026?</div><div class="a"><p>Split the market. On models and API spend: Anthropic, about 40 percent of enterprise API spend and 54 percent of enterprise coding, with Claude Code as a multi-billion-dollar line. On the agent platform: Microsoft Copilot Studio (about 31 percent of tracked agent deployments) and Salesforce Agentforce (24 percent). On distribution inside the bundle: Google, via Workspace. The model layer and the platform layer have different winners, which is why the specialization layer of this chapter can sell to all of them.
+Because the invoice is small relative to the wage it replaces. Vercel&rsquo;s gateway data: Anthropic takes over 60 percent of business API spending on about 30 percent of token volume. Enterprises pay the premium where the eval score is highest, which is coding. Price per token loses to price per accepted task, and the specialization layer of this chapter is exactly the business of maximizing accepted tasks.</p><div class="followup"><strong>Follow-up:</strong> Why does Anthropic charge 4x the average price per token and still win?</div></div></div>
+<div class="qa"><div class="q">What would you ask a specialization-layer startup to test the business?</div><div class="a"><p>Three questions. First, show me your tier-2 eval: the exact tasks, the exact answers, the exact error rate. Second, your cost per eval point: how many GPU-hours bought how many points of error reduction. Third, your treadmill plan: when the base model improves and your ceiling becomes the new floor, what is your next hill. The first tests whether the eval is real. The second tests the 5-percent economics. The third tests whether you understand the squeeze.</p></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
 <ol>
 <li><strong>The gap.</strong> Frontier models are geniuses that know
@@ -477,7 +565,8 @@ A deployed model that improves from real-world use, learning from sparse rewards
    data is proprietary and enterprise-held.</li>
 <li><strong>Evals.</strong> Define the hill first. RL is the
    eval-maxing machine. SWE-bench started the code
-   race. Guard the eval; it is the roadmap.</li>
+   race. Guard the eval. it is the roadmap. Watch
+   Goodhart.</li>
 <li><strong>Tiers.</strong> Lab evals steer the base models.
    Enterprise evals steer specialization. JPMorgan&rsquo;s
    good is not Goldman&rsquo;s.</li>
@@ -485,7 +574,7 @@ A deployed model that improves from real-world use, learning from sparse rewards
    on ~2.5M of pre-training. Post-training is cheap
    and its share is growing.</li>
 <li><strong>DoorDash.</strong> 100k+ merchants a year, strict style
-   guide. Human corrections defined the error rate;
+   guide. Human corrections defined the error rate.
    RL minimized it. A VLM, a delta, no prompting.</li>
 <li><strong>The Pareto frontier.</strong> Small models, trained
    hard on one task, beat general models on cost and
@@ -495,15 +584,29 @@ A deployed model that improves from real-world use, learning from sparse rewards
    hot-stove problem is the next bottleneck.</li>
 <li><strong>The squeeze.</strong> Data vendors train themselves out
    of easy tasks. Synthetic data via the
-   generator-verifier gap is the escape. Next: what
-   this does to software itself.</li>
+   generator-verifier gap is the escape.</li>
+<li><strong>October 2026.</strong> Anthropic leads models and spend.
+   Microsoft and Salesforce lead the agent platform.
+   Next: what this does to software itself.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/LRGX-gTegVA" title="Enterprise Internal Knowledge (MS&E 435, Yash Patil)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=LRGX-gTegVA">Enterprise Internal Knowledge (MS&amp;E 435, second half)</a></li>
+<li>The session this lesson follows, in full.</li>
+<li><a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></li>
+<li>Karpathy&rsquo;s write-up on RLVR, in the course readings: search &ldquo;Karpathy RLVR 2025&rdquo; for the current mirror.</li>
+<li><a href="https://www.aboutchromebooks.com/enterprise-llm-vendor-market-share-statistics/">Enterprise LLM vendor market share, 2026 (Menlo Ventures, Ramp, Vercel data)</a></li>
+<li><a href="https://startupfortune.com/anthropic-overtakes-openai-in-business-ai-spending-for-the-first-time/">Anthropic&rsquo;s enterprise position, 2026</a></li>
+</ul>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Enterprise Internal Knowledge (MS&amp;E 435, Spring
-  2026), guest Yash Patil, Applied Compute:
-  https://www.youtube.com/watch?v=LRGX-gTegVA
-- MS&amp;E 435 course site: https://mse435.stanford.edu/</p>
+  2026), guest Yash Patil, Applied Compute: <a href="https://www.youtube.com/watch?v=LRGX-gTegVA">link</a>
+- <a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></p>
 <p><strong>Further reading:</strong>
 - Karpathy&rsquo;s write-up on RLVR, in the course
   readings.
@@ -511,13 +614,14 @@ A deployed model that improves from real-world use, learning from sparse rewards
   tokens beyond the data frontier will be AI-generated.</p>
 <p><strong>Caveats from these sources.</strong> The DeepSeek numbers
 are the guest&rsquo;s (&ldquo;I looked it up on the way here&rdquo;),
-not audited filings. &ldquo;TreeBench&rdquo; is the transcript&rsquo;s
-rendering of the eval the guest calls flawed
-[uncertain: exact name]. The Cursor training details
+not audited filings. The Cursor training details
 (hours per step, days to weeks) are the guest&rsquo;s
 recollection. The 75 percent Nvidia margin figure is
 the guest&rsquo;s estimate in this session (80 percent in
-the Crusoe session); treat both as approximate.</p>
+the Crusoe session). treat both as approximate. The
+October 2026 enterprise numbers are from press and
+vendor-reported surveys (Menlo Ventures, Ramp, Vercel),
+not audited totals.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>MS&amp;E435 L03:</strong> the model history this chapter

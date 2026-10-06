@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the DoorDash loop</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. Human corrections defined the error rate. RL minimized it directly. No prompting.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT the loop</text>
+<text x="402" y="124">the rule: measure the delta</text>
+<text x="648" y="124">WITH the loop</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">general models failed,</text>
+<text x="190" y="208" text-anchor="middle" fill="#1B2838">even with prompting</text>
+<text x="190" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">100,000 merchants a year,</text>
+<text x="190" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">about 274 a day</text>
+<text x="190" y="324" text-anchor="middle" fill="#C46B2C" font-size="14">the style guide is too specific,</text>
+<text x="190" y="348" text-anchor="middle" fill="#C46B2C" font-size="14">too proprietary for the</text>
+<text x="190" y="372" text-anchor="middle" fill="#C46B2C" font-size="14">training data to know</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">the error rate</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">is the reward</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">take the model's outputs,</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">have humans correct the menus,</text>
+<text x="490" y="308" text-anchor="middle" fill="#5C6B7A" font-size="14">score the delta against</text>
+<text x="490" y="332" text-anchor="middle" fill="#5C6B7A" font-size="14">ground truth</text>
+<text x="490" y="376" text-anchor="middle" fill="#1E4D8C" font-size="14">then optimize directly</text>
+<text x="490" y="400" text-anchor="middle" fill="#1E4D8C" font-size="14">against reducing it</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">12% -> 6% -> 3%</text>
+<text x="780" y="212" text-anchor="middle" fill="#5C6B7A" font-size="14">100 menus, 12 errors,</text>
+<text x="780" y="236" text-anchor="middle" fill="#5C6B7A" font-size="14">then halving again</text>
+<text x="780" y="280" text-anchor="middle" fill="#1F7A72" font-size="14">a VLM, a style guide,</text>
+<text x="780" y="304" text-anchor="middle" fill="#1F7A72" font-size="14">a delta, no prompting</text>
+<text x="780" y="348" text-anchor="middle" fill="#5C6B7A" font-size="14">the pattern generalizes:</text>
+<text x="780" y="372" text-anchor="middle" fill="#5C6B7A" font-size="14">define, measure, optimize</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: why not wait for the next model? The ROI on training now beats waiting years.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">And no general model will ever know your style guide out of the box. The ceiling is company-specific.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: the eval loop from this chapter's opening, made concrete on one enterprise.</text>
+</svg>

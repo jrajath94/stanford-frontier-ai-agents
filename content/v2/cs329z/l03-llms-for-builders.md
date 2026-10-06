@@ -143,6 +143,39 @@ top-p gives a flat draw among the leaders: diverse but sane. Low
 temperature with loose top-p is nearly greedy: the dial does nothing.
 Set them as a pair, not as two dials.
 
+### Beam search, worked by hand
+
+Beam search trades sampling for search. Keep a beam of k hypotheses,
+extend each with every candidate token, keep the k best-scoring
+extensions, repeat. Worked with k = 2 on a three-token vocabulary
+("to", "as", "the"), scores given as probabilities:
+
+```ascii
+step 1:  start with the empty hypothesis
+  candidates: to (0.32), as (0.05), the (0.04)
+  beam:       [to: 0.32], [as: 0.05]
+
+step 2:  extend each hypothesis
+  from "to":  "to be" (0.32 x 0.15 = 0.048),
+              "to begin" (0.32 x 0.09 = 0.0288)
+  from "as":  "as the" (0.05 x 0.20 = 0.010)
+  beam:       [to be: 0.048], [to begin: 0.0288]
+
+step 3:  the beam keeps only the two best paths
+  winner: "to be" at 0.048, not the greedy "to the"
+```
+
+The greedy path picks "to" then the single best next token. The beam
+kept "as" alive at step 1, which let it check whether "as the" beats
+"to begin". The price: k hypotheses, k times the memory and roughly k
+times the time, per step. Agents rarely run beam search per token:
+the loop already samples diverse plans at the action level, where the
+branching matters more than the token level. Beam search wins on
+constrained outputs (translation, summarization) where the single
+best sequence is the goal and the budget allows the k multiplier.
+
+![Beam search](assets/l03-beam-search.svg "Beam of 2: 'to be' at 0.048 beats the greedy 'to the'. Each step keeps the k best hypotheses. Cost: k times the memory and time. Project: Stanford Frontier AI. Source: original.")
+
 ## The decoder stack, built from zero
 
 Modern LLMs are **decoder-only transformers**: they read tokens left
@@ -241,12 +274,14 @@ each changing the data mix:
 
 ![The training ladder](assets/l03-training-ladder.svg "Pretrain on web text. Midtrain toward target domains. Post-train with SFT, RLHF/DPO, RLVR. Train agents on agent data. Project: Stanford Frontier AI. Source: source.")
 
-### Pretraining and midtraining: the data sets the ceiling
+### Pretraining: web-scale text sets the ceiling
 
 **Pretraining:** web-scale text, next-token loss. The pipeline:
 extract text from HTML, deduplicate, identify languages, apply rule and
 quality filters, mix the data. Scale markers from the lecture: The
 Pile at 800 GB, Nemotron-CC-Math at 133 billion tokens of math.
+
+### Midtraining: shift the mix toward the target
 
 **Midtraining:** shift the mix toward target domains like math and
 code. Mixing target data into pretraining helps: the model that will
@@ -264,11 +299,15 @@ model usable as an agent core. Its limit: it teaches the format, not
 the judgment. A model can emit perfect tool-call JSON and still call
 the wrong tool.
 
-### RLHF and DPO: learn from preferences
+### RLHF: learn from human taste
 
 **RLHF** learns from human taste. Sample responses, have humans rank
 them, train a reward model on the rankings, optimize the policy against
-the reward model. **DPO** is the direct variant: skip the reward model
+the reward model.
+
+### DPO: skip the reward model
+
+**DPO** is the direct variant: skip the reward model
 and optimize the preference pair directly (prompt, chosen, rejected).
 
 Human feedback has traps. Annotators are unreliable. Preferences differ

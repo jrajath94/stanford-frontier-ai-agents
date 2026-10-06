@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="540" fill="#F7F4EE"/>
+<text x="48" y="64" font-size="30" font-weight="600" fill="#1B2838">The power path: from 34.5 kV to the rack</text>
+<text x="48" y="96" font-size="17" fill="#5C6B7A">Shell 3. Step power down in stages: 34.5 kV to 480 V. Source: original, from the session's campus walk.</text>
+<g font-size="15" font-weight="500">
+<rect x="48" y="148" width="144" height="112" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="120" y="188" text-anchor="middle" fill="#1B2838">substation</text>
+<text x="120" y="214" text-anchor="middle" fill="#5C6B7A" font-size="14">grid power in</text>
+<line x1="192" y1="204" x2="220" y2="204" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="220,196 236,204 220,212" fill="#1B2838"/>
+<rect x="228" y="148" width="144" height="112" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="300" y="188" text-anchor="middle" fill="#1B2838" font-size="14">power distribution</text>
+<text x="300" y="210" text-anchor="middle" fill="#1B2838" font-size="14">centers</text>
+<text x="300" y="234" text-anchor="middle" fill="#5C6B7A" font-size="14">34.5 kV</text>
+<line x1="372" y1="204" x2="400" y2="204" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="400,196 416,204 400,212" fill="#1B2838"/>
+<text x="386" y="192" text-anchor="middle" font-size="13" fill="#5C6B7A">steps down</text>
+<rect x="408" y="148" width="144" height="112" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="188" text-anchor="middle" fill="#1B2838">transformers</text>
+<text x="480" y="214" text-anchor="middle" fill="#5C6B7A" font-size="14">34.5 kV to 480 V</text>
+<line x1="552" y1="204" x2="580" y2="204" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="580,196 596,204 580,212" fill="#1B2838"/>
+<rect x="588" y="148" width="144" height="112" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="660" y="188" text-anchor="middle" fill="#1B2838">switchgear</text>
+<text x="660" y="214" text-anchor="middle" fill="#5C6B7A" font-size="14">route and protect</text>
+<line x1="732" y1="204" x2="760" y2="204" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="760,196 776,204 760,212" fill="#1B2838"/>
+<rect x="768" y="148" width="144" height="112" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="840" y="188" text-anchor="middle" fill="#1B2838">racks</text>
+<text x="840" y="214" text-anchor="middle" fill="#1F7A72" font-size="14">480 V, chip-ready</text>
+<!-- support row -->
+<rect x="228" y="296" width="300" height="96" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="378" y="332" text-anchor="middle" fill="#1B2838">UPS battery</text>
+<text x="378" y="358" text-anchor="middle" fill="#5C6B7A" font-size="14">smooths the flow</text>
+<text x="378" y="380" text-anchor="middle" fill="#5C6B7A" font-size="13">bridges seconds to generators</text>
+<line x1="378" y1="296" x2="378" y2="268" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="370,280 378,264 386,280" fill="#1B2838"/>
+<rect x="588" y="296" width="300" height="96" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="738" y="332" text-anchor="middle" fill="#1B2838">diesel generators</text>
+<text x="738" y="358" text-anchor="middle" fill="#5C6B7A" font-size="14">last resort</text>
+<text x="738" y="380" text-anchor="middle" fill="#5C6B7A" font-size="13">backup: storage and network only</text>
+<line x1="738" y1="296" x2="738" y2="268" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="730,280 738,264 746,280" fill="#1B2838"/>
+</g>
+<rect x="48" y="416" width="864" height="56" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="451" text-anchor="middle" font-size="15" fill="#1B2838">five nines = 99.999% uptime, about 5 minutes a year. Bought for storage and networking, not for everything.</text>
+<text x="48" y="508" font-size="16" font-weight="500" fill="#1B2838">One claim: each stage trades voltage for current at roughly constant power. Backup is sized to what must survive.</text>
+</svg>

@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="Inter, 'Source Sans 3', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
 <rect width="960" height="540" fill="#F7F4EE"/>
 <text x="48" y="64" font-size="30" font-weight="600" fill="#1B2838">The energy-first inversion: Abilene</text>
 <text x="48" y="96" font-size="17" fill="#5C6B7A">Move the computers to the cheap power, not the reverse. Shell 3. Source: original, numbers from the session.</text>
 <g font-size="15" font-weight="500">
-<rect x="48" y="136" width="160" height="120" rx="12" fill="#F6E7A8" stroke="#1B2838" stroke-width="1.5"/>
+<rect x="48" y="136" width="160" height="120" rx="12" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5"/>
 <text x="128" y="168" text-anchor="middle" fill="#1B2838">tax credits</text>
 <text x="128" y="196" text-anchor="middle" fill="#5C6B7A" font-size="14">pay for clean</text>
 <text x="128" y="218" text-anchor="middle" fill="#5C6B7A" font-size="14">electrons</text>
 <line x1="208" y1="196" x2="244" y2="196" stroke="#1B2838" stroke-width="1.5"/>
 <polygon points="244,188 260,196 244,204" fill="#1B2838"/>
-<rect x="260" y="136" width="160" height="120" rx="12" fill="#F6E7A8" stroke="#1B2838" stroke-width="1.5"/>
+<rect x="260" y="136" width="160" height="120" rx="12" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5"/>
 <text x="340" y="168" text-anchor="middle" fill="#1B2838">overbuild</text>
 <text x="340" y="196" text-anchor="middle" fill="#5C6B7A" font-size="14">more generation</text>
 <text x="340" y="218" text-anchor="middle" fill="#5C6B7A" font-size="14">than the grid carries</text>
@@ -29,15 +29,14 @@
 <g font-size="15" font-weight="500">
 <text x="48" y="316" font-size="20" font-weight="600" fill="#1B2838">The campus that resulted</text>
 <rect x="48" y="336" width="280" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="188" y="368" text-anchor="middle" fill="#1B2838" font-size="22" font-weight="600">2.1 GW</text>
-<text x="188" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">= two Denvers of power</text>
-<rect x="344" y="336" width="280" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="484" y="368" text-anchor="middle" fill="#1B2838" font-size="22" font-weight="600">1 GW substation</text>
-<text x="484" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">largest private US substation</text>
-<rect x="640" y="336" width="272" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="776" y="368" text-anchor="middle" fill="#1B2838" font-size="22" font-weight="600">9,000 workers</text>
-<text x="776" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">on site daily, town of 120k</text>
+<text x="188" y="368" text-anchor="middle" fill="#1B2838" font-size="22" font-weight="600">1.2 GW delivered</text>
+<text x="188" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">of 2.1 GW planned; grid capped it</text>
+<rect x="336" y="336" width="280" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="476" y="368" text-anchor="middle" fill="#1B2838" font-size="22" font-weight="600">1 GW substation</text>
+<text x="476" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">largest private US substation</text>
+<rect x="624" y="336" width="280" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="764" y="368" text-anchor="middle" fill="#1B2838" font-size="22" font-weight="600">9,000 workers</text>
+<text x="764" y="396" text-anchor="middle" fill="#5C6B7A" font-size="14">on site daily, town of 120k</text>
 </g>
-<text x="48" y="464" font-size="16" fill="#1B2838">Eight buildings serve Oracle and OpenAI (Project Stargate). A 350 MW gas plant energizes the cluster.</text>
-<text x="48" y="500" font-size="16" fill="#1B2838" font-weight="500">One claim: stranded power is a location decision. Build the factory where the electrons already are.</text>
+<text x="48" y="472" font-size="16" font-weight="500" fill="#1B2838">One claim: stranded power is a location decision. Build the factory where the electrons already are.</text>
 </svg>

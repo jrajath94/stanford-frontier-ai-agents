@@ -311,6 +311,22 @@ these three.</p>
 <p>The trap is to treat the LLM as the agent. The LLM is one block. The
 agent is the loop plus the blocks. Reliability lives in the loop design,
 not in the model weights.</p>
+<h3 id="where-the-loop-meets-the-world-sensors-and-actuators">Where the loop meets the world: sensors and actuators</h3>
+<p>&ldquo;Sensors&rdquo; and &ldquo;actuators&rdquo; sound like robotics, but every software agent
+has them. Name them concretely for three environments.</p>
+<ul>
+<li><strong>Web agent.</strong> Sensors: the page DOM or screenshots, search results,
+  API responses. Actuators: clicks, form fills, navigation, HTTP calls.</li>
+<li><strong>Coding agent.</strong> Sensors: file contents, test output, linter
+  messages, git status. Actuators: file edits, shell commands, commits.</li>
+<li><strong>Desktop agent.</strong> Sensors: screenshots, window lists, clipboard.
+  Actuators: mouse moves, keystrokes, app launches.</li>
+</ul>
+<p>The design question is always the same: is the sensor stream rich
+enough to detect failure, and are the actuators precise enough to fix
+it? A coding agent that cannot read test output has no Observe step
+worth the name. A web agent that can only click has no way to type.
+The loop is only as good as its edges.</p>
 <h2 id="the-agent-loop-built-from-zero">The agent loop, built from zero</h2>
 <p>This is the canonical symbol of the course, and CS329Z owns it. CS329A
 reuses this exact symbol for every agent it studies. Five steps, in
@@ -328,6 +344,23 @@ perceive with the new observation in context.</p>
 until it runs out of context or budget. A real check is a named test:
 the booking confirmation exists, the unit tests pass, a human approved.
 &ldquo;Looks done&rdquo; is not a check.</p>
+<h3 id="termination-the-loop-must-end">Termination: the loop must end</h3>
+<p>A loop with no exit is a billing incident. Every production loop carries
+three exits, and the check is only the first.</p>
+<ol>
+<li><strong>The check passes.</strong> The named test succeeds. The happy path.</li>
+<li><strong>The budget dies.</strong> Max steps (often 10 to 25), max tokens, max
+   wall-clock time, max tool calls. The budget is the backstop when the
+   check is wrong or the task is impossible.</li>
+<li><strong>The model declares done.</strong> The model emits a final answer instead
+   of a tool call. This is the weakest exit: it is the model grading
+   its own work.</li>
+</ol>
+<p>The failure mode to fear is the loop that never triggers any of the
+three: the check is vague (&ldquo;looks good&rdquo;), the budget is generous, and
+the model keeps acting because acting is what the prompt rewards. The
+fix is a check with teeth and a budget with a number. A loop that
+cannot end cannot be trusted.</p>
 <h2 id="react-the-loop-with-thoughts-traced-by-hand">ReAct: the loop with thoughts, traced by hand</h2>
 <p>ReAct (Yao et al., 2022) is the loop made concrete: Thought, Act,
 Observe, repeat. Here is the full trace from the lecture, turn by turn.
@@ -369,6 +402,23 @@ original guess. It came from the world.</p>
 cuts the hallucination that chain-of-thought suffers. The mechanism is
 visible in the trace: observations ground each thought, and thoughts
 repair failed actions.</p>
+<h3 id="the-recovery-turn-anatomized">The recovery turn, anatomized</h3>
+<p>Look closely at Thought 3, because it is where ReAct earns its name.
+The failed observation is not empty. It says: Could not find [Front
+Row]. Similar: [&lsquo;Front Row (software)&rsquo;, &hellip;]. Two facts hide in that
+failure: the query missed, and the index suggests a better one.</p>
+<p>An act-only agent cannot use either fact. It has no step that reads an
+observation and rewrites the plan. Thought 3 does exactly that: it
+names the failure (&ldquo;Front Row is not found&rdquo;), extracts the hint (the
+parenthetical disambiguation), and converts it into the next action
+(Search[Front Row (software)]). Three operations in one Thought:
+diagnose, extract, replan.</p>
+<p>This is the general pattern of every recovery in every agent. The
+observation always contains more than success or failure: error
+messages name the missing file, empty results suggest the wrong index,
+timeouts suggest the wrong granularity. The Thought step is the parser
+for that surplus information. Agents that recover well are not smarter.
+They read their failures more carefully.</p>
 <p>A note on the reasoning step itself. For humans, reasoning means
 deduction and analogy. For an LLM, it means intermediate text that
 imitates those processes. For an agent, reasoning is an internal action:
@@ -384,6 +434,174 @@ human check the plan before it acts. The misunderstanding to avoid:
 this is not classical planning. There is no search tree and no formal
 world model. It is text that imitates human mental processes, and it
 works because the model trained on text full of them.</p>
+<h2 id="the-loop-extended">The loop, extended</h2>
+<p>ReAct is the base pattern. Three extensions change what the loop can do.</p>
+<h3 id="plan-and-execute-the-plan-becomes-a-document">Plan-and-execute: the plan becomes a document</h3>
+<p>ReAct plans one step at a time. <strong>Plan-and-execute</strong> splits the work:
+a planner writes the full plan first, an executor runs the steps, and a
+replanner revises the plan when a step fails. The plan is a document the
+loop can read, not a thought that vanishes.</p>
+<figure><img alt="Plan-and-execute" src="assets/l01-plan-execute.svg"><figcaption>ReAct decides each step on the fly. Plan-and-execute writes the steps down first, executes them, and replans on failure. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>The tradeoff is concrete. ReAct adapts fast but can wander: each step
+is a fresh decision with no memory of the overall shape. Plan-and-execute
+holds the shape but pays for it: the plan can go stale when the world
+changes mid-run, and the replanner is another model call. Use
+plan-and-execute when the task decomposes cleanly up front (book the
+flight: search, compare, book). Use ReAct when the next step depends on
+what the last step found (debug the outage: each clue changes the plan).</p>
+<h3 id="handoffs-the-orchestrators-primitive">Handoffs: the orchestrator&rsquo;s primitive</h3>
+<p>The orchestrator generalizes debate into teamwork. One coordinator
+routes subtasks to specialist agents: a web agent, a code agent, a file
+agent. Magentic-One from Microsoft Research is the lecture&rsquo;s example.
+The orchestrator is itself an agent running the same five-step loop,
+with &ldquo;delegate to specialist&rdquo; as one of its actions.</p>
+<figure><img alt="Handoff" src="assets/l01-handoff.svg"><figcaption>The triage agent does not do the work. It hands the conversation to a specialist. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>A <strong>handoff</strong> is delegation implemented as a tool call. The triage
+agent decides the request needs a specialist and invokes
+handoff(billing_agent). The runner transfers the conversation,
+history included, to the specialist, which continues with its own
+instructions and tools. The OpenAI Agents SDK (2025) made this the
+named primitive: agents, handoffs, guardrails. The design rule: hand
+off when one agent&rsquo;s instructions would need two jobs&rsquo; worth of
+context. A specialist with a short prompt beats a generalist with a
+long one.</p>
+<h3 id="reflection-patterns-reflexion-debate-self-consistency">Reflection patterns: Reflexion, debate, self-consistency</h3>
+<p><strong>Reflexion</strong> (Shinn et al., 2023) adds a reflection step. The agent
+runs the task, fails, and receives a feedback signal: test results, an
+environment score, a human note. It writes a verbal reflection, keeps it
+in memory as a self-hint, and retries. Long failed trajectories distill
+into short lessons. No weights change. The lesson is text, stored and
+re-read.</p>
+<figure><img alt="Reflexion: learn from the failed run" src="assets/l01-reflexion.svg"><figcaption>Run, fail, reflect in words, store the reflection, retry with the hint. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<p><strong>Multi-agent debate</strong> (Du et al., 2023) parallelizes the correction.
+Several agents propose answers, argue, and revise. A judge picks the
+winner. Debate catches errors that one agent&rsquo;s blind spots hide. It
+works when the errors are uncorrelated: three medium agents with
+different blind spots beat one strong agent with one blind spot. If all
+agents share the same weakness, debate amplifies it.</p>
+<figure><img alt="Multi-agent debate" src="assets/l01-debate.svg"><figcaption>Three agents argue about the answer. A judge picks the winner. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<p><strong>Self-consistency</strong> (Wang et al., 2023) is the no-tool, no-verifier
+option. Prompt with chain-of-thought, generate many reasoning paths,
+and take the most consistent final answer. More samples, majority vote.
+It costs tokens linearly in the number of paths, and it belongs wherever
+tools cannot go.</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>What changes in the loop</th>
+<th>When it wins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reflexion</td>
+<td>failure becomes a stored hint</td>
+<td>one agent, repeated tries, verbal feedback available</td>
+</tr>
+<tr>
+<td>Debate</td>
+<td>several agents argue, judge picks</td>
+<td>errors are uncorrelated across agents</td>
+</tr>
+<tr>
+<td>Orchestrator + handoffs</td>
+<td>&ldquo;delegate&rdquo; becomes an action</td>
+<td>subtasks need different tools</td>
+</tr>
+<tr>
+<td>Plan-and-execute</td>
+<td>the plan is a document</td>
+<td>the task decomposes cleanly up front</td>
+</tr>
+<tr>
+<td>Self-consistency</td>
+<td>many paths, majority vote</td>
+<td>no tools, no verifier, fixed budget</td>
+</tr>
+</tbody>
+</table>
+<p>The common misunderstanding: these are not five different agents. They
+are five edits to the same loop. Reflexion edits memory. Debate edits
+the actor count. Handoffs edit the action set. Plan-and-execute edits
+where the plan lives. Self-consistency edits the check. Learn the loop
+once, and every pattern is one edit away.</p>
+<h2 id="what-is-used-where-the-production-loop">What is used where: the production loop</h2>
+<p>Every production agent system is an opinion about this chapter. Same
+five steps, different answers to three questions: who holds the plan,
+how does the agent remember, and what checks the work.</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Loop shape</th>
+<th>Memory</th>
+<th>The check</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI Agents SDK (2025)</td>
+<td>Runner drives Thought/Act; handoffs route to specialists</td>
+<td>Sessions persist conversation history</td>
+<td>input/output guardrails run alongside the agent</td>
+<td>triage to specialists; OpenAI-centric stacks</td>
+</tr>
+<tr>
+<td>Claude Agent SDK (Anthropic)</td>
+<td>subagents with isolated context windows</td>
+<td>per-subagent context; MCP tools for files</td>
+<td>permission-gated tool use</td>
+<td>deep environment work: coding, files, long-horizon tasks</td>
+</tr>
+<tr>
+<td>LangGraph</td>
+<td>the loop is a graph: nodes, edges, cycles</td>
+<td>checkpointing to SQLite/Postgres; resume after crash</td>
+<td>human-in-the-loop interrupts; time-travel debugging</td>
+<td>long-running, auditable production workflows</td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td>crews of role-based agents, sequential or hierarchical</td>
+<td>task outputs pass between roles</td>
+<td>role prompts constrain each agent</td>
+<td>fast multi-agent prototypes</td>
+</tr>
+<tr>
+<td>Microsoft Agent Framework (2026)</td>
+<td>Sequential, Concurrent, Handoff, Group Chat, Magentic patterns</td>
+<td>workflow state with checkpointing</td>
+<td>enterprise telemetry and policy</td>
+<td>.NET/Azure shops; governed multi-agent work</td>
+</tr>
+<tr>
+<td>Devin (Cognition)</td>
+<td>plan-and-execute in a cloud VM: plan, code, test, PR</td>
+<td>session workspace per task</td>
+<td>the PR review is the check; tests are the gate</td>
+<td>bounded coding tasks, assigned and walked away from</td>
+</tr>
+<tr>
+<td>Cursor background agents</td>
+<td>IDE agent detached into the cloud</td>
+<td>repo context plus conversation</td>
+<td>the diff is the check; human approves</td>
+<td>multi-file edits while you keep working</td>
+</tr>
+</tbody>
+</table>
+<p>Read the table as loop edits. The OpenAI SDK bets that handoffs plus
+guardrails are enough structure. LangGraph bets that explicit graphs
+with checkpointing are worth the verbosity. Devin bets that the PR, a
+human-readable artifact with tests attached, is the only check that
+scales. They disagree about the machinery and agree about the loop.</p>
+<p>Two honest caveats. Product details move fast: verify the current docs
+before building on any row. And &ldquo;best for&rdquo; is about the center of
+gravity, not a fence: LangGraph can run a simple ReAct loop, and the
+OpenAI SDK can orchestrate long workflows. The table names where each
+system&rsquo;s design pays off, not where it is confined.</p>
 <h2 id="mapping-back-what-each-piece-fixes">Mapping back: what each piece fixes</h2>
 <table>
 <thead>
@@ -410,9 +628,24 @@ works because the model trained on text full of them.</p>
 <td>Perceive, plan, act, observe, check repeats until the goal is met</td>
 </tr>
 <tr>
+<td>The plan lives only in the head</td>
+<td>Plan-and-execute</td>
+<td>The plan is a document; the replanner revises it</td>
+</tr>
+<tr>
+<td>One agent needs two jobs&rsquo; context</td>
+<td>Handoffs</td>
+<td>Delegate to a specialist with a short prompt</td>
+</tr>
+<tr>
 <td>No way to know it is done</td>
 <td>The check</td>
 <td>A named test, not a feeling; loop back while it fails</td>
+</tr>
+<tr>
+<td>The loop never ends</td>
+<td>Termination</td>
+<td>Budget and model-done exits backstop the check</td>
 </tr>
 </tbody>
 </table>
@@ -430,78 +663,29 @@ full and shows what contains it.</p>
 <p>And the check, the most important step, is the hardest to write. &ldquo;The
 booking exists&rdquo; is checkable. &ldquo;The answer looks right&rdquo; is not. Every
 serious agent project spends its hardest design hours on the check.</p>
-<h2 id="the-loop-extended">The loop, extended</h2>
-<p>Three extensions of the same loop close the chapter.</p>
-<p><strong>Reflexion</strong> (Shinn et al., 2023) adds a reflection step. The agent
-runs the task, fails, and receives a feedback signal: test results, an
-environment score, a human note. It writes a verbal reflection, keeps it
-in memory as a self-hint, and retries. Long failed trajectories distill
-into short lessons. No weights change. The lesson is text, stored and
-re-read.</p>
-<figure><img alt="Reflexion: learn from the failed run" src="assets/l01-reflexion.svg"><figcaption>Run, fail, reflect in words, store the reflection, retry with the hint. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
-<p><strong>Multi-agent debate</strong> (Du et al., 2023) parallelizes the correction.
-Several agents propose answers, argue, and revise. A judge picks the
-winner. Debate catches errors that one agent&rsquo;s blind spots hide. It
-works when the errors are uncorrelated: three medium agents with
-different blind spots beat one strong agent with one blind spot. If all
-agents share the same weakness, debate amplifies it.</p>
-<figure><img alt="Multi-agent debate" src="assets/l01-debate.svg"><figcaption>Three agents argue about the answer. A judge picks the winner. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
-<p><strong>The orchestrator</strong> generalizes debate into teamwork. One coordinator
-routes subtasks to specialist agents: a web agent, a code agent, a file
-agent. Magentic-One from Microsoft Research is the lecture&rsquo;s example.
-The orchestrator is itself an agent running the same five-step loop,
-with &ldquo;delegate to specialist&rdquo; as one of its actions.</p>
-<p><strong>Self-consistency</strong> (Wang et al., 2023) is the no-tool, no-verifier
-option. Prompt with chain-of-thought, generate many reasoning paths,
-and take the most consistent final answer. More samples, majority vote.
-It costs tokens linearly in the number of paths, and it belongs wherever
-tools cannot go.</p>
-<table>
-<thead>
-<tr>
-<th>Extension</th>
-<th>What changes in the loop</th>
-<th>When it wins</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Reflexion</td>
-<td>failure becomes a stored hint</td>
-<td>one agent, repeated tries, verbal feedback available</td>
-</tr>
-<tr>
-<td>Debate</td>
-<td>several agents argue, judge picks</td>
-<td>errors are uncorrelated across agents</td>
-</tr>
-<tr>
-<td>Orchestrator</td>
-<td>&ldquo;delegate&rdquo; becomes an action</td>
-<td>subtasks need different tools</td>
-</tr>
-<tr>
-<td>Self-consistency</td>
-<td>many paths, majority vote</td>
-<td>no tools, no verifier, fixed budget</td>
-</tr>
-</tbody>
-</table>
 <h2 id="interview-qa">Interview Q&amp;A</h2>
 <div class="qa"><div class="q">Why does ReAct beat chain-of-thought on knowledge-heavy questions?</div><div class="a"><p>Chain-of-thought reasons only from the model&rsquo;s weights, so it hallucinates facts with full confidence. The lecture&rsquo;s trace shows it: a clean step-by-step argument for &ldquo;iPhone, iPad, and iPod Touch&rdquo; that is wrong at every link. ReAct pulls observations from the world between thoughts, so each reasoning step is grounded in fresh evidence. The trace adapts after a failed search and lands on &ldquo;keyboard function keys&rdquo;, an answer the model never would have generated from memory. Yao et al. report that ReAct beats act-only agents consistently and cuts chain-of-thought hallucination.
 When the task needs no external facts: pure math, logic puzzles, style rewriting. Each tool call costs latency and money, and observations add nothing when the answer is fully determined by reasoning over the prompt. Match the machinery to where the uncertainty lives: facts need tools, logic needs thoughts.</p><div class="followup"><strong>Follow-up:</strong> When would you prefer pure chain-of-thought over ReAct?</div></div></div>
-<div class="qa"><div class="q">Walk through the five steps of the agent loop for a coding task, and name the step builders skip.</div><div class="a"><p>Perceive: read the issue and the repo state into context. Plan: a Thought like &ldquo;the bug is in the parser&rsquo;s edge case&rdquo;. Act: a tool call that edits the file. Observe: read the test output. Check: do the tests pass, and is the fix minimal? The skipped step is the check. Without a named test, the loop never converges: the agent edits, tests fail, it edits again, and the context fills with stale attempts. &ldquo;Looks done&rdquo; is not a check.
-The observation is raw: the test output, the page content, the tool result. The check is a verdict on the observation against the goal: tests pass, booking confirmed, answer verified. Observations accumulate; the check decides. A loop with observations but no check runs until the budget dies.</p><div class="followup"><strong>Follow-up:</strong> What is the difference between the check and the observation?</div></div></div>
+<div class="qa"><div class="q">Walk me through the five steps of the agent loop for a coding task, and name the step builders skip.</div><div class="a"><p>Perceive: read the issue and the repo state into context. Plan: a Thought like &ldquo;the bug is in the parser&rsquo;s edge case&rdquo;. Act: a tool call that edits the file. Observe: read the test output. Check: do the tests pass, and is the fix minimal? The skipped step is the check. Without a named test, the loop never converges: the agent edits, tests fail, it edits again, and the context fills with stale attempts. &ldquo;Looks done&rdquo; is not a check.
+The observation is raw: the test output, the page content, the tool result. The check is a verdict on the observation against the goal: tests pass, booking confirmed, answer verified. Observations accumulate. The check decides. A loop with observations but no check runs until the budget dies.</p><div class="followup"><strong>Follow-up:</strong> What is the difference between the check and the observation?</div></div></div>
+<div class="qa"><div class="q">Walk me through Thought 3 of the ReAct trace. What exactly does it do with the failed observation?</div><div class="a"><p>The observation says: Could not find [Front Row]. Similar: [&lsquo;Front Row (software)&rsquo;, &hellip;]. Thought 3 performs three operations. Diagnose: it names the failure, &ldquo;Front Row is not found&rdquo;. Extract: it pulls the hint from the failure, the parenthetical disambiguation the index suggests. Replan: it converts the hint into the next action, Search[Front Row (software)]. The general pattern: observations always contain more than success or failure, and the Thought step is the parser for that surplus information.
+It has no step that reads an observation and rewrites the plan. Its policy maps the last observation directly to the next action, so a failed search maps to nothing: the run ends. Recovery needs a step whose input is the failure and whose output is a new plan. That step is the Thought.</p><div class="followup"><strong>Follow-up:</strong> Why can an act-only agent never do this?</div></div></div>
+<div class="qa"><div class="q">ReAct versus plan-and-execute: when does each win?</div><div class="a"><p>ReAct plans one step at a time and adapts fast, but it can wander: each step is a fresh decision with no memory of the overall shape. Plan-and-execute writes the full plan first, so long tasks hold their shape, but the plan can go stale when the world changes mid-run, and replanning costs another model call. Use plan-and-execute when the task decomposes cleanly up front: search, compare, book. Use ReAct when the next step depends on what the last step found: debugging, where each clue changes the plan.
+Yes, and production systems do. The planner writes the plan, and each step executes as a small ReAct loop that adapts locally. The plan holds the shape. ReAct handles the surprises inside each step. The replanner fires only when a step&rsquo;s local recovery fails.</p><div class="followup"><strong>Follow-up:</strong> Can you combine them?</div></div></div>
+<div class="qa"><div class="q">What is a handoff, and why is it better than one big agent prompt?</div><div class="a"><p>A handoff is delegation implemented as a tool call: the triage agent invokes handoff(billing_agent), and the runner transfers the conversation, history included, to the specialist, which continues with its own instructions and tools. It beats one big prompt because context is the scarce resource. A specialist with a short, focused prompt makes better decisions than a generalist carrying two jobs&rsquo; worth of instructions. The design rule: hand off when one agent&rsquo;s instructions would need two jobs&rsquo; worth of context.
+Context loss at the boundary: the specialist inherits the history but not the triage agent&rsquo;s unstated assumptions. And routing errors compound: the wrong specialist burns a full sub-loop before the mistake surfaces. Guardrails on the handoff decision, and a summary (not the raw history) passed forward, contain both.</p><div class="followup"><strong>Follow-up:</strong> What can go wrong with handoffs?</div></div></div>
 <div class="qa"><div class="q">What is the difference between Reflexion and fine-tuning on the failure?</div><div class="a"><p>Reflexion changes no weights. The lesson from a failed run is stored as text in memory and read on the next attempt: fast, local to one task, no training run. Fine-tuning changes the weights and needs a dataset and a training run: slow, but the lesson generalizes across tasks. Pick Reflexion when the feedback is verbal and the task recurs in similar form. Pick fine-tuning when you have many failures and want the fix baked into the model.
-Uncorrelated errors. Three medium agents with different blind spots catch more than one strong agent with one blind spot, because the judge sees three independent attempts. But if all agents share the model&rsquo;s weakness, debate just amplifies it three times. Diversity of failure is the resource; the judge is only as good as the disagreement.</p><div class="followup"><strong>Follow-up:</strong> Why would debate beat a single stronger model?</div></div></div>
+Uncorrelated errors. Three medium agents with different blind spots catch more than one strong agent with one blind spot, because the judge sees three independent attempts. But if all agents share the model&rsquo;s weakness, debate just amplifies it three times. Diversity of failure is the resource. The judge is only as good as the disagreement.</p><div class="followup"><strong>Follow-up:</strong> Why would debate beat a single stronger model?</div></div></div>
+<div class="qa"><div class="q">Design an agent that books the cheapest flight. Name the check, the budget, and the termination exits.</div><div class="a"><p>The loop: perceive the request and current prices, plan the next search, act with the flight search tool, observe the results, check against the goal. The check: a booking confirmation exists for the cheapest option found, verified by reading it back from the booking API, not by the agent&rsquo;s word. The budget: max 15 tool calls, max 10 minutes, max spend on search API calls. Termination exits: check passes (booked), budget dies (stop and report the best found so far), or the model declares done (treat as a failed check unless the confirmation exists).
+The check cannot pass, so the loop must not declare success. The honest behavior: hold the booking details, report &ldquo;booking attempted, confirmation unverified&rdquo;, and schedule a verification pass. A check that cannot run is a failed check, not a passed one. This is why the check reads the world instead of trusting the act.</p><div class="followup"><strong>Follow-up:</strong> The agent books a flight but the confirmation API is down. What now?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
-<p>The story in eight steps. Each step answers the one before it.</p>
+<p>The story in ten steps. Each step answers the one before it.</p>
 <ol>
-<li><strong>Words must become actions.</strong> A chatbot discusses flights; it cannot
+<li><strong>Words must become actions.</strong> A chatbot discusses flights. It cannot
    book one. The agent closes the loop between words and the world.</li>
 <li><strong>The idea is fifty years old.</strong> Actors in 1973, formal definitions
    in 1995, RL agents in 2015, language agents from 2022. The interface
-   changed to words; the loop did not.</li>
+   changed to words. The loop did not.</li>
 <li><strong>Memory answers hallucinate.</strong> The reason-only trace argues cleanly
    for a wrong answer at every link. Fluency is not evidence.</li>
 <li><strong>Acting without thought is brittle.</strong> One failed observation kills
@@ -511,47 +695,74 @@ Uncorrelated errors. Three medium agents with different blind spots catch more t
    order until the check passes. The check is a named test, and it is
    the step most builders skip.</li>
 <li><strong>ReAct grounds thought in observation.</strong> Four acts, three
-   observations, one recovery: Thought 3 adapts the failed search and
-   the trace lands on keyboard function keys.</li>
-<li><strong>The loop extends.</strong> Reflexion stores lessons as text. Debate
-   cancels uncorrelated errors. The orchestrator delegates to
-   specialists. Self-consistency votes without tools.</li>
+   observations, one recovery: Thought 3 diagnoses the failed search,
+   extracts the hint, and replans. The answer comes from the world.</li>
+<li><strong>The loop extends by edits.</strong> Plan-and-execute writes the plan
+   down. Handoffs delegate to specialists. Reflexion stores lessons as
+   text. Debate cancels uncorrelated errors. Self-consistency votes
+   without tools.</li>
+<li><strong>Every production system is a loop opinion.</strong> OpenAI SDK bets on
+   handoffs plus guardrails. LangGraph bets on graphs with
+   checkpointing. Devin bets the PR is the check that scales.</li>
 <li><strong>The price is per-turn cost and compounding error.</strong> Every turn
    spends tokens and latency, and bad observations poison later steps.
    The check is the hardest step to write well.</li>
+<li><strong>The loop must end.</strong> Check passes, budget dies, or the model
+    declares done. A loop with no exit is a billing incident.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/PEssdKXOobU" title="How AI Agents Actually Work: One Loop, Tested on Real Models" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>Ground Truth, How AI Agents Actually Work: One Loop, Tested on Real Models (the embed above): https://www.youtube.com/watch?v=PEssdKXOobU, the loop built in Python and tested: context rot, stop rules, and the contract around the loop.</li>
+</ul>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/Eug2clsLtFs" title="Understanding ReACT with LangChain" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>Sam Witteveen, Understanding ReACT with LangChain (the embed above): https://www.youtube.com/watch?v=Eug2clsLtFs, the ReAct paper&rsquo;s mechanism walked through with code.</li>
+</ul>
+<p>Further:
+- Anthropic, Building Effective Agents: https://www.anthropic.com/engineering/building-effective-agents, workflows versus agents, and when each wins, from production experience.
+- Lilian Weng, LLM Powered Autonomous Agents: https://lilianweng.github.io/posts/2023-06-23-agent/, the survey the lecture cites: components, planning, memory, tool use.
+- OpenAI Agents SDK documentation: https://openai.github.io/openai-agents-python/, handoffs, guardrails, sessions, and the Runner loop.
+- LangGraph documentation: https://langchain-ai.github.io/langgraph/, graphs, checkpointing, and human-in-the-loop.</p>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Lecture 1 slides (local: sources/agents/cs329z/lecture01.pdf): the
   anatomy diagram, the ReAct trace, the history timeline.
-- Course site: http://web.stanford.edu/class/cs329z — logistics,
+- Course site: http://web.stanford.edu/class/cs329z, logistics,
   office hours, project details.</p>
 <p><strong>Further reading:</strong>
-- Lilian Weng, &ldquo;LLM Powered Autonomous Agents&rdquo;: the survey the lecture
-  cites for agent definitions.
+- Yao et al., ReAct (2022): https://arxiv.org/abs/2210.03629 : the Thought/Act/Observe loop and its measurements.
+- Shinn et al., Reflexion (2023): https://arxiv.org/abs/2303.11366 : verbal reinforcement from failed runs.
+- Du et al. (2023), multi-agent debate: reflection and revision across
+  agents.
 - Sumers and Yao (2024), cognitive language agents: the lecture&rsquo;s
   pointer for deeper agent theory.</p>
 <p><strong>Caveats from these sources.</strong> The lecture states ReAct&rsquo;s advantage
-qualitatively (&ldquo;outperforms Act consistently&rdquo;); exact benchmark numbers
+qualitatively (&ldquo;outperforms Act consistently&rdquo;). Exact benchmark numbers
 are not in the slides, so none are quoted. No lecture video ID is on
-record, so timestamps are omitted. The 0.9^4 survival figure is a worked
-toy, not a measured rate.</p>
+record. The embeds above are third-party explainers, verified live. The
+0.9^4 survival figure is a worked toy, not a measured rate. Production
+framework details move fast. Verify the current docs before building.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS336 L01:</strong> the LLM core is a next-token predictor. Tokenization
   and the chain rule live there.</li>
 <li><strong>CS336 L15/L16:</strong> post-training and RLVR shape the reasoning the
   core produces. The Thought step inherits their strengths and flaws.</li>
-<li><strong>CS329H L02:</strong> human feedback trains the core&rsquo;s preferences; the
+<li><strong>CS329H L02:</strong> human feedback trains the core&rsquo;s preferences. The
   preference pair explains sycophancy, which the safety lesson meets
   again.</li>
 <li><strong>CS329A:</strong> reuses the agent loop symbol from this lesson for every
-  agent it studies. Its agents are research systems; this course&rsquo;s are
+  agent it studies. Its agents are research systems. This course&rsquo;s are
   engineered ones.</li>
 <li><strong>This course:</strong> the next lesson gives the loop its hands (tools),
   and the failure-modes lesson prices the compounding.</li>
 </ul>
-      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">SLIDES</span>Lecture 1 slides: Intro to Agentic Systems (local: sources/agents/cs329z/lecture01.pdf)</li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao et al., ReAct: Synergizing Reasoning and Acting in Language Models (2022)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener">Shinn et al., Reflexion: Language Agents with Verbal Reinforcement Learning (2023)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="noopener">Lilian Weng, LLM Powered Autonomous Agents (blog)</a></li></ul></section>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">SLIDES</span>Lecture 1 slides: Intro to Agentic Systems (local: sources/agents/cs329z/lecture01.pdf)</li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao et al., ReAct: Synergizing Reasoning and Acting in Language Models (2022)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener">Shinn et al., Reflexion: Language Agents with Verbal Reinforcement Learning (2023)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="noopener">Lilian Weng, LLM Powered Autonomous Agents (blog)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic, Building Effective Agents (2024)</a></li></ul></section>
       <nav class="pager"><a href="../cs329z/index.html"><span class="lbl">← Previous</span>CS329Z: Engineering AI Agents</a><a href="../cs329z/l02-compound-ai-systems.html"><span class="lbl">Next →</span>Lecture 1B: Compound AI Systems, Memory, and What Breaks</a></nav>
     </article>
     <footer class="pagefoot">

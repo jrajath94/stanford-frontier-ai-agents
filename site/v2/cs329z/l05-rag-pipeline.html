@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -333,7 +330,7 @@ the retriever learns to fetch passages that help the generator.</p>
 <p>Two variants. <strong>RAG-Sequence</strong> picks one passage and generates the
 whole answer with it. <strong>RAG-Token</strong> re-picks the passage at every token
 of the answer. Sequence is cheaper. Token is more flexible. The
-lecture&rsquo;s retriever is DPR: p(z|x) proportional to exp(d(z)^T q(x)),
+lecture&rsquo;s retriever is DPR (Dense Passage Retrieval): p(z|x) proportional to exp(d(z)^T q(x)),
 two BERT encoders, top-K by maximum inner product search. The generator
 is BART, reading the query and passage concatenated.</p>
 <figure><img alt="RAG variants" src="assets/l05-rag-variants.svg"><figcaption>RAG-Sequence picks one passage for the whole answer. RAG-Token re-picks per token and marginalizes. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
@@ -374,6 +371,46 @@ on your eval set. The most common mistake is chunking without looking
 at the documents: fixed-size splitting on PDFs with tables, code, or
 headings shreds the structure the questions need. Read ten chunks by
 hand before tuning anything.</p>
+<h3 id="recursive-splitting-cut-on-real-boundaries">Recursive splitting: cut on real boundaries</h3>
+<p>Fixed-size splitting is the floor, not the ceiling. Four upgrades,
+each fixing a different weakness.</p>
+<p><strong>Recursive splitting</strong> splits on a priority order of separators:
+double newline (paragraph), then single newline, then space, then
+character. A chunk that fits after paragraph splitting stays whole.
+Only oversized pieces split further. The result: chunks that end at
+real boundaries instead of mid-sentence. This is the production
+default for prose.</p>
+<h3 id="semantic-chunking-cut-where-meaning-changes">Semantic chunking: cut where meaning changes</h3>
+<p><strong>Semantic chunking</strong> splits on meaning, not length. Embed each
+sentence, compute the similarity between consecutive sentences, and
+cut where the similarity drops: a topic change is a chunk boundary.
+The chunks vary in size, but each one is about one thing. The price
+is an embedding call per sentence at index time.</p>
+<h3 id="parent-document-chunking-match-small-return-big">Parent-document chunking: match small, return big</h3>
+<p><strong>Parent-document chunking</strong> fixes the precision-recall dilemma.
+Small chunks retrieve precisely (a 100-token chunk matches the query
+tightly) but read poorly (no context around the hit). The index
+stores small chunks. Each small chunk carries its parent chunk&rsquo;s ID.
+Retrieval matches on the small chunk, then returns the parent.
+Worked on the queue-log toy:</p>
+<pre class="ascii">child chunk:   &quot;Thursday 9am averages 3 waiting.&quot;
+parent chunk:  &quot;Office hours queue log, week of Oct 6.
+               Tuesday 4pm averages 14 waiting.
+               Thursday 9am averages 3 waiting.
+               Friday 2pm averages 9 waiting.&quot;
+query:         &quot;Which office hour this week is least crowded?&quot;
+match:         child scores high (short, on-topic)
+return:        the parent, with all three sessions for comparison
+</pre>
+<p>The reader gets the comparison table, not one row. The cost is index
+size: children plus parents, roughly double the chunks.</p>
+<h3 id="agentic-chunking-the-llm-places-the-cuts">Agentic chunking: the LLM places the cuts</h3>
+<p><strong>Agentic chunking</strong> goes furthest: an LLM decides the boundaries by
+reading the document and placing cuts where the topic changes. The
+most accurate splits, and the most expensive: one model call per
+document. Use it when the documents are few and the questions are
+hard. Use recursive splitting when they are many.</p>
+<figure><img alt="Parent-document chunking" src="assets/l05-parent-chunk.svg"><figcaption>Small child chunks match the query precisely. Retrieval returns the parent: the child 'Thursday 9am averages 3 waiting' brings the full three-session queue log. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
 <h3 id="embeddings-meaning-becomes-position">Embeddings: meaning becomes position</h3>
 <p>A chunk is text. The retriever needs numbers. An <strong>embedding model</strong>
 (BERT, E5, BGE, and their successors) turns each chunk into a vector:
@@ -391,7 +428,9 @@ where no distance metric can find it.</p>
 answers nearest-neighbor queries. The work splits into two phases.</p>
 <figure><img alt="The vector store" src="assets/l05-vector-store.svg"><figcaption>Chunks are embedded offline. The query is embedded live. Search is distance math. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
 <p>Offline: split the documents, embed every chunk, build the index
-(usually an HNSW graph, the next lesson&rsquo;s subject). Online: embed the
+(usually an HNSW graph, a hierarchical navigable small world: a layered
+graph index whose greedy walk reaches the query in about log N hops.
+The next lesson builds it in full). Online: embed the
 query, run approximate nearest-neighbor search, return the top-K
 chunks. The index is the price of retrieval: embedding 10,000 chunks
 once beats reading them per query. And the staleness rule: update a
@@ -409,7 +448,9 @@ revenue was $314M.&rdquo; The prompt shows the whole document and the chunk
 and asks for one succinct situating paragraph. Now the chunk vector
 carries the answer&rsquo;s identity. The recipe pairs it with hybrid
 retrieval: embeddings catch meaning, BM25 catches exact terms, results
-merge. The lecture reports that contextual embeddings reduced the
+merge. BM25 is a sparse keyword scorer: it ranks a passage by how often
+the query&rsquo;s words appear, weighs rare words above common ones, and
+corrects for passage length so short documents do not win by default. The lecture reports that contextual embeddings reduced the
 retrieval failure rate. The cost is one LLM call and extra tokens per
 chunk at index time.</p>
 <p><strong>Late chunking</strong> (Günther et al., 2024) gets document context into the
@@ -439,7 +480,7 @@ confidently for the wrong question. Rewrite, then verify the retrieved
 passages mention the original question&rsquo;s entities.</p>
 <h2 id="raptor-and-graphrag-when-the-answer-is-spread-out">RAPTOR and GraphRAG: when the answer is spread out</h2>
 <p>Flat chunk retrieval fails when the answer is spread across a document.
-No single chunk holds it. <strong>RAPTOR</strong> (Sarthi et al., 2025) builds a
+No single chunk holds it. <strong>RAPTOR</strong> (Sarthi et al., 2024) builds a
 tree, bottom up: embed the chunks, cluster them, summarize each cluster
 with an LLM, embed the summaries, and repeat.</p>
 <figure><img alt="RAPTOR" src="assets/l05-raptor.svg"><figcaption>Chunks at the leaves, LLM summaries at the nodes, one root. Detail questions match leaves. Thematic questions match nodes. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
@@ -567,7 +608,7 @@ Contextual retrieval: an LLM writes a situating prefix per chunk (&ldquo;From AC
 <div class="qa"><div class="q">Walk me through the vector store: what happens offline and what happens per query?</div><div class="a"><p>Offline: split the documents into chunks, embed every chunk into a vector, build the index (usually an HNSW graph over the vectors plus metadata). Online: embed the query with the same model, run approximate nearest-neighbor search over the index, return the top-K chunks. The offline phase is the price of retrieval: embedding 10,000 chunks once beats reading them per query. The staleness rule: update a document and the index must be rebuilt, or the agent reads last month&rsquo;s rows.
 Because the vectors live in that model&rsquo;s meaning space. A different model&rsquo;s vectors have different geometry: distances between them are meaningless. Mixing embedders is like measuring one room in meters and another in feet and comparing the numbers. The index and the query must share the encoder.</p><div class="followup"><strong>Follow-up:</strong> Why must the query use the same embedding model as the index?</div></div></div>
 <div class="qa"><div class="q">What is HyDE, and when does query rewriting backfire?</div><div class="a"><p>HyDE (hypothetical document embeddings) has the LLM write a fake answer first, then retrieves using the fake answer&rsquo;s embedding. The hypothetical document looks like the real documents in the index, so the distance math works even when the user&rsquo;s question shares no words with the evidence. It backfires when the rewrite is confidently wrong: a bad hypothetical retrieves passages for the wrong question, and the reader answers from them. Rewrite, then verify the retrieved passages mention the original question&rsquo;s entities.
-Single rewrite is cheaper: one model call, one retrieval. Multi-query generates several rewrites and fuses the results, which helps when the question is ambiguous and different phrasings retrieve different evidence. The fusion needs a rule (RRF, from the methods lesson). Use multi-query when ambiguity is the failure mode. Use a single rewrite when the mismatch is just vocabulary.</p><div class="followup"><strong>Follow-up:</strong> Multi-query versus single rewrite: which and when?</div></div></div>
+Single rewrite is cheaper: one model call, one retrieval. Multi-query generates several rewrites and fuses the results, which helps when the question is ambiguous and different phrasings retrieve different evidence. The fusion needs a rule (reciprocal rank fusion, RRF). Use multi-query when ambiguity is the failure mode. Use a single rewrite when the mismatch is just vocabulary.</p><div class="followup"><strong>Follow-up:</strong> Multi-query versus single rewrite: which and when?</div></div></div>
 <div class="qa"><div class="q">When does RAPTOR beat flat chunk retrieval?</div><div class="a"><p>When the answer is spread across the document. Flat retrieval returns chunks that each look relevant but none of which contains the answer. RAPTOR&rsquo;s summary nodes compress many chunks into one retrievable unit, so a thematic question matches a node that actually contains the synthesized answer. The Cinderella queries are the demo: &ldquo;central theme&rdquo; needs the root summary, &ldquo;how did she find a happy ending&rdquo; needs the leaves. RAPTOR&rsquo;s selected context usually contains what flat DPR retrieves, directly or inside a summary.
 Build cost and staleness. The tree needs clustering plus LLM summaries at every level, and any document update can invalidate a subtree. For fast-changing corpora, flat chunking with good retrieval wins on maintenance. Match the index structure to the question shape and the update rate.</p><div class="followup"><strong>Follow-up:</strong> What is the catch?</div></div></div>
 <div class="qa"><div class="q">RAG, fine-tuning, or prompting: a new support bot for a product whose docs change weekly. Decide.</div><div class="a"><p>RAG, with prompting for the format. The docs change weekly, so fine-tuning is stale by design: you would retrain every week to learn changing facts. RAG reads the current docs at answer time, cites the passage, and updates by replacing a file. Fine-tune only the stable part: the support tone, the escalation judgment. Prompt the rest: the answer format, the citation style. The decision rule: stable judgment gets trained, changing facts get retrieved, per-query instructions get prompted.
@@ -611,10 +652,16 @@ The reader, not the retriever. Log whether the answer&rsquo;s claims appear in t
 <ul>
 <li>How AI Looks Things Up (RAG, Actually Explained) (the embed above): https://www.youtube.com/watch?v=YamlxX17n6Y, chunks, vectors, retrieve, augment, generate; RAG versus fine-tuning; the one honest catch.</li>
 </ul>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/MgZ_Egy-DXI" title="Embeddings and Chunking Strategies in RAG" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>Zero to Deployed, Embeddings and Chunking Strategies in RAG (the embed above): https://www.youtube.com/watch?v=MgZ_Egy-DXI, recursive, parent-child, semantic, and agentic chunking strategies in code.</li>
+</ul>
 <p>Further:
 - Anthropic, Contextual Retrieval: https://www.anthropic.com/engineering/contextual-retrieval, the prefix recipe in production.
 - Gao et al. (2024) survey of RAG variants: the full zoo this lesson samples.
-- Sarthi et al. (2025), RAPTOR: tree-structured retrieval.
+- Sarthi et al. (2024), RAPTOR: https://arxiv.org/abs/2401.18059, tree-structured retrieval.
 - Edge et al. (2024), GraphRAG: https://arxiv.org/abs/2402.08907, knowledge graphs for retrieval.</p>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>

@@ -1,1 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif"><rect width="960" height="480" fill="#F7F4EE" rx="0"/><text x="32" y="44" font-size="30" font-weight="600" fill="#1B2838">Archon: spend inference compute as architecture</text><text x="32" y="72" font-size="16" font-weight="450" fill="#5C6B7A">Generators diversify. Critic judges. Ranker orders. Fuser writes the final answer.</text><rect x="40" y="168" width="200" height="128" fill="#E7F1F8" stroke="#1B2838" stroke-width="1.5" rx="12"/><text x="140" y="216" text-anchor="middle" font-size="17" font-weight="600" fill="#1B2838">generators</text><text x="140" y="244" text-anchor="middle" font-size="12" font-weight="450" fill="#5C6B7A">10 open models, 1 sample each</text><line x1="240" y1="232" x2="276" y2="232" stroke="#1B2838" stroke-width="2"/><polygon points="276,232 266.78939005997114,235.8941834230865 266.78939005997114,228.1058165769135" fill="#1B2838"/><rect x="276" y="168" width="200" height="128" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5" rx="12"/><text x="376" y="216" text-anchor="middle" font-size="17" font-weight="600" fill="#1B2838">critic</text><text x="376" y="244" text-anchor="middle" font-size="12" font-weight="450" fill="#5C6B7A">strengths and weaknesses</text><line x1="476" y1="232" x2="512" y2="232" stroke="#1B2838" stroke-width="2"/><polygon points="512,232 502.78939005997114,235.8941834230865 502.78939005997114,228.1058165769135" fill="#1B2838"/><rect x="512" y="168" width="200" height="128" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5" rx="12"/><text x="612" y="216" text-anchor="middle" font-size="17" font-weight="600" fill="#1B2838">ranker</text><text x="612" y="244" text-anchor="middle" font-size="12" font-weight="450" fill="#5C6B7A">orders candidates</text><line x1="712" y1="232" x2="748" y2="232" stroke="#1B2838" stroke-width="2"/><polygon points="748,232 738.7893900599712,235.8941834230865 738.7893900599712,228.1058165769135" fill="#1B2838"/><rect x="748" y="168" width="200" height="128" fill="#E7F4EF" stroke="#1B2838" stroke-width="1.5" rx="12"/><text x="848" y="216" text-anchor="middle" font-size="17" font-weight="600" fill="#1B2838">fuser</text><text x="848" y="244" text-anchor="middle" font-size="12" font-weight="450" fill="#5C6B7A">writes final answer</text><text x="480" y="336" text-anchor="middle" font-size="14" font-weight="450" fill="#1E4D8C">+14.1% average pass@1 over GPT-4o and Claude 3.5 Sonnet, open models only</text><text x="32" y="456" font-size="15" font-weight="500" fill="#1B2838">Shell 3. Fusion beats picking: the fuser synthesizes instead of selecting. Source: paper: Archon.</text><text x="928" y="456" text-anchor="end" font-size="12" font-weight="450" fill="#5C6B7A">source: paper: Archon</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="680" viewBox="0 0 1120 680" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="680" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="30" font-weight="600" fill="#1B2838">Archon stacks inference-time components</text>
+<text x="40" y="80" font-size="16" fill="#5C6B7A">Layers of generators, fusers, critics, rankers, verifiers. Bayesian optimization picks the stack.</text>
+<line x1="40" y1="96" x2="1080" y2="96" stroke="#D9D3C7" stroke-width="1.5"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1F7A72"/></marker></defs>
+<rect x="40" y="120" width="640" height="400" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="360" y="152" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">One model stack</text>
+<rect x="140" y="190" width="440" height="52" rx="12" fill="#E7F1F8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="360.0" y="217.0" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Generators</text>
+<rect x="140" y="250" width="440" height="52" rx="12" fill="#E7F4EF" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="360.0" y="277.0" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Fusers</text>
+<rect x="140" y="310" width="440" height="52" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="360.0" y="337.0" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Critics</text>
+<rect x="140" y="370" width="440" height="52" rx="12" fill="#F4E6D4" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="360.0" y="397.0" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Rankers</text>
+<rect x="140" y="430" width="440" height="52" rx="12" fill="#E6E2DA" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="360.0" y="457.0" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Verifiers</text>
+<text x="360" y="504" font-size="13" fill="#5C6B7A" text-anchor="middle">Bayesian optimization (ITAS) tries stacks and keeps what measures best</text>
+<rect x="728" y="120" width="352" height="400" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="904" y="152" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Headline result</text>
+<text x="904" y="220" font-size="15" fill="#5C6B7A" text-anchor="middle">average pass@1 gain</text>
+<text x="904" y="280" font-size="44" font-weight="600" fill="#1F7A72" text-anchor="middle">+14.1%</text>
+<text x="904" y="316" font-size="13" fill="#5C6B7A" text-anchor="middle">over GPT-4o and Claude 3.5 Sonnet</text>
+<text x="904" y="340" font-size="13" fill="#5C6B7A" text-anchor="middle">with open-source models</text>
+<text x="904" y="400" font-size="14" font-weight="500" fill="#1B2838" text-anchor="middle">0.60 pass@1 becomes about 0.685</text>
+<text x="904" y="428" font-size="13" fill="#5C6B7A" text-anchor="middle">fusion beats even oracle selection</text>
+<text x="40" y="624" font-size="15" font-weight="450" fill="#1B2838">Search the inference-time architecture, and small models beat big ones on average.</text>
+<text x="40" y="652" font-size="13" fill="#5C6B7A">Project: Stanford Frontier AI. Source: paper, Archon (v1). Shell 2.</text>
+</svg>

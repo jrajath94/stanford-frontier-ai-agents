@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" font-family="Inter, 'Source Sans 3', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
 <rect width="960" height="520" fill="#F7F4EE"/>
 <text x="48" y="60" font-size="30" font-weight="600" fill="#1B2838">$100 of training spend: the 5 percent</text>
 <text x="48" y="92" font-size="17" fill="#5C6B7A">Post-training is 5% of the compute and buys the reasoning. Its share is rising. Shell 2. Source: original, DeepSeek V3/R1 numbers from the session.</text>

@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -452,9 +449,12 @@ what the last step found (debug the outage: each clue changes the plan).</p>
 <h3 id="handoffs-the-orchestrators-primitive">Handoffs: the orchestrator&rsquo;s primitive</h3>
 <p>The orchestrator generalizes debate into teamwork. One coordinator
 routes subtasks to specialist agents: a web agent, a code agent, a file
-agent. Magentic-One from Microsoft Research is the lecture&rsquo;s example.
-The orchestrator is itself an agent running the same five-step loop,
-with &ldquo;delegate to specialist&rdquo; as one of its actions.</p>
+agent. Magentic-One from Microsoft Research is the lecture&rsquo;s example:
+one Orchestrator leads four specialists (WebSurfer for the browser,
+FileSurfer for files, Coder for Python, ComputerTerminal for the
+shell), tracks a task ledger of facts and plans, and replans when
+progress stalls. The orchestrator is itself an agent running the same
+five-step loop, with &ldquo;delegate to specialist&rdquo; as one of its actions.</p>
 <figure><img alt="Handoff" src="assets/l01-handoff.svg"><figcaption>The triage agent does not do the work. It hands the conversation to a specialist. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
 <p>A <strong>handoff</strong> is delegation implemented as a tool call. The triage
 agent decides the request needs a specialist and invokes
@@ -465,7 +465,27 @@ named primitive: agents, handoffs, guardrails. The design rule: hand
 off when one agent&rsquo;s instructions would need two jobs&rsquo; worth of
 context. A specialist with a short prompt beats a generalist with a
 long one.</p>
-<h3 id="reflection-patterns-reflexion-debate-self-consistency">Reflection patterns: Reflexion, debate, self-consistency</h3>
+<h3 id="guardrails-the-check-runs-beside-the-agent">Guardrails: the check runs beside the agent</h3>
+<p>An <strong>input guardrail</strong> validates the request before the loop runs.
+An <strong>output guardrail</strong> validates the answer before the user sees it.
+Both sit beside the loop, not inside it: the agent never grades its
+own work, which is the weakest termination exit from the loop lesson.</p>
+<p>Work a toy. A billing triage agent carries handoff tools and a refund
+tool. The input guardrail checks the incoming request against a named
+list of supported intents: billing question, yes. Medical advice, no.
+The unsupported request never reaches the loop. The output guardrail
+checks the final answer against a different list: no account numbers,
+no social security numbers, no refund amounts above a threshold
+without human approval. A pattern match for <code>\d{3}-\d{2}-\d{4}</code> blocks
+the answer before it is sent.</p>
+<p>Guardrails edit the check, the same way handoffs edit the action set.
+The OpenAI Agents SDK runs them as separate functions alongside the
+Runner, so a guardrail failure is not a model opinion. It is a hard
+stop. The failure mode they do not fix: a guardrail that the agent
+can rewrite or route around is decoration. Keep guardrails outside
+the model&rsquo;s reach, in code the agent cannot edit.</p>
+<figure><img alt="Guardrails" src="assets/l01-guardrails.svg"><figcaption>Input guardrail checks the request before the loop. Output guardrail checks the answer before the user. Both sit beside the loop, never inside it. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<h3 id="reflexion-failure-becomes-a-stored-hint">Reflexion: failure becomes a stored hint</h3>
 <p><strong>Reflexion</strong> (Shinn et al., 2023) adds a reflection step. The agent
 runs the task, fails, and receives a feedback signal: test results, an
 environment score, a human note. It writes a verbal reflection, keeps it
@@ -473,6 +493,7 @@ in memory as a self-hint, and retries. Long failed trajectories distill
 into short lessons. No weights change. The lesson is text, stored and
 re-read.</p>
 <figure><img alt="Reflexion: learn from the failed run" src="assets/l01-reflexion.svg"><figcaption>Run, fail, reflect in words, store the reflection, retry with the hint. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<h3 id="multi-agent-debate-parallelize-the-correction">Multi-agent debate: parallelize the correction</h3>
 <p><strong>Multi-agent debate</strong> (Du et al., 2023) parallelizes the correction.
 Several agents propose answers, argue, and revise. A judge picks the
 winner. Debate catches errors that one agent&rsquo;s blind spots hide. It
@@ -480,6 +501,7 @@ works when the errors are uncorrelated: three medium agents with
 different blind spots beat one strong agent with one blind spot. If all
 agents share the same weakness, debate amplifies it.</p>
 <figure><img alt="Multi-agent debate" src="assets/l01-debate.svg"><figcaption>Three agents argue about the answer. A judge picks the winner. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<h3 id="self-consistency-majority-vote-over-reasoning-paths">Self-consistency: majority vote over reasoning paths</h3>
 <p><strong>Self-consistency</strong> (Wang et al., 2023) is the no-tool, no-verifier
 option. Prompt with chain-of-thought, generate many reasoning paths,
 and take the most consistent final answer. More samples, majority vote.
@@ -551,7 +573,7 @@ how does the agent remember, and what checks the work.</p>
 <tr>
 <td>Claude Agent SDK (Anthropic)</td>
 <td>subagents with isolated context windows</td>
-<td>per-subagent context; MCP tools for files</td>
+<td>per-subagent context; Model Context Protocol (MCP) tools for files</td>
 <td>permission-gated tool use</td>
 <td>deep environment work: coding, files, long-horizon tasks</td>
 </tr>
@@ -676,6 +698,8 @@ Yes, and production systems do. The planner writes the plan, and each step execu
 Context loss at the boundary: the specialist inherits the history but not the triage agent&rsquo;s unstated assumptions. And routing errors compound: the wrong specialist burns a full sub-loop before the mistake surfaces. Guardrails on the handoff decision, and a summary (not the raw history) passed forward, contain both.</p><div class="followup"><strong>Follow-up:</strong> What can go wrong with handoffs?</div></div></div>
 <div class="qa"><div class="q">What is the difference between Reflexion and fine-tuning on the failure?</div><div class="a"><p>Reflexion changes no weights. The lesson from a failed run is stored as text in memory and read on the next attempt: fast, local to one task, no training run. Fine-tuning changes the weights and needs a dataset and a training run: slow, but the lesson generalizes across tasks. Pick Reflexion when the feedback is verbal and the task recurs in similar form. Pick fine-tuning when you have many failures and want the fix baked into the model.
 Uncorrelated errors. Three medium agents with different blind spots catch more than one strong agent with one blind spot, because the judge sees three independent attempts. But if all agents share the model&rsquo;s weakness, debate just amplifies it three times. Diversity of failure is the resource. The judge is only as good as the disagreement.</p><div class="followup"><strong>Follow-up:</strong> Why would debate beat a single stronger model?</div></div></div>
+<div class="qa"><div class="q">What is a guardrail, and why does it sit outside the loop?</div><div class="a"><p>An input guardrail validates the request before the loop runs: is this a billing question or a medical question for a billing agent? An output guardrail validates the answer before the user sees it: no account numbers, no unapproved refunds. It sits outside the loop because the loop grading itself is the weakest termination exit: the model grading its own work. A guardrail is code the agent cannot rewrite, a hard stop rather than a model opinion.
+A social-security pattern match on the output: the agent answers a billing question correctly but includes the account holder&rsquo;s SSN from the retrieved record. The output guardrail matches the digit pattern, blocks the answer, and returns a redacted version. The agent did its job. The guardrail did its different job: the answer was right and unsafe at the same time.</p><div class="followup"><strong>Follow-up:</strong> Give a concrete guardrail that actually blocked something.</div></div></div>
 <div class="qa"><div class="q">Design an agent that books the cheapest flight. Name the check, the budget, and the termination exits.</div><div class="a"><p>The loop: perceive the request and current prices, plan the next search, act with the flight search tool, observe the results, check against the goal. The check: a booking confirmation exists for the cheapest option found, verified by reading it back from the booking API, not by the agent&rsquo;s word. The budget: max 15 tool calls, max 10 minutes, max spend on search API calls. Termination exits: check passes (booked), budget dies (stop and report the best found so far), or the model declares done (treat as a failed check unless the confirmation exists).
 The check cannot pass, so the loop must not declare success. The honest behavior: hold the booking details, report &ldquo;booking attempted, confirmation unverified&rdquo;, and schedule a verification pass. A check that cannot run is a failed check, not a passed one. This is why the check reads the world instead of trusting the act.</p><div class="followup"><strong>Follow-up:</strong> The agent books a flight but the confirmation API is down. What now?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>

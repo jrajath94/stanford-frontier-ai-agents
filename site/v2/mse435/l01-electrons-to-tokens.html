@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 1: From Electrons to Tokens — Stanford Frontier AI</title>
+<meta name="description" content="Why the five hyperscalers are spending $650B: the AI production function, the Cobb-Douglas growth equation, and digital labor as the first digitally scalable la">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="mse435-l01" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01" class="active">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">MS&amp;E 435: Economics of the AI Supercycle</a> / Lecture 1: From Electrons to Tokens</nav>
+      <h1>Lecture 1: From Electrons to Tokens</h1>
+      <p class="meta-line">2026-04 · Instructor: Apoorv Agrawal · Spring 2026</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="GcCGzfKdCd0"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/GcCGzfKdCd0" title="Building AI Factories" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Guest: Chase Lochmiller, Co-Founder and CEO of Crusoe. Session covers infrastructure and building AI factories at gigawatt scale.</p></div><h2 id="the-chart-that-opens-the-course">The chart that opens the course</h2>
+<p>The first session opens on one chart. It plots the capital
+expenditure of the five hyperscalers on AI, and the line goes up
+and to the right, fast. To put the scale in context, the host
+frames it as one of the largest investments ever made: bigger
+than the space program, bigger than the interstate highway
+system, bigger than the Manhattan Project. Second only to the
+United States defense budget.</p>
+<p>The natural question is the one the host puts to the guest:
+when the hyperscalers spend on the order of $650 billion
+building data centers, where does that money actually go?</p>
+<p>This chapter builds the answer from zero. It starts with what
+it takes to produce AI at all, then shows why the spending is
+rational under one economic model, and then follows the money
+down into the physical stack. The next chapter opens the
+dollar itself.</p>
+<h2 id="the-ai-production-function">The AI production function</h2>
+<p>Before the money, the recipe. The guest, Chase Lochmiller of
+Crusoe, starts with a plain question: what does it take to
+produce AI? His answer is an equation with five ingredients.</p>
+<pre class="ascii">AI = data + algorithms + compute + energy + data centers
+
+data        the text, images, and labels models learn from
+algorithms  backpropagation, neural networks, transformers
+compute     GPUs doing parallel tensor math at high speed
+energy      the electricity that runs the GPUs
+data centers  the buildings that house and cool the machines
+</pre>
+<p>Read each ingredient the way an economist reads an input to a
+factory. <strong>Data</strong> is raw material. Companies like Scale AI buy
+and label it; the transcript also names Mercor
+[uncertain: the transcript reads &ldquo;Merkur&rdquo;] and Handshake as
+players in this market. <strong>Algorithms</strong> are the process
+technology, invented mostly inside the research labs: new
+architectures, recursive learning techniques, better ways to
+use the data. <strong>Compute</strong> is the machinery: large numbers of
+GPUs running the same math in parallel. <strong>Energy</strong> is the
+fuel. <strong>Data centers</strong> are the factory buildings.</p>
+<p>The striking claim is which ingredients draw the money.
+Data and algorithms matter, but the guest says the spending
+concentrates on the last three: compute, energy, and data
+centers. That is where Crusoe sits, and that is where the
+CapEx chart is pointing. The rest of this chapter explains
+why investors believe the return justifies it.</p>
+<h2 id="the-growth-equation">The growth equation</h2>
+<p>The guest reaches for a classic economics model to explain
+the bet. It is called the <strong>Cobb-Douglas</strong> model of
+production, and it decomposes the growth of an economy into
+three additive parts.</p>
+<pre class="ascii">GDP growth = change in labor + change in capital + change in technology
+
+labor       more workers, or more productive hours
+capital     buildings, plants, equipment, invested money
+technology  ideas that make labor more productive
+</pre>
+<p>A <strong>supercycle</strong> is a long wave of investment driven by a
+general-purpose technology: the PC, the internet, mobile,
+and now AI. The course site names AI &ldquo;the biggest technology
+supercycle since the PC, Internet, and Mobile.&rdquo; The
+Cobb-Douglas frame says a supercycle earns its name when it
+moves one of the three terms hard.</p>
+<p>Technology gets most of the press. The guest&rsquo;s argument is
+about labor. Historically, the labor term could only change
+through the birth rate: a 20-year lead time, because a new
+worker must be born, raised, schooled, fed, and housed
+before producing anything. Labor was the slow term. Capital
+could move fast. Labor could not.</p>
+<p>Now run the toy version. Suppose an economy grows 3 percent
+a year, split evenly: 1 point from labor, 1 from capital, 1
+from technology. The labor point is capped by demography.
+No investment decision made this quarter changes how many
+20-year-olds exist. The term is, for all practical purposes,
+fixed on any horizon a company plans against.</p>
+<p>AI breaks the cap. When you hand a task to a coding agent
+(&ldquo;build a CRM for my new product&rdquo;) and it does the work,
+that is labor being produced. Not a tool assisting a worker.
+Labor itself, created by buying data centers and GPUs. The
+guest&rsquo;s phrase is <strong>digital labor</strong>: the first labor force
+in history whose size changes through an investment
+decision instead of a birth rate.</p>
+<pre class="ascii">traditional labor:  birth rate --&gt; 20-year wait --&gt; new worker
+digital labor:      CapEx     --&gt; build data center --&gt; new workers
+</pre>
+<p>That is the thesis behind the chart. The $650 billion is
+not a bet that chatbots are fun. It is a bet that the labor
+term of the growth equation can now be scaled the way
+capital always could, and that whoever builds the factories
+for digital labor captures the return.</p>
+<h2 id="why-energy-comes-first">Why energy comes first</h2>
+<p>Here the chapter turns from the thesis to the strategy it
+implies. If digital labor is the prize, the bottleneck is
+whatever gates the factories. The guest&rsquo;s founding insight,
+from just under a decade of building, was that the scarce
+resource was <strong>energy</strong>, not chips.</p>
+<p>The reasoning is market logic. Data center capacity had
+grown steadily through the web 2.0 era, clustering in
+established hubs. Northern Virginia, which the guest names,
+runs a large share of the internet. Building &ldquo;the next data
+center in Northern Virginia&rdquo; was a crowded trade. Meanwhile
+the new workloads, AI training with backpropagation and
+proof-of-work crypto, shared one trait: at scale, they are
+limited by energy.</p>
+<p>So Crusoe inverted the usual plan. Instead of moving energy
+to the computers, move the computers to the energy. Find
+places with abundant cheap power that are not historical
+data center markets, and build there.</p>
+<p>The worked example is Abilene, Texas, and it deserves the
+arithmetic. West Texas had attracted heavy renewable
+investment because production tax credits paid developers
+to produce clean electrons. The result was overbuild:
+more generation than the grid could carry out, and no
+marginal buyer. Power prices went negative. Crusoe signed
+its first two buildings there in June 2024, and the site
+is now described as one of the largest AI computing
+campuses in the world, possibly the largest.</p>
+<p>Figure L01-F1. The energy-first inversion. Source: original
+diagram for Stanford Frontier AI, drawn from the session.</p>
+<pre class="ascii">usual plan:        build data center in hub --&gt; buy expensive power
+Crusoe plan:       find cheap stranded power --&gt; build data center there
+Abilene trigger:   tax credits --&gt; renewable overbuild --&gt; negative prices
+</pre>
+<p>The campus numbers set the scale for the whole course.
+A 200 MW substation and a 1 GW substation, the latter
+described as the largest privately owned substation in the
+United States. One gigawatt is roughly the power draw of
+the city of Denver, the guest&rsquo;s home town. The full campus
+is 2.1 gigawatts in aggregate: two Denvers of power, all
+feeding computers. Eight buildings serve Oracle and
+OpenAI, the project known as Project Stargate, plus a
+350 MW natural gas plant built to energize the cluster
+and an expansion planned for Microsoft.</p>
+<h2 id="the-moving-bottleneck">The moving bottleneck</h2>
+<p>A common misunderstanding is that the binding constraint
+in AI is fixed. The guest insists it moves, and the
+history of the last four years proves it.</p>
+<pre class="ascii">4 years ago:    compute (get the chips)
+then:          memory (memory stocks ripping)
+today:         energized data centers (power shells you can plug into)
+always:        labor (electricians, welders, plumbers, construction)
+</pre>
+<p><strong>Chips have softened as the bottleneck.</strong> Access to GPUs
+is better than it was. The binding constraint today is
+finding places where you can put the chips and turn them
+on: powered shells with the electrical and cooling plant
+ready. And underneath every phase, labor: the guest calls
+the shortage of tradespeople a bottleneck in its own
+right, with 9,000 people on site at Abilene every day
+against a town of 120,000.</p>
+<p>This is why Crusoe is <strong>vertically integrated</strong>, meaning
+it owns multiple layers of the stack instead of one. The
+company works from energy development at the bottom,
+through the data center buildings, up to GPU cluster
+deployment and managed services at the top. When the
+bottleneck moves, a single-layer company is stuck; a
+vertically integrated one retools. The guest is explicit
+about the boundary: not in the chip business, not in the
+model business. Everything between energy and tokens.</p>
+<p>Figure L01-F2. The bottleneck timeline. Source: original
+diagram for Stanford Frontier AI, drawn from the session.</p>
+<div class="mermaid">flowchart LR
+  A["4 years ago: chips"] --> B["then: memory"]
+  B --> C["today: energized shells"]
+  C --> D["underneath: skilled labor"]
+</div><pre class="mermaid-fallback"><code>flowchart LR
+  A[&quot;4 years ago: chips&quot;] --&gt; B[&quot;then: memory&quot;]
+  B --&gt; C[&quot;today: energized shells&quot;]
+  C --&gt; D[&quot;underneath: skilled labor&quot;]
+</code></pre>
+<h2 id="mapping-back-why-the-money-is-rational">Mapping back: why the money is rational</h2>
+<p>Each piece of this chapter answers the opening question.</p>
+<table>
+<thead>
+<tr>
+<th>Opening puzzle</th>
+<th>This chapter&rsquo;s answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Why $650B of CapEx?</td>
+<td>Digital labor: the labor term of GDP growth is now investable. The spending buys workers, not just tools.</td>
+</tr>
+<tr>
+<td>What does AI need?</td>
+<td>Five inputs: data, algorithms, compute, energy, data centers. The money concentrates on the last three.</td>
+</tr>
+<tr>
+<td>Why start from energy?</td>
+<td>At scale, energy is the scarce input. Stranded cheap power (Abilene) beats a crowded hub (Northern Virginia).</td>
+</tr>
+<tr>
+<td>What gates growth?</td>
+<td>A moving bottleneck: chips, then memory, now energized shells, always skilled labor. Vertical integration is the hedge.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price-the-thesis-can-be-wrong">The honest price: the thesis can be wrong</h2>
+<p>Every investment thesis has a falsifier, and this one is
+sharp. The entire $650 billion rests on tokens staying
+valuable: on digital labor actually substituting for human
+labor at a price that covers the factories. If the demand
+for tokens stalls, the chart is a monument to overbuild,
+and the depreciation question in the next chapter becomes
+an obituary.</p>
+<p>The guest names his own long-run risks later in the
+session: open source models taking share from closed
+ones, and the legacy electrical stack being disrupted by
+power electronics. The price of the thesis is that it must
+be right about demand for a decade. The next chapter
+checks whether the unit economics give it that decade.</p>
+<div class="qa"><div class="q">What is the AI production function, in plain words?</div><div class="a"><p>Five inputs make AI: data, algorithms, compute, energy, and data centers. Data is the raw material, algorithms are the process technology, GPUs are the machinery, electricity is the fuel, and data centers are the factory buildings. The guest&rsquo;s key claim is that the money concentrates on the last three. Data labeling created a real market (Scale AI and others), and algorithms live in the labs, but the CapEx chart is compute, energy, and buildings.
+Because it tells you where the spending must flow. If AI output scales with compute and energy, then every unit of AI demand converts mechanically into demand for GPUs, power plants, and data centers. The investor question becomes unit economics per megawatt, which is the next chapter.</p><div class="followup"><strong>Follow-up:</strong> Why would an investor care about this decomposition?</div></div></div>
+<div class="qa"><div class="q">Explain the Cobb-Douglas argument for the AI supercycle.</div><div class="a"><p>Cobb-Douglas decomposes GDP growth into three parts: change in labor, change in capital, and change in technology. Historically the labor term moved only through the birth rate, with a 20-year lead time, so it was the slow term. Digital labor breaks that: an agent doing real work is labor produced by an investment decision. For the first time, the labor term can scale the way capital always could, which is the economic case for building AI factories at gigawatt scale.
+Token demand stalling. If digital labor does not substitute for human labor at prices that cover the factories, the CapEx is overbuild. The guest&rsquo;s own bear cases point the same way: open source eroding closed-model pricing power would compress the revenue side of the trade.</p><div class="followup"><strong>Follow-up:</strong> What would falsify this thesis?</div></div></div>
+<div class="qa"><div class="q">Why did Crusoe start from energy instead of compute?</div><div class="a"><p>At scale, energy was the scarce input, and markets are reasonably efficient everywhere else. The web 2.0 era had already filled the established hubs like Northern Virginia. The new workloads (AI training, proof-of-work) are energy-hungry at scale, so the winning move was to find cheap stranded power and bring the computers to it. Abilene is the worked example: renewable overbuild from production tax credits pushed power prices negative, and Crusoe built one of the world&rsquo;s largest AI campuses there, now 2.1 gigawatts in aggregate.
+Stranded power is stranded for a reason: no transmission, no local demand. If the grid buildout catches up or the tax regime changes, the cost advantage narrows. The Abilene answer was to build its own 1 GW substation and a 350 MW gas plant, which converts the risk into more CapEx.</p><div class="followup"><strong>Follow-up:</strong> What is the risk of the energy-first strategy?</div></div></div>
+<div class="qa"><div class="q">What is a power shell, and why is it the bottleneck today?</div><div class="a"><p>A power shell is an energized data center: the building, the substation, the cooling, everything needed so that you can plug in chips and start computing. Chips themselves have become easier to get. The scarce thing is a place to turn them on. Underneath that, skilled labor binds too: electricians, welders, plumbers, and construction workers, with projects like Abilene putting 9,000 people on site daily in a town of 120,000.
+Because the bottleneck moves: chips four years ago, memory after that, energized shells today. A company that owns one layer is hostage to whichever layer binds. Crusoe spans energy development, buildings, GPU clusters, and managed services, so it can attack whichever layer is gating growth, while staying out of chips and models.</p><div class="followup"><strong>Follow-up:</strong> Why does vertical integration help with a moving bottleneck?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>The chart.</strong> Hyperscaler AI CapEx goes up and to the
+   right, fast. Roughly $650 billion. Bigger than the space
+   program, the highways, the Manhattan Project.</li>
+<li><strong>The recipe.</strong> AI needs data, algorithms, compute,
+   energy, and data centers. The money concentrates on the
+   last three.</li>
+<li><strong>The growth equation.</strong> Cobb-Douglas: GDP growth is
+   change in labor plus change in capital plus change in
+   technology.</li>
+<li><strong>The slow term.</strong> Labor historically moved only via
+   the birth rate: a 20-year lead time. Fixed on any
+   planning horizon.</li>
+<li><strong>Digital labor.</strong> Agents doing real work are labor
+   produced by investment. The labor term is now scalable
+   like capital. That is the $650B thesis.</li>
+<li><strong>Energy first.</strong> At scale, energy is the scarce input.
+   Move the computers to the cheap power, not the reverse.</li>
+<li><strong>Abilene.</strong> Tax credits caused renewable overbuild,
+   prices went negative. Now a 2.1 GW campus: two Denvers
+   of power, 9,000 workers on site, a 1 GW substation.</li>
+<li><strong>The moving bottleneck.</strong> Chips, then memory, now
+   energized shells, always skilled labor. Vertical
+   integration is the hedge. Next: the dollar anatomy.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- Building AI Factories (MS&amp;E 435, Spring 2026), guest
+  Chase Lochmiller, Crusoe:
+  https://www.youtube.com/watch?v=GcCGzfKdCd0
+- MS&amp;E 435 course site: https://mse435.stanford.edu/</p>
+<p><strong>Further reading:</strong>
+- The course site&rsquo;s framing line: AI is &ldquo;the biggest
+  technology supercycle since the PC, Internet, and
+  Mobile.&rdquo;</p>
+<p><strong>Caveats from these sources.</strong> The $650B figure is the
+host&rsquo;s framing of hyperscaler spend, not an audited total.
+The transcript spells the guest&rsquo;s name &ldquo;Lockmiller&rdquo; in
+places; the course site spells it &ldquo;Lochmiller,&rdquo; used
+here. One data-labeling company is transcribed as
+&ldquo;Merkur&rdquo; [uncertain: likely Mercor]. The Cobb-Douglas
+treatment is the guest&rsquo;s intuitive version (growth as a
+sum of three changes), not the formal multiplicative
+production function. Abilene &ldquo;largest campus&rdquo; is the
+guest&rsquo;s claim, stated with hedging.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS229S:</strong> the systems course prices the same stack
+  from the inside: what the GPUs cost to run, why
+  inference is memory-bound, and what FlashAttention saves.
+  Read it for the engineering behind the dollars here.</li>
+<li><strong>CS336:</strong> builds the transformer and the training
+  stack that all this infrastructure exists to serve.</li>
+<li><strong>CS329A / CS329Z:</strong> the agents course covers the
+  digital labor itself: what agents can do and where
+  they break.</li>
+<li><strong>MS&amp;E435 L02:</strong> opens the $60M megawatt and checks
+  whether the unit economics pay back.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">VIDEO</span><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0" target="_blank" rel="noopener">Stanford MS&amp;E435 Economics of the AI Supercycle, Building AI Factories (Chase Lochmiller, Crusoe)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://mse435.stanford.edu/" target="_blank" rel="noopener">MS&amp;E 435 course site: mse435.stanford.edu</a></li></ul></section>
+      <nav class="pager"><a href="../mse435/index.html"><span class="lbl">← Previous</span>MS&amp;E 435: Economics of the AI Supercycle</a><a href="../mse435/l02-sixty-million-megawatt.html"><span class="lbl">Next →</span>Lecture 2: The $60 Million Megawatt</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

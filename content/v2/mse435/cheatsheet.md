@@ -181,7 +181,7 @@ Then o1 adds test-time compute. Chain of thought
 emerges untrained. Plus tool use: agents.
 [L03](l03-how-models-get-smarter.html)
 
-![The three scaling axes](assets/plate-l03-axes.webp)
+![The three scaling axes](assets/plate-l03-axes.svg)
 
 </div>
 
@@ -260,7 +260,7 @@ is basically free. Reflexivity says engagement
 compounds anyway. Retention is the metric to watch.
 [L05](l05-software-is-dead.html)
 
-![The agentic infrastructure triangle](assets/plate-l05-triangle.webp)
+![The agentic infrastructure triangle](assets/plate-l05-triangle.svg)
 
 </div>
 

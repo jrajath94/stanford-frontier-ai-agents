@@ -223,6 +223,137 @@
 tells one idea the way the lesson tells it: the
 problem, the number, the fix. Follow the links for the
 full derivations.</p>
+<h2 id="the-numbers-table-one-glance">The numbers table: one glance</h2>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$650B</td>
+<td>Session framing of hyperscaler AI CapEx. ~$730B in reported 2026 plans by October</td>
+</tr>
+<tr>
+<td>$60M/MW</td>
+<td>Full build: $20M factory + $40M machines ($60B per GW)</td>
+</tr>
+<tr>
+<td>$30M</td>
+<td>of the $60M is GPUs: half the total, three quarters of IT spend</td>
+</tr>
+<tr>
+<td>$4.7M/MW</td>
+<td>Construction labor, the bottleneck bar. $4.7B in wages per GW</td>
+</tr>
+<tr>
+<td>$15M/MW/yr</td>
+<td>Renting bare chips: ~4-year payback</td>
+</tr>
+<tr>
+<td>$30M/MW/yr</td>
+<td>Selling tokens: ~2-year payback</td>
+</tr>
+<tr>
+<td>$1-2M/MW/yr</td>
+<td>OpEx: power, insurance, repairs</td>
+</tr>
+<tr>
+<td>6 years</td>
+<td>Book depreciation standard. the 2026 critique says economic life is 3</td>
+</tr>
+<tr>
+<td>$36k / -$4.4k</td>
+<td>H100 annual profit, year 2 / year 4 (Research Affiliates)</td>
+</tr>
+<tr>
+<td>150k / 2.5M</td>
+<td>DeepSeek R1 RL hours / V3 pre-training hours: about 5%</td>
+</tr>
+<tr>
+<td>20 tokens/param</td>
+<td>Chinchilla compute-optimal scaling rule</td>
+</tr>
+<tr>
+<td>$2/$10</td>
+<td>Frontier convergence price, Sept 2026: GPT-6 Sol, Sonnet 5.5, Gemini 4 Argon</td>
+</tr>
+<tr>
+<td>86/86</td>
+<td>Claude picking Vercel&rsquo;s deployment in agent tests</td>
+</tr>
+<tr>
+<td>93%</td>
+<td>Vercel support inquiries answered by its own agent</td>
+</tr>
+<tr>
+<td>54%</td>
+<td>Anthropic share of enterprise coding market, early 2026</td>
+</tr>
+<tr>
+<td>40% / 27% / 21%</td>
+<td>Enterprise API spend: Anthropic / OpenAI / Google (late 2025)</td>
+</tr>
+<tr>
+<td>~$300</td>
+<td>GPUs activated by saying &ldquo;thanks&rdquo; to a flagship model</td>
+</tr>
+<tr>
+<td>2.1 GW</td>
+<td>Abilene campus: two Denvers of power</td>
+</tr>
+</tbody>
+</table>
+<h2 id="memory-aids">Memory aids</h2>
+<p><strong>Mnemonic: DOLLAR.</strong> The six lessons: <strong>D</strong>igital labor,
+<strong>O</strong>pening the megawatt, <strong>L</strong>earning machines (models),
+<strong>L</strong>abs to enterprise, <strong>A</strong>pplications (SaaS),
+<strong>R</strong>ents accrue below the model. Follow the dollar from
+thesis to stack.</p>
+<p><strong>Never-confuse pairs.</strong></p>
+<ul>
+<li>Renting chips vs selling tokens: $15M vs $30M per
+  MW/yr. Chips are the commodity. Tokens are the
+  margin. Four years vs two.</li>
+<li>Book life vs economic life: 6 years on the books,
+  ~3 years in the power ceiling. The payback must
+  finish before the hardware dies economically.</li>
+<li>Lab evals vs enterprise evals: tier 1 steers base
+  models, tier 2 steers your specialization. JPMorgan&rsquo;s
+  good is not Goldman&rsquo;s.</li>
+<li>Presentation layer vs system of record: the pixels
+  go plastic, the database holds. v0 rebuilds the
+  surface, not the ACLs.</li>
+<li>Seat vs token: pay for access vs pay for
+  intelligence used. The meter moved to the unit of
+  cognition.</li>
+<li>Gateway vs sandbox: the CDN for tokens vs EC2 for
+  agents. One routes intelligence. One houses the
+  agent.</li>
+<li>Test-time vs training-time compute: spend when
+  answering vs spend when learning. o1 opened the
+  third axis.</li>
+</ul>
+<p><strong>If-this-then-that rules.</strong></p>
+<ul>
+<li>If the bottleneck moves, the moat moves. Find the
+  bottleneck, price the unit, follow the margin.</li>
+<li>If token demand stalls, the $650B is overbuild.
+  That is the thesis&rsquo;s falsifier.</li>
+<li>If customers never see the chip, old chips stay
+  valuable. Abstraction stretches depreciation.</li>
+<li>If the eval is wrong, the whole lab climbs the
+  wrong hill. Guard the eval.</li>
+<li>If software is free, watch retention, not
+  generation. Saturday toy vs Wednesday need.</li>
+<li>If the agent cannot transact with you in one call,
+  you are invisible to the token economy. Expose
+  MCP, CLI, API, consumption pricing.</li>
+<li>If the price war reaches your layer, compete on
+  cost per accepted task, not cost per token.</li>
+</ul>
 <div class="cheat-cols">
 <div class="cheat-block">
 <h3 id="digital-labor">Digital labor</h3>
@@ -261,6 +392,7 @@ annual use), materials. $40M/MW fills it: GPUs $30M,
 networking $4M (one coherent cluster), CPUs + storage
 $3M (CPUs now scarce too). Total $60B per gigawatt.
 Half of it is GPUs. <a href="l02-sixty-million-megawatt.html">L02</a></p>
+<p><img alt="The full $60M stack" src="assets/plate-l02-cost-stack.svg" /></p>
 </div>
 <div class="cheat-block">
 <h3 id="the-payback">The payback</h3>
@@ -272,7 +404,9 @@ a two-year payback. The variable that matters is
 depreciation: six years is the standard, and H100
 rental prices rose above launch three years in.
 Abstraction (customers never see the chip) stretches
-useful life. <a href="l02-sixty-million-megawatt.html">L02</a></p>
+useful life. The 2026 critique: economic life may be
+3 years, which makes the two-year payback the safe
+one. <a href="l02-sixty-million-megawatt.html">L02</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="the-model-eras">The model eras</h3>
@@ -281,14 +415,16 @@ features. The bargain: uninterpretable scale.
 2017 transformer: self-attention parallelizes on
 GPUs, scales to long sequences. 2018-19
 pre-training: next-token prediction on internet
-text, backprop, trillions of tokens. The product: compression of
-human knowledge into weights. Scaling laws: Kaplan
-(bigger performs better, GPT-3), Chinchilla (scale
-data with parameters). Intelligence becomes a
-capital allocation problem. Then RLHF steers it
-(GPT-4). Then o1 adds test-time compute. Chain of
-thought emerges untrained. Plus tool use: agents.
+text, backprop, trillions of tokens. The product:
+compression of human knowledge into weights. Scaling
+laws: Kaplan (bigger performs better, GPT-3),
+Chinchilla (scale data with parameters, ~20
+tokens/param). Intelligence becomes a capital
+allocation problem. Then RLHF steers it (GPT-4).
+Then o1 adds test-time compute. Chain of thought
+emerges untrained. Plus tool use: agents.
 <a href="l03-how-models-get-smarter.html">L03</a></p>
+<p><img alt="The three scaling axes" src="assets/plate-l03-axes.webp" /></p>
 </div>
 <div class="cheat-block">
 <h3 id="the-bottleneck-tour">The bottleneck tour</h3>
@@ -301,7 +437,8 @@ reasons: RLVR gives free verifiable rewards
 and code is AGI-complete, the general language for
 acting on the world. Price of the chapter: the
 pre-training data wall. Only frontier labs can still
-play there. <a href="l03-how-models-get-smarter.html">L03</a></p>
+play there. By Aug 2026, 31% of filtered web text
+was AI-generated. <a href="l03-how-models-get-smarter.html">L03</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="evals-and-the-5-percent">Evals and the 5 percent</h3>
@@ -315,6 +452,7 @@ Goldman&rsquo;s). DeepSeek: ~150k GPU-hours of RL on
 cheap and its share is growing (data-center-wide
 RL). General models set the floor. Specialization
 sets the ceiling. <a href="l04-evals-rlvr-enterprise.html">L04</a></p>
+<p><img alt="The eval loop" src="assets/plate-l04-eval-loop.svg" /></p>
 </div>
 <div class="cheat-block">
 <h3 id="doordash-and-the-pareto-frontier">DoorDash and the Pareto frontier</h3>
@@ -347,6 +485,7 @@ surface) while the system of record holds. Software
 is basically free. Reflexivity says engagement
 compounds anyway. Retention is the metric to watch.
 <a href="l05-software-is-dead.html">L05</a></p>
+<p><img alt="The agentic infrastructure triangle" src="assets/plate-l05-triangle.webp" /></p>
 </div>
 <div class="cheat-block">
 <h3 id="where-value-accrues">Where value accrues</h3>
@@ -367,6 +506,40 @@ enterprises. The map is dated 2026. The method
 margin) is durable. <a href="l06-where-value-accrues.html">L06</a></p>
 </div>
 </div>
+<h2 id="rapid-fire-self-tests">Rapid-fire self-tests</h2>
+<ol>
+<li>GDP growth = labor + capital + technology. Which
+   term was fixed, and what broke it? <strong>Labor was
+   fixed by the birth rate (20-year lead time).
+   Digital labor broke it: agents are labor produced
+   by investment.</strong></li>
+<li>$60M/MW = ? <strong>$20M factory (labor $4.7M, gas
+   plant $2-3M, electrical, mechanical, materials)
+   + $40M machines ($30M GPUs, $4M network, $3M
+   CPU/storage).</strong></li>
+<li>Payback: renting chips vs selling tokens?
+   <strong>$15M/MW/yr = ~4 years. $30M/MW/yr = ~2 years.
+   OpEx $1-2M/MW/yr.</strong></li>
+<li>Six years vs three years? <strong>Book depreciation vs
+   the 2026 economic-life critique. The two-year
+   payback survives the critique. the four-year one
+   does not.</strong></li>
+<li>Chinchilla rule? <strong>~20 training tokens per
+   parameter. Starve the model and the parameters
+   are wasted.</strong></li>
+<li>The 5 percent? <strong>DeepSeek R1 RL: ~150k
+   GPU-hours on ~2.5M of pre-training. The share is
+   rising.</strong></li>
+<li>Eval loop? <strong>Define the hill, RL climbs it, pick
+   the next hill. Never train on the eval.</strong></li>
+<li>Pareto frontier pattern? <strong>General orchestrator,
+   fast specialists, proprietary data.</strong></li>
+<li>SaaS split? <strong>Presentation layer goes plastic.
+   System of record holds.</strong></li>
+<li>Value in 2026? <strong>Below the model. The method:
+    find the bottleneck, price the unit, follow the
+    margin.</strong></li>
+</ol>
       
       <nav class="pager"><a href="../mse435/l06-where-value-accrues.html"><span class="lbl">← Previous</span>Lecture 6: Where Value Accrues</a><a href="../mse435/crash-course.html"><span class="lbl">Next →</span>MS&amp;E 435 Crash Course</a></nav>
     </article>

@@ -240,7 +240,7 @@ from memory, no retrieval needed.</p>
 <p><strong>Staleness.</strong> The queue log changes every week. Retraining the model
 every week to learn the new log is absurd: a training run for a
 changing fact. Retrieval updates by replacing a file. The index is
-rewritten in minutes; the weights never move.</p>
+rewritten in minutes. The weights never move.</p>
 <p><strong>No citation.</strong> A memorized answer cannot point at its source. &ldquo;Trust
 me, Thursday is quiet&rdquo; is the model&rsquo;s word against nothing. A
 retrieved answer carries its passage: here is the log line, check it
@@ -254,6 +254,38 @@ row itself, byte for byte.</p>
 everything, provide the relevant content just in time. Retrieval is
 dynamic (update documents without retraining) and interpretable (the
 model can cite passages a human can verify).</p>
+<h3 id="rag-vs-fine-tuning-vs-prompting-the-decision">RAG vs fine-tuning vs prompting: the decision</h3>
+<p>The three options are not rivals. They answer different questions.</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Answers</th>
+<th>When it wins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompting</td>
+<td>&ldquo;use this context&rdquo;</td>
+<td>the facts fit in the window and change per query</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>&ldquo;fetch the facts&rdquo;</td>
+<td>the facts change, need citations, or exceed the window</td>
+</tr>
+<tr>
+<td>Fine-tuning</td>
+<td>&ldquo;become the expert&rdquo;</td>
+<td>the knowledge is stable and must shape judgment: tone, reasoning patterns, domain intuition</td>
+</tr>
+</tbody>
+</table>
+<p>The best systems do all three: fine-tune the judgment, retrieve the
+facts, prompt the format. The mistake is using one for another&rsquo;s job:
+fine-tuning the queue log (stale next week), or retrieving the
+company&rsquo;s voice (facts cannot teach style).</p>
 <h2 id="the-key-question">The key question</h2>
 <p>What if the model reads the documents at answer time instead of
 memorizing them?</p>
@@ -277,7 +309,7 @@ reading-comprehension model, or today a zero-shot LLM.</p>
 documents. Reading is a comprehension problem over K passages.
 Different problems, different tools, one pipeline. And the handoff is
 the fragile joint: if the retriever misses the evidence, the reader
-cannot recover; if the reader ignores the passages, the retrieval was
+cannot recover. If the reader ignores the passages, the retrieval was
 wasted. The failure-modes lesson works both.</p>
 <h2 id="rag-weight-answers-by-retrieval">RAG: weight answers by retrieval</h2>
 <p>RAG (Lewis et al., 2021) formalizes the pipeline as probability. A
@@ -300,7 +332,7 @@ negative marginal log-likelihood over both retriever and generator, so
 the retriever learns to fetch passages that help the generator.</p>
 <p>Two variants. <strong>RAG-Sequence</strong> picks one passage and generates the
 whole answer with it. <strong>RAG-Token</strong> re-picks the passage at every token
-of the answer. Sequence is cheaper; token is more flexible. The
+of the answer. Sequence is cheaper. Token is more flexible. The
 lecture&rsquo;s retriever is DPR: p(z|x) proportional to exp(d(z)^T q(x)),
 two BERT encoders, top-K by maximum inner product search. The generator
 is BART, reading the query and passage concatenated.</p>
@@ -334,14 +366,37 @@ tokens. Too small and the vector has no context: it matches everything
 vaguely. Too large and one vector averages many topics: it matches
 nothing precisely. Overlap of 10 to 20 percent keeps sentences from
 dying at boundaries. The fancier options: semantic chunking splits on
-logical boundaries like sentences and sections; context-enriched
-chunking carries metadata or summaries per chunk; AI-driven dynamic
+logical boundaries like sentences and sections. Context-enriched
+chunking carries metadata or summaries per chunk. AI-driven dynamic
 chunking uses an LLM to find natural breakpoints.</p>
 <p>Start at 200 to 400 tokens with 10 to 20 percent overlap, then measure
 on your eval set. The most common mistake is chunking without looking
 at the documents: fixed-size splitting on PDFs with tables, code, or
 headings shreds the structure the questions need. Read ten chunks by
 hand before tuning anything.</p>
+<h3 id="embeddings-meaning-becomes-position">Embeddings: meaning becomes position</h3>
+<p>A chunk is text. The retriever needs numbers. An <strong>embedding model</strong>
+(BERT, E5, BGE, and their successors) turns each chunk into a vector:
+768 numbers that place the chunk at one point in meaning space. Similar
+meanings land near each other.</p>
+<figure><img alt="Embeddings" src="assets/l05-embed.svg"><figcaption>The embedding model turns a chunk into a 768-dim vector. Similar meanings land near each other. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>Two chunks about deadlines land near each other. A chunk about lunch
+lands far away. The retriever never reads the text. It measures
+distances between points: dot product, cosine similarity, Euclidean
+distance. The embedding model is the retriever&rsquo;s eyes, and its quality
+decides everything downstream. A weak embedder buries the evidence
+where no distance metric can find it.</p>
+<h3 id="the-vector-store-index-once-search-per-query">The vector store: index once, search per query</h3>
+<p>The <strong>vector store</strong> holds the chunk vectors plus metadata, and
+answers nearest-neighbor queries. The work splits into two phases.</p>
+<figure><img alt="The vector store" src="assets/l05-vector-store.svg"><figcaption>Chunks are embedded offline. The query is embedded live. Search is distance math. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>Offline: split the documents, embed every chunk, build the index
+(usually an HNSW graph, the next lesson&rsquo;s subject). Online: embed the
+query, run approximate nearest-neighbor search, return the top-K
+chunks. The index is the price of retrieval: embedding 10,000 chunks
+once beats reading them per query. And the staleness rule: update a
+document and the index must be rebuilt, or the agent answers from last
+month&rsquo;s rows with this month&rsquo;s confidence.</p>
 <h2 id="contextual-retrieval-vs-late-chunking">Contextual retrieval vs late chunking</h2>
 <p>A chunk without context is ambiguous. &ldquo;The company&rsquo;s revenue grew by 3%
 over the previous quarter.&rdquo; Which company? Which quarter? The embedding
@@ -349,7 +404,7 @@ of the bare chunk cannot match the query &ldquo;What was the revenue growth
 for ACME Corp in Q2 2023?&rdquo;</p>
 <figure><img alt="Contextual retrieval" src="assets/l05-contextual-retrieval.svg"><figcaption>Bare chunk: ambiguous, retrieval misses. Contextualized chunk: an LLM-written prefix names ACME Corp and Q2 2023, and the query matches. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
 <p><strong>Contextual retrieval</strong> (Anthropic) prepends a short LLM-written
-context to each chunk: &ldquo;From ACME Corp&rsquo;s Q2 2023 SEC filing; Q1 2023
+context to each chunk: &ldquo;From ACME Corp&rsquo;s Q2 2023 SEC filing. Q1 2023
 revenue was $314M.&rdquo; The prompt shows the whole document and the chunk
 and asks for one succinct situating paragraph. Now the chunk vector
 carries the answer&rsquo;s identity. The recipe pairs it with hybrid
@@ -366,15 +421,31 @@ saw the full document when it produced the token vectors.</p>
 <p>The choice is economic. Indexing millions of chunks with an LLM call
 each is expensive. If your encoder has the context length, late
 chunking buys most of the gain for free.</p>
+<h3 id="query-rewriting-ask-better">Query rewriting: ask better</h3>
+<p>The retriever scores passages against the query, but the user&rsquo;s
+question is rarely the best query. &ldquo;Which office hour this week is
+least crowded?&rdquo; contains no words from the queue log. <strong>Query
+rewriting</strong> fixes the mismatch before retrieval: an LLM rewrites the
+question into the terms the documents use (&ldquo;office hour queue wait
+times by session&rdquo;).</p>
+<p>Two named variants. <strong>HyDE</strong> (hypothetical document embeddings) has
+the LLM write a fake answer first, then retrieves with the fake
+answer&rsquo;s embedding: the hypothetical document looks like the real
+documents, so the distance math works. <strong>Multi-query</strong> generates
+several rewrites and fuses the results. The cost is a model call
+before retrieval. The gain is that the retriever finally sees a query
+shaped like its index. The failure mode: a bad rewrite retrieves
+confidently for the wrong question. Rewrite, then verify the retrieved
+passages mention the original question&rsquo;s entities.</p>
 <h2 id="raptor-and-graphrag-when-the-answer-is-spread-out">RAPTOR and GraphRAG: when the answer is spread out</h2>
 <p>Flat chunk retrieval fails when the answer is spread across a document.
 No single chunk holds it. <strong>RAPTOR</strong> (Sarthi et al., 2025) builds a
 tree, bottom up: embed the chunks, cluster them, summarize each cluster
 with an LLM, embed the summaries, and repeat.</p>
-<figure><img alt="RAPTOR" src="assets/l05-raptor.svg"><figcaption>Chunks at the leaves, LLM summaries at the nodes, one root. Detail questions match leaves; thematic questions match nodes. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<figure><img alt="RAPTOR" src="assets/l05-raptor.svg"><figcaption>Chunks at the leaves, LLM summaries at the nodes, one root. Detail questions match leaves. Thematic questions match nodes. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
 <p>Retrieval happens across levels. A detail question matches a leaf
 chunk. A thematic question matches a summary node. The Cinderella test:
-&ldquo;what is the central theme of the story?&rdquo; retrieves the root summary;
+&ldquo;what is the central theme of the story?&rdquo; retrieves the root summary.
 &ldquo;how did she find a happy ending?&rdquo; retrieves leaves. RAPTOR&rsquo;s selected
 context usually contains what flat DPR retrieves, directly or inside a
 summary. The cost is the tree build: clustering plus LLM summaries at
@@ -385,6 +456,54 @@ the graph, and answers queries from community summaries. Use it when
 the questions are about relationships: who works with whom, what
 connects these events. The shared idea: index the connections, not just
 the chunks.</p>
+<h2 id="what-is-used-where-the-rag-stack-in-production">What is used where: the RAG stack in production</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>System</th>
+<th>What it does</th>
+<th>The price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Embeddings</td>
+<td>E5, BGE, OpenAI embeddings</td>
+<td>text to vectors</td>
+<td>the embedder&rsquo;s quality is the ceiling</td>
+</tr>
+<tr>
+<td>Vector store</td>
+<td>Pinecone, Weaviate, Qdrant, pgvector</td>
+<td>ANN search at scale</td>
+<td>managed cost; index rebuilds on update</td>
+</tr>
+<tr>
+<td>Managed RAG</td>
+<td>OpenAI file search, Anthropic contextual retrieval</td>
+<td>chunking plus retrieval as an API</td>
+<td>less control over chunking and fusion</td>
+</tr>
+<tr>
+<td>Search product</td>
+<td>Perplexity, ChatGPT Deep Research</td>
+<td>RAG as the product</td>
+<td>the pipeline is theirs; you get answers</td>
+</tr>
+<tr>
+<td>Graph</td>
+<td>Neo4j-backed GraphRAG builds</td>
+<td>relationships as retrievable units</td>
+<td>the graph build: LLM extraction per document</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern: every layer is a buy-vs-build decision on one pipeline
+stage. Teams that own their corpus build the store. Teams that own
+their questions buy the managed API. The eval lesson&rsquo;s rule applies:
+measure retriever recall separately, because it is the ceiling of the
+whole system no matter who built it.</p>
 <h2 id="mapping-back-what-each-piece-fixes">Mapping back: what each piece fixes</h2>
 <table>
 <thead>
@@ -411,6 +530,11 @@ the chunks.</p>
 <td>Retrieval returns the row byte for byte</td>
 </tr>
 <tr>
+<td>The question is not the query</td>
+<td>Query rewriting</td>
+<td>Rewrite into the index&rsquo;s terms; HyDE retrieves with a hypothetical answer</td>
+</tr>
+<tr>
 <td>Bare chunks are ambiguous</td>
 <td>Contextual retrieval / late chunking</td>
 <td>Situate the chunk before embedding, or pool after encoding</td>
@@ -431,62 +555,82 @@ handoff is fragile: the retriever&rsquo;s miss is the reader&rsquo;s ceiling, an
 a reader that ignores passages wastes the retrieval. Staleness cuts
 the other way from training: the index must be rebuilt when documents
 change, or the agent answers from last month&rsquo;s log. The retrieval
-methods lesson builds the retriever zoo; the agentic lesson puts
+methods lesson builds the retriever zoo. The agentic lesson puts
 retrieval inside the loop and prices every failure.</p>
 <h2 id="interview-qa">Interview Q&amp;A</h2>
-<div class="qa"><div class="q">Why not just train the model on all the documents instead of retrieving?</div><div class="a"><p>Three reasons, each demonstrated. Staleness: the queue log changes weekly and retraining weekly is absurd; retrieval updates by replacing a file. No citation: a memorized answer cannot point at its source, while a retrieved answer carries its passage for a human to verify. Lossy memory: training approximates, so the exact Tuesday average comes back as a reconstruction; retrieval returns the row byte for byte. Retrieval is dynamic, exact, and checkable.
-When the knowledge is stable and must be deeply integrated: reasoning patterns, domain intuition, style. Retrieval fetches facts; training builds judgment. The best systems do both: train the judgment, retrieve the facts. The ladder lesson&rsquo;s midtraining is the training side of this split.</p><div class="followup"><strong>Follow-up:</strong> When is training better than retrieval?</div></div></div>
+<div class="qa"><div class="q">Why not just train the model on all the documents instead of retrieving?</div><div class="a"><p>Three reasons, each demonstrated. Staleness: the queue log changes weekly and retraining weekly is absurd. Retrieval updates by replacing a file. No citation: a memorized answer cannot point at its source, while a retrieved answer carries its passage for a human to verify. Lossy memory: training approximates, so the exact Tuesday average comes back as a reconstruction. Retrieval returns the row byte for byte. Retrieval is dynamic, exact, and checkable.
+When the knowledge is stable and must be deeply integrated: reasoning patterns, domain intuition, style. Retrieval fetches facts. Training builds judgment. The best systems do both: train the judgment, retrieve the facts. The ladder lesson&rsquo;s midtraining is the training side of this split.</p><div class="followup"><strong>Follow-up:</strong> When is training better than retrieval?</div></div></div>
 <div class="qa"><div class="q">Explain the RAG formula and work it on a tiny example.</div><div class="a"><p>p(y|x) sums p(z|x) p(y|x,z) over the top-K passages: each passage&rsquo;s answer weighted by how likely the retriever rates that passage. Toy: the queue-log passage scores p(z1|x) = 0.7 and gives &ldquo;Thursday 9am&rdquo; probability 0.9, contributing 0.63. The old FAQ scores 0.3 and gives the same answer probability 0.2, contributing 0.06. Total: 0.69. The trusted passage dominates the sum. Training minimizes the negative marginal log-likelihood jointly, so the retriever learns to fetch passages that help the generator.
-Sequence picks one passage for the whole answer; token re-picks per token. It matters when the answer draws on multiple passages: a comparison answer needs token-level switching, while a single-fact answer is fine with one passage. Token is more flexible and more expensive. Most production systems approximate the token behavior with multi-hop retrieval instead.</p><div class="followup"><strong>Follow-up:</strong> RAG-Sequence versus RAG-Token: when does the choice matter?</div></div></div>
+Sequence picks one passage for the whole answer. Token re-picks per token. It matters when the answer draws on multiple passages: a comparison answer needs token-level switching, while a single-fact answer is fine with one passage. Token is more flexible and more expensive. Most production systems approximate the token behavior with multi-hop retrieval instead.</p><div class="followup"><strong>Follow-up:</strong> RAG-Sequence versus RAG-Token: when does the choice matter?</div></div></div>
 <div class="qa"><div class="q">How do you choose a chunk size, and what is the most common mistake?</div><div class="a"><p>Start at 200 to 400 tokens with 10 to 20 percent overlap. Smaller chunks give precise matches but lose context: the vector covers too little to be distinctive. Larger chunks keep context but blur: one vector averages several topics and matches vaguely. Then measure on your eval set, because the right size depends on your documents and questions. The most common mistake is chunking without looking: fixed-size splitting on PDFs with tables, code, or headings shreds the structure the questions need. Read ten chunks by hand before tuning anything.
 Contextual retrieval: an LLM writes a situating prefix per chunk (&ldquo;From ACME Corp&rsquo;s Q2 2023 SEC filing&hellip;&rdquo;), costing one LLM call and extra tokens per chunk at index time. Late chunking: embed the whole document with a long-context encoder, then mean-pool token vectors per chunk span, costing no LLM calls but requiring an encoder with real long-context ability. Same goal: disambiguate before the query arrives.</p><div class="followup"><strong>Follow-up:</strong> A bare chunk says &quot;revenue grew by 3%&quot;. The query asks about ACME Corp Q2 2023. What are your two fixes and their costs?</div></div></div>
+<div class="qa"><div class="q">Walk me through the vector store: what happens offline and what happens per query?</div><div class="a"><p>Offline: split the documents into chunks, embed every chunk into a vector, build the index (usually an HNSW graph over the vectors plus metadata). Online: embed the query with the same model, run approximate nearest-neighbor search over the index, return the top-K chunks. The offline phase is the price of retrieval: embedding 10,000 chunks once beats reading them per query. The staleness rule: update a document and the index must be rebuilt, or the agent reads last month&rsquo;s rows.
+Because the vectors live in that model&rsquo;s meaning space. A different model&rsquo;s vectors have different geometry: distances between them are meaningless. Mixing embedders is like measuring one room in meters and another in feet and comparing the numbers. The index and the query must share the encoder.</p><div class="followup"><strong>Follow-up:</strong> Why must the query use the same embedding model as the index?</div></div></div>
+<div class="qa"><div class="q">What is HyDE, and when does query rewriting backfire?</div><div class="a"><p>HyDE (hypothetical document embeddings) has the LLM write a fake answer first, then retrieves using the fake answer&rsquo;s embedding. The hypothetical document looks like the real documents in the index, so the distance math works even when the user&rsquo;s question shares no words with the evidence. It backfires when the rewrite is confidently wrong: a bad hypothetical retrieves passages for the wrong question, and the reader answers from them. Rewrite, then verify the retrieved passages mention the original question&rsquo;s entities.
+Single rewrite is cheaper: one model call, one retrieval. Multi-query generates several rewrites and fuses the results, which helps when the question is ambiguous and different phrasings retrieve different evidence. The fusion needs a rule (RRF, from the methods lesson). Use multi-query when ambiguity is the failure mode. Use a single rewrite when the mismatch is just vocabulary.</p><div class="followup"><strong>Follow-up:</strong> Multi-query versus single rewrite: which and when?</div></div></div>
 <div class="qa"><div class="q">When does RAPTOR beat flat chunk retrieval?</div><div class="a"><p>When the answer is spread across the document. Flat retrieval returns chunks that each look relevant but none of which contains the answer. RAPTOR&rsquo;s summary nodes compress many chunks into one retrievable unit, so a thematic question matches a node that actually contains the synthesized answer. The Cinderella queries are the demo: &ldquo;central theme&rdquo; needs the root summary, &ldquo;how did she find a happy ending&rdquo; needs the leaves. RAPTOR&rsquo;s selected context usually contains what flat DPR retrieves, directly or inside a summary.
 Build cost and staleness. The tree needs clustering plus LLM summaries at every level, and any document update can invalidate a subtree. For fast-changing corpora, flat chunking with good retrieval wins on maintenance. Match the index structure to the question shape and the update rate.</p><div class="followup"><strong>Follow-up:</strong> What is the catch?</div></div></div>
+<div class="qa"><div class="q">RAG, fine-tuning, or prompting: a new support bot for a product whose docs change weekly. Decide.</div><div class="a"><p>RAG, with prompting for the format. The docs change weekly, so fine-tuning is stale by design: you would retrain every week to learn changing facts. RAG reads the current docs at answer time, cites the passage, and updates by replacing a file. Fine-tune only the stable part: the support tone, the escalation judgment. Prompt the rest: the answer format, the citation style. The decision rule: stable judgment gets trained, changing facts get retrieved, per-query instructions get prompted.
+The reader, not the retriever. Log whether the answer&rsquo;s claims appear in the retrieved passages: that is faithfulness, and it is a reader metric. If the retriever&rsquo;s recall is fine but the reader paraphrases from memory, the fix is in the prompt (&ldquo;answer only from these passages&rdquo;) or in training, not in the index. The handoff is the fragile joint: measure each side separately.</p><div class="followup"><strong>Follow-up:</strong> The bot&#x27;s answers are correct but ignore the retrieved passages half the time. What do you check?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
-<p>The story in eight steps. Each step answers the one before it.</p>
+<p>The story in nine steps. Each step answers the one before it.</p>
 <ol>
 <li><strong>The job: evidence at answer time.</strong> The LLM alone guesses
    Wednesday. With the queue log it answers Thursday 9am, three
    waiting. Specific, sourced, checkable.</li>
 <li><strong>Training breaks three ways.</strong> Staleness (retrain weekly?),
    no citation (&ldquo;trust me&rdquo;), lossy memory (reconstructions, not
-   rows).</li>
+   rows). Stable judgment gets trained. Changing facts get retrieved.</li>
 <li><strong>Split the problem.</strong> Retriever f finds top-K passages (K = 100
-   in DrQA); reader g writes the answer. Search over millions,
+   in DrQA). Reader g writes the answer. Search over millions,
    comprehend over K.</li>
 <li><strong>Weight answers by retrieval.</strong> p(y|x) = sum p(z|x) p(y|x,z).
    The toy: 0.7 x 0.9 + 0.3 x 0.2 = 0.69. The trusted passage
    dominates.</li>
 <li><strong>The chunk is the unit.</strong> 100 to 500 tokens, 10 to 20 percent
-   overlap. Too small loses context; too large blurs topics. Read
+   overlap. Too small loses context. Too large blurs topics. Read
    ten chunks by hand.</li>
+<li><strong>Embeddings turn text into points.</strong> 768 numbers per chunk. The
+   retriever measures distances, never reads text. The index is built
+   offline. The query is embedded live.</li>
 <li><strong>Situate before embedding.</strong> Contextual retrieval writes a
    prefix per chunk (one LLM call each). Late chunking embeds the
    document then pools per span (no LLM call, needs a long-context
-   encoder).</li>
+   encoder). Rewrite the query when it mismatches the index.</li>
 <li><strong>Spread-out answers need trees.</strong> RAPTOR: embed, cluster,
    summarize, repeat. Leaves for detail, nodes for theme. GraphRAG:
    index the relationships.</li>
 <li><strong>The price: build cost, latency, fragility.</strong> Indexing is paid
-   upfront; retrieval per query; the retriever&rsquo;s miss is the
+   upfront. Retrieval per query. The retriever&rsquo;s miss is the
    reader&rsquo;s ceiling.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/YamlxX17n6Y" title="How AI Looks Things Up (RAG, Actually Explained)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<ul>
+<li>How AI Looks Things Up (RAG, Actually Explained) (the embed above): https://www.youtube.com/watch?v=YamlxX17n6Y, chunks, vectors, retrieve, augment, generate; RAG versus fine-tuning; the one honest catch.</li>
+</ul>
+<p>Further:
+- Anthropic, Contextual Retrieval: https://www.anthropic.com/engineering/contextual-retrieval, the prefix recipe in production.
+- Gao et al. (2024) survey of RAG variants: the full zoo this lesson samples.
+- Sarthi et al. (2025), RAPTOR: tree-structured retrieval.
+- Edge et al. (2024), GraphRAG: https://arxiv.org/abs/2402.08907, knowledge graphs for retrieval.</p>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Lecture 3 slides (local: sources/agents/cs329z/lecture03.pdf).
 - Course site: http://web.stanford.edu/class/cs329z.</p>
 <p><strong>Further reading:</strong>
-- Gao et al. (2024) survey of RAG variants.
-- Sarthi et al. (2025), RAPTOR.
-- Edge et al. (2024), GraphRAG.
-- Günther et al. (2024), late chunking.
-- Anthropic, &ldquo;Contextual Retrieval&rdquo;: the prefix recipe in production.</p>
+- Lewis et al. (2021), RAG: https://arxiv.org/abs/2005.11401.
+- Chen et al. (2017), DrQA: https://arxiv.org/abs/1704.00051.
+- Günther et al. (2024), late chunking.</p>
 <p><strong>Caveats from these sources.</strong> The lecture reports RAG wins
 qualitatively on named benchmarks without quoting exact numbers, so
 none are quoted here. The 0.69 toy is worked arithmetic, not a
-measured probability. Retrieval latency figures vary by hardware; the
+measured probability. Retrieval latency figures vary by hardware. The
 methods lesson carries the lecture&rsquo;s numbers with that warning. No
-video ID is on record.</p>
+lecture video is on record. The embed above is a third-party explainer,
+verified live.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS336 L01:</strong> embeddings sit on tokenized text. The chunk vectors

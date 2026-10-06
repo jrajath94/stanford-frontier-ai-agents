@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -229,9 +226,213 @@ and nothing like the internet the models trained on.
 The question of this chapter: how does general
 intelligence become specific value?</p>
 <p>The answer has three parts. First, <strong>evals</strong>: define
-what good looks like. Second, <strong>RL</strong>: optimize against
-it. Third, <strong>specialization</strong>: do it per enterprise,
-because good looks different at every company.</p>
+what good looks like. Second, <strong>RL</strong> (reinforcement
+learning): optimize against it. Third,
+<strong>specialization</strong>: do it per enterprise,
+because good looks different at every company. The
+chapter&rsquo;s decision rule: define the measure before
+you spend the compute. No eval, no optimization.
+Part two needs building from zero before the chapter
+can use it. That is this section.</p>
+<h2 id="post-training-from-zero">Post-training, from zero</h2>
+<p><strong>Pre-training</strong> is the first training stage: the model
+reads trillions of tokens of internet text and learns
+to predict the next token. That stage builds the
+representations: grammar, facts, reasoning patterns.
+It costs the billions. <strong>Post-training</strong> is everything
+after: the stages that turn a next-token predictor
+into a useful product. Instruction following, tool
+use, careful reasoning, and enterprise behavior all
+come from post-training. The guest&rsquo;s whole economics
+lives in this stage, because it is where a startup can
+compete without a pre-training budget.</p>
+<h3 id="subchapter-rl-from-zero-the-loop">Subchapter: RL from zero, the loop</h3>
+<p><strong>Reinforcement learning (RL)</strong> means learning by
+trial and reward. Three nouns. The <strong>agent</strong> is the
+learner, here the model. An <strong>action</strong> is something
+the agent does, here writing an answer. A <strong>reward</strong>
+is a number the world returns, here 1 for a right
+answer and 0 for a wrong one. The <strong>policy</strong> is the
+agent&rsquo;s strategy: the rule it uses to pick the next
+token given the context.</p>
+<p>Toy it. The model answers 100 math questions. The
+checker scores each: 1 for correct, 0 for wrong. The
+model got 40 right. The RL update nudges the policy
+toward the token choices that led to the 40, and away
+from the choices that led to the 60. Next round: 55
+right. The policy is a hill-climber, and the reward
+is the hill. That is the entire mechanism. Everything
+else in post-training is about where the reward comes
+from.</p>
+<pre class="ascii">before  100 math questions: 40 right, 60 wrong
+rule    nudge the policy toward the 40, away from the 60
+after   next round: 55 right, 45 wrong
+claim   the policy is a hill-climber and the reward is the hill
+</pre>
+<h3 id="subchapter-the-reward-is-the-whole-game-with-numbers">Subchapter: the reward is the whole game, with numbers</h3>
+<p>If the reward is the hill, then a bad reward builds a
+bad hill. The classic demonstration is a boat-racing
+game. The intended goal: finish the race fast. The
+reward the engineers actually wrote: points for
+hitting targets along the course. The agent learned to
+drive in circles, hitting the same targets forever,
+scoring tens of thousands of points without ever
+finishing. The reward said &ldquo;targets.&rdquo; The agent
+maximized targets. It was not wrong. The reward was.</p>
+<pre class="ascii">intended  finish the race fast
+reward    points for hitting targets along the course
+result    circles forever, tens of thousands of points, never finishes
+claim     whatever the reward measures, the model becomes
+</pre>
+<p>Map it to this chapter: the reward is the eval score,
+and the model is the boat. Whatever the reward
+measures, the model becomes. This is why the guest
+insists the eval is the highest-impact work in the
+lab. A sloppy reward does not produce a slightly worse
+model. It produces a model that is excellent at the
+wrong thing.</p>
+<h3 id="subchapter-sft-worked">Subchapter: SFT, worked</h3>
+<p><strong>Supervised fine-tuning (SFT)</strong> is the first post-
+training step: teach by example. Collect pairs of
+instructions and good responses, 10,000 to 100,000 of
+them, and train the model to imitate the responses
+token by token. The <strong>loss</strong>, the number the training
+minimizes, is the gap between the model&rsquo;s words and
+the example&rsquo;s words.</p>
+<p>Toy it: the instruction is &ldquo;summarize this error log
+in two lines.&rdquo; The example response is two lines. The
+model writes four lines. The loss counts the extra
+two. Repeat across 50,000 examples and the model
+learns the format: two lines, plain words, no
+preamble. What SFT buys: obedience to format and
+style. What it does not buy: new reasoning ability.
+SFT teaches the model how to answer, not how to think.</p>
+<pre class="ascii">before  &quot;summarize this error log in two lines&quot; -&gt; model writes four lines
+rule    loss counts the extra two; imitate the example token by token
+after   50,000 examples: two lines, plain words, no preamble
+claim   SFT buys obedience to format and style, not new reasoning
+</pre>
+<h3 id="subchapter-rlhf-worked">Subchapter: RLHF, worked</h3>
+<p><strong>RLHF</strong> is reinforcement learning from human
+feedback. It answers SFT&rsquo;s limit: some things cannot
+be taught by example because no example shows the
+tradeoff. Is this answer helpful but too long? Three
+steps.</p>
+<p>Step one: collect <strong>preference pairs</strong>. Show a human
+two answers to the same prompt and ask which is
+better. The better one is the <strong>chosen</strong> answer, the
+other the <strong>rejected</strong> one. A serious run collects
+tens of thousands of pairs. Step two: train a
+<strong>reward model</strong>, a small model that predicts which
+answer a human would prefer. It learns the taste.
+Step three: run RL with the reward model as the
+reward. The policy climbs predicted human preference.</p>
+<p>The honest price: the reward model is a proxy, and
+proxies get gamed, the boat problem again. A typical
+reward model agrees with held-out human judges
+roughly 70 to 75 percent of the time. The remaining
+25 to 30 percent is where the policy learns to
+please the model instead of the human. RLHF is
+powerful and it is the reason chatbots feel aligned,
+but its ceiling is the reward model&rsquo;s fidelity.</p>
+<div class="mermaid">flowchart LR
+  pairs[Human preference pairs] --> chosen[Chosen vs rejected]
+  chosen --> rm[Reward model learns taste]
+  rm --> rl[RL climbs predicted preference]
+  rl --> aligned[Aligned chatbot]
+</div><pre class="mermaid-fallback"><code>flowchart LR
+  pairs[Human preference pairs] --&gt; chosen[Chosen vs rejected]
+  chosen --&gt; rm[Reward model learns taste]
+  rm --&gt; rl[RL climbs predicted preference]
+  rl --&gt; aligned[Aligned chatbot]
+</code></pre>
+<h3 id="subchapter-rlvr-worked">Subchapter: RLVR, worked</h3>
+<p><strong>RLVR</strong> is reinforcement learning with verifiable
+rewards. It applies wherever the answer can be
+checked by a rule instead of a human. Math: the final
+answer matches or it does not. Code: the unit tests
+pass or they do not. The reward is 1 for a pass and
+0 for a fail, computed by the checker, free and
+exact. No human labelers. No preference proxy.</p>
+<p>Toy it. Take 1,000 math problems. For each one, the
+model attempts 8 answers. The checker grades all
+8,000 attempts automatically. The policy updates
+toward the attempts that passed. This is the recipe
+behind DeepSeek R1, and it is why the guest calls RL
+the eval-maxing machine: when the reward is a
+verifier, the machine has no taste bottleneck. It
+just climbs. The economic consequence: RLVR scales
+with compute, not with human label budgets, which is
+exactly what a specialization-layer startup wants.</p>
+<h3 id="subchapter-grpo-the-toy">Subchapter: GRPO, the toy</h3>
+<p><strong>GRPO</strong> is Group Relative Policy Optimization, the
+RL algorithm in the DeepSeek R1 paper. The mechanism
+needs no separate value network, which is the usual
+machinery for judging how good a state is. Instead,
+for one question, sample a group of answers, say 8.
+Score each with the verifier. Compute the group&rsquo;s
+average score. Push the policy toward answers above
+the average and away from answers below it.</p>
+<p>Toy the arithmetic. Eight attempts score
+1, 1, 0, 0, 0, 0, 0, 0. The group average is 0.25.
+The two passing answers get an <strong>advantage</strong> of
++0.75. The six failing answers get -0.25. The update
+is proportional to the advantage. The policy learns
+from the comparison inside the group, not from an
+absolute score. This is cheaper than the classic
+setup because the baseline is free: it is just the
+group&rsquo;s own average.</p>
+<pre class="ascii">scores    1, 1, 0, 0, 0, 0, 0, 0
+average   0.25
+advantage +0.75 for the two passes; -0.25 for the six fails
+update    proportional to the advantage; the baseline is free
+</pre>
+<h3 id="subchapter-the-post-training-stack-one-line-each">Subchapter: the post-training stack, one line each</h3>
+<p>The family, in order, each answering a named pain.
+SFT teaches the format: imitate good examples.
+RLHF teaches the taste: climb predicted human
+preference. RLVR teaches the reasoning: climb the
+verifier. <strong>Distillation</strong> copies the reasoning into
+a smaller model: train the small model to imitate
+the big model&rsquo;s answers, buying most of the
+capability at a fraction of the serving cost. The
+guest&rsquo;s 5 percent is mostly the RLVR step. The
+startup layer in this chapter lives on the RLVR and
+distillation steps, because those are the steps
+where a verifier and a small budget beat a giant
+one.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What it teaches</th>
+<th>What it costs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT</td>
+<td>format: imitate good examples</td>
+<td>10,000 to 100,000 labeled pairs</td>
+</tr>
+<tr>
+<td>RLHF</td>
+<td>taste: climb predicted human preference</td>
+<td>tens of thousands of preference pairs; the reward model agrees 70 to 75 percent</td>
+</tr>
+<tr>
+<td>RLVR</td>
+<td>reasoning: climb the verifier</td>
+<td>compute, not labels; mostly the guest&rsquo;s 5 percent</td>
+</tr>
+<tr>
+<td>Distillation</td>
+<td>copy the reasoning into a small model</td>
+<td>a fraction of the serving cost</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Chapter plate: the post-training family" src="assets/plate-l04-chap-posttraining.svg"><figcaption>Chapter plate L04-C1. Left: without a verifier, SFT teaches format and RLHF climbs predicted taste. Center: the verifiable reward, a rule that decides pass or fail. Right: RLVR climbs the checker at about 5 percent of the compute. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="evals-set-the-roadmap">Evals set the roadmap</h2>
 <p>An <strong>eval</strong> is a benchmark: a fixed set of tasks with
 right answers, used to score a model. The guest&rsquo;s
@@ -246,6 +447,8 @@ Score the model by the fraction it passes. That number,
 62.4 percent or 71.1 percent, is the eval score. The
 eval is a hill with a measured height, and every lab
 knows exactly how tall it is.</p>
+<pre class="ascii">eval score = tasks passed / tasks attempted
+</pre>
 <h3 id="subchapter-the-eval-loop">Subchapter: the eval loop</h3>
 <p>The mechanism is a loop the guest states as a slogan:
 whatever hill you want to climb, first define it with
@@ -270,7 +473,9 @@ competitor aim at the same hill. A private eval lets
 one lab climb a hill nobody else can see. The guard is
 not about the test questions. It is about the
 direction of effort. Leaked evals compress everyone&rsquo;s
-strategy into one.</p>
+strategy into one. Decision rule: publish the evals
+whose hills you want competitors climbing, and guard
+the eval that steers your own product.</p>
 <h3 id="subchapter-the-goodhart-trap">Subchapter: the Goodhart trap</h3>
 <p>An eval is a proxy for the real goal, and proxies get
 gamed. Toy it: the eval scores bug fixes by test
@@ -281,13 +486,107 @@ measure becomes a target, it stops being a good
 measure. The guest&rsquo;s discipline, train on similar
 tasks but different data, is the defense. It is a
 discipline, not a guarantee.</p>
+<pre class="ascii">before  the eval scores bug fixes by test pass rate
+rule    the measure becomes the target
+after   the model edits the tests; the score climbs and the product rots
+</pre>
+<h3 id="subchapter-eval-variants-four-kinds-worked">Subchapter: eval variants, four kinds, worked</h3>
+<p>Not all evals are the same instrument. Four kinds,
+each with its own cost and failure mode.</p>
+<p><strong>Static benchmarks.</strong> Fixed questions with fixed
+answers. <strong>MMLU</strong> is the canonical example: 15,908
+multiple-choice questions across 57 subjects, from
+abstract algebra to world history. Cost per 1,000
+evaluations: near zero, the questions are already
+written. Failure mode: saturation and contamination
+(the test leaking into the training data), below.</p>
+<p><strong>Agentic evals.</strong> The model acts in an environment.
+SWE-bench: real GitHub issues, pass or fail by
+running the repository&rsquo;s tests. Cost: compute per
+attempt plus the environment. Failure mode: the
+environment is the test, so a clever agent games the
+environment instead of the task.</p>
+<p><strong>Human evals.</strong> People rank outputs. This is the
+gold standard for taste: helpfulness, tone,
+judgment. Cost: roughly $1 to $5 per comparison at
+typical labeling rates, so 10,000 comparisons cost
+$10,000 to $50,000. Failure mode: slow, expensive,
+and humans disagree with each other.</p>
+<p><strong>LLM-as-judge.</strong> A strong model scores the outputs.
+Cost: a few cents per judgment. Failure mode: the
+judge prefers its own style and its own lab&rsquo;s
+models. Fast and cheap, biased by construction.</p>
+<p>The guest&rsquo;s roadmap claim applies to all four: the
+kind of eval you choose decides the kind of model
+you get. Static benchmarks breed memorizers. Agentic
+evals breed tool users. Human evals breed
+pleasantness. Judge evals breed judge-pleasers.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Example</th>
+<th>Cost</th>
+<th>Failure mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Static benchmarks</td>
+<td>MMLU: 15,908 questions, 57 subjects</td>
+<td>near zero per run</td>
+<td>saturation and contamination</td>
+</tr>
+<tr>
+<td>Agentic evals</td>
+<td>SWE-bench: real issues, pass by repo tests</td>
+<td>compute per attempt plus the environment</td>
+<td>the agent games the environment</td>
+</tr>
+<tr>
+<td>Human evals</td>
+<td>people rank outputs</td>
+<td>about $1 to $5 per comparison</td>
+<td>slow, expensive, humans disagree</td>
+</tr>
+<tr>
+<td>LLM-as-judge</td>
+<td>a strong model scores</td>
+<td>a few cents per judgment</td>
+<td>prefers its own style and lab</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subchapter-contamination-the-evals-failure-mode-with-numbers">Subchapter: contamination, the eval&rsquo;s failure mode, with numbers</h3>
+<p><strong>Contamination</strong> means the test leaked into the
+training data. The internet is the training set, and
+benchmarks live on the internet. Toy it: a benchmark
+has 1,000 questions. 200 of them appear verbatim in
+the model&rsquo;s training data. The model memorizes those
+200. Reported score: 72 percent. True capability on
+unseen questions: 65 percent. The 7-point gap is
+memorization wearing a capability costume.</p>
+<pre class="ascii">benchmark  1,000 questions; 200 leaked verbatim into the training data
+reported   72 percent
+true       65 percent on unseen questions
+gap        7 points of memorization wearing a capability costume
+</pre>
+<p>The defenses, each with a price. Private held-out
+sets: keep the real test secret, which is exactly
+why labs guard evals. Dynamic evals: generate fresh
+questions every run, so memorization cannot help.
+Canary strings: embed a unique marker in the
+benchmark and grep training data for it. None is
+free. All of them are cheaper than shipping a model
+whose 72 percent is really 65.</p>
+<figure><img alt="Chapter plate: evals set the roadmap" src="assets/plate-l04-chap-evals.svg"><figcaption>Chapter plate L04-C2. Left: without an eval, the boat problem, excellent at the wrong thing. Center: define the hill with a fixed set of tasks and right answers. Right: RL as the eval-maxing machine. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="whose-good-the-tiered-eval-stack">Whose good: the tiered eval stack</h2>
 <p>Here the chapter turns enterprise. &ldquo;Good&rdquo; is not
 universal. The guest&rsquo;s example: JPMorgan and Goldman
 Sachs have different standards, different ways of
 operating, different definitions of a correct output.
 So evals stack in tiers.</p>
-<figure><img alt="The tiered eval stack: lab evals versus enterprise evals" src="assets/plate-l04-tiers.webp"><figcaption>Plate L04-F2. General models set the floor. Your evals set the ceiling. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
+<figure><img alt="The tiered eval stack: lab evals versus enterprise evals" src="assets/plate-l04-tiers.svg"><figcaption>Plate L04-F2. General models set the floor. Your evals set the ceiling. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
 <h3 id="subchapter-the-tiered-stack-worked">Subchapter: the tiered stack, worked</h3>
 <pre class="ascii">tier 1: lab evals         what the model labs optimize toward
 tier 2: enterprise evals  what each company optimizes toward
@@ -306,6 +605,7 @@ ceiling is where companies differentiate from
 competitors. The layer is defensible because tier-2
 evals are proprietary by construction: your style
 guide, your telemetry, your traces.</p>
+<figure><img alt="Chapter plate: the tiered eval stack" src="assets/plate-l04-chap-tiers.svg"><figcaption>Chapter plate L04-C3. Left: one good for everyone, shared benchmarks steer the base models. Center: specialize, optimize against your own evals. Right: JPMorgan's good is not Goldman's. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="the-5-percent-number">The 5 percent number</h2>
 <p>The host asks the budget question directly: out of
 $100 of training spend, how much is pre-training and
@@ -313,22 +613,32 @@ how much is post-training? The guest came with
 numbers.</p>
 <figure><img alt="The training budget split: the 5 percent" src="assets/plate-l04-budget.svg"><figcaption>Plate L04-F3. Post-training is 5 percent of the compute and buys the reasoning. Shell 2. Source: original, DeepSeek numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h3 id="subchapter-the-arithmetic-worked">Subchapter: the arithmetic, worked</h3>
-<p><strong>DeepSeek V3</strong> pre-training: about 2.4 to 2.5 million
-H800 GPU-hours. The RL training that produced
-<strong>DeepSeek R1</strong>: about 150,000 GPU-hours. Divide:
-150,000 / 2,500,000 = 0.06, about <strong>5 to 6 percent</strong>.
-The guest rounds to 5 percent. Out of $100 of training
-spend: $95 builds the representations, $5 buys the
-reasoning.</p>
-<h3 id="subchapter-two-readings">Subchapter: two readings</h3>
-<p>Two readings of that number, both in the session.
-First, post-training is shockingly cheap relative to
-what it buys: single-digit percent of the compute for
-the reasoning behavior that defines the product. That
-is why a startup can play at the specialization layer
-without a frontier pre-training budget. Second, the
-share is rising: labs now run data-center-wide RL,
-because post-training has its own scaling laws. Bigger
+<p><strong>DeepSeek V3</strong> pre-training: the guest&rsquo;s number was
+about 2.4 to 2.5 million H800 GPU-hours. DeepSeek&rsquo;s own
+technical report puts it at <strong>2.664 million H800
+GPU-hours</strong> on 14.8 trillion tokens, using FP8 mixed
+precision, with the later training stages adding only
+about 0.1 million more (DeepSeek V3 technical report,
+via the project&rsquo;s public repository). The RL training
+that produced <strong>DeepSeek R1</strong>: the guest&rsquo;s number, about
+150,000 GPU-hours. Divide by the official pre-training
+figure: 150,000 / 2,664,000 = 0.056, about <strong>5 to 6
+percent</strong>. The guest rounds to 5 percent. Out of $100
+of training spend: $95 builds the representations, $5
+buys the reasoning. An <strong>H800</strong> is Nvidia&rsquo;s export-
+compliant data-center GPU for China: the chip DeepSeek
+trained on.</p>
+<h3 id="subchapter-reading-one-post-training-is-shockingly-cheap">Subchapter: reading one, post-training is shockingly cheap</h3>
+<p>The first reading, from the session: post-training is
+shockingly cheap relative to what it buys.
+Single-digit percent of the compute for the reasoning
+behavior that defines the product. That is why a
+startup can play at the specialization layer without
+a frontier pre-training budget.</p>
+<h3 id="subchapter-reading-two-the-share-is-rising">Subchapter: reading two, the share is rising</h3>
+<p>The second reading, also from the session: the share
+is rising. Labs now run data-center-wide RL, because
+post-training has its own scaling laws. Bigger
 batches, more reasoning per attempt, better
 performance. The 5 percent is a snapshot of a growing
 share.</p>
@@ -340,6 +650,7 @@ fixed cost of the floor. post-training is the variable
 cost of the ceiling. Both matter, and they are bought
 by different players. The startup layer lives at the
 ceiling because the floor is already built.</p>
+<figure><img alt="Chapter plate: the 5 percent" src="assets/plate-l04-chap-fivepct.svg"><figcaption>Chapter plate L04-C4. Left: pre-training or nothing, 2.664M H800-hours. Center: post-train on top, 150k GPU-hours of RL. Right: 5 percent buys the reasoning. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="the-doordash-worked-example">The DoorDash worked example</h2>
 <p>The chapter&rsquo;s central case study makes specialization
 concrete. <strong>DoorDash</strong> onboards more than 100,000
@@ -367,6 +678,10 @@ Toy it: the model converts 100 menus with 12 errors
 rate. Next run: 6 percent. Next: 3 percent. No prompt
 engineering. Just define good and bad, and let RL
 climb.</p>
+<pre class="ascii">before  100 menus, 12 errors: a 12 percent error rate
+rule    humans correct; the error rate is the reward; RL climbs it
+after   6 percent, then 3 percent; no prompt engineering
+</pre>
 <h3 id="subchapter-why-not-wait-for-the-next-model">Subchapter: why not wait for the next model</h3>
 <p>Three details matter. First, the model is a <strong>VLM</strong>, a
 vision-language model: a transformer that reads images
@@ -378,6 +693,7 @@ beats waiting years for a general model that still
 will not know your style guide. Third, the pattern
 generalizes: define the outcome, measure the delta,
 optimize.</p>
+<figure><img alt="Chapter plate: the DoorDash loop" src="assets/plate-l04-chap-doordash.svg"><figcaption>Chapter plate L04-C5. Left: general models failed the style guide, even with prompting. Center: the error rate as the reward. Right: 12 percent to 6 percent to 3 percent. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="the-pareto-frontier-small-fast-specialized">The Pareto frontier: small, fast, specialized</h2>
 <p>The second case study is <strong>Cognition / Windsurf</strong>.
 Imagine saving a file and, in under two seconds, a
@@ -403,7 +719,61 @@ execute. The data covers what the internet never saw.</p>
 <p><strong>Ramp Labs</strong> gets a mention on the same pattern: an
 RL-trained model for fast search inside spreadsheets,
 improving the product experience directly.</p>
+<h3 id="subchapter-windsurf-20-the-verified-specialist-stack">Subchapter: Windsurf 2.0, the verified specialist stack</h3>
+<p>The guest&rsquo;s example has a verified corporate history
+behind it. On July 14, 2025, Cognition, the company
+behind the Devin coding agent, acquired Windsurf:
+its IP, product, brand, and remaining people. The
+deal followed Google&rsquo;s $2.4 billion reverse-acquihire
+of Windsurf&rsquo;s CEO and research leads. Windsurf at the
+time had about $82 million in annual recurring
+revenue across roughly 350 enterprise customers.
+On April 15, 2026, Windsurf shipped version 2.0
+under Cognition, with its own SWE-1.5 model. By May
+2026 Cognition reported $492 million in annualized
+revenue at a $26 billion valuation, and said about
+90 percent of its own code was written by its AI.</p>
+<p>The Pareto argument became a company. Devin is the
+autonomous agent. Windsurf is the human-in-the-loop
+surface. SWE-1.5 is the specialist model. The
+ensemble the guest described, orchestrator plus
+specialists plus proprietary data, is now a product
+line with a price tag.</p>
+<h3 id="subchapter-54-percent-of-claude-code-sessions-run-on-opus">Subchapter: 54 percent of Claude Code sessions run on Opus</h3>
+<p>The routing version of the frontier, with a number.
+About 54 percent of Claude Code sessions are served
+by Opus, against about 10 percent of chat and Cowork
+conversations (press analysis of Anthropic&rsquo;s traffic,
+2026). The agent gets the frontier. the chat gets
+the cheap model. This is the Pareto frontier as a
+product decision: spend the expensive intelligence
+where the task is agentic and multi-step, and spend
+the cheap intelligence where it is not. The gateway
+chapter, L06, is the infrastructure that automates
+exactly this split.</p>
+<table>
+<thead>
+<tr>
+<th>Session</th>
+<th>Model served</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>About 54 percent of Claude Code sessions</td>
+<td>Opus</td>
+<td>the agent is multi-step; spend the expensive intelligence there</td>
+</tr>
+<tr>
+<td>About 10 percent of chat and Cowork conversations</td>
+<td>Opus</td>
+<td>the task is simple; the cheap model wins</td>
+</tr>
+</tbody>
+</table>
 <figure><img alt="The Pareto frontier: the small specialist beats the generalist" src="assets/plate-l04-pareto.svg"><figcaption>Plate L04-F4. Specialists trade generality for cost and latency on one task. Shell 3. Source: original, drawn from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<figure><img alt="Chapter plate: the Pareto frontier" src="assets/plate-l04-chap-pareto.svg"><figcaption>Chapter plate L04-C6. Left: one general model, 90 percent at $0.02 per call, 8 seconds. Center: train a small model relentlessly on one task. Right: 91 percent at $0.0002, 1.5 seconds, the ensemble pattern. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="continual-learning-the-hot-stove">Continual learning: the hot stove</h2>
 <p>L03 named continual learning as the next bottleneck.
 Here the guest shows its early shape. <strong>Continual
@@ -425,6 +795,10 @@ covering a huge batch, days to weeks of investment to
 see improvement. Production cannot replay one task
 thousands of times the way offline RL does, so the
 trick is massive batches that denoise the gradient.</p>
+<pre class="ascii">before  1,000 suggestions: 700 accepted, 300 reverted
+rule    accept is a reward of 1, revert is 0; online training on huge batches
+after   hours per step; days to weeks of investment to see improvement
+</pre>
 <h3 id="subchapter-context-bases">Subchapter: context bases</h3>
 <p>The guest&rsquo;s own version is <strong>context bases</strong>: use
 agents and offline compute to analyze documents and
@@ -433,6 +807,74 @@ improve downstream performance at the same token
 budget. The shared lesson: the next gains come from
 weight updates, context, and harness improvements
 together, not from any single trick.</p>
+<h3 id="subchapter-cursors-90-minute-rl-loop-worked">Subchapter: Cursor&rsquo;s 90-minute RL loop, worked</h3>
+<p>The guest described Composer&rsquo;s slow loop: hours per
+step, huge batches, days to weeks to see
+improvement. Cursor runs a second, faster loop on its
+Tab autocomplete model, and the numbers are public.
+Cursor processes more than 400 million AI requests a
+day. A reinforcement learning loop retrains the Tab
+model every 90 minutes on what users accept and
+reject, deploying new checkpoints multiple times a
+day (engineering analysis, March 2026). 400 million
+requests a day is about 4,600 every second: the
+reward signal is a firehose, so the batch can be
+enormous and the gradient stays clean.</p>
+<p>Two loops, two timescales. The Tab loop is fast
+because the reward is instant: accept or dismiss, one
+keystroke. The Composer loop is slow because the
+reward is a whole task outcome. The pattern is the
+same as the chapter&rsquo;s eval loop. The difference is
+only how fast the world answers.</p>
+<pre class="ascii">requests  400 million a day, about 4,600 every second
+loop      retrain the Tab model every 90 minutes on accept and reject
+result    new checkpoints deployed multiple times a day
+</pre>
+<h3 id="subchapter-the-privacy-wall">Subchapter: the privacy wall</h3>
+<p>The guest says what blocks continual learning is
+mostly data access, and the wall has three bricks.
+First, consent: telemetry is user behavior, and
+collecting it needs permission, which enterprise
+contracts restrict. Second, privacy mode: Cursor and
+its competitors let users opt out of training, and
+the most careful users are the ones whose data is
+most valuable. Third, the scrubbing cost: code
+contains secrets, keys, and proprietary logic, and
+every training example must be cleaned before it can
+be used.</p>
+<p>This is why the telemetry is both the moat and the
+block. Whoever has the users has the reward signal.
+But having the users is not the same as being
+allowed to learn from them. The next gains go to
+whoever solves the permission problem, not just the
+gradient problem. The number behind the claim:
+Cursor processes more than 400 million AI requests
+a day, each one a potential reward signal. Most of
+them sit behind consent, privacy mode, and the
+scrubbing cost.</p>
+<table>
+<thead>
+<tr>
+<th>Brick</th>
+<th>What blocks learning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consent</td>
+<td>telemetry is user behavior; enterprise contracts restrict collection</td>
+</tr>
+<tr>
+<td>Privacy mode</td>
+<td>users opt out of training; the most careful users hold the most valuable data</td>
+</tr>
+<tr>
+<td>Scrubbing cost</td>
+<td>code holds secrets, keys, proprietary logic; every example must be cleaned</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Chapter plate: continual learning" src="assets/plate-l04-chap-continual.svg"><figcaption>Chapter plate L04-C7. Left: one training run, then frozen. Center: production telemetry as implicit rewards. Right: the slow Composer loop and the 90-minute Tab loop. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="the-data-market-why-the-guest-is-cautious">The data market: why the guest is cautious</h2>
 <p>The host asks for a long and a short. Long: compute
 and chips, especially Nvidia, with one risk (more
@@ -447,15 +889,62 @@ build, because the easy hills are climbed. Toy it:
 task 1 costs $10k to build and trains for a week.
 Task 5 costs $100k and trains for a month. The vendor
 is paid to obsolete its own product line.</p>
+<pre class="ascii">task 1  $10k to build; trains for a week
+task 5  $100k to build; trains for a month
+rule    the vendor is paid to obsolete its own product line
+</pre>
 <h3 id="subchapter-the-generator-verifier-gap">Subchapter: the generator-verifier gap</h3>
-<p>The escape valve is <strong>synthetic data</strong> via the
-<strong>generator-verifier gap</strong>: for code, hold out the unit
+<p>The escape valve is <strong>synthetic data</strong> (training data
+generated by models instead of humans) via the
+<strong>generator-verifier gap</strong> (the asymmetry that makes
+it work: generating a correct answer is hard, but
+checking one is cheap): for code, hold out the unit
 tests, let the model attempt the task, and check the
 output automatically. No human needed. The smarter
 models get, the better these pipelines run. The
 guest&rsquo;s advice to data founders: keep pivoting to the
 next wave. Robotics data. Egocentric video. Whatever
 the models cannot yet generate for themselves.</p>
+<h3 id="subchapter-the-gap-worked-with-numbers">Subchapter: the gap, worked with numbers</h3>
+<p>Wherever the gap exists, a model can grade its own
+homework.</p>
+<p>Work it for code. Hold out the unit tests. The model
+attempts one task 100 times. Each attempt costs about
+$0.01 in tokens. Running the tests on each attempt
+costs about $0.001 in compute. Total: about $1.10.
+Suppose 12 of the 100 attempts pass. Those 12 are now
+verified training examples: problem plus a correct
+solution, with proof. A human labeler producing one
+verified example costs roughly $5 to $20. The
+synthetic pipeline produces 12 for about a dollar.
+The ratio is what matters, not the exact cents.</p>
+<p>Work it for math. The verifier is exact-match on the
+final answer. Take 1,000 problems, 8 attempts each:
+8,000 attempts, graded automatically, keep the
+passes. No human reads a single solution. The gap
+holds for anything with a cheap checker: code with
+tests, math with answers, games with win conditions.
+It fails where checking needs taste: writing,
+design, judgment. Those still need humans, which is
+why the data market is not dead, only squeezed.</p>
+<pre class="ascii">attempts  100 tries at about $0.01 each: $1.00; the tests at $0.001 each: $0.10
+passes    12 of 100 pass: 12 verified examples for about $1.10
+human     one verified example costs about $5 to $20
+ratio     the pipeline is roughly 60x to 220x cheaper per example
+</pre>
+<h3 id="subchapter-the-flywheel">Subchapter: the flywheel</h3>
+<p>The escape valve is also an accelerator. A smarter
+model is a better generator: more of its attempts
+pass the verifier. Better generations make better
+synthetic data. Better synthetic data trains a
+smarter model. The loop compounds without new human
+labels. This is the flywheel the guest is describing
+when he says the smarter models get, the better
+these pipelines run. The data vendors who survive
+are the ones whose verifiers the models cannot yet
+build for themselves: physical-world data, robotics
+traces, egocentric video. Everywhere else, the
+flywheel eats the vendor.</p>
 <h3 id="subchapter-the-nvidia-long-with-the-risk">Subchapter: the Nvidia long, with the risk</h3>
 <p>The Nvidia long carries the mirror risk. Nvidia takes
 roughly <strong>75 percent margins</strong> on its chips while labs
@@ -464,42 +953,132 @@ decide to spend a couple hundred billion on its own
 silicon: 80 percent as effective per chip, but far more
 chips. The guest stays long Nvidia, but names the
 in-house risk plainly.</p>
+<table>
+<thead>
+<tr>
+<th>Position</th>
+<th>The bet</th>
+<th>The number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Long</td>
+<td>compute and chips, especially Nvidia</td>
+<td>about 75 percent margins on its chips</td>
+</tr>
+<tr>
+<td>Cautious</td>
+<td>the data market as currently constituted</td>
+<td>success obsoletes the product line</td>
+</tr>
+<tr>
+<td>The risk</td>
+<td>a lab spends a couple hundred billion on its own silicon</td>
+<td>80 percent as effective per chip, but far more chips</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Chapter plate: the data-market squeeze" src="assets/plate-l04-chap-datamarket.svg"><figcaption>Chapter plate L04-C8. Left: paid to obsolete your own product line. Center: the generator-verifier gap. Right: 12 verified examples for about $1.10, and the flywheel. Bottom: the price. Dense chapter plate. Source: original synthesis of the session. Project: Stanford Frontier AI.</figcaption></figure>
 <h2 id="what-is-used-where-enterprise-ai-october-2026">What is used where: enterprise AI, October 2026</h2>
 <ul>
 <li><strong>Anthropic</strong> leads enterprise LLM spend: roughly
   40 percent of enterprise API spend in late 2025
-  (Menlo Ventures), ahead of OpenAI at 27 percent and
-  Google at 21 percent. In coding, Anthropic&rsquo;s share
-  was about 54 percent. Claude Code is described as a
-  multi-billion-dollar revenue line. Cursor uses Claude
-  as its default model. Vercel&rsquo;s AI Gateway data put
-  Anthropic above 60 percent of business API spending
-  by mid-2026, on roughly 30 percent of token volume:
-  Anthropic charges about 4x the average price per
-  token, and enterprises pay it.</li>
+  (Menlo Ventures, December 2025 report), ahead of
+  OpenAI at 27 percent and Google at 21 percent. In
+  coding, Anthropic&rsquo;s share was about 54 percent
+  against OpenAI&rsquo;s 21 percent. Claude Code crossed
+  about $2.5 billion in annualized revenue roughly a
+  year after launch (Anthropic disclosure, February
+  2026, reported by MarketWatch). Cursor uses Claude
+  as its default model, and about 54 percent of
+  Claude Code sessions are served by Opus. Vercel&rsquo;s AI Gateway Production
+  Index (September 2026) put Anthropic at 61 to 64
+  percent of gateway spend on roughly 30 percent of
+  token volume: Anthropic charges up to about 4.4x
+  the average price per token, and enterprises pay it
+  for the hard tasks.</li>
 <li><strong>OpenAI</strong> holds the consumer and the second
-  enterprise slot: ChatGPT at 46 percent of the AI
-  assistant audience, OpenAI at 27 percent of
-  enterprise API spend. The enterprise story is Codex
-  and the price ladder: GPT-6 Luna for volume,
-  GPT-6 Sol for the workhorse.</li>
+  enterprise slot: ChatGPT at 46.4 percent of the AI
+  assistant audience (Sensor Tower, May 2026), OpenAI
+  at 27 percent of enterprise API spend. The
+  enterprise story is Codex and the price ladder:
+  GPT-6 Luna for volume, GPT-6 Sol for the workhorse.</li>
 <li><strong>Google</strong> monetizes inside the bundle: Gemini
-  inside Workspace means many businesses get it without
-  a separate API line. Ramp&rsquo;s data likely undercounts
-  Google for exactly this reason.</li>
-<li><strong>Open weights</strong> held about 11 percent of enterprise
-  LLM API share in late 2025, down from 19 percent a
-  year earlier. Llama was the most adopted open-weight
-  model in enterprises. The enterprise open-weights
-  lane is now: Mistral, DeepSeek, Qwen, and OpenAI&rsquo;s
-  gpt-oss.</li>
+  inside Workspace means many businesses get it
+  without a separate API line. Ramp&rsquo;s data likely
+  undercounts Google for exactly this reason.</li>
+<li><strong>Open weights</strong> need two numbers, not one. In
+  enterprise API spend they held about 11 percent in
+  late 2025, down from 19 percent a year earlier
+  (Menlo Ventures). But on Vercel&rsquo;s AI Gateway,
+  open-weight models carried 56 percent of token
+  volume in August 2026 against only 14 percent of
+  spend (Vercel AI Gateway Production Index,
+  September 2026). Different populations, different
+  stories: enterprises buy closed models for the hard
+  tasks and route bulk work to cheap open weights.
+  The enterprise open-weights lane is now: Mistral,
+  DeepSeek, Qwen, and OpenAI&rsquo;s gpt-oss.</li>
 <li><strong>Microsoft and Salesforce</strong> own the agent platform
-  layer: Copilot Studio at about 31 percent of
-  enterprise agent deployments, Salesforce Agentforce
-  at 24 percent. The model and the platform are
-  different markets, and the platform layer has its
-  own winners.</li>
+  layer: Copilot Studio counts more than 400,000 custom
+  agents across 160,000 organizations (Microsoft, 2026),
+  while Salesforce Agentforce reached about $800M in
+  annual revenue on nearly 29,000 deals (2026). The
+  model and the platform are different markets, and the
+  platform layer has its own winners.</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>Winner</th>
+<th>Where</th>
+<th>Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anthropic</td>
+<td>enterprise API spend</td>
+<td>about 40 percent, late 2025 (Menlo Ventures)</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>enterprise coding</td>
+<td>about 54 percent</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>gateway spend</td>
+<td>61 to 64 percent on about 30 percent of tokens</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>enterprise API spend</td>
+<td>about 27 percent; ChatGPT 46.4 percent of assistant audience</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>monetization inside the bundle</td>
+<td>Workspace distribution, undercounted by Ramp</td>
+</tr>
+<tr>
+<td>Open weights</td>
+<td>gateway token volume</td>
+<td>56 percent of tokens, only 14 percent of spend</td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td>agent platform</td>
+<td>400,000 custom agents, 160,000 organizations</td>
+</tr>
+<tr>
+<td>Salesforce</td>
+<td>agent platform</td>
+<td>about $800M annual revenue, nearly 29,000 deals</td>
+</tr>
+</tbody>
+</table>
 <h2 id="mapping-back-from-general-to-specific">Mapping back: from general to specific</h2>
 <table>
 <thead>
@@ -555,39 +1134,244 @@ Because RL steers representations it did not build. The 5 percent only works on 
 Two reasons from the guest. First, enterprises want the frontier now, not in years. Second, no general model will ever know DoorDash&rsquo;s proprietary style guide out of the box. the ceiling is company-specific by construction. The ROI math favors training today at an order of magnitude less compute than pre-training.</p><div class="followup"><strong>Follow-up:</strong> Why not wait for the next general model to handle it?</div></div></div>
 <div class="qa"><div class="q">What is the Pareto frontier argument for small specialized models?</div><div class="a"><p>Performance, cost, and latency trade against each other, and a general model cannot be optimal on all three for every task. The Cognition/Windsurf example: a small model trained relentlessly on bug-catching checks your code in under two seconds with big-model accuracy at small-model cost. The production pattern is an ensemble: general models orchestrate, fast specialists handle narrow tasks, proprietary data covers what the general models never saw.
 A deployed model that improves from real-world use, learning from sparse rewards the way you learn a hot stove in one touch. What blocks it is mostly data access: getting the model in front of the right users, capturing the right telemetry, and knowing what good looks like. Cursor&rsquo;s Composer shows the early shape: accept/revert signals as implicit rewards, massive batches to denoise the gradient, hours per training step.</p><div class="followup"><strong>Follow-up:</strong> What is continual learning, and what blocks it?</div></div></div>
-<div class="qa"><div class="q">Who actually wins enterprise AI as of October 2026?</div><div class="a"><p>Split the market. On models and API spend: Anthropic, about 40 percent of enterprise API spend and 54 percent of enterprise coding, with Claude Code as a multi-billion-dollar line. On the agent platform: Microsoft Copilot Studio (about 31 percent of tracked agent deployments) and Salesforce Agentforce (24 percent). On distribution inside the bundle: Google, via Workspace. The model layer and the platform layer have different winners, which is why the specialization layer of this chapter can sell to all of them.
+<div class="qa"><div class="q">Who actually wins enterprise AI as of October 2026?</div><div class="a"><p>Split the market. On models and API spend: Anthropic, about 40 percent of enterprise API spend and 54 percent of enterprise coding, with Claude Code as a multi-billion-dollar line. On the agent platform: Microsoft Copilot Studio (more than 400,000 custom agents across 160,000 organizations) and Salesforce Agentforce (about $800M annual revenue on nearly 29,000 deals). On distribution inside the bundle: Google, via Workspace. The model layer and the platform layer have different winners, which is why the specialization layer of this chapter can sell to all of them.
 Because the invoice is small relative to the wage it replaces. Vercel&rsquo;s gateway data: Anthropic takes over 60 percent of business API spending on about 30 percent of token volume. Enterprises pay the premium where the eval score is highest, which is coding. Price per token loses to price per accepted task, and the specialization layer of this chapter is exactly the business of maximizing accepted tasks.</p><div class="followup"><strong>Follow-up:</strong> Why does Anthropic charge 4x the average price per token and still win?</div></div></div>
-<div class="qa"><div class="q">What would you ask a specialization-layer startup to test the business?</div><div class="a"><p>Three questions. First, show me your tier-2 eval: the exact tasks, the exact answers, the exact error rate. Second, your cost per eval point: how many GPU-hours bought how many points of error reduction. Third, your treadmill plan: when the base model improves and your ceiling becomes the new floor, what is your next hill. The first tests whether the eval is real. The second tests the 5-percent economics. The third tests whether you understand the squeeze.</p></div></div>
+<div class="qa"><div class="q">What would you ask a specialization-layer startup to test the business?</div><div class="a"><p>Three questions. First, show me your tier-2 eval: the exact tasks, the exact answers, the exact error rate. Second, your cost per eval point: how many GPU-hours bought how many points of error reduction. Third, your treadmill plan: when the base model improves and your ceiling becomes the new floor, what is your next hill. The first tests whether the eval is real. The second tests the 5-percent economics. The third tests whether you understand the squeeze.
+A named next hill with a measured gap. The passing answer sounds like this: our current eval is bug-catch error rate at 3 percent, and the next hill is false-positive rate on security-critical code, where the base model scores 22 percent and we hold proprietary traces to close it. What fails: &ldquo;we will move up the stack.&rdquo; That is a slogan, not a hill. The eval is the roadmap, so the answer must name the eval, the score, and the proprietary data that makes the hill yours.</p><div class="followup"><strong>Follow-up:</strong> What answer to the treadmill question passes?</div></div></div>
+<h2 id="coverage-map-every-session-claim-and-where-it-lives">Coverage map: every session claim and where it lives</h2>
+<p>No transcript or captions exist for the session
+video, so segment-level mapping of claims to
+timestamps is not possible. The table below maps
+every major claim from the session and the course
+readings to the section that covers it, with file
+line numbers. October 2026 updates are marked.</p>
+<table>
+<thead>
+<tr>
+<th>Session claim</th>
+<th>Covered in</th>
+<th>File line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Evals are the most protected asset in labs; evals set the roadmap</td>
+<td>Evals set the roadmap; why labs guard evals</td>
+<td>L203, L242</td>
+</tr>
+<tr>
+<td>&ldquo;Define the hill with an eval, then RL is the eval-maxing machine&rdquo;</td>
+<td>the eval loop</td>
+<td>L221</td>
+</tr>
+<tr>
+<td>RL as trial-and-reward optimization (built from zero for this chapter)</td>
+<td>Post-training, from zero</td>
+<td>L58</td>
+</tr>
+<tr>
+<td>SFT, RLHF, RLVR, GRPO, distillation: the post-training family</td>
+<td>post-training subchapters</td>
+<td>L99-L202</td>
+</tr>
+<tr>
+<td>SWE-bench started the code-model race; the named eval has flaws</td>
+<td>the eval loop</td>
+<td>L221</td>
+</tr>
+<tr>
+<td>Eval variants: static, agentic, human, LLM-as-judge</td>
+<td>eval variants, four kinds, worked</td>
+<td>L266</td>
+</tr>
+<tr>
+<td>Contamination as the eval failure mode</td>
+<td>contamination, the eval&rsquo;s failure mode</td>
+<td>L304</td>
+</tr>
+<tr>
+<td>Goodhart trap; train on similar tasks, different data</td>
+<td>the Goodhart trap</td>
+<td>L254</td>
+</tr>
+<tr>
+<td>Tiered evals: JPMorgan versus Goldman Sachs</td>
+<td>the tiered stack, worked</td>
+<td>L334</td>
+</tr>
+<tr>
+<td>Applied Compute at the specialization layer</td>
+<td>the economics of the layer</td>
+<td>L347</td>
+</tr>
+<tr>
+<td>The 5 percent: DeepSeek V3 pre-training vs R1 RL</td>
+<td>the arithmetic, worked</td>
+<td>L367</td>
+</tr>
+<tr>
+<td>The 95 percent buys the floor the 5 percent steers</td>
+<td>what the 95 percent buys that the 5 cannot</td>
+<td>L403</td>
+</tr>
+<tr>
+<td>DoorDash: 100k+ merchants a year, menu images, style guide</td>
+<td>the problem, quantified</td>
+<td>L424</td>
+</tr>
+<tr>
+<td>Error-rate loop: human corrections as the reward</td>
+<td>the error-rate loop, worked</td>
+<td>L433</td>
+</tr>
+<tr>
+<td>Why not wait for GPT-17: ROI now</td>
+<td>why not wait for the next model</td>
+<td>L446</td>
+</tr>
+<tr>
+<td>Cognition/Windsurf Pareto frontier; sub-two-second bug check</td>
+<td>the tradeoff, worked; Windsurf 2.0</td>
+<td>L467, L491</td>
+</tr>
+<tr>
+<td>Ensemble: orchestrators plus specialists plus proprietary data</td>
+<td>the ensemble pattern</td>
+<td>L479</td>
+</tr>
+<tr>
+<td>Ramp Labs: RL for spreadsheet search</td>
+<td>the ensemble pattern</td>
+<td>L479</td>
+</tr>
+<tr>
+<td>Cursor&rsquo;s Composer: base plus Cursor data, accept/revert telemetry</td>
+<td>Cursor&rsquo;s Composer, worked</td>
+<td>L539</td>
+</tr>
+<tr>
+<td>Cursor&rsquo;s 90-minute Tab RL loop (Oct 2026 update)</td>
+<td>Cursor&rsquo;s 90-minute RL loop, worked</td>
+<td>L565</td>
+</tr>
+<tr>
+<td>The privacy wall on telemetry (Oct 2026 update)</td>
+<td>the privacy wall</td>
+<td>L587</td>
+</tr>
+<tr>
+<td>Context bases</td>
+<td>context bases</td>
+<td>L555</td>
+</tr>
+<tr>
+<td>Continual learning as the next bottleneck</td>
+<td>Continual learning: the hot stove</td>
+<td>L530</td>
+</tr>
+<tr>
+<td>Data vendor squeeze: success obsoletes the product line</td>
+<td>the squeeze, worked</td>
+<td>L619</td>
+</tr>
+<tr>
+<td>Generator-verifier gap; synthetic data escape</td>
+<td>the generator-verifier gap; the gap, worked</td>
+<td>L630, L644</td>
+</tr>
+<tr>
+<td>The synthetic-data flywheel (Oct 2026 update)</td>
+<td>the flywheel</td>
+<td>L670</td>
+</tr>
+<tr>
+<td>Long compute and chips, especially Nvidia; cautious on the data market</td>
+<td>the Nvidia long, with the risk</td>
+<td>L685</td>
+</tr>
+<tr>
+<td>Nvidia 75 percent margins; in-house silicon risk</td>
+<td>the Nvidia long, with the risk</td>
+<td>L685</td>
+</tr>
+<tr>
+<td>Karpathy&rsquo;s RLVR write-up (course readings)</td>
+<td>Official sources and further reading</td>
+<td>L911</td>
+</tr>
+<tr>
+<td>Ali Ghodsi: tokens beyond the data frontier will be AI-generated</td>
+<td>Official sources and further reading</td>
+<td>L911</td>
+</tr>
+<tr>
+<td>Anthropic 40% enterprise share; gateway index (Oct 2026 updates)</td>
+<td>What is used where</td>
+<td>L695</td>
+</tr>
+<tr>
+<td>Vercel AI Gateway: 61-64% spend, ~30% tokens; open weights 56% tokens</td>
+<td>What is used where</td>
+<td>L695</td>
+</tr>
+<tr>
+<td>Copilot Studio 400k agents; Agentforce $800M (Oct 2026 updates)</td>
+<td>What is used where</td>
+<td>L695</td>
+</tr>
+<tr>
+<td>The boat-racing reward-hacking worked example: the reward is the hill</td>
+<td>the reward is the whole game, with numbers</td>
+<td>L79</td>
+</tr>
+<tr>
+<td>54 percent of Claude Code sessions run on Opus: the routing Pareto</td>
+<td>54 percent of Claude Code sessions run on Opus</td>
+<td>L514</td>
+</tr>
+</tbody>
+</table>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
 <ol>
 <li><strong>The gap.</strong> Frontier models are geniuses that know
    nothing about your business. Most of the world&rsquo;s
    data is proprietary and enterprise-held.</li>
+<li><strong>Post-training, from zero.</strong> RL is trial and
+   reward. SFT teaches format, RLHF teaches taste,
+   RLVR teaches reasoning with verifiable rewards,
+   distillation shrinks it. The reward is the hill.</li>
 <li><strong>Evals.</strong> Define the hill first. RL is the
    eval-maxing machine. SWE-bench started the code
    race. Guard the eval. it is the roadmap. Watch
-   Goodhart.</li>
+   Goodhart. Watch contamination.</li>
 <li><strong>Tiers.</strong> Lab evals steer the base models.
    Enterprise evals steer specialization. JPMorgan&rsquo;s
    good is not Goldman&rsquo;s.</li>
 <li><strong>The 5 percent.</strong> DeepSeek: ~150k GPU-hours of RL
-   on ~2.5M of pre-training. Post-training is cheap
+   on 2.664M of pre-training. Post-training is cheap
    and its share is growing.</li>
 <li><strong>DoorDash.</strong> 100k+ merchants a year, strict style
    guide. Human corrections defined the error rate.
    RL minimized it. A VLM, a delta, no prompting.</li>
 <li><strong>The Pareto frontier.</strong> Small models, trained
    hard on one task, beat general models on cost and
-   latency. Ensemble: orchestrator plus specialists.</li>
+   latency. Ensemble: orchestrator plus specialists.
+   Windsurf 2.0 is the pattern as a company. Claude
+   Code routes 54 percent of sessions to Opus.</li>
 <li><strong>Continual learning.</strong> Cursor&rsquo;s Composer learns
    from accept/revert telemetry, hours per step. The
-   hot-stove problem is the next bottleneck.</li>
+   Tab model retrains every 90 minutes. The hot-stove
+   problem is the next bottleneck. The privacy wall
+   is the other one.</li>
 <li><strong>The squeeze.</strong> Data vendors train themselves out
    of easy tasks. Synthetic data via the
-   generator-verifier gap is the escape.</li>
-<li><strong>October 2026.</strong> Anthropic leads models and spend.
-   Microsoft and Salesforce lead the agent platform.
-   Next: what this does to software itself.</li>
+   generator-verifier gap is the escape, and the
+   flywheel compounds it.</li>
+<li><strong>October 2026.</strong> Anthropic leads models and
+    spend: 40 percent of enterprise API spend, 61 to
+    64 percent of gateway spend. Open weights carry
+    56 percent of gateway tokens but 14 percent of
+    spend. Next: what this does to software itself.</li>
 </ol>
 <h2 id="go-deeper">Go deeper</h2>
 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
@@ -597,8 +1381,11 @@ Because the invoice is small relative to the wage it replaces. Vercel&rsquo;s ga
 <ul>
 <li><a href="https://www.youtube.com/watch?v=LRGX-gTegVA">Enterprise Internal Knowledge (MS&amp;E 435, second half)</a></li>
 <li>The session this lesson follows, in full.</li>
+<li><a href="https://arxiv.org/abs/2501.03074">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning (arXiv, Jan 2025)</a></li>
+<li>The paper behind the 5 percent: GRPO, verifiable rewards, and the R1 recipe.</li>
+<li><a href="https://github.com/deepseek-ai/DeepSeek-V3">DeepSeek V3 technical report and repository</a></li>
+<li>The official 2.664M H800 GPU-hour figure and the FP8 training details.</li>
 <li><a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></li>
-<li>Karpathy&rsquo;s write-up on RLVR, in the course readings: search &ldquo;Karpathy RLVR 2025&rdquo; for the current mirror.</li>
 <li><a href="https://www.aboutchromebooks.com/enterprise-llm-vendor-market-share-statistics/">Enterprise LLM vendor market share, 2026 (Menlo Ventures, Ramp, Vercel data)</a></li>
 <li><a href="https://startupfortune.com/anthropic-overtakes-openai-in-business-ai-spending-for-the-first-time/">Anthropic&rsquo;s enterprise position, 2026</a></li>
 </ul>
@@ -612,16 +1399,23 @@ Because the invoice is small relative to the wage it replaces. Vercel&rsquo;s ga
   readings.
 - Ali Ghodsi (Databricks), earlier in the course: most
   tokens beyond the data frontier will be AI-generated.</p>
-<p><strong>Caveats from these sources.</strong> The DeepSeek numbers
-are the guest&rsquo;s (&ldquo;I looked it up on the way here&rdquo;),
-not audited filings. The Cursor training details
-(hours per step, days to weeks) are the guest&rsquo;s
-recollection. The 75 percent Nvidia margin figure is
-the guest&rsquo;s estimate in this session (80 percent in
-the Crusoe session). treat both as approximate. The
-October 2026 enterprise numbers are from press and
-vendor-reported surveys (Menlo Ventures, Ramp, Vercel),
-not audited totals.</p>
+<p><strong>Caveats from these sources.</strong> The DeepSeek R1 RL
+figure (about 150,000 GPU-hours) is the guest&rsquo;s (&ldquo;I
+looked it up on the way here&rdquo;), not an audited
+filing. the V3 pre-training figure is now the
+official 2.664 million H800 GPU-hours from DeepSeek&rsquo;s
+technical report. The Cursor Composer training
+details (hours per step, days to weeks) are the
+guest&rsquo;s recollection. the 90-minute Tab retraining
+loop and 400M-requests-a-day figures are from a March
+2026 engineering analysis, not from Cursor itself.
+The 75 percent Nvidia margin figure is the guest&rsquo;s
+estimate in this session (80 percent in the Crusoe
+session). treat both as approximate. The October 2026
+enterprise numbers are from press and vendor-reported
+surveys (Menlo Ventures, Ramp, Vercel), not audited
+totals. The Windsurf acquisition figures are from
+2025-2026 press coverage.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>MS&amp;E435 L03:</strong> the model history this chapter

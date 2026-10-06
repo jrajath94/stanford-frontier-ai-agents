@@ -122,12 +122,29 @@ into knowledge strips: short, filtered statements with the noise cut.
 The idea is repair, not retry. A failed retrieval is not just tried
 again. It is diagnosed (which documents failed and why), escalated
 (web search when the corpus has nothing), and refined (strips instead
-of raw chunks). The cost is the evaluator and the fallback: every
-correction is latency and tokens. The decision rule: add the
-correctness loop when retrieval misses are the dominant failure on
-your eval set. If the reader is the problem, CRAG buys nothing.
+of raw chunks). Work the CEO question through CRAG:
 
-### Search-R1 and FLARE: retrieve mid-reasoning
+```ascii
+query:        "World Series host 2019"
+retrieved:    3 chunks (a 2019 schedule, a ticket ad, a 2018 recap)
+evaluator:    schedule = correct, ticket ad = incorrect,
+              2018 recap = incorrect (wrong year)
+decision:     2 of 3 incorrect -> escalate to web search
+web result:   "The 2019 World Series was played in Houston and
+               Washington. Washington Nationals won."
+refined:      knowledge strip: "2019 World Series host cities:
+               Houston, Washington."
+reader:       answers from the strip, not the three noisy chunks
+```
+
+The cost is the evaluator and the fallback: every correction is
+latency and tokens. The decision rule: add the correctness loop when
+retrieval misses are the dominant failure on your eval set. If the
+reader is the problem, CRAG buys nothing.
+
+![CRAG repair](assets/l07-crag.svg "Retrieve 3 chunks. The evaluator marks 2 incorrect. Web search escalates. A knowledge strip replaces the noisy chunks. Project: Stanford Frontier AI. Source: original.")
+
+### Search-R1: learn the query policy from reward
 
 **Search-R1** (Jin et al., 2025) trains the loop with reinforcement
 learning. The model generates its own search queries mid-reasoning and
@@ -135,11 +152,25 @@ learns the query policy from the outcome reward: did the final answer
 come out right? No hand-written query templates, no heuristics. The
 query policy is learned, not designed.
 
+### FLARE: retrieve when confidence drops
+
 **FLARE** (forward-looking active retrieval) takes a different angle:
 predict the next sentence, and retrieve when the model's confidence in
-the prediction is low. **IRCoT** interleaves retrieval with
-chain-of-thought: each reasoning step can trigger a retrieval for the
-fact it needs. The family shares one idea: retrieval fires when the
+the prediction is low. Work a toy. The model writes "The ACME CEO took
+office in 2019." Next it drafts "Washington hosted that year's World
+Series." The confidence on the city is low (many cities hosted a World
+Series across years), so FLARE fires a retrieval for the predicted
+sentence before writing it, then writes from the evidence. The
+confidence threshold is the knob: set it too low and retrieval never
+fires. Too high and every sentence triggers a search.
+
+### IRCoT: interleave retrieval with the chain of thought
+
+**IRCoT** (interleaved retrieval chain-of-thought) interleaves
+retrieval with chain-of-thought: each reasoning
+step can trigger a retrieval for the fact it needs. Where FLARE is
+confidence-gated, IRCoT is step-gated: the chain of thought itself is
+the schedule. The family shares one idea: retrieval fires when the
 reasoning needs it, not on a schedule. The price is control: the
 retrieval pattern is learned or confidence-gated, which makes it
 harder to bound the token budget than a fixed pipeline.
@@ -171,8 +202,15 @@ is trusted exactly as far as its artifact is checkable.
 ## The honest price: nine failure modes, priced
 
 Agentic retrieval multiplies the moving parts, and each part fails
-with numbers. Barnett et al. (2024) catalog the failure points. The
-lecture organizes them. Worked one by one, in three groups.
+with numbers. Barnett et al. (2024) catalog seven failure points for
+engineered RAG: missing content, missed top ranking, consolidation
+failures, extraction failures, wrong format, wrong specificity, and
+incomplete answers. This lesson's nine extend that catalog for the
+agentic loop: the loop's own math (compounding error, no stopping
+rule) and untrusted input (injection) are the lecture's additions,
+because they only bite when retrieval runs inside a loop. The mapping
+below is honest about which failures come from the engineering
+catalog and which from the loop.
 
 ### Group 1: the loop's own math
 
@@ -230,8 +268,14 @@ retriever recall separately: it is the ceiling of the whole system.
 agent answers from last month's rows with this month's confidence.
 The RAG lesson's staleness argument returns: the fix is index refresh
 discipline, and a freshness check on retrieved passages for
-time-sensitive questions. For fast corpora, size the refresh to the
-question's half-life: hourly docs need hourly rebuilds or a fresh tier.
+time-sensitive questions. Price the refresh on a toy: 2,000,000
+chunks, each embedding takes 50 ms of GPU time in batch, the full
+re-embed is 2,000,000 x 0.05 s = 100,000 GPU-seconds, about 28
+GPU-hours per rebuild. Hourly docs cannot wait for a 28-GPU-hour
+rebuild, so the production answer is a fresh tier: new documents land
+in a small, fast index searched alongside the big one, merged at query
+time. For fast corpora, size the refresh to the question's half-life:
+hourly docs need hourly rebuilds or a fresh tier.
 
 **6. Permission leak.** Retrieval crosses permission boundaries the
 user cannot see. The agent retrieves a document the user is not
@@ -352,6 +396,11 @@ The story in nine steps. Each step answers the one before it.
 <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/hwxmYqh_ykY" title="Agentic RAG: Query Planning, Iterative Retrieval, and Knowledge Graphs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 - Agentic RAG: Query Planning, Iterative Retrieval, and Knowledge Graphs (the embed above): https://www.youtube.com/watch?v=hwxmYqh_ykY, the one-shot limit, retrieval as a tool, the agentic loop, query decomposition, and knowledge-graph RAG.
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/dGsa6HzZ-z4" title="Build a Self-Correcting RAG Agent in LangGraph" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- Ramkumar Nexus, Build a Self-Correcting RAG Agent in LangGraph (the embed above): https://www.youtube.com/watch?v=dGsa6HzZ-z4, planner to retriever to generator to reflection, the CRAG-style repair loop built in code.
 
 Further:
 - Asai et al., Self-RAG (2023): https://arxiv.org/abs/2310.11511, retrieve, generate, and critique through self-reflection.

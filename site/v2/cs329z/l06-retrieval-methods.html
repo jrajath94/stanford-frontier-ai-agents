@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 3B: BM25, Dense Retrieval, and the Retriever Zoo — Stanford Frontier AI</title>
+<meta name="description" content="How the retriever finds passages: BM25 word matching, DPR dense retrieval, ColBERT late interaction, hybrid fusion, rerankers, and what each costs in millisecon">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329z-l06" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06" class="active">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329Z: Engineering AI Agents</a> / Lecture 3B: BM25, Dense Retrieval, and the Retriever Zoo</nav>
+      <h1>Lecture 3B: BM25, Dense Retrieval, and the Retriever Zoo</h1>
+      <p class="meta-line">[uncertain: Fall 2026] · Instructor: Diyi Yang · Fall 2026</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h2 id="the-job-find-the-passages">The job: find the passages</h2>
+<p>&ldquo;What was the revenue growth for ACME Corp in Q2 2023?&rdquo; Ten thousand
+chunks sit in the index. The retriever must return the few that answer
+it. Everything in the RAG pipeline depends on this step: the reader
+cannot recover evidence the retriever missed.</p>
+<p>A <strong>retriever</strong> scores every candidate passage against the query and
+returns the top-K. The question is what &ldquo;scores&rdquo; means. Words, or
+meaning?</p>
+<h2 id="first-attempt-scan-everything-compare-words">First attempt: scan everything, compare words</h2>
+<p>The straightforward approach: compare the query to every passage
+word by word, and scan the whole index per query. Two costs. The scan
+is O(N x d): with 10 million chunks and 768-dimension vectors, one
+query needs 7.68 billion multiply-adds. And word comparison misses
+meaning entirely.</p>
+<h2 id="where-word-matching-breaks">Where word matching breaks</h2>
+<p>Two cracks, each with a worked case.</p>
+<p><strong>Crack 1: paraphrase scores zero.</strong> Query: &ldquo;car&rdquo;. Passage: &ldquo;the
+automobile accelerated&rdquo;. Word overlap: none. A word matcher scores
+this passage 0, though it is exactly relevant. Synonyms, paraphrases,
+and different phrasings are invisible to word counting.</p>
+<p><strong>Crack 2: dense vectors miss rare literals.</strong> Query: &ldquo;ERR_0x7F3A&rdquo;.
+The passage contains that exact error code. A dense model trained on
+ordinary text has no good vector for a code it never saw; the meaning
+match is noise. Exact strings, product IDs, and names need exact
+matching. The two approaches fail differently, which is why the course
+ends with both.</p>
+<h2 id="the-key-question">The key question</h2>
+<p>Can we score passages by meaning, and keep the exact words too?</p>
+<h2 id="bm25-word-matching-done-right">BM25: word matching done right</h2>
+<p><strong>BM25</strong> is the most widely used retriever, even today. It scores a
+document D against a query Q by summing over query terms:</p>
+<pre class="ascii">score(D, Q) = sum over query terms qi of:
+  IDF(qi) x [ f(qi,D) x (k1 + 1) ]
+      / [ f(qi,D) + k1 x (1 - b + b x |D|/avgdl) ]
+
+  IDF(qi) = ln( (N - n(qi) + 0.5) / (n(qi) + 0.5) )
+  f(qi,D)   = how often qi occurs in D
+  |D|/avgdl = this doc's length vs the average
+  N         = docs in the collection
+  n(qi)     = docs that contain qi
+</pre>
+<p>Two ideas carry the formula. <strong>IDF rewards rarity.</strong> How rare is the
+term across the collection? Worked on a 1,000-document corpus:</p>
+<pre class="ascii">&quot;ACME&quot; appears in 3 docs:
+  IDF = ln(997.5 / 3.5) = ln(285) = 5.65
+&quot;revenue&quot; appears in 50 docs:
+  IDF = ln(950.5 / 50.5) = ln(18.8) = 2.93
+</pre>
+<p>The rare term scores nearly twice the common one. A document matching
+&ldquo;ACME&rdquo; outranks one matching only &ldquo;revenue&rdquo;. That is the whole idea:
+rare terms discriminate, common terms do not.</p>
+<p><strong>Term frequency saturates.</strong> The tenth mention of a word matters less
+than the first. With k1 = 1.2 and an average-length document, the
+frequency factor f x 2.2 / (f + 1.2) gives:</p>
+<pre class="ascii">f = 1:   2.2 / 2.2  = 1.00
+f = 10:  22 / 11.2  = 1.96
+</pre>
+<p>Ten times the mentions, less than twice the score. Keyword stuffing
+cannot win. The length term (b x |D|/avgdl) stops long documents from
+winning just by containing more words.</p>
+<figure><img alt="BM25: saturation and rarity" src="assets/l06-bm25.svg"><figcaption>Two ideas: repeated terms matter less each time; rare terms matter more. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>BM25 needs no training, no vectors, no labels. Its index is an
+inverted index: term to document list. Query latency: 62 ms on the
+lecture&rsquo;s MS MARCO setup. Its weakness is crack 1: paraphrase is
+invisible to it.</p>
+<h2 id="dpr-meaning-as-a-dot-product">DPR: meaning as a dot product</h2>
+<p><strong>Dense Passage Retrieval</strong> (Karpukhin et al., 2020) encodes meaning
+into vectors. Two BERT encoders: one for the query, one for the
+passage. Score by dot product:</p>
+<pre class="ascii">p(z|x) proportional to exp( d(z)^T q(x) )
+d(z) = BERT_d(z),   q(x) = BERT_q(x)
+</pre>
+<p>Worked on a two-dimensional toy:</p>
+<pre class="ascii">query   q = [0.8, 0.6]
+doc A   d = [0.9, 0.4]   dot = 0.72 + 0.24 = 0.96
+doc B   d = [0.1, 0.9]   dot = 0.08 + 0.54 = 0.62
+winner: doc A
+</pre>
+<p>The query points mostly along the first axis; doc A points the same
+way. &ldquo;Car&rdquo; and &ldquo;automobile&rdquo; land near each other in vector space, so
+the paraphrase that scored zero under BM25 now scores high. Top-K
+retrieval is <strong>maximum inner product search (MIPS)</strong> over the passage
+vectors, precomputed offline.</p>
+<figure><img alt="DPR: two encoders, one dot product" src="assets/l06-dpr.svg"><figcaption>Encode the query and the passage separately. Score with a dot product. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>Training is contrastive: pull the query vector toward its true
+passage, push it away from negatives. The negatives matter. <strong>In-batch
+negatives</strong> reuse the other queries&rsquo; passages in the batch as free
+negatives. <strong>BM25 hard negatives</strong> add passages that word-match but
+are wrong: the exact cases where dense must beat sparse. The results:
+DPR beats BM25 on 4 of 5 datasets, and 1,000 QA pairs are enough to
+beat BM25. No extra pretraining needed. DPR needs labeled pairs;
+BM25 needs nothing. That is the price of meaning.</p>
+<h2 id="colbert-score-tokens-not-documents">ColBERT: score tokens, not documents</h2>
+<p>DPR compresses each passage into one vector. <strong>ColBERT</strong> (Khattab and
+Zaharia, 2020) keeps one vector per token and interacts late: encode
+the query and passage independently, interact only at scoring time.
+The scoring rule is <strong>MaxSim</strong>:</p>
+<pre class="ascii">S(q,d) = sum over query tokens i of max over doc tokens j of (qi . dj)
+</pre>
+<p>Each query token takes its best-matching document token, and the best
+matches sum. Worked on a toy, query tokens q1 = [1,0], q2 = [0,1]:</p>
+<pre class="ascii">doc A tokens: [1,0], [0.2,0.2], [0,1]
+  q1 best: max(1, 0.2, 0) = 1
+  q2 best: max(0, 0.2, 1) = 1
+  S = 2
+doc B tokens: [0.5,0.5], [0.5,0.5]
+  q1 best: 0.5,  q2 best: 0.5
+  S = 1
+winner: doc A
+</pre>
+<p>Doc A has a token that matches each query token nearly exactly. The
+late interaction keeps token-level evidence that a single passage
+vector would blur. The price: the index stores one vector per token,
+not per document, so it is much larger. End-to-end latency on MS
+MARCO: 458 ms, between the fast retrievers and the slow judges.</p>
+<figure><img alt="ColBERT: MaxSim over tokens" src="assets/l06-colbert.svg"><figcaption>One vector per token. Each query token takes its best match. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<h2 id="rerank-the-slow-judge-on-a-shortlist">Rerank: the slow judge on a shortlist</h2>
+<p>A <strong>bi-encoder</strong> (BM25, DPR, ColBERT) encodes the query and passage
+separately and scans the corpus. A <strong>cross-encoder</strong> feeds the query
+and passage through the model together, with full attention across
+both. It is more accurate and far slower: nothing is precomputed, so
+it cannot scan a corpus.</p>
+<p>The architecture that results: two stages.</p>
+<figure><img alt="Rerank the shortlist" src="assets/l06-rerank.svg"><figcaption>Fast retriever finds candidates. Slow cross-encoder judges them. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>Stage 1, the bi-encoder, scans the corpus and returns the top 100 in
+tens of milliseconds. Stage 2, the cross-encoder, scores only those
+100 with full attention. The lecture&rsquo;s number: 10,700 ms per 1,000
+passages for a BERT-base cross-encoder. On a 100-passage shortlist
+that is about a second: affordable as a second stage, impossible as a
+first. Accuracy on a shortlist is what the cross-encoder buys.</p>
+<h2 id="hybrid-search-fuse-ranks-not-scores">Hybrid search: fuse ranks, not scores</h2>
+<p>BM25 misses paraphrase. Dense misses rare literals. <strong>Hybrid search</strong>
+runs both and fuses the two ranked lists. The fusion rule is
+<strong>reciprocal rank fusion (RRF)</strong>: merge positions, not raw scores, so
+no per-corpus tuning is needed and any number of retrievers can join.</p>
+<pre class="ascii">RRF(d) = sum over retrievers r of 1 / (k + rank_r(d)),   k = 60
+</pre>
+<p>Worked: doc A ranks 1st in BM25, 4th in DPR. Doc B ranks 2nd in both.</p>
+<pre class="ascii">RRF(A) = 1/61 + 1/64 = 0.0164 + 0.0156 = 0.0320
+RRF(B) = 1/62 + 1/62 = 0.0161 + 0.0161 = 0.0323
+winner: doc B
+</pre>
+<p>Doc B wins by ranking high in both lists. RRF rewards consensus: a
+document that two different methods both like beats one that a single
+method loves. The k = 60 constant dampens the difference between rank
+1 and rank 2 so that agreement across lists dominates.</p>
+<figure><img alt="RRF: fuse ranks, not scores" src="assets/l06-rrf.svg"><figcaption>BM25 misses paraphrase. Dense misses rare literals. Run both, fuse. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<h2 id="speed-approximate-search-over-the-index">Speed: approximate search over the index</h2>
+<p>Exact search is O(N x d) per query. <strong>Approximate nearest neighbor
+(ANN)</strong> trades a little recall for a lot of speed. Three standard
+tools. <strong>IVF</strong> (inverted file index): cluster the index, probe only
+the nearest centroids. <strong>PQ</strong> (product quantization): compress each
+vector into a short code. <strong>HNSW</strong> (hierarchical navigable small
+world): a multi-layer proximity graph. All vectors sit at the bottom
+layer, thinner samples above. Search starts at the top, greedy-hops
+toward the query, and drops a layer when stuck: about log N hops with
+high recall. The graph is built by inserting one vector at a time,
+linking M nearest neighbors per layer plus a heuristic long-range link
+so the greedy walk cannot get trapped.</p>
+<h2 id="scoring-the-retriever-what-each-metric-rewards">Scoring the retriever: what each metric rewards</h2>
+<p>Same top-5 list, different questions about it. The figure&rsquo;s list has
+relevant passages at ranks 1 and 3.</p>
+<figure><img alt="What each metric rewards" src="assets/l06-metrics.svg"><figcaption>Same top-5 list. Different questions about it. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>Two queries make the differences concrete. Q1: first relevant passage
+at rank 1. Q2: first relevant at rank 3.</p>
+<pre class="ascii">Hit@5:    any relevant passage in the top 5?
+          Q1: yes, Q2: yes  -&gt;  1.0
+          position does not matter
+
+MRR@5:    1 / (rank of the first relevant passage), averaged
+          (1/1 + 1/3) / 2 = 0.667
+          early ranks score higher
+
+Recall@5: relevant passages found / all relevant passages
+          rewards finding all of them, not just one
+
+nDCG@5:   DCG = sum rel_i / log2(i+1); normalized by the ideal ranking
+          rank position is discounted smoothly
+Failed@k = 1 - Hit@k: queries with nothing relevant in the top k
+</pre>
+<p>Hit@k asks &ldquo;did we find anything&rdquo;. MRR asks &ldquo;how far down did the
+user scroll&rdquo;. Recall asks &ldquo;did we find all of it&rdquo;. nDCG asks &ldquo;how good
+is the whole ordering&rdquo;. Pick the metric that matches the reader: a
+reader that reads one passage wants MRR; a reader that synthesizes
+many wants recall.</p>
+<h2 id="mapping-back-what-each-retriever-fixes">Mapping back: what each retriever fixes</h2>
+<table>
+<thead>
+<tr>
+<th>Word-matching crack</th>
+<th>The answer</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paraphrase scores zero</td>
+<td>DPR</td>
+<td>Meaning as vectors; &ldquo;car&rdquo; meets &ldquo;automobile&rdquo;</td>
+</tr>
+<tr>
+<td>One vector blurs evidence</td>
+<td>ColBERT</td>
+<td>MaxSim keeps token-level matches</td>
+</tr>
+<tr>
+<td>Fast retrieval is rough</td>
+<td>Cross-encoder rerank</td>
+<td>Full attention on the shortlist only</td>
+</tr>
+<tr>
+<td>Each method fails differently</td>
+<td>Hybrid + RRF</td>
+<td>Fuse ranks; consensus wins</td>
+</tr>
+<tr>
+<td>Exact scan is O(N x d)</td>
+<td>ANN / HNSW</td>
+<td>Log N hops, a little recall traded</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price-the-latency-table">The honest price: the latency table</h2>
+<p>The lecture&rsquo;s table, measured on MS MARCO (DPR on different hardware,
+so treat cross-method gaps as magnitudes):</p>
+<table>
+<thead>
+<tr>
+<th>Retriever</th>
+<th>Precomputed offline</th>
+<th>Query latency</th>
+<th>Wins on</th>
+<th>Breaks on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BM25 (sparse)</td>
+<td>inverted index</td>
+<td>62 ms</td>
+<td>exact terms: IDs, names, error codes</td>
+<td>paraphrase, synonyms</td>
+</tr>
+<tr>
+<td>DPR (bi-encoder)</td>
+<td>one vector per passage</td>
+<td>tens of ms</td>
+<td>semantic match at corpus scale</td>
+<td>rare literals; needs labeled pairs</td>
+</tr>
+<tr>
+<td>ColBERT (late interaction)</td>
+<td>one vector per token</td>
+<td>458 ms end-to-end</td>
+<td>token-level evidence at scale</td>
+<td>index size: tokens, not documents</td>
+</tr>
+<tr>
+<td>Cross-encoder (BERT-base)</td>
+<td>nothing</td>
+<td>10,700 ms per 1k passages</td>
+<td>accuracy on a shortlist</td>
+<td>cannot scan a corpus</td>
+</tr>
+</tbody>
+</table>
+<p>Every row is a tradeoff with a number. BM25 is fast, exact, and free
+of training data. DPR is fast and semantic, but needs 1,000+ labeled
+pairs and misses rare strings. ColBERT keeps token evidence at a 7x
+latency cost and a token-sized index. The cross-encoder is the most
+accurate judge and 170x slower than BM25 per passage: shortlists only.
+There is no best retriever. There is only the retriever whose price
+your pipeline can pay.</p>
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<div class="qa"><div class="q">Walk me through the BM25 formula and explain the two ideas that matter.</div><div class="a"><p>Score(D,Q) sums over query terms: IDF(qi) times a saturated term-frequency factor f x (k1+1) / (f + k1 x (1 - b + b x |D|/avgdl)). Idea one, IDF rewards rarity: on a 1,000-doc corpus, &ldquo;ACME&rdquo; in 3 docs gives IDF ln(285) = 5.65 while &ldquo;revenue&rdquo; in 50 docs gives 2.93, so the rare term discriminates nearly twice as hard. Idea two, term frequency saturates: at k1 = 1.2, one mention scores 1.00 and ten mentions score 1.96, so keyword stuffing cannot win. The length term stops long documents from winning on word count alone.
+It needs no training, no vectors, and no labeled data, and it answers in 62 ms off an inverted index. For exact terms like error codes and product IDs it is unbeatable. Its blind spot is paraphrase, which is why production systems pair it with a dense retriever and fuse with RRF.</p><div class="followup"><strong>Follow-up:</strong> Why is BM25 still the most widely used retriever?</div></div></div>
+<div class="qa"><div class="q">How does DPR training work, and why do the negatives matter so much?</div><div class="a"><p>Two BERT encoders produce the query and passage vectors; the score is the dot product, trained contrastively to pull the query toward its true passage and push it away from negatives. In-batch negatives reuse other queries&rsquo; passages as free negatives. BM25 hard negatives are the crucial addition: passages that word-match but are wrong, the exact cases where dense must beat sparse. With good negatives, 1,000 QA pairs are enough to beat BM25, and DPR wins on 4 of 5 datasets with no extra pretraining.
+On rare literals: error codes, product IDs, unusual names. The dense model never learned a good vector for a string it rarely saw, while BM25 matches it exactly. This is the standard argument for hybrid search: the two methods fail differently, so run both and fuse.</p><div class="followup"><strong>Follow-up:</strong> When does DPR lose to BM25?</div></div></div>
+<div class="qa"><div class="q">Explain ColBERT&#x27;s MaxSim and when you would pay its price.</div><div class="a"><p>ColBERT keeps one vector per token instead of one per passage. At scoring time, each query token takes its maximum dot product over all document tokens, and the maxima sum: S(q,d) = sum_i max_j (qi . dj). The toy: query tokens [1,0] and [0,1] against doc A&rsquo;s [1,0], [0.2,0.2], [0,1] give 1 + 1 = 2, beating doc B&rsquo;s 1. Token-level evidence survives that a single passage vector would blur. The price: the index is per-token, much larger, and end-to-end latency is 458 ms versus tens of ms for DPR. Pay it when token-level evidence decides relevance and the corpus fits the index budget.
+The cross-encoder runs the query and passage through the model together with full attention, so it judges relevance best, but nothing is precomputed and it costs 10,700 ms per 1,000 passages: it cannot scan a corpus. The bi-encoder precomputes passage vectors and scans in tens of ms but judges roughly. The two-stage design uses each where it wins: bi-encoder retrieves the top 100, cross-encoder reranks the shortlist.</p><div class="followup"><strong>Follow-up:</strong> Bi-encoder versus cross-encoder: why do we need both?</div></div></div>
+<div class="qa"><div class="q">Work through RRF on two documents and explain why ranks beat scores.</div><div class="a"><p>Doc A ranks 1st in BM25 and 4th in DPR; doc B ranks 2nd in both. RRF with k = 60: RRF(A) = 1/61 + 1/64 = 0.0320, RRF(B) = 1/62 + 1/62 = 0.0323. Doc B wins by consensus. Ranks beat scores because raw scores from different methods live on incomparable scales: a BM25 score of 14.2 and a dot product of 0.96 cannot be added meaningfully. Ranks are already normalized, the k = 60 dampens rank-1 versus rank-2 gaps, and the method needs no per-corpus tuning and works with any number of retrievers.
+MRR. Hit@k ignores position, but a one-passage reader only sees the top result, so rank 1 versus rank 3 is the whole game. MRR scores 1 for rank 1 and 1/3 for rank 3, which matches the reader&rsquo;s experience. For a reader that synthesizes many passages, report recall instead.</p><div class="followup"><strong>Follow-up:</strong> Which metric do you report for a reader that reads exactly one passage?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<p>The story in eight steps. Each step answers the one before it.</p>
+<ol>
+<li><strong>The job: score passages against the query.</strong> Ten thousand
+   chunks, one question. The reader cannot recover what the
+   retriever misses.</li>
+<li><strong>Scanning everything costs O(N x d).</strong> 10M chunks x 768 dims =
+   7.68B multiply-adds per query. Word comparison misses meaning
+   anyway.</li>
+<li><strong>Two cracks.</strong> &ldquo;Car&rdquo; vs &ldquo;automobile&rdquo; scores zero (paraphrase).
+   &ldquo;ERR_0x7F3A&rdquo; is noise to a dense model (rare literals).</li>
+<li><strong>BM25: rarity and saturation.</strong> IDF 5.65 for &ldquo;ACME&rdquo; vs 2.93
+   for &ldquo;revenue&rdquo;. Ten mentions score 1.96, not 10. 62 ms, no
+   training.</li>
+<li><strong>DPR: meaning as a dot product.</strong> Two encoders, MIPS over
+   precomputed vectors. Beats BM25 on 4 of 5 datasets with 1,000
+   QA pairs. Needs labels; misses rare strings.</li>
+<li><strong>ColBERT: MaxSim over tokens.</strong> Each query token takes its best
+   match; the maxima sum. Token-sized index, 458 ms.</li>
+<li><strong>Rerank the shortlist.</strong> Cross-encoder judges with full
+   attention: 10,700 ms per 1k passages. Stage 1 retrieves 100,
+   stage 2 judges them.</li>
+<li><strong>Fuse with RRF; measure with the right metric.</strong> RRF(B) =
+   0.0323 beats RRF(A) = 0.0320: consensus wins. MRR for
+   one-passage readers, recall for synthesizers.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- Lecture 3 slides (local: sources/agents/cs329z/lecture03.pdf).
+- Course site: http://web.stanford.edu/class/cs329z.</p>
+<p><strong>Further reading:</strong>
+- Karpukhin et al. (2020), DPR: training with in-batch and BM25
+  hard negatives.
+- Khattab and Zaharia (2020), ColBERT: late interaction.
+- Humeau et al. (2020): bi-encoders versus cross-encoders.
+- HNSW paper: the multi-layer graph behind fast ANN search.</p>
+<p><strong>Caveats from these sources.</strong> Latency figures are the lecture&rsquo;s,
+measured on MS MARCO with DPR on different hardware: treat
+cross-method gaps as magnitudes, not exact ratios. The toy
+computations (IDF, saturation, RRF, metrics) are worked arithmetic on
+small examples, not measurements. No video ID is on record.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS336 L01:</strong> the embeddings and token vectors the dense methods
+  build on.</li>
+<li><strong>CS224N:</strong> dense retrieval from the NLP side, with the same DPR
+  and ColBERT papers.</li>
+<li><strong>This course, RAG pipeline:</strong> the retriever-reader framework this
+  lesson&rsquo;s zoo plugs into.</li>
+<li><strong>This course, indexing:</strong> chunking decides what one vector covers;
+  this lesson decides how vectors are scored.</li>
+<li><strong>This course, agentic retrieval:</strong> the retriever becomes an action
+  inside the loop, and its misses become the agent&rsquo;s failures.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">SLIDES</span>Lecture 3 slides: RAG + Agents (local: sources/agents/cs329z/lecture03.pdf)</li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2004.04906" target="_blank" rel="noopener">Karpukhin et al., Dense Passage Retrieval for Open-Domain Question Answering (2020)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2004.12832" target="_blank" rel="noopener">Khattab and Zaharia, ColBERT: Efficient and Effective Passage Search (2020)</a></li></ul></section>
+      <nav class="pager"><a href="../cs329z/l05-rag-pipeline.html"><span class="lbl">← Previous</span>Lecture 3A: RAG, Indexing, and Chunking</a><a href="../cs329z/l07-agentic-retrieval-failure-modes.html"><span class="lbl">Next →</span>Lecture 3C: Retrieval Inside the Loop and Nine Failure Modes</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

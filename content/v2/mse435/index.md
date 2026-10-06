@@ -32,7 +32,7 @@ ran Thursdays in Spring 2026. This course site covers
 three of the guest sessions in full: the data-center
 builder, the model post-trainer, and the agent
 infrastructure CEO. [uncertain: the full course had
-roughly nine sessions; transcripts exist here for
+roughly nine sessions. transcripts exist here for
 three.]
 
 ## The one long argument

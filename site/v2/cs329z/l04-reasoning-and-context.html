@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 2B: Inference-Time Scaling, Structured I/O, Context Engineering — Stanford Frontier AI</title>
+<meta name="description" content="Spend compute after training: chain of thought, reasoning effort, repeated sampling. Force output shape with constrained decoding. Engineer the context: rot, KV">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329z-l04" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04" class="active">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329Z: Engineering AI Agents</a> / Lecture 2B: Inference-Time Scaling, Structured I/O, Context Engineering</nav>
+      <h1>Lecture 2B: Inference-Time Scaling, Structured I/O, Context Engineering</h1>
+      <p class="meta-line">[uncertain: Fall 2026] · Instructor: Diyi Yang, Michael Ryan, John Yang · Fall 2026</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h2 id="the-job-training-is-frozen-queries-are-not">The job: training is frozen, queries are not</h2>
+<p>Training happens once. Queries arrive forever, and they vary in
+difficulty. &ldquo;What is 2+2&rdquo; and &ldquo;debug this race condition&rdquo; should not
+cost the same. <strong>Inference-time scaling</strong> spends compute after
+training, per query: more tokens for the hard ones, fewer for the easy
+ones.</p>
+<p>The lecture&rsquo;s toy makes the case. A jacket costs $80. The store raises
+its price by 25 percent, then offers a 25 percent discount on the new
+price. What is the final price?</p>
+<h2 id="first-attempt-answer-directly">First attempt: answer directly</h2>
+<p>The direct answer pattern-matches: adding 25 percent and subtracting 25
+percent looks like no change. So $80.</p>
+<pre class="ascii">+25% then -25%  -&gt;  looks like cancellation  -&gt;  $80
+</pre>
+<p>Wrong. The two percentages use different bases. The increase applies
+to $80. The discount applies to the increased price. The pattern
+&ldquo;cancels out&rdquo; is a mirage, and the direct answer walks into it with
+full confidence.</p>
+<h2 id="where-direct-answers-break">Where direct answers break</h2>
+<p>Work the arithmetic the direct answer skipped:</p>
+<pre class="ascii">increase:  $80 x 1.25 = $100   (25% of $80 is $20)
+discount:  $100 x 0.75 = $75   (25% of $100 is $25)
+check:     $80 + $20 - $25 = $75
+</pre>
+<p>The true answer is $75. The direct answer is off by $5, a 6.25 percent
+error from a confident pattern match. The mistake is invisible without
+the intermediate numbers. Each step of the worked version is a small,
+checkable claim: $80 to $100, $100 to $75. The direct answer has no
+steps to check.</p>
+<h2 id="the-key-question">The key question</h2>
+<p>What if the model writes the steps, and we spend compute on the steps
+that need it?</p>
+<h2 id="chain-of-thought-working-memory-not-smarts">Chain of thought: working memory, not smarts</h2>
+<p><strong>Chain of thought</strong> (Wei et al., 2022) elicits the reasoning steps
+before the answer. The model writes the intermediate math, and the
+intermediate math is checkable. The jacket trace above is the whole
+idea: $80 x 1.25 = $100, $100 x 0.75 = $75, check the bases.</p>
+<p>The misunderstanding: chain of thought does not make the model
+smarter. It gives the model working memory. Each step is a small claim
+the model commits to in text, where a verifier or a human can catch it.
+And the failure mode: long traces on ambiguous questions accumulate
+confident-sounding errors. The steps are in the open, but open errors
+are still errors. The fix is the same as in agents: verify the steps,
+do not just admire them.</p>
+<h2 id="the-effort-dial">The effort dial</h2>
+<p>Reasoning models expose an <strong>effort</strong> setting: low, medium, high. Low
+is cheap and fast for simple lookups. High spends many tokens on hard
+math and deep bugs. The system prompt sets it per query.</p>
+<figure><img alt="Reasoning effort" src="assets/l04-reasoning-effort.svg"><figcaption>Low, medium, high: cost rises with effort. Kimi K3 trains the dial with a budget-aware reward. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>Kimi K3 trains the dial explicitly with a budget-aware reward:</p>
+<pre class="ascii">correct answer:               reward = +1
+wrong answer:                 reward =  0
+wrong AND over the budget:    reward = -1
+</pre>
+<p>Read what the -1 teaches. A wrong answer already scores 0. A wrong
+answer that also burned the budget scores -1: worse than being wrong
+cheaply. The model learns two lessons at once: be right, and do not
+spend effort where it does not pay. That is the dial, learned.</p>
+<p>The agent lesson: set effort per step, not per agent. A file lookup
+gets low effort. A tricky bug gets high effort. The loop already knows
+which steps are hard: the ones that failed before.</p>
+<h2 id="repeated-sampling-the-verifier-is-the-scarce-resource">Repeated sampling: the verifier is the scarce resource</h2>
+<p>Sample the same prompt N times. With a verifier, pick the best.
+<strong>Coverage</strong>, the chance that at least one sample is right, keeps
+rising with more samples. Large Language Monkeys (Brown et al., 2024)
+shows inference compute keeps helping far past intuition. The math of
+coverage, worked on a toy: if each sample succeeds with probability
+0.3, ten samples give 1 - 0.7^10 = 0.97. Ninety-seven percent coverage
+from a thirty-percent model, provided the verifier can spot the winner.</p>
+<figure><img alt="Repeated sampling" src="assets/l04-repeated-sampling.svg"><figcaption>One sample: low coverage. Ten samples: rising. A thousand samples with a verifier: high. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<p>Without a verifier, vote. <strong>Self-consistency</strong> is the no-verifier
+version: sample many reasoning paths, take the majority answer. The
+cost is linear in samples either way. The agent version: sample three
+candidate plans, execute the best-scoring one. Sampling is cheap.
+Checking is dear. The verifier is the scarce resource, which is why
+the builders lesson spent so long on verifier design.</p>
+<h2 id="mapping-back-i-what-inference-time-compute-buys">Mapping back I: what inference-time compute buys</h2>
+<table>
+<thead>
+<tr>
+<th>Direct-answer crack</th>
+<th>The answer</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pattern-match says $80</td>
+<td>Chain of thought</td>
+<td>The steps $80 to $100 to $75 expose the base change</td>
+</tr>
+<tr>
+<td>Every query costs the same</td>
+<td>Effort dial</td>
+<td>Low for lookups, high for hard bugs; Kimi K3&rsquo;s -1 teaches the budget</td>
+</tr>
+<tr>
+<td>One shot, one chance</td>
+<td>Repeated sampling</td>
+<td>1 - 0.7^10 = 0.97 coverage from a 0.3 model, with a verifier</td>
+</tr>
+</tbody>
+</table>
+<p>The honest price of this half: tokens are money and latency. A small
+model with a big inference budget can beat a big model with none, but
+the budget is real. Spend it where the errors are.</p>
+<h2 id="the-second-contract-structured-output">The second contract: structured output</h2>
+<p>Agents are programs, and programs need contracts. The model&rsquo;s output
+goes to a parser, a tool, or another agent. Free text breaks the
+contract: plausible-looking JSON with a missing field, a wrong type, a
+trailing comma. The parser fails downstream and the loop burns a turn.</p>
+<p><strong>Constrained decoding</strong> enforces the contract at generation time. The
+decoder may only emit tokens the grammar allows. SGLang implements this
+with finite state machines built into decoding. Every token is checked
+against the grammar as it is generated. The output always parses.</p>
+<figure><img alt="Constrained decoding" src="assets/l04-constrained-decoding.svg"><figcaption>Free text breaks the schema. Grammar-constrained output always parses. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>This is the validate stage of the tool call, moved into the decoder
+itself. The cost: the grammar must be written, and constrained decoding
+adds overhead per step. The benefit for agents is decisive: tool
+arguments must parse every time. What constrained decoding cannot fix
+is semantics. The output parses but can still be wrong: a valid tool
+call with the wrong arguments, a well-formed plan that misunderstands
+the goal. The grammar constrains shape, not meaning. Meaning needs the
+check step.</p>
+<p><strong>DSPy</strong> declares the contract one level up. A <strong>signature</strong> names the
+input and output fields of a model call, and DSPy compiles the prompt
+that implements it. The lecture&rsquo;s example extracts contact info:</p>
+<pre class="ascii">input:  &quot;I'm Sarah (sarah@acme.co). Meet Thursday?&quot;
+output fields:
+  name:   str
+  email:   Union[str, None]     &lt;- must match the JSON schema
+  intent:  Literal['meeting',
+            'intro', 'follow-up']  &lt;- exact match, no extra chars
+</pre>
+<p>The compiled prompt wraps each field in markers and states the type
+constraints in prose. The signature is the contract; the compiled
+prompt is the implementation. Two lighter constraining tools: a small
+classifier head on embeddings for fixed label sets (cheap, fast, no
+generation), and the Toolformer pattern, where the tool&rsquo;s argument
+schema is the structured output.</p>
+<h2 id="the-third-contract-the-context">The third contract: the context</h2>
+<p><strong>Context engineering</strong> is the design of what the model sees. Five
+ingredients: the system prompt, the message history, memories, tool
+call results, and attached files.</p>
+<figure><img alt="What goes in the context" src="assets/l04-context-parts.svg"><figcaption>System prompt, message history, retrieved memories, tool results, attached files. Every token costs bandwidth per decode step. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>Three practical rules from the lecture. <strong>Avoid bloat:</strong> a few tools
+beat fifty. Pi ships with four: read, write, edit, bash. <strong>Retrieve on
+demand:</strong> fetch the relevant memories and files when needed instead of
+stuffing them in. <strong>Evaluate empirically:</strong> set up a small eval set and
+test each context choice. There is no one right context. The context is
+a design surface, not a dumping ground.</p>
+<h3 id="where-stuffing-breaks-context-rot">Where stuffing breaks: context rot</h3>
+<p>More context is not more understanding. OOLONG (2025) measures long
+context reasoning and aggregation: as the context fills with
+distractors, the model&rsquo;s reasoning degrades. The lecture calls this
+<strong>context rot</strong>.</p>
+<figure><img alt="Context rot" src="assets/l04-context-rot.svg"><figcaption>Stuff everything: reasoning degrades. Curate and retrieve: the signal survives. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<p>The before state: fifty tool schemas when the task needs three, full
+chat history gone stale, ten retrieved documents with two relevant.
+The after state: three schemas, compacted history, top-k documents.
+Same task, less rot, better answers. The mechanism is attention
+dilution plus the decode cost from the builders lesson: every
+distractor token is bandwidth spent on noise and a chance to mislead
+the next step.</p>
+<h3 id="the-kv-cache-placement-rule">The KV-cache placement rule</h3>
+<p>The KV cache is positional. Appending tokens at the end keeps every
+existing position unchanged, so the cache stays valid. Inserting or
+editing in the middle shifts positions: every token after the edit gets
+new position embeddings, and their cached keys and values are wrong.</p>
+<figure><img alt="Append, do not edit" src="assets/l04-kv-append.svg"><figcaption>Append at the end: cache stays valid. Insert in the middle: positions shift, cache invalidates. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>The design rule: the loop appends. Tool results go at the end of the
+context, never spliced into history. Rewriting history is not just
+confusing for the model; it is expensive, forcing recomputation of the
+whole suffix.</p>
+<h3 id="compaction-the-keep-or-drop-dilemma">Compaction: the keep-or-drop dilemma</h3>
+<p>Long trajectories fill the context. <strong>Compaction</strong> summarizes it: the
+model compresses the trace into a summary plus key facts, and the new
+context starts from there.</p>
+<figure><img alt="Compaction" src="assets/l04-compaction.svg"><figcaption>Full context compresses to a summary. The new context keeps the summary and the open loops. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
+<p>The decision is what to keep, and the lecture names the two failure
+modes without resolving them. Keep too much and you compact again
+soon: no savings. Drop too much and you lose critical context: the
+task fails for lack of a fact you had. Resolution is empirical: test
+what the summary must contain for your task class. In practice, keep
+the goal, the open loops (what is still undone), the key facts
+discovered, and the current plan. Drop stale tool outputs, superseded
+plans, and dead-end attempts. The summary is a new perceive step for a
+fresh loop.</p>
+<h3 id="recursive-lms-a-different-philosophy">Recursive LMs: a different philosophy</h3>
+<p><strong>Recursive language models</strong> (2025) reject the giant context. Instead
+of stuffing the document into one context, the model calls itself on
+chunks: summarize this part, then the top call reasons over the
+summaries.</p>
+<figure><img alt="Recursive LMs" src="assets/l04-rlm.svg"><figcaption>The top call delegates chunks to sub-calls. Each call sees a small context. Depth replaces width. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
+<p>Each call sees a small context, so there is no rot and no quadratic
+blowup. The tradeoff: detail is lost in the summaries, and errors in a
+sub-call propagate silently upward. Compare with RAG: RAG retrieves
+chunks into one context; RLM recurses over chunks with separate calls.
+Both fight the same enemy, the O(n^2) context. RAG is retrieval plus
+one reader. RLM is divide and conquer with the model as the divider.</p>
+<h2 id="mapping-back-ii-what-the-contracts-fix">Mapping back II: what the contracts fix</h2>
+<table>
+<thead>
+<tr>
+<th>Context crack</th>
+<th>The answer</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parser chokes on free text</td>
+<td>Constrained decoding</td>
+<td>The grammar masks every forbidden token; output always parses</td>
+</tr>
+<tr>
+<td>Fifty schemas, three needed</td>
+<td>Avoid bloat</td>
+<td>Pi&rsquo;s four tools; retrieve memories and files on demand</td>
+</tr>
+<tr>
+<td>Distractors degrade reasoning</td>
+<td>Curation</td>
+<td>Three schemas, compacted history, top-k docs; OOLONG measures the rot</td>
+</tr>
+<tr>
+<td>Mid-context edits kill the cache</td>
+<td>Append-only loop</td>
+<td>Tool results go at the end; positions never shift</td>
+</tr>
+<tr>
+<td>The trace outgrows the window</td>
+<td>Compaction or RLM</td>
+<td>Summarize to goals plus open loops, or recurse over chunks</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price">The honest price</h2>
+<p>Inference-time compute costs tokens, and tokens are latency and money.
+Chain of thought gives working memory, not intelligence, and long
+traces accumulate confident errors in the open. Context rot is
+measured, not hypothetical. Compaction&rsquo;s keep-or-drop dilemma has no
+principled answer: the lecture leaves it empirical. Recursive LMs dodge
+the quadratic context but let sub-call errors propagate silently. Every
+contract here, shape and context both, is a bet placed per task. The
+lecture&rsquo;s final word on context stands: experiment, and measure.</p>
+<h2 id="interview-qa">Interview Q&amp;A</h2>
+<div class="qa"><div class="q">Why does chain of thought help on the jacket problem, and what does that tell you about what CoT actually is?</div><div class="a"><p>The naive answer pattern-matches: plus 25 minus 25 looks like zero change, so $80. Writing the steps forces the model to compute each stage: 80 to 100, then 100 to 75, exposing that the discount applies to a different base. The check, $80 + $20 - $25 = $75, closes it. What this tells you: CoT is working memory, not intelligence. Each step is a small, checkable claim committed to text. It does not make the model smarter; it gives errors a place to be caught.
+When the steps are uncheckable and the model is confident anyway. Long reasoning traces on ambiguous questions accumulate confident-sounding errors, each step building on the last. The fix is the agent&rsquo;s fix: verify the steps against the world or a verifier. Open errors are still errors.</p><div class="followup"><strong>Follow-up:</strong> When does chain of thought hurt?</div></div></div>
+<div class="qa"><div class="q">You have a verifier and a fixed budget. One careful high-effort sample or 50 quick samples?</div><div class="a"><p>Usually the 50 quick samples with the verifier picking. Coverage grows fast: at 0.3 success per sample, ten samples give 1 - 0.7^10 = 0.97 coverage. High effort wins when the task needs deep sequential reasoning that quick samples never stumble into: a proof with a 20-step dependency chain, a bug that needs sustained attention. Spend the budget where the errors are: breadth when solutions are scattered, depth when they are buried.
+A bad verifier. If the check accepts wrong answers, more samples just find more ways to be wrong. This is the verifier-design warning from the builders lesson, applied at inference time. Sampling is cheap; checking is dear; a cheap check is worse than none because it certifies garbage.</p><div class="followup"><strong>Follow-up:</strong> What breaks repeated sampling?</div></div></div>
+<div class="qa"><div class="q">Why does constrained decoding matter more for agents than for chatbots?</div><div class="a"><p>A chatbot&rsquo;s output goes to a human who tolerates a malformed sentence. An agent&rsquo;s output goes to a parser, a tool, or another agent. One bad token breaks the tool call and burns a loop turn. Constrained decoding turns &ldquo;usually valid JSON&rdquo; into &ldquo;always valid JSON&rdquo; by masking every token the grammar forbids, as it is generated. It is the validate stage of the tool call moved into the decoder itself.
+Semantics. The output parses but can still be wrong: a valid tool call with the wrong arguments, a well-formed plan that misunderstands the goal. The grammar constrains shape, not meaning. Meaning needs the check step of the agent loop. Shape guarantees are cheap; meaning guarantees are the whole hard problem.</p><div class="followup"><strong>Follow-up:</strong> What can constrained decoding not fix?</div></div></div>
+<div class="qa"><div class="q">What is context rot, and what are the three practical defenses?</div><div class="a"><p>Context rot is the measured degradation of reasoning as the context fills with distractors (OOLONG, 2025). More context is not more understanding: every distractor token is decode bandwidth spent on noise and a chance to mislead the next step. Three defenses from the lecture. Avoid bloat: a few tools beat fifty, as Pi&rsquo;s four tools show. Retrieve on demand: fetch memories and files when needed instead of stuffing them in. Compact: summarize the trace to goals, open loops, and key facts before the window fills.
+The KV cache is positional. Appending at the end keeps every existing position unchanged, so the cache stays valid. Editing in the middle shifts positions: every token after the edit gets new position embeddings and its cached keys and values are wrong. Rewriting history forces recomputation of the whole suffix. The rule is append-only, with compaction as the one expensive rewrite.</p><div class="followup"><strong>Follow-up:</strong> Why must the loop append rather than edit the context?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<p>The story in eight steps. Each step answers the one before it.</p>
+<ol>
+<li><strong>Training is frozen; queries vary.</strong> &ldquo;What is 2+2&rdquo; and &ldquo;debug this
+   race condition&rdquo; should not cost the same. Spend compute per query.</li>
+<li><strong>Direct answers pattern-match.</strong> +25% then -25% looks like
+   cancellation. $80. Wrong by $5.</li>
+<li><strong>The steps expose the base.</strong> $80 x 1.25 = $100, $100 x 0.75 =
+   $75. Each step is a checkable claim. CoT is working memory, not
+   smarts.</li>
+<li><strong>Effort is a dial.</strong> Low, medium, high, set per step. Kimi K3&rsquo;s
+   reward: +1 correct, 0 wrong, -1 wrong and over budget. The -1
+   teaches the budget.</li>
+<li><strong>Sample many, verify once.</strong> 1 - 0.7^10 = 0.97 coverage from a
+   0.3 model. Without a verifier, vote (self-consistency). Checking
+   is the scarce resource.</li>
+<li><strong>Force the shape.</strong> Constrained decoding masks forbidden tokens;
+   output always parses. DSPy signatures declare the contract. Shape,
+   not meaning.</li>
+<li><strong>Engineer the context.</strong> Five ingredients. Defenses against rot:
+   few tools, retrieve on demand, compact. Append, never edit: the KV
+   cache is positional.</li>
+<li><strong>The price is tokens.</strong> Latency and money per step. Compaction&rsquo;s
+   keep-or-drop dilemma is empirical. RLM dodges the quadratic
+   context but propagates sub-call errors silently.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- Lecture 2 slides (local: sources/agents/cs329z/lecture02.pdf).
+- Course site: http://web.stanford.edu/class/cs329z.</p>
+<p><strong>Further reading:</strong>
+- SGLang paper: constrained decoding with finite state machines.
+- DSPy documentation: signatures and compilation.
+- OOLONG paper (2025): long-context reasoning and aggregation.
+- Recursive Language Models paper (2025): the recursion philosophy.
+- Anthropic, &ldquo;Effective context engineering for AI agents&rdquo;: the five
+  ingredients in production form.</p>
+<p><strong>Caveats from these sources.</strong> The slides cite blog and paper figures
+for several claims; the plates here are original. Effort-level
+mechanics differ across providers; the Kimi K3 reward numbers are the
+lecture&rsquo;s. The coverage arithmetic is a worked toy, not a measured
+rate. No video ID is on record.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS336 L10/L18:</strong> the inference cost model behind every choice
+  here. Decode bandwidth is the tax.</li>
+<li><strong>CS336 L15/L16:</strong> reasoning models and RLVR: where the effort dial
+  comes from.</li>
+<li><strong>CS329A:</strong> studies inference-time scaling as a research subject
+  (test-time compute, verifiers, search). This lesson is the
+  engineering interface to the same ideas.</li>
+<li><strong>This course, intro lesson:</strong> self-consistency and the agent loop.
+  Inference-time methods plug into the plan and check steps.</li>
+<li><strong>This course, builders lesson:</strong> verifier design, which repeated
+  sampling depends on.</li>
+<li><strong>This course, RAG lessons:</strong> retrieval is the main weapon against
+  context rot. Compaction and RLM are the alternatives.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">SLIDES</span>Lecture 2 slides: LLMs for Builders (local: sources/agents/cs329z/lecture02.pdf)</li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Wei et al., Chain-of-Thought Prompting Elicits Reasoning in Large Language Models (2022)</a></li><li><span class="src-tag">PAPER</span><a href="https://arxiv.org/abs/2407.21787" target="_blank" rel="noopener">Brown et al., Large Language Monkeys: Scaling Inference Compute with Repeated Sampling (2024)</a></li><li><span class="src-tag">SUPPLEMENT</span><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">Anthropic Engineering: Effective context engineering for AI agents</a></li></ul></section>
+      <nav class="pager"><a href="../cs329z/l03-llms-for-builders.html"><span class="lbl">← Previous</span>Lecture 2A: LLMs for Builders, the Agent Engineer&#x27;s Interface</a><a href="../cs329z/l05-rag-pipeline.html"><span class="lbl">Next →</span>Lecture 3A: RAG, Indexing, and Chunking</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

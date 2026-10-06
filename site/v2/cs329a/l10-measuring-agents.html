@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 10: Measuring Agents and the Road Ahead — Stanford Frontier AI</title>
+<meta name="description" content="How long a task can an agent complete? The METR time-horizon doubles every 7 months, but 80 percent reliability lags years behind 50 percent capability. The cou">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-l10" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10" class="active">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 10: Measuring Agents and the Road Ahead</nav>
+      <h1>Lecture 10: Measuring Agents and the Road Ahead</h1>
+      <p class="meta-line">2025-11-12 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="8JAqLnTaZu4"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/8JAqLnTaZu4" title="Lecture 10: Measuring Agents and the Road Ahead" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Original Stanford lecture. Timestamps in the text link to the exact moment.</p></div><h2 id="the-problem-benchmarks-say-better-users-say-unreliable">The problem: benchmarks say &ldquo;better&rdquo;, users say &ldquo;unreliable&rdquo;</h2>
+<p>Every method in this course reports wins: higher coverage,
+better pass rates, climbing proof scores. But ask anyone who
+has delegated a real afternoon of work to an agent, and the
+report is different: it sometimes works, sometimes wanders,
+sometimes confidently finishes the wrong task. Benchmark
+scores and lived reliability disagree. This chapter is about
+measuring what actually matters: how long a task an agent can
+complete, and how reliably.</p>
+<p>An <strong>agentic evaluation</strong> differs from a question-answering
+benchmark in one way: the task takes time. Not seconds, but
+minutes to hours of skilled human work: debugging a real
+repository, reproducing a machine learning result, planning
+under constraints. The unit of difficulty is the <strong>time
+horizon</strong>: how long the task would take a skilled human.</p>
+<h2 id="the-measurement-worked-concretely">The measurement, worked concretely</h2>
+<p>The METR methodology the lecture presents works like this.
+Take a battery of tasks spanning seconds to many hours. For
+each task, have skilled professionals, roughly five years of
+experience, record how long successful completion takes, and
+take the geometric mean as the task&rsquo;s difficulty rating. Then
+run models on the tasks and record the success rate at each
+horizon.</p>
+<p>The headline numbers, read off the lecture&rsquo;s trend line:</p>
+<pre class="ascii">model (year)          task horizon at 50% success
+GPT-2 (2019)          2 seconds
+GPT-4 (2023)          8 minutes
+Claude 3.7 (2025)     59 minutes
+</pre>
+<p>From 2 seconds to 59 minutes in six years. The doubling time
+is about 7 months: every 7 months, the task length the model
+handles half the time doubles. That is the capability trend,
+and it is steep.</p>
+<p>Now the number that matters for deployment. Redo the
+measurement at 80 percent success instead of 50:</p>
+<pre class="ascii">Claude 3.7 (2025):    59 minutes at 50% success
+                      ~15 minutes at 80% success
+</pre>
+<p>An intern who completes hour-long tasks half the time, and
+15-minute tasks most of the time. The lecture&rsquo;s gloss: there
+is always uncertainty. Capability at 50 percent is years
+ahead of reliability at 80 percent. The gap between the two
+curves is the headroom the field has not closed, and it is
+large.</p>
+<p>The lecture is also honest about the methodology&rsquo;s weak
+point. Experts underestimate task difficulty: people fluent
+in a field are conditioned to what success looks like, and
+their times do not reflect how hard the task feels to a
+model. Human difficulty and model difficulty are different
+rulers.</p>
+<h2 id="where-agents-fail-the-failure-modes">Where agents fail: the failure modes</h2>
+<p>The lecture walks through a failure-mode analysis comparing
+a non-reasoning model (GPT-4) with a reasoning model (o1).
+The categories recur across the field:</p>
+<ul>
+<li><strong>Poor planning.</strong> The model does not break the task into
+  steps, or breaks it wrongly. It acts before it has a plan,
+  or plans at the wrong granularity.</li>
+<li><strong>Poor tool choice.</strong> Wrong tool, or right tool with a bad
+  query. The trajectory grounds itself in the wrong facts.</li>
+<li><strong>No error recovery.</strong> Something goes wrong mid-task, as it
+  always does in an hour-long task, and the agent cannot
+  detect it or replan. It repeats the failing behavior.</li>
+<li><strong>Lost goal state.</strong> Over a long horizon the agent forgets
+  what it is optimizing: no memory of the final goal, no
+  sense of progress. It optimizes a subtask as if it were
+  the task.</li>
+</ul>
+<p>Read these against the earlier chapters. Poor planning is
+what Lecture 5&rsquo;s tree search addresses. Poor tool choice is
+Lecture 3&rsquo;s failure mode. No error recovery is the
+compounding-error arithmetic of Lecture 3, now measured.
+Lost goal state is the memory problem the lectures keep
+naming and never fully solving: the agent needs a notion of
+where it is and what remains.</p>
+<p>The lecture notes what has been driving the gains anyway:
+better reasoning, better code generation, tool use, less
+repetitive behavior, and crucially, <strong>context engineering</strong>,
+structuring what the agent sees across steps so the tools
+work better. Reliability engineering around the model, not
+just the model, moves the curves.</p>
+<h2 id="the-key-question">The key question</h2>
+<p>If capability doubles every 7 months but reliability lags
+years behind, what are the actual open problems?</p>
+<h2 id="the-road-ahead-from-the-recap-lecture">The road ahead, from the recap lecture</h2>
+<p>The course&rsquo;s closing lecture names the frontier explicitly.
+Each item is a research problem, not a solved one:</p>
+<ol>
+<li><strong>Diversity of reasoning chains.</strong> Self-improvement feeds
+   on varied attempts. Keeping them diverse, across rounds
+   of training, is unsolved. Multi-agent debate is a start.</li>
+<li><strong>Breaking the verifier bottleneck.</strong> Everything needs
+   fast, honest judges. Outcome checks are blind, model
+   judges are gullible, and slow domains have no judges at
+   all. Better verifiers improve everything downstream.</li>
+<li><strong>Data selection.</strong> Only so much can be curated by humans.
+   Which problems go into the loop, in which order, a
+   <strong>curriculum</strong>, matters enormously and is barely studied.</li>
+<li><strong>Non-verifiable domains.</strong> Creative writing, open-ended
+   design, science with slow experiments. The loop does not
+   reach them today. Learned reward stand-ins invite hacking.</li>
+<li><strong>The cost of intelligence.</strong> Test-time scaling burns
+   compute per question. Demand is exploding: the lecture
+   cites Google&rsquo;s served tokens jumping from 160 trillion to
+   1.3 quadrillion in months, and data-center energy demand
+   in the hundreds of gigawatts. Efficiency is not optional.</li>
+</ol>
+<p>And the through-line the lecturers keep returning to: the
+self-improvement loop, generate, verify, train, is the
+engine. Every open problem is a way the engine stalls.
+Fix the stall, turn the crank again.</p>
+<h2 id="mapping-back-the-whole-course-in-one-table">Mapping back: the whole course in one table</h2>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Engine part</th>
+<th>Core result</th>
+<th>Honest price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L01</td>
+<td>The loop</td>
+<td>Generate, verify, train</td>
+<td>Needs fast honest verifiers</td>
+</tr>
+<tr>
+<td>L02</td>
+<td>Generate</td>
+<td>Log-linear coverage. Small beats big</td>
+<td>Pays per question. Needs the check</td>
+</tr>
+<tr>
+<td>L03</td>
+<td>Act</td>
+<td>ReAct grounds thought in tools</td>
+<td>Errors compound: 0.9^10 = 0.35</td>
+</tr>
+<tr>
+<td>L04</td>
+<td>Train on doing</td>
+<td>RLEF: execution feedback to RL</td>
+<td>Sparse binary signal. Tests required</td>
+</tr>
+<tr>
+<td>L05</td>
+<td>Plan</td>
+<td>LATS: tree search over plans</td>
+<td>Hundreds of calls. Judge can mislead</td>
+</tr>
+<tr>
+<td>L06</td>
+<td>Scale</td>
+<td>AlphaCode: 10@k. Learned selectors</td>
+<td>Selection bottleneck. Diversity engineered</td>
+</tr>
+<tr>
+<td>L07</td>
+<td>Know</td>
+<td>Agentic search fills gaps mid-thought</td>
+<td>Trigger heuristics. Context budget</td>
+</tr>
+<tr>
+<td>L08</td>
+<td>Learn</td>
+<td>STaR: bootstrap reasoning from answers</td>
+<td>Unfiltered rationales. Needs answer keys</td>
+</tr>
+<tr>
+<td>L09</td>
+<td>Judge</td>
+<td>Meta-verifier. Multi-agent debate</td>
+<td>Human-seeded. Slow domains excluded</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>Measure</td>
+<td>7-month doubling. Reliability lags</td>
+<td>50% is not deployable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price-final">The honest price, final</h2>
+<p>The course&rsquo;s own measurement says the field is far from done.
+An agent that handles hour-long tasks half the time is a
+research result, not a coworker. The reliability gap, the
+verifier bottleneck, and the cost curve are the three walls.
+The doubling trend says the walls are moving. Nothing in the
+lectures says they fall on their own.</p>
+<div class="qa"><div class="q">What is the METR time-horizon result?</div><div class="a"><p>The task length a model completes 50 percent of the time doubles roughly every 7 months: GPT-2 in 2019 managed 2 seconds, GPT-4 in 2023 managed 8 minutes, Claude 3.7 Sonnet in 2025 manages 59 minutes. Task difficulty is rated by the geometric mean of skilled professionals&rsquo; completion times. It is a capability trend, not a reliability claim.
+Because deployment needs reliability. At 80 percent success, Claude 3.7&rsquo;s horizon drops from 59 minutes to about 15. The gap between the 50-percent curve and the 80-percent curve is years of headroom. An agent that finishes half its hour-long tasks is a demo. One that finishes 80 percent of 15-minute tasks is a tool. The field has the first, not the second.</p><div class="followup"><strong>Follow-up:</strong> Why is not 50 percent enough?</div></div></div>
+<div class="qa"><div class="q">What are the main failure modes of long-horizon agents?</div><div class="a"><p>Four, from the lecture&rsquo;s analysis. Poor planning: the task is not broken into workable steps. Poor tool choice: wrong tool or bad query grounds the trace in wrong facts. No error recovery: mid-task failures go undetected and un-replanned. Lost goal state: over long horizons the agent forgets the objective and optimizes a subtask. Every one of them compounds with trajectory length.
+Planning: LATS tree search. Tool choice: ReAct grounding, plus learned selectors in AlphaCode 2. Error recovery: reflection in LATS, retry loops in RLEF. Lost goal state: named repeatedly, never fully solved. Memory structures for agents remain an open research area. The honest scorecard is three partials and one open.</p><div class="followup"><strong>Follow-up:</strong> Which of these did the course&#x27;s methods address?</div></div></div>
+<div class="qa"><div class="q">What are the open problems the course leaves?</div><div class="a"><p>Five from the recap lecture. Keeping reasoning chains diverse across training rounds. Building fast honest verifiers, especially process-level ones. Data selection and curriculum: which problems feed the loop in which order. Reaching non-verifiable domains: creativity, slow science, where no fast judge exists. And the cost of intelligence: test-time scaling&rsquo;s compute demand against exploding usage.
+The lecturers&rsquo; framing points at verification. Every loop, sampling, RL, debate, meta-verification, consumes verifier judgments. A breakthrough in fast, trustworthy, process-level verification would speed up all of them at once.</p><div class="followup"><strong>Follow-up:</strong> Which one helps the most downstream?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>Benchmarks vs reliability.</strong> Scores climb. Users still
+   see flakiness. Measure task horizons, not just accuracy.</li>
+<li><strong>The trend.</strong> 50%-success horizon doubles every 7 months:
+   2 seconds (2019), 8 minutes (2023), 59 minutes (2025).</li>
+<li><strong>The gap.</strong> At 80% success, the 2025 frontier drops to
+   about 15 minutes. Capability is years ahead of
+   reliability.</li>
+<li><strong>Failure modes.</strong> Poor planning, poor tool choice, no
+   error recovery, lost goal state. All compound with length.</li>
+<li><strong>What drove gains.</strong> Reasoning, code, tools, less
+   repetition, and context engineering around the model.</li>
+<li><strong>The key question.</strong> Capability doubles. Reliability
+   lags. What are the real open problems?</li>
+<li><strong>Five opens.</strong> Diversity, verifiers, curriculum,
+   non-verifiable domains, cost of intelligence.</li>
+<li><strong>The engine.</strong> Generate, verify, train. Every open
+   problem is a stall in the engine. Fix the stall, turn
+   the crank.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- CS329A Lecture 8 (Autumn 2025): the lecture this chapter
+  follows. https://www.youtube.com/watch?v=8JAqLnTaZu4
+- METR, &ldquo;Measuring AI Ability to Complete Long Tasks&rdquo;
+  (2025): the time-horizon methodology and doubling trend.</p>
+<p><strong>Further reading:</strong>
+- The recap lecture&rsquo;s open-problems discussion (Lecture 7):
+  https://www.youtube.com/watch?v=AyO6wyu4DEg</p>
+<p><strong>Caveats from these sources.</strong> Horizon numbers are the
+lecture&rsquo;s readings from METR plots, approximate. The 7-month
+doubling is a fitted trend, not a law. Expert time estimates
+underestimate difficulty, per the lecture itself. Model names
+are Autumn 2025 snapshots.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS329Z:</strong> evaluation engineering: building the
+  benchmarks this chapter critiques, and doing it well.</li>
+<li><strong>CS336:</strong> the pretraining side of the capability trend:
+  where the base models come from.</li>
+<li><strong>CS229S:</strong> the cost side of the road ahead: what
+  exploding inference demand means for systems.</li>
+<li><strong>CS329A L01:</strong> the full circle: the loop this chapter&rsquo;s
+  open problems are all trying to unstall.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">CS329A Lecture 8: agentic evaluations and long-horizon tasks (Autumn 2025)</a></li><li><span class="src-tag">PAPER</span>METR, Measuring AI Ability to Complete Long Tasks (2025)</li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
+      <nav class="pager"><a href="../cs329a/l09-verifier-bottleneck.html"><span class="lbl">← Previous</span>Lecture 9: The Verifier Bottleneck: Who Judges the Judge</a><a href="../cs329a/cheatsheet.html"><span class="lbl">Next →</span>CS329A Cheatsheet</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

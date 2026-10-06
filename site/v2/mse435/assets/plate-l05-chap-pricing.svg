@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the pricing ladder</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. The seat priced access. Usage prices work. Outcome prices results.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT the move</text>
+<text x="414" y="124">the rule: the meter moves</text>
+<text x="648" y="124">WITH the move</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">the seat: $20 per user</text>
+<text x="190" y="208" text-anchor="middle" fill="#1B2838">per month</text>
+<text x="190" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">1,000 users, $20,000 a month,</text>
+<text x="190" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">whether they work or sleep</text>
+<text x="190" y="324" text-anchor="middle" fill="#C46B2C" font-size="14">the seat was insurance:</text>
+<text x="190" y="348" text-anchor="middle" fill="#C46B2C" font-size="14">the vendor's costs were mostly</text>
+<text x="190" y="372" text-anchor="middle" fill="#C46B2C" font-size="14">fixed, so it charged for access</text>
+<text x="190" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">worked when humans were</text>
+<text x="190" y="440" text-anchor="middle" fill="#5C6B7A" font-size="14">the users: countable, bounded</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">price the unit</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">of cognition</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">the seat dies with the</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">compromise that created it</text>
+<text x="490" y="324" text-anchor="middle" fill="#1E4D8C" font-size="14">heavy users pay more,</text>
+<text x="490" y="348" text-anchor="middle" fill="#1E4D8C" font-size="14">light users pay less</text>
+<text x="490" y="392" text-anchor="middle" fill="#5C6B7A" font-size="14">the seat was a flat tax.</text>
+<text x="490" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">Usage is a utility bill.</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">usage: $2 per million</text>
+<text x="780" y="208" text-anchor="middle" fill="#1B2838">input tokens</text>
+<text x="780" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">10,000 chats x 5,000 tokens:</text>
+<text x="780" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">$100 of input</text>
+<text x="780" y="324" text-anchor="middle" fill="#1B2838">outcome: pay per result</text>
+<text x="780" y="352" text-anchor="middle" fill="#5C6B7A" font-size="14">lead agent: $5,000 a year,</text>
+<text x="780" y="376" text-anchor="middle" fill="#5C6B7A" font-size="14">returns 32x in pipeline</text>
+<text x="780" y="420" text-anchor="middle" fill="#1F7A72" font-size="14">the vendor guarantees</text>
+<text x="780" y="444" text-anchor="middle" fill="#1F7A72" font-size="14">the result, not the access</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: outcome pricing needs a measurable outcome and a vendor confident enough to guarantee it.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">Expect it where the task is narrow: leads, resolved tickets, caught bugs.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: agents buy with token budgets, not seats. Price for the token budget.</text>
+</svg>

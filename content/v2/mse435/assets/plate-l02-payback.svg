@@ -1,26 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Inter, 'Source Sans 3', sans-serif">
-<rect width="960" height="560" fill="#F7F4EE"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="600" fill="#F7F4EE"/>
 <text x="48" y="60" font-size="30" font-weight="600" fill="#1B2838">The payback: renting chips versus selling tokens</text>
 <text x="48" y="92" font-size="17" fill="#5C6B7A">$60M build. OpEx is $1-2M/yr. Revenue decides the payback. Shell 3. Source: original, numbers from the session.</text>
 <!-- before: rent chips -->
-<text x="48" y="148" font-size="20" font-weight="600" fill="#1B2838">Rent bare chips: $15M / MW / yr</text>
+<text x="48" y="148" font-size="20" font-weight="600" fill="#1B2838">Before: rent bare chips, $15M / MW / yr</text>
 <rect x="48" y="164" width="720" height="40" rx="8" fill="#E6E2DA" stroke="#1B2838" stroke-width="1.5"/>
 <rect x="48" y="164" width="360" height="40" rx="8" fill="#C46B2C"/>
 <text x="228" y="190" text-anchor="middle" font-size="15" font-weight="500" fill="#FFFFFF">$60M recovered in 4 years</text>
+<!-- center: the rule -->
+<line x1="48" y1="244" x2="560" y2="244" stroke="#1B2838" stroke-width="1.5"/>
+<polygon points="560,236 576,244 560,252" fill="#1B2838"/>
+<text x="48" y="232" font-size="13" font-weight="500" fill="#1F7A72">rule: add the managed-services layer, +$5-15M per MW per year</text>
 <!-- after: managed tokens -->
-<text x="48" y="256" font-size="20" font-weight="600" fill="#1B2838">Sell tokens (managed): $30M / MW / yr</text>
-<rect x="48" y="272" width="720" height="40" rx="8" fill="#E6E2DA" stroke="#1B2838" stroke-width="1.5"/>
-<rect x="48" y="272" width="720" height="40" rx="8" fill="#1F7A72"/>
-<text x="408" y="298" text-anchor="middle" font-size="15" font-weight="500" fill="#FFFFFF">$60M recovered in 2 years</text>
+<text x="48" y="296" font-size="20" font-weight="600" fill="#1B2838">After: sell tokens (managed), $30M / MW / yr</text>
+<rect x="48" y="312" width="720" height="40" rx="8" fill="#E6E2DA" stroke="#1B2838" stroke-width="1.5"/>
+<rect x="48" y="312" width="720" height="40" rx="8" fill="#1F7A72"/>
+<text x="408" y="338" text-anchor="middle" font-size="15" font-weight="500" fill="#FFFFFF">$60M recovered in 2 years</text>
 <g font-size="15" font-weight="500">
-<text x="48" y="364" fill="#1B2838">build cost (one time)</text>
-<text x="560" y="364" fill="#1B2838" font-size="22" font-weight="600">$60M / MW</text>
-<text x="48" y="404" fill="#1B2838">operating cost (per year)</text>
-<text x="560" y="404" fill="#1B2838" font-size="22" font-weight="600">$1-2M / MW</text>
-<text x="48" y="444" fill="#1B2838">upgrade margin ("from electrons to tokens")</text>
-<text x="560" y="444" fill="#1F7A72" font-size="22" font-weight="600">+$5-15M / MW / yr</text>
+<text x="48" y="404" fill="#1B2838">build cost (one time)</text>
+<text x="560" y="404" fill="#1B2838" font-size="22" font-weight="600">$60M / MW</text>
+<text x="48" y="444" fill="#1B2838">operating cost (per year)</text>
+<text x="560" y="444" fill="#1B2838" font-size="22" font-weight="600">$1-2M / MW</text>
+<text x="48" y="484" fill="#1B2838">upgrade margin ("from electrons to tokens")</text>
+<text x="560" y="484" fill="#1F7A72" font-size="22" font-weight="600">+$5-15M / MW / yr</text>
 </g>
-<line x1="48" y1="476" x2="912" y2="476" stroke="#D9D3C7" stroke-width="1.5"/>
-<text x="48" y="512" font-size="16" font-weight="500" fill="#1B2838">One claim: the product is not compute. The product is finished intelligence, and it halves the payback.</text>
-<text x="48" y="538" font-size="14" fill="#5C6B7A">Caveat: revenue basis, not profit. Excludes the engineering workforce and financing.</text>
+<line x1="48" y1="516" x2="912" y2="516" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="48" y="552" font-size="16" font-weight="500" fill="#1B2838">One claim: the product is not compute. The product is finished intelligence, and it halves the payback.</text>
+<text x="48" y="578" font-size="14" fill="#5C6B7A">Caveat: revenue basis, not profit. Excludes the engineering workforce and financing.</text>
 </svg>

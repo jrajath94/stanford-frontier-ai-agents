@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="680" viewBox="0 0 1120 680" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif">
+<rect width="1120" height="680" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="30" font-weight="600" fill="#1B2838">The proposer lives at the frontier</text>
+<text x="40" y="80" font-size="16" fill="#5C6B7A">Proposer invents tasks. Solver attempts. Reward 1 minus success rate, 0 when success is 0. Sweet spot at 0.5.</text>
+<line x1="40" y1="96" x2="1080" y2="96" stroke="#D9D3C7" stroke-width="1.5"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1F7A72"/></marker></defs>
+<rect x="40" y="120" width="640" height="300" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="100" y="190" width="220" height="120" rx="12" fill="#F6E7A8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="210.0" y="229.0" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Proposer</text>
+<text x="210.0" y="253.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">invents reasoning</text>
+<text x="210.0" y="275.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">tasks</text>
+<line x1="332" y1="250" x2="392" y2="250" stroke="#1F7A72" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="338.8" y="224.0" width="46.4" height="20" rx="4" fill="#F7F4EE"/>
+<text x="362.0" y="239.0" font-size="13" font-weight="500" fill="#1F7A72" text-anchor="middle">task</text>
+<rect x="404" y="190" width="220" height="120" rx="12" fill="#E7F1F8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="514.0" y="240.0" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Solver</text>
+<text x="514.0" y="264.0" font-size="13" font-weight="450" fill="#5C6B7A" text-anchor="middle">attempts them</text>
+<path d="M 514 322 C 514 380, 210 380, 210 322" fill="none" stroke="#1F7A72" stroke-width="2" marker-end="url(#arr)"/>
+<text x="362" y="404" font-size="13" font-weight="500" fill="#1F7A72" text-anchor="middle">learnable-task reward</text>
+<text x="360" y="440" font-size="13" fill="#5C6B7A" text-anchor="middle">deduction, abduction, induction; task buffer keeps the curriculum matched</text>
+<rect x="728" y="120" width="352" height="300" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="904" y="152" font-size="16" font-weight="600" fill="#1B2838" text-anchor="middle">Reward toy</text>
+<text x="770" y="210" font-size="14" fill="#1B2838">success 0.0 -&gt; reward <tspan font-weight="600" fill="#5C6B7A">0.0</tspan></text>
+<text x="990" y="210" font-size="13" fill="#5C6B7A">too hard</text>
+<text x="770" y="274" font-size="14" fill="#1B2838">success 1.0 -&gt; reward <tspan font-weight="600" fill="#5C6B7A">0.0</tspan></text>
+<text x="990" y="274" font-size="13" fill="#5C6B7A">too easy</text>
+<text x="770" y="338" font-size="14" fill="#1B2838">success 0.4 -&gt; reward <tspan font-weight="600" fill="#1F7A72">0.6</tspan></text>
+<text x="990" y="338" font-size="13" fill="#5C6B7A">the frontier</text>
+<text x="904" y="400" font-size="14" font-weight="600" fill="#1F7A72" text-anchor="middle">the proposer learns to live at 0.5</text>
+<rect x="40" y="456" width="1040" height="76" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="504" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Zero human data: no problems, no answers, no preferences from people.</text>
+<text x="40" y="624" font-size="15" font-weight="450" fill="#1B2838">Self-play bootstraps from the model's own inventions. The frontier is the curriculum.</text>
+<text x="40" y="652" font-size="13" fill="#5C6B7A">Project: Stanford Frontier AI. Source: paper, Absolute Zero. Shell 3.</text>
+</svg>

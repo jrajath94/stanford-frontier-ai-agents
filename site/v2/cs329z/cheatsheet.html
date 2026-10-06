@@ -219,103 +219,365 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329Z: Engineering AI Agents</a> / CS329Z Cheatsheet</nav>
       <h1>CS329Z Cheatsheet</h1>
       
-      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><p>The whole course as a set of short stories. Each block tells one
-idea the way the lesson tells it: the problem, the number, the
-fix. Follow the links for the full derivations.</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><p>The whole course as one-glance tables. Each block holds the numbers
+and the decision rules. Follow the links for the derivations.</p>
 <div class="cheat-cols">
 <div class="cheat-block">
 <h3 id="the-agent-loop">The agent loop</h3>
-<p>Perceive, decide, act, observe, check. Reason-only hallucinates the
-Apple Remote as &ldquo;iPhone, iPad, iPod Touch&rdquo;. Act-only dies on the
-first unexpected screen. ReAct interleaves: 4 acts, 3 observations,
-Thought 3 recovers from the wrong remote. Four tool calls at 0.9
-reliability survive at 0.9^4 = 0.66. The check step is the whole
-difference between a demo and a system. <a href="l01-intro-agentic-systems.html">Lecture 1</a></p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Does</th>
+<th>Skipped means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perceive</td>
+<td>read task + world state</td>
+<td>acts on stale state</td>
+</tr>
+<tr>
+<td>Plan</td>
+<td>Thought: choose the next step</td>
+<td>no recovery from failure</td>
+</tr>
+<tr>
+<td>Act</td>
+<td>tool call, message, answer</td>
+<td>nothing touches the world</td>
+</tr>
+<tr>
+<td>Observe</td>
+<td>read what came back</td>
+<td>blind next step</td>
+</tr>
+<tr>
+<td>Check</td>
+<td>named test: goal met?</td>
+<td>runs until budget dies</td>
+</tr>
+</tbody>
+</table>
+<p>0.9^4 = 0.66: four steps at 90% each. Termination: check passes,
+budget dies, or the model declares done. ReAct: Thought/Act/Observe.
+Thought 3 diagnoses, extracts, replans. <a href="l01-intro-agentic-systems.html">Lecture 1</a></p>
+</div>
+<div class="cheat-block">
+<h3 id="loop-patterns">Loop patterns</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Edit to the loop</th>
+<th>Wins when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ReAct</td>
+<td>Thought between acts</td>
+<td>facts live in the world</td>
+</tr>
+<tr>
+<td>Plan-and-execute</td>
+<td>plan is a document</td>
+<td>task decomposes up front</td>
+</tr>
+<tr>
+<td>Handoff</td>
+<td>delegate = tool call</td>
+<td>one prompt would need two jobs</td>
+</tr>
+<tr>
+<td>Reflexion</td>
+<td>failure becomes text hint</td>
+<td>repeated tries, verbal feedback</td>
+</tr>
+<tr>
+<td>Debate</td>
+<td>N agents argue, judge picks</td>
+<td>errors uncorrelated</td>
+</tr>
+<tr>
+<td>Self-consistency</td>
+<td>many paths, majority vote</td>
+<td>no tools, no verifier</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="cheat-block">
 <h3 id="tool-calling-done-right">Tool calling done right</h3>
-<p>Select, Arguments, Validate, Execute. The crack: an argument of
-{&ldquo;path&rdquo;: [&ldquo;test.py&rdquo;]} sails through and the tool fails late.
-Validate before executing, never after. The 87% pop-up attack works
-because the agent executes untrusted tool output as instruction.
-Treat tool results as data, never as instructions. <a href="l02-compound-ai-systems.html">Lecture 1</a></p>
+<p>Select, Arguments, Validate, Execute. Validate is load-bearing:
+{&ldquo;path&rdquo;: [&ldquo;test.py&rdquo;]} dies there, not in the sandbox. Errors return
+as data, never as exceptions: the model routes around what it can
+read. Retry transient failures only: backoff 1s/2s/4s, max 3, then
+dead-letter. The 87% pop-up attack works on untrusted tool output
+read as instruction. MCP: 5 x 8 = 40 integrations become 5 + 8 = 13.
+Transport, not trust. <a href="l02-compound-ai-systems.html">Lecture 1</a></p>
+</div>
+<div class="cheat-block">
+<h3 id="tool-design-rules">Tool design rules</h3>
+<p>One job per tool. Typed narrow arguments. Errors as data. Idempotent
+where possible. Names the model can spell. Few sharp tools (Pi: read,
+write, edit, bash) beat fifty dull ones. The description is a prompt:
+it says when to reach for this tool.</p>
 </div>
 <div class="cheat-block">
 <h3 id="the-sampling-math">The sampling math</h3>
-<p>Temperature rescales before the softmax. On [0.7, 0.2, 0.1]: T=0.5
-sharpens to [0.91, 0.07, 0.02]; T=2 flattens to [0.52, 0.28, 0.20].
-Training minimizes cross-entropy, which is negative log-likelihood:
-the toy gives -log10(0.0124) = 1.907. Attention at n=4096 computes
-16.7M scores: quadratic. Decode is bandwidth bound, so make the
-model smaller, not the math different. <a href="l03-llms-for-builders.html">Lecture 2</a></p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>[0.7, 0.2, 0.1] becomes</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T = 0.5</td>
+<td>[0.91, 0.07, 0.02]</td>
+<td>acting: tool calls steady</td>
+</tr>
+<tr>
+<td>T = 1</td>
+<td>unchanged</td>
+<td>default</td>
+</tr>
+<tr>
+<td>T = 2</td>
+<td>[0.52, 0.28, 0.20]</td>
+<td>thinking: plans need variety</td>
+</tr>
+</tbody>
+</table>
+<p>Logits -&gt; scale by T -&gt; softmax -&gt; truncate (top-k/top-p) -&gt; sample.
+Set T and top-p as a pair. Loss = -log p(true token): the toy gives
+-log10(0.0124) = 1.907. <a href="l03-llms-for-builders.html">Lecture 2</a></p>
+</div>
+<div class="cheat-block">
+<h3 id="the-cost-model">The cost model</h3>
+<p>Attention O(n^2): 16.7M scores per layer per head at n = 4096. KV
+cache = 2 x layers x tokens x dims x bytes: 2.0 GiB at 32 layers,
+4096 tokens, fp16. Prefill: parallel, compute-bound. Decode: one
+token at a time, memory-bound. Every context token is bandwidth per
+step. Speculative decoding: draft cheap, verify in one pass. Wins on
+predictable structured output.</p>
+</div>
+<div class="cheat-block">
+<h3 id="training-ladder">Training ladder</h3>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>Teaches</th>
+<th>Trap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pretrain</td>
+<td>next-token on web text</td>
+<td>the corpus is the ceiling</td>
+</tr>
+<tr>
+<td>Midtrain</td>
+<td>domain mix (code, math)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SFT</td>
+<td>format: follow instructions</td>
+<td>format, not judgment</td>
+</tr>
+<tr>
+<td>RLHF/DPO</td>
+<td>human preferences</td>
+<td>sycophancy: annotators like confident agreeable answers</td>
+</tr>
+<tr>
+<td>RLVR</td>
+<td>verifiable rewards (tests)</td>
+<td>weak verifier teaches reward hacking</td>
+</tr>
+<tr>
+<td>Agent train</td>
+<td>synthesized tasks + sandbox</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="cheat-block">
 <h3 id="spend-compute-at-inference">Spend compute at inference</h3>
 <p>The jacket: +25% then -25% is not $80. $80 x 1.25 = $100, $100 x
-0.75 = $75. Chain of thought is working memory, not intelligence:
-each step is a checkable claim. Kimi K3&rsquo;s effort reward: +1
-correct, 0 wrong, -1 wrong and over budget. The -1 teaches the
-budget. Repeated sampling: at 0.3 success per sample, 1 - 0.7^10 =
-0.97 coverage. The verifier is the scarce resource. <a href="l04-reasoning-and-context.html">Lecture 2</a></p>
+0.75 = $75. Chain of thought is working memory, not intelligence.
+Effort dial: low/medium/high per step. Kimi K3: +1 correct, 0 wrong,
+-1 wrong and over budget. Repeated sampling: 1 - 0.7^10 = 0.97
+coverage at 0.3 per sample. Sampling is cheap. The verifier is the
+scarce resource. Outcome reward checks the answer. Process reward
+checks each step (needs step labels). <a href="l04-reasoning-and-context.html">Lecture 2</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="constrain-the-shape-engineer-the-context">Constrain the shape, engineer the context</h3>
-<p>Constrained decoding masks forbidden tokens at generation time:
-output always parses, but shape is not meaning. DSPy signatures
-declare the contract; the compiled prompt implements it. Context
-rot is measured: distractors degrade reasoning. Pi ships four
-tools; fetch the rest on demand. The KV cache is positional, so
-append, never edit. Compaction keeps goals, open loops, and key
-facts; the keep-or-drop dilemma is empirical. <a href="l04-reasoning-and-context.html">Lecture 2</a></p>
+<p>Constrained decoding: grammar masks forbidden tokens. Output always
+parses. Shape, not meaning. DSPy: signature declares, compiled prompt
+implements. Context rot: distractors degrade reasoning (OOLONG).
+Defenses: few tools, retrieve on demand, compact. KV cache is
+positional: append, never edit. Compaction keeps goal, open loops, key
+facts. The keep-or-drop dilemma is empirical. <a href="l04-reasoning-and-context.html">Lecture 2</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="rag-in-one-formula">RAG in one formula</h3>
-<p>p(y|x) = sum p(z|x) p(y|x,z). The toy: 0.7 x 0.9 + 0.3 x 0.2 =
-0.69; the trusted passage dominates. Training is a memory tax:
-stale (retrain weekly?), no citation, lossy (reconstructions, not
-rows). Retrieval is dynamic, exact, checkable. The retriever&rsquo;s
-miss is the reader&rsquo;s ceiling. <a href="l05-rag-pipeline.html">Lecture 3</a></p>
-</div>
-<div class="cheat-block">
-<h3 id="chunking-and-indexing">Chunking and indexing</h3>
-<p>200 to 400 tokens, 10 to 20% overlap, then measure. Too small
-loses context; too large blurs topics. Read ten chunks by hand
-before tuning. Contextual retrieval: an LLM writes a situating
-prefix per chunk (one call each). Late chunking: embed the
-document, pool per span (no LLM call, needs a long-context
-encoder). RAPTOR builds a tree for spread-out answers; GraphRAG
-indexes the relationships. <a href="l05-rag-pipeline.html">Lecture 3</a></p>
+<p>p(y|x) = sum p(z|x) p(y|x,z). Toy: 0.7 x 0.9 + 0.3 x 0.2 = 0.69. The
+trusted passage dominates. RAG-Sequence: one passage per answer.
+RAG-Token: re-pick per token. Chunk: 200-400 tokens, 10-20% overlap.
+read ten chunks by hand. Embeddings: 768 numbers per chunk. The
+retriever measures distances. Vector store: embed offline, query live.
+Contextual retrieval: LLM prefix per chunk (one call each). Late
+chunking: embed doc, pool per span (no call, needs long encoder).
+RAPTOR: tree for spread-out answers. GraphRAG: index relationships.
+<a href="l05-rag-pipeline.html">Lecture 3</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="the-retriever-zoo">The retriever zoo</h3>
-<p>BM25: IDF rewards rarity (&ldquo;ACME&rdquo; 5.65 vs &ldquo;revenue&rdquo; 2.93),
-frequency saturates (10 mentions score 1.96, not 10). 62 ms, no
-training. DPR: meaning as a dot product, beats BM25 on 4 of 5
-datasets with 1,000 QA pairs, misses rare literals. ColBERT:
-MaxSim over tokens, token-sized index, 458 ms. Cross-encoder:
-10,700 ms per 1k passages, shortlists only. RRF fuses ranks:
-0.0323 beats 0.0320, consensus wins. <a href="l06-retrieval-methods.html">Lecture 3</a></p>
+<table>
+<thead>
+<tr>
+<th>Retriever</th>
+<th>Latency</th>
+<th>Wins on</th>
+<th>Breaks on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BM25</td>
+<td>62 ms</td>
+<td>exact terms, no training</td>
+<td>paraphrase</td>
+</tr>
+<tr>
+<td>DPR</td>
+<td>tens of ms</td>
+<td>semantic, 1k pairs beats BM25</td>
+<td>rare literals</td>
+</tr>
+<tr>
+<td>ColBERT</td>
+<td>458 ms</td>
+<td>token-level evidence</td>
+<td>token-sized index</td>
+</tr>
+<tr>
+<td>Cross-encoder</td>
+<td>10,700 ms / 1k</td>
+<td>accuracy on shortlist</td>
+<td>cannot scan corpus</td>
+</tr>
+<tr>
+<td>HNSW</td>
+<td>ms</td>
+<td>ANN at billions of vectors</td>
+<td>a little recall</td>
+</tr>
+</tbody>
+</table>
+<p>BM25: IDF 5.65 (&ldquo;ACME&rdquo;) vs 2.93 (&ldquo;revenue&rdquo;). 10 mentions score 1.96
+not 10. RRF: 0.0323 beats 0.0320. Fuse ranks not scores. MRR for
+one-passage readers. Recall for synthesizers. Failed@k for empty
+queries. <a href="l06-retrieval-methods.html">Lecture 3</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="agentic-retrieval-fails-with-numbers">Agentic retrieval fails with numbers</h3>
-<p>Query 2 is born from observation 1: &ldquo;CEO since 2019&rdquo; arrives, then
-&ldquo;World Series host 2019&rdquo; is written. The loop owns whether, what,
-and when to stop. Nine failures: compounding error (0.95^20 =
-0.36), no stopping rule (2,000 tokens x 25 rounds = 50,000),
-injection (87%, steering the next hop), recall ceiling,
-staleness, permission leaks, lost-in-the-middle, distraction,
-evidence conflict. <a href="l07-agentic-retrieval-failure-modes.html">Lecture 3</a></p>
+<p>Query 2 is born from observation 1. The loop owns whether, what, and
+when to stop. Nine failures: compounding (0.95^20 = 0.36), no
+stopping rule (2,000 x 25 = 50,000 tokens), injection (87%, steers the
+next hop), recall ceiling (0.8 caps all), stale index, permission
+leak (fix at retrieval time), lost-in-the-middle, distraction,
+evidence conflict (resolve: newer, primary, or tiebreaker).
+<a href="l07-agentic-retrieval-failure-modes.html">Lecture 3</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="evaluate-the-other-nine-runs">Evaluate the other nine runs</h3>
-<p>Consistency 7/10, robustness 4/10 on rephrasing, legibility: run 6
-called a refund tool it should never touch. SWE-bench: 2,294 real
-GitHub issues; FAIL_TO_PASS must flip, PASS_TO_PASS must hold;
-Claude 2 resolved 4.8% in 2023. GAIA: 466 questions, humans 92%,
-GPT-4 with plugins 15%. The judge is wrong 15 times in 100;
-humans cost 17 hours per 100 tasks. Goodhart: the metric becomes
-the target. Sandbox the grader. <a href="l08-evaluating-agents.html">Lecture 4</a></p>
+<p>Consistency 7/10. Robustness 4/10 on rephrasing. Legibility: run 6
+called a refund tool it should never touch. SWE-bench: 2,294 issues.
+FAIL_TO_PASS must flip, PASS_TO_PASS must hold. Claude 2 4.8% (2023).
+GAIA: 466 questions. Humans 92%, GPT-4 + plugins 15%. Judge wrong 15
+times in 100: calibrate on humans first. Never claim a 2-point win.
+Humans cost 17 hours per 100 tasks. Goodhart: the metric becomes the
+target. Sandbox the grader. Score the trace. Print cost, latency,
+safety next to every score. <a href="l08-evaluating-agents.html">Lecture 4</a></p>
 </div>
+<div class="cheat-block">
+<h3 id="never-confuse-pairs">Never-confuse pairs</h3>
+<table>
+<thead>
+<tr>
+<th>Do not confuse</th>
+<th>Because</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Observation vs check</td>
+<td>observation is raw; check is the verdict</td>
+</tr>
+<tr>
+<td>RAG-Sequence vs RAG-Token</td>
+<td>one passage per answer vs re-pick per token</td>
+</tr>
+<tr>
+<td>Outcome vs process reward</td>
+<td>answer check vs step check</td>
+</tr>
+<tr>
+<td>Recall vs MRR</td>
+<td>find all vs first rank</td>
+</tr>
+<tr>
+<td>BM25 vs DPR failure</td>
+<td>paraphrase vs rare literals</td>
+</tr>
+<tr>
+<td>Self-RAG vs CRAG</td>
+<td>decide to retrieve vs repair retrieval</td>
+</tr>
+<tr>
+<td>Consistency vs robustness</td>
+<td>same task twice vs rephrased task</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cheat-block">
+<h3 id="if-this-then-that">If-this-then-that</h3>
+<ul>
+<li>If the answer needs no external facts -&gt; chain-of-thought, not ReAct.</li>
+<li>If {&ldquo;path&rdquo;: [&ldquo;test.py&rdquo;]} -&gt; it dies at validate, before the sandbox.</li>
+<li>If a tool fails transiently -&gt; append as result, backoff, max 3.</li>
+<li>If the context fills -&gt; compact to goal + open loops + key facts.</li>
+<li>If the retriever&rsquo;s recall is 0.8 -&gt; the system caps at 0.8.</li>
+<li>If two passages disagree -&gt; resolve (newer, primary, tiebreaker).</li>
+<li>If no verifier exists -&gt; vote (self-consistency), do not sample blind.</li>
+<li>If the judge is uncalibrated -&gt; its scores are stories, not numbers.</li>
+</ul>
+</div>
+</div>
+<div class="cheat-block">
+<h3 id="go-deeper">Go deeper</h3>
+<ul>
+<li>Yao et al., ReAct (2022): https://arxiv.org/abs/2210.03629 : the Thought/Act/Observe loop and its measurements.</li>
+<li>Shinn et al., Reflexion (2023): https://arxiv.org/abs/2303.11366 : verbal reinforcement from failed runs.</li>
+<li>Lewis et al., RAG (2020): https://arxiv.org/abs/2005.11401 : the original retrieve-then-generate recipe.</li>
+<li>Barnett et al. (2024): https://arxiv.org/abs/2401.05856 : seven failure points of RAG engineering.</li>
+<li>Asai et al., Self-RAG (2023): https://arxiv.org/abs/2310.11511 : retrieve, generate, and critique through self-reflection.</li>
+<li>Brown et al., Large Language Monkeys (2024): https://arxiv.org/abs/2407.21787 : inference compute keeps helping far past intuition.</li>
+<li>Wei et al., Chain-of-Thought (2022): https://arxiv.org/abs/2201.11903 : the scratch pad that started it all.</li>
+<li>HarnessAudit: https://harnessaudit.github.io : agent scaffold auditing.</li>
+</ul>
 </div>
       
       <nav class="pager"><a href="../cs329z/l08-evaluating-agents.html"><span class="lbl">← Previous</span>Lecture 4: Evaluating Agents with Numbers</a><a href="../cs329z/crash-course.html"><span class="lbl">Next →</span>CS329Z Crash Course</a></nav>

@@ -36,7 +36,7 @@ Project, is a bet that the labor term of the growth
 equation is now investable. The falsifier is token
 demand stalling.
 
-![Digital labor: the labor term becomes investable](assets/plate-l01-digital-labor.webp)
+![Digital labor: the labor term becomes investable](assets/plate-l01-digital-labor.svg)
 
 **Memory aid.** Labor was the slow term. Now it moves
 with money. The toy: buying half a point of labor
@@ -148,7 +148,7 @@ continual learning, the hot-stove problem of learning
 from one loud signal. Price of the era: the
 pre-training data wall.
 
-![The three scaling axes](assets/plate-l03-axes.webp)
+![The three scaling axes](assets/plate-l03-axes.svg)
 
 **Memory aid.** Mnemonic: **A-T-P-S-R-R**: AlexNet,
 Transformer, Pre-training, Scaling laws, RLHF,
@@ -224,7 +224,7 @@ reflexivity (once you know the efficiency, you never
 forego it) says engagement compounds. Watch
 retention, not generation.
 
-![The agentic infrastructure triangle](assets/plate-l05-triangle.webp)
+![The agentic infrastructure triangle](assets/plate-l05-triangle.svg)
 
 **Memory aid.** The triangle: FOR agents, TO BUILD
 agents, BY agents. The SaaS split: pixels go

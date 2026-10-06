@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Inter, 'Source Sans 3', sans-serif">
+<rect width="960" height="560" fill="#F7F4EE"/>
+<text x="48" y="60" font-size="30" font-weight="600" fill="#1B2838">The eras of the model layer</text>
+<text x="48" y="92" font-size="17" fill="#5C6B7A">Each era breaks one bottleneck. Each unlocks the next. Shell 2. Source: original, drawn from the session.</text>
+<g font-size="14" font-weight="500">
+<rect x="48" y="128" width="200" height="150" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="148" y="160" text-anchor="middle" fill="#C46B2C">2012</text>
+<text x="148" y="188" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">AlexNet</text>
+<text x="148" y="214" text-anchor="middle" fill="#5C6B7A">GPUs + ImageNet</text>
+<text x="148" y="238" text-anchor="middle" fill="#5C6B7A">beat hand features</text>
+<rect x="264" y="128" width="200" height="150" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="364" y="160" text-anchor="middle" fill="#C46B2C">2017</text>
+<text x="364" y="188" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">transformer</text>
+<text x="364" y="214" text-anchor="middle" fill="#5C6B7A">self-attention</text>
+<text x="364" y="238" text-anchor="middle" fill="#5C6B7A">parallelizes on GPUs</text>
+<rect x="480" y="128" width="200" height="150" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="580" y="160" text-anchor="middle" fill="#C46B2C">2018-19</text>
+<text x="580" y="188" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">pre-training</text>
+<text x="580" y="214" text-anchor="middle" fill="#5C6B7A">next-token on</text>
+<text x="580" y="238" text-anchor="middle" fill="#5C6B7A">internet text</text>
+<rect x="696" y="128" width="216" height="150" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="804" y="160" text-anchor="middle" fill="#1F7A72">2020-22</text>
+<text x="804" y="188" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">scaling laws</text>
+<text x="804" y="214" text-anchor="middle" fill="#5C6B7A">intelligence becomes</text>
+<text x="804" y="238" text-anchor="middle" fill="#5C6B7A">a capital allocation</text>
+<rect x="48" y="296" width="280" height="150" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="188" y="328" text-anchor="middle" fill="#C46B2C">2022-23</text>
+<text x="188" y="356" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">RLHF</text>
+<text x="188" y="382" text-anchor="middle" fill="#5C6B7A">human preferences</text>
+<text x="188" y="406" text-anchor="middle" fill="#5C6B7A">steer the raw model</text>
+<rect x="344" y="296" width="280" height="150" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="484" y="328" text-anchor="middle" fill="#1F7A72">2024-</text>
+<text x="484" y="356" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">reasoning models</text>
+<text x="484" y="382" text-anchor="middle" fill="#5C6B7A">test-time compute</text>
+<text x="484" y="406" text-anchor="middle" fill="#5C6B7A">chain of thought emerges</text>
+<rect x="640" y="296" width="272" height="150" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="2"/>
+<text x="776" y="328" text-anchor="middle" fill="#1E4D8C">next</text>
+<text x="776" y="356" text-anchor="middle" fill="#1B2838" font-size="18" font-weight="600">continual learning</text>
+<text x="776" y="382" text-anchor="middle" fill="#5C6B7A">the hot stove:</text>
+<text x="776" y="406" text-anchor="middle" fill="#5C6B7A">one loud signal, learned</text>
+</g>
+<text x="48" y="500" font-size="16" font-weight="500" fill="#1B2838">One claim: progress is a moving bottleneck. Each era's constraint becomes the next era's solved problem.</text>
+</svg>

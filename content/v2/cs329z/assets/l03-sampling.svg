@@ -1,1 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif"><rect width="1120" height="560" fill="#F7F4EE"/><text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">Sampling: the same scores, different dice</text><text x="40" y="82" font-size="17" fill="#5C6B7A">P(next | "The class was about"): to 0.3171, as 0.0491, the 0.036, a 0.033.</text><line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/><g><rect x="40" y="140" width="320" height="260" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/><text x="200" y="172" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Greedy: always "to"</text><rect x="70" y="200" width="260" height="28" rx="4" fill="#1F7A72"/><text x="80" y="220" font-size="13" fill="#FFFFFF">to 0.3171</text><rect x="70" y="236" width="40" height="20" rx="4" fill="#E6E2DA"/><rect x="70" y="262" width="30" height="20" rx="4" fill="#E6E2DA"/><rect x="70" y="288" width="28" height="20" rx="4" fill="#E6E2DA"/><text x="200" y="348" font-size="13" fill="#5C6B7A" text-anchor="middle">deterministic, boring,</text><text x="200" y="368" font-size="13" fill="#5C6B7A" text-anchor="middle">repeats itself</text></g><g><rect x="400" y="140" width="320" height="260" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/><text x="560" y="172" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Temperature: flatten or sharpen</text><rect x="430" y="200" width="180" height="24" rx="4" fill="#1F7A72"/><text x="440" y="218" font-size="13" fill="#FFFFFF">T=1: to 0.32</text><rect x="430" y="232" width="230" height="24" rx="4" fill="#C46B2C"/><text x="440" y="250" font-size="13" fill="#FFFFFF">T=2: to 0.19 (flatter)</text><rect x="430" y="264" width="120" height="24" rx="4" fill="#1E4D8C"/><text x="440" y="282" font-size="13" fill="#FFFFFF">T=0.5: to 0.55 (sharper)</text><text x="560" y="348" font-size="13" fill="#5C6B7A" text-anchor="middle">divide by T, renormalize</text><text x="560" y="368" font-size="13" fill="#5C6B7A" text-anchor="middle">math/code: low T</text></g><g><rect x="760" y="140" width="320" height="260" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/><text x="920" y="172" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Top-k, top-p, beam</text><text x="920" y="210" font-size="13" fill="#1B2838" text-anchor="middle">top-k: keep k best tokens</text><text x="920" y="236" font-size="13" fill="#1B2838" text-anchor="middle">top-p: keep smallest set</text><text x="920" y="262" font-size="13" fill="#5C6B7A" text-anchor="middle">with total prob p</text><text x="920" y="300" font-size="13" fill="#1B2838" text-anchor="middle">beam: keep k hypotheses,</text><text x="920" y="326" font-size="13" fill="#5C6B7A" text-anchor="middle">costs time and memory</text><text x="920" y="368" font-size="13" fill="#5C6B7A" text-anchor="middle">creative writing: high T</text></g><text x="40" y="448" font-size="15" font-weight="450" fill="#1B2838">The strategy follows the task and the budget. Beam search costs more; temperature is nearly free.</text><text x="40" y="480" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: source. Shell 2: three dice on the same four probabilities.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" font-family="Inter, 'Source Sans 3', 'IBM Plex Sans', system-ui, sans-serif"><rect width="1120" height="560" fill="#F7F4EE"/>
+<text x="40" y="52" font-size="32" font-weight="600" fill="#1B2838">Sampling: the same scores, different dice</text><text x="40" y="82" font-size="17" fill="#5C6B7A">P(next | "The class was about"): to 0.3171, as 0.0491, the 0.036, a 0.033.</text><line x1="40" y1="100" x2="1080" y2="100" stroke="#D9D3C7" stroke-width="1.5"/>
+<rect x="40" y="140" width="320" height="260" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="200" y="172" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Greedy: always "to"</text>
+<rect x="70" y="200" width="260" height="28" rx="4" fill="#1F7A72"/>
+<text x="80" y="220" font-size="13" fill="#FFFFFF">to 0.3171</text>
+<rect x="70" y="236" width="40" height="20" rx="4" fill="#E6E2DA"/>
+<rect x="70" y="262" width="30" height="20" rx="4" fill="#E6E2DA"/>
+<rect x="70" y="288" width="28" height="20" rx="4" fill="#E6E2DA"/>
+<text x="200" y="348" font-size="13" fill="#5C6B7A" text-anchor="middle">deterministic, boring,</text>
+<text x="200" y="368" font-size="13" fill="#5C6B7A" text-anchor="middle">repeats itself</text>
+<rect x="400" y="140" width="320" height="260" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="560" y="172" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Temperature: flatten or sharpen</text>
+<text x="560" y="196" font-size="13" fill="#5C6B7A" text-anchor="middle">toy: [0.7, 0.2, 0.1], leader shown</text>
+<text x="430" y="240" font-size="13" font-weight="500" fill="#1B2838">T=2</text>
+<rect x="480" y="222" width="62" height="24" rx="4" fill="#C46B2C"/>
+<text x="552" y="240" font-size="13" fill="#1B2838">0.52 (flatter)</text>
+<text x="430" y="280" font-size="13" font-weight="500" fill="#1B2838">T=1</text>
+<rect x="480" y="262" width="84" height="24" rx="4" fill="#1F7A72"/>
+<text x="574" y="280" font-size="13" fill="#1B2838">0.70</text>
+<text x="430" y="320" font-size="13" font-weight="500" fill="#1B2838">T=0.5</text>
+<rect x="480" y="302" width="109" height="24" rx="4" fill="#1E4D8C"/>
+<text x="599" y="320" font-size="13" fill="#1B2838">0.91 (sharper)</text>
+<text x="560" y="352" font-size="13" fill="#5C6B7A" text-anchor="middle">divide by T, renormalize</text>
+<text x="560" y="372" font-size="13" fill="#5C6B7A" text-anchor="middle">math/code: low T</text>
+<rect x="760" y="140" width="320" height="260" rx="12" fill="#FFFDF8" stroke="#D9D3C7" stroke-width="1.5"/>
+<text x="920" y="172" font-size="15" font-weight="600" fill="#1B2838" text-anchor="middle">Top-k, top-p, beam</text>
+<text x="920" y="210" font-size="13" fill="#1B2838" text-anchor="middle">top-k: keep k best tokens</text>
+<text x="920" y="236" font-size="13" fill="#1B2838" text-anchor="middle">top-p: keep smallest set</text>
+<text x="920" y="262" font-size="13" fill="#5C6B7A" text-anchor="middle">with total prob p</text>
+<text x="920" y="300" font-size="13" fill="#1B2838" text-anchor="middle">beam: keep k hypotheses,</text>
+<text x="920" y="326" font-size="13" fill="#5C6B7A" text-anchor="middle">costs time and memory</text>
+<text x="920" y="368" font-size="13" fill="#5C6B7A" text-anchor="middle">creative writing: high T</text>
+<text x="40" y="448" font-size="15" font-weight="450" fill="#1B2838">The strategy follows the task and the budget. Beam search costs more; temperature is nearly free.</text>
+<text x="40" y="480" font-size="14" fill="#5C6B7A">Project: Stanford Frontier AI. Source: source. Shell 2: three dice on the same probabilities.</text>
+</svg>

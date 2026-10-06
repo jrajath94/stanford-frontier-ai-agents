@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="600" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the $60M stack</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. The hand-built bars, the megawatt, the modular answer. Source: original synthesis.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT modularity: hand-built</text>
+<text x="328" y="124">the stored object: $60M/MW</text>
+<text x="648" y="124">WITH Spark: manufactured</text>
+</g>
+<g font-size="14" font-weight="500">
+<rect x="48" y="140" width="264" height="330" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="180" y="180" text-anchor="middle" fill="#1B2838">labor $4.7M/MW</text>
+<text x="180" y="204" text-anchor="middle" fill="#5C6B7A">hired town by town</text>
+<text x="180" y="244" text-anchor="middle" fill="#1B2838">gas plant $2-3M/MW</text>
+<text x="180" y="268" text-anchor="middle" fill="#5C6B7A">turbines $1M to $3M</text>
+<text x="180" y="308" text-anchor="middle" fill="#1B2838">years to energize</text>
+<text x="180" y="332" text-anchor="middle" fill="#5C6B7A">delay compounds soft costs</text>
+<text x="180" y="372" text-anchor="middle" fill="#1B2838">fit-out: double-count risk</text>
+<text x="180" y="396" text-anchor="middle" fill="#5C6B7A">the guest flags it himself</text>
+<text x="180" y="436" text-anchor="middle" fill="#1B2838">every bar inflating</text>
+<rect x="328" y="140" width="304" height="330" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="480" y="200" text-anchor="middle" fill="#1B2838" font-size="20" font-weight="600">$20M</text>
+<text x="480" y="226" text-anchor="middle" fill="#5C6B7A">factory and power plant</text>
+<text x="480" y="266" text-anchor="middle" fill="#1B2838" font-size="24" font-weight="600">+</text>
+<text x="480" y="316" text-anchor="middle" fill="#1B2838" font-size="20" font-weight="600">$40M</text>
+<text x="480" y="342" text-anchor="middle" fill="#5C6B7A">machines inside</text>
+<text x="480" y="382" text-anchor="middle" fill="#1B2838" font-size="24" font-weight="600">= $60M per MW</text>
+<text x="480" y="412" text-anchor="middle" fill="#5C6B7A">half of it is GPUs: $30M</text>
+<text x="480" y="440" text-anchor="middle" fill="#5C6B7A">a gigawatt costs $60B</text>
+<rect x="648" y="140" width="264" height="330" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="180" text-anchor="middle" fill="#1B2838">500 kW air units</text>
+<text x="780" y="204" text-anchor="middle" fill="#1B2838">2 MW liquid units</text>
+<text x="780" y="244" text-anchor="middle" fill="#1F7A72">delivery in months</text>
+<text x="780" y="268" text-anchor="middle" fill="#5C6B7A">against years for hand-built</text>
+<text x="780" y="308" text-anchor="middle" fill="#1B2838">30-50% claimed savings</text>
+<text x="780" y="332" text-anchor="middle" fill="#5C6B7A">on infrastructure cost</text>
+<text x="780" y="372" text-anchor="middle" fill="#1B2838">Energy Vault: 8 to 25 MW</text>
+<text x="780" y="396" text-anchor="middle" fill="#5C6B7A">commercial operation Q1 2027</text>
+<text x="780" y="436" text-anchor="middle" fill="#1B2838">Brighton CO factory</text>
+</g>
+<rect x="48" y="486" width="864" height="56" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="521" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: the $20M is a spring-2026 snapshot, inflating. The savings are the guest's claim, not an audited figure.</text>
+<text x="48" y="578" font-size="15" font-weight="500" fill="#1B2838">One connection: every sanity argument is about the $30M GPU half or the $20M factory third.</text>
+</svg>

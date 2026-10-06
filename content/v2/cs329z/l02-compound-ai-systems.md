@@ -10,7 +10,7 @@ summary: "Workflows versus agents, RAG and tool use and MCP, three kinds of memo
 date: "[uncertain: Fall 2026]"
 instructor: "Diyi Yang, Michael Ryan, John Yang"
 offering: "Fall 2026"
-concepts: [workflow, compound-ai, rag, tool-use, mcp, memory, episodic-memory, semantic-memory, procedural-memory, reliability, safety, evaluation]
+concepts: [workflow, compound-ai, rag, tool-use, function-calling, mcp, tool-design, error-handling, memory, episodic-memory, semantic-memory, procedural-memory, reliability, safety, evaluation]
 sources:
   - tag: slides
     label: "Lecture 1 slides: Intro to Agentic Systems (local: sources/agents/cs329z/lecture01.pdf)"
@@ -23,6 +23,9 @@ sources:
   - tag: supplement
     label: "Anthropic, On the Biology of a Large Language Model: reward tampering"
     url: https://www.anthropic.com/research/reward-tampering
+  - tag: supplement
+    label: "Model Context Protocol specification"
+    url: https://modelcontextprotocol.io
 ---
 
 ## The job: the model cannot touch the world
@@ -153,7 +156,68 @@ Two systems train this behavior instead of prompting it. **Toolformer**
 what arguments to pass, and how to use the result. Its tools: a
 calculator, a Q&A system, a search engine, a translation system, a
 calendar. **Gorilla** (Patil et al., 2023) connects LLMs to massive API
-collections. Same four stages; the selection is learned, not prompted.
+collections. Same four stages. The selection is learned, not prompted.
+
+### Function calling APIs: the schema travels in the request
+
+In production, the four stages are not a scaffold convention. They are
+the API. OpenAI's function calling and Anthropic's tool use both work
+the same way: the request carries a `tools` array of JSON schemas, and
+the model returns `tool_calls` with arguments as JSON, not prose.
+
+![Function calling](assets/l02-function-call.svg "The request carries the schemas. The model returns arguments as JSON. The runtime validates before executing. Project: Stanford Frontier AI. Source: original.")
+
+The consequence is architectural. Because the contract is typed JSON
+in the API itself, the validate stage can live in three places: in
+your scaffold (check before executing), in the API (the provider
+validates the shape), or in the decoder (constrained decoding masks
+invalid tokens as they generate, the subject of the reasoning lesson).
+Serious systems use at least two. The schema is also the model's
+documentation: the description field is the only thing telling the
+model when to reach for this tool, so it is prompt, not comment.
+
+### Designing good tools: the checklist
+
+Most tool-use failures are tool-design failures. The lecture's implied
+checklist, made explicit:
+
+1. **One job per tool.** `read_file` reads. It does not search, rank,
+   and summarize. A tool that does three jobs has three ways to be
+   misused.
+2. **Typed, narrow arguments.** `path: string, required` beats
+   `query: string, optional, does everything`. Narrow types make the
+   validate stage strong.
+3. **Return errors as data.** A missing file returns a result that says
+   "file not found", not an exception. The next section shows why.
+4. **Idempotent where possible.** Reading twice is safe. Writing twice
+   should be too, or the tool needs a dry-run flag.
+5. **Names the model can spell.** `get_weather` beats
+   `retrieve_meteorological_data`. The model writes the name from the
+   description. Every extra syllable is a misfire chance.
+
+The common mistake is exposing the database directly: fifty tables as
+fifty tools, each with fifteen optional arguments. The model drowns in
+choice. Pi's four tools (read, write, edit, bash) are the counterexample
+the context lesson returns to: a few sharp tools beat fifty dull ones.
+
+### Error handling: append the error, do not raise it
+
+When a tool fails, the scaffold faces a choice. Raise the exception, or
+append the error as a tool result and let the model read it. The right
+answer is the second, and the reason is the recovery turn from the
+intro lesson: a model that can read the failure can route around it,
+and a model that gets an exception cannot.
+
+![Error handling](assets/l02-retry.svg "The exception escapes and the loop crashes. The error appended as a result becomes an observation the model can use. Project: Stanford Frontier AI. Source: original.")
+
+The retry policy is a budget, not hope. Exponential backoff (1s, 2s,
+4s), max three tries, then dead-letter to a human with the full trace.
+Two rules. First, retry only transient failures: timeouts, rate
+limits, flaky networks. A validation error will fail the same way
+forever. Retrying it burns budget for nothing. Second, the error text
+goes into the context, so it must be legible to the model: "file not
+found. Tried /sandbox/missing.txt" beats a stack trace. The model
+reads the failure the way Thought 3 read the failed search.
 
 ## MCP: one plug for every tool
 
@@ -175,6 +239,24 @@ how the schemas arrive in context and how the call is transported. And
 a warning from the safety section: MCP standardizes transport, not
 trust. A malicious server can serve a poisoned tool description. The
 87 percent pop-up figure applies here too.
+
+### MCP deep: tools, resources, prompts
+
+A server offers three primitives, and the distinction matters.
+
+- **Tools** are actions: `read_file`, `run_query`. The model calls
+  them. They change the world or fetch live data.
+- **Resources** are data: `file:///report.pdf`, a database row. The
+  model reads them. They do not execute.
+- **Prompts** are templates: pre-built instruction sets the server
+  offers, like "review this diff for security issues".
+
+The security reading: tools are the dangerous primitive, because a
+tool call changes the world. Resources are safer but not safe: a
+resource can carry injected text, the pop-up case again. The practical
+rule: grant tools narrowly, read resources skeptically, and never let a
+server's prompt template override your system prompt. MCP's OAuth and
+permission scoping exist for exactly this reason.
 
 ## Workflows vs agents: who decides the steps?
 
@@ -221,14 +303,43 @@ content, inspired by human long-term memory.
 | Semantic | knowledge | LLM reasoning over events | retrieval | distilled facts |
 | Procedural | skills | code: reusable procedures | embedding retrieval | Voyager (Wang et al., 2023) |
 
-The read-write asymmetry decides the design. Episodic write is cheap
-and dumb: append everything. Semantic write is expensive and smart: an
-LLM must reason over the events to distill facts. Procedural write is
-code: a discovered procedure compiled into a reusable skill. The rule
-of thumb: append raw traces for recent work, distill to semantic facts
-for the long term, compile repeated wins into procedural skills. Pure
-append-everything fails because retrieval over a giant event stream
-returns stale episodes and the context fills with noise.
+### The read-write asymmetry decides the design
+
+The table's write column is the whole design problem. Episodic write
+is cheap and dumb: append everything. Semantic write is expensive and
+smart: an LLM must reason over the events to distill facts. Procedural
+write is code: a discovered procedure compiled into a reusable skill.
+
+The rule of thumb: append raw traces for recent work, distill to
+semantic facts for the long term, compile repeated wins into procedural
+skills. Pure append-everything fails because retrieval over a giant
+event stream returns stale episodes and the context fills with noise.
+The failure mode has a name in production: the agent that remembers
+everything relevantly remembers nothing, because the retriever cannot
+tell the one useful episode from ten thousand stale ones.
+
+Voyager shows the full ladder. The agent explores Minecraft, discovers
+that mining wood then crafting planks then crafting a table works, and
+compiles that sequence into a reusable skill function. The next task
+calls the skill instead of re-deriving it. Episodic ("I did this"),
+semantic ("wood makes planks"), procedural ("run make_table()").
+Each rung compresses the one below.
+
+## What is used where: the tool stack in production
+
+| Layer | System | What it standardizes | The price |
+|---|---|---|---|
+| API contract | OpenAI function calling / Anthropic tool use | schemas in the request, `tool_calls` in the response | provider-shaped; the schema dialect differs |
+| Protocol | MCP (Linux Foundation, 2025) | host/client/server; tools, resources, prompts | transport, not trust: poisoned servers are still possible |
+| Agent-to-agent | A2A (Google's agent protocol) | agents calling agents across vendors | [uncertain: adoption depth as of Oct 2026] |
+| Framework | LangChain tools, LlamaIndex | tool wrappers in the scaffold | scaffold lock-in. The loop is theirs |
+| Sandbox | Docker, Firecracker, WASM | where execute runs | latency and setup cost per call |
+
+The pattern: every layer moves one of the four stages into shared
+infrastructure. The API moved select and arguments into typed JSON.
+MCP moved schema discovery into the protocol. Sandboxes moved execute
+into isolation. What never moves is validate: every layer re-checks,
+because every layer is a place where crack 1 can hide.
 
 ## Mapping back: what each piece fixes
 
@@ -239,6 +350,7 @@ returns stale episodes and the context fills with noise.
 | Every tool needs custom glue | MCP | 5 x 8 = 40 integrations become 5 + 8 = 13 |
 | The loop forgets | Memory | Episodic appends, semantic distills, procedural compiles |
 | Steps must be fixed in advance | Agents | The LLM decides each step when the order cannot be fixed |
+| Exceptions kill the loop | Error-as-data | The failure becomes an observation the model can route around |
 
 ## The honest price: what breaks at scale
 
@@ -263,7 +375,7 @@ signal is slow and costly.
 
 **Long-horizon: context grows and drifts.** The context fills with stale
 attempts and the plan degrades. Compaction and retrieval exist to fight
-this; the context lesson works them in full.
+this. The context lesson works them in full.
 
 **Safety: task success is not safe behavior.** Four cases. Pop-up
 attacks hijack agents with 87 percent success. PrivacyLens (Shao et
@@ -289,26 +401,44 @@ score highly.
 > A: In arguments and validation. The model picks the right tool but fills a wrong or malformed argument, or the schema is loose and the call fails at execution time. Tight schemas plus a real validate stage catch these before they cost a sandbox run. This is also why constrained decoding matters: it moves validation into the decoder itself.
 
 > [!QA]
+> Q: Why should a tool return errors as data instead of raising exceptions?
+> A: Because the agent's recovery machinery reads observations, not stack traces. When read_file returns "file not found. Tried /sandbox/missing.txt" as a tool result, the next Thought can diagnose, extract the hint, and replan: exactly the Thought 3 pattern from the ReAct trace. An exception either crashes the scaffold or surfaces as text the model cannot use. The rule: tools return results, even for failures. Retry only transient failures with bounded backoff. A validation error will fail the same way forever.
+> Follow-up: What is the retry policy, concretely?
+> A: Exponential backoff (1s, 2s, 4s), max three tries, then dead-letter to a human with the full trace. The budget, not hope, decides when to stop. And the error text must be legible to the model, because it goes into the context as the next observation.
+
+> [!QA]
 > Q: What problem does MCP solve, and what does it not solve?
 > A: It solves integration sprawl. Without it, five agents and eight tools need 5 x 8 = 40 custom integrations. With it, each side speaks one protocol: 5 + 8 = 13. The host spawns clients, clients call servers, servers expose tools, data, and prompts. It does not solve trust. It standardizes transport, not safety: a malicious MCP server can serve a poisoned tool description, and the 87 percent pop-up attack rate applies to tool outputs regardless of how they arrived.
 > Follow-up: Does MCP change the four stages of a tool call?
-> A: No. Select, arguments, validate, execute stay exactly the same. MCP changes how the schemas arrive in context and how the call is transported. The anatomy is untouched; only the plumbing is standardized.
+> A: No. Select, arguments, validate, execute stay exactly the same. MCP changes how the schemas arrive in context and how the call is transported. The anatomy is untouched. Only the plumbing is standardized.
+
+> [!QA]
+> Q: An MCP server offers tools, resources, and prompts. Which is the dangerous one, and why?
+> A: Tools, because a tool call changes the world: it executes. Resources are data the model reads. They are safer but not safe, since a resource can carry injected text (the pop-up case). Prompts are templates the server offers. The danger is letting a server's template override your system prompt. The practical rule: grant tools narrowly, read resources skeptically, and keep your system prompt sovereign.
+> Follow-up: How does this map to the 87 percent pop-up attack?
+> A: The pop-up is a resource (page content) that behaves like a tool call: it steers the agent's next action. The attack works because the model does not distinguish the primitives. The defense is architectural: retrieved content is data, never instructions, regardless of which MCP primitive carried it.
 
 > [!QA]
 > Q: When do you build a workflow instead of an agent?
 > A: When the steps are known and the variation is in the data. AlphaCode 2 is the canonical workflow: sample up to one million solutions, filter, score, pick. The code fixes the order. Build an agent when the next step depends on what the last step found, like debugging or web research, where SWE-agent lets the model choose each action. Good systems mix them: a workflow of agents, or an agent that calls workflows as tools.
 > Follow-up: The lecture says the field shifted from models to compound AI systems. What does that mean for where engineering effort goes?
-> A: Into the scaffold. Benchmarks measure the harness as much as the model: the same model with a better loop, better tools, and better checks gets a better number. The HarnessAudit bench exists to grade exactly that. Effort moves from training bigger models to engineering the system around the model.
+> A: Into the scaffold. Benchmarks measure the scaffold as much as the model: the same model with a better loop, better tools, and better checks gets a better number. Effort moves from training bigger models to engineering the system around the model: the loop, the tools, the memory, the checks.
 
 > [!QA]
 > Q: What are the three memory types and why do their writes differ?
 > A: Episodic stores experience with append-only writes: cheap and dumb. Semantic stores knowledge with LLM reasoning over events as the write: expensive and smart, distilling episodes into facts. Procedural stores skills with code-based writes: discovered procedures compiled into reusable skills, as in Voyager. Reads are retrieval in all three. The write cost decides the design: append raw traces for recent work, distill facts for the long term, compile repeated wins into skills.
 > Follow-up: Why not just append everything to episodic memory?
-> A: Retrieval degrades. Heuristic scores over a giant event stream return stale or irrelevant episodes, and the context fills with noise. Semantic distillation compresses many episodes into few facts. Procedural memory goes further: one callable skill replaces a whole trace.
+> A: Retrieval degrades. Heuristic scores over a giant event stream return stale or irrelevant episodes, and the context fills with noise. The agent that remembers everything relevantly remembers nothing. Semantic distillation compresses many episodes into few facts. Procedural memory goes further: one callable skill replaces a whole trace.
+
+> [!QA]
+> Q: Design the tool set for a coding agent. How many tools, and what are the rules?
+> A: Few and sharp: read, write, edit, bash, plus test and search. Pi's four tools are the model. The rules: one job per tool, typed narrow arguments, errors returned as data, idempotent where possible, names the model can spell. Do not expose fifty database tables as fifty tools: the model drowns in choice, the select stage degrades, and every extra schema is context rot. Start with the smallest set that covers the task, and add a tool only when a trace shows the agent reaching for something missing.
+> Follow-up: The agent keeps calling the wrong tool. Is that a model problem or a tool problem?
+> A: Usually a tool problem. Overlapping tools with vague descriptions make the select stage a coin flip. Fix the descriptions first: each description is a prompt that says when to reach for this tool and when not to. If two tools still collide, merge them or narrow their arguments. Blame the contract before the model.
 
 ## Recap: the whole lesson on one screen
 
-The story in eight steps. Each step answers the one before it.
+The story in nine steps. Each step answers the one before it.
 
 1. **The model cannot touch the world.** Asked what test.py contains,
    it guesses. Plausible text is not the file.
@@ -318,18 +448,39 @@ The story in eight steps. Each step answers the one before it.
    the agent (87 percent pop-up success), and N agents times M tools is
    40 integrations for 5 and 8.
 4. **The contract: a typed function call.** Schema first, then the four
-   stages: select, arguments, validate, execute.
+   stages: select, arguments, validate, execute. In production the
+   schema travels in the API request as JSON.
 5. **Validate is load-bearing.** {"path": ["test.py"]} dies here,
    cheaply, before the sandbox. Toolformer and Gorilla learn the same
    stages.
-6. **MCP standardizes the plumbing.** 5 x 8 = 40 becomes 5 + 8 = 13.
-   Transport, not trust.
-7. **Workflows fix steps; agents decide them.** AlphaCode 2 samples a
-   million; SWE-agent chooses each act. Memory (episodic, semantic,
-   procedural) gives the loop a past.
-8. **The price: reliability, training, drift, safety, eval.**
+6. **Errors are data, not exceptions.** Append the failure as a tool
+   result so the model can route around it. Bounded retries with
+   backoff. The budget decides when to stop.
+7. **MCP standardizes the plumbing.** 5 x 8 = 40 becomes 5 + 8 = 13.
+   Tools act, resources inform, prompts template. Transport, not trust.
+8. **Workflows fix steps. Agents decide them.** AlphaCode 2 samples a
+   million. SWE-agent chooses each act. Memory (episodic, semantic,
+   procedural) gives the loop a past. The write cost decides the design.
+9. **The price: reliability, training, drift, safety, eval.**
    Capability climbs, reliability lags. Task success is not safe
    behavior. A demo that works once is not a system.
+
+## Go deeper
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/dr6tayzwn3c" title="MCP Explained: What It Is, How It Works and Build Your Own Server" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- MCP in 4 Minutes, Plus a Server in 20 Lines (the embed above): https://www.youtube.com/watch?v=dr6tayzwn3c, host, client, server; tools, resources, prompts; one request traced end to end; then a real server in 20 lines.
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/1xrx7S0Fkh0" title="What Is MCP? The Protocol Connecting AI to Everything" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- What Is MCP? The Protocol Connecting AI to Everything (the embed above): https://www.youtube.com/watch?v=1xrx7S0Fkh0, the N x M integration problem, the three primitives, and where the protocol is heading.
+
+Further:
+- Model Context Protocol specification: https://modelcontextprotocol.io, the normative doc: lifecycle, primitives, transports.
+- Anthropic, Building Effective Agents: https://www.anthropic.com/engineering/building-effective-agents, workflows versus agents from production experience.
+- Zaharia et al., The Shift from Models to Compound AI Systems: https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/, the lecture's framing essay.
 
 ## Official sources and further reading
 
@@ -338,16 +489,18 @@ The story in eight steps. Each step answers the one before it.
 - Course site: http://web.stanford.edu/class/cs329z.
 
 **Further reading:**
-- HAL reliability dashboard: https://hal.cs.princeton.edu — the
+- HAL reliability dashboard: http://hal.cs.princeton.edu, the
   capability-reliability measurements the lecture cites.
-- HarnessAudit bench: https://harnessaudit.github.io — agent harness
+- HarnessAudit bench: https://harnessaudit.github.io, agent scaffold auditing
   auditing.
-- METR incident investigation (2026): multi-agent collusion case study.
+- PrivacyLens (Shao et al., 2024): agents leaking what they should not.
+- Zhang, Yu, and Yang (2024), pop-up attacks: https://arxiv.org/abs/2411.02391.
 
 **Caveats from these sources.** The 87 percent pop-up figure is from
-one paper's setup; treat it as a magnitude, not a universal constant.
-The lecture surveys the five challenges rather than solving them; each
-gets deeper treatment later in the course. No video ID is on record.
+one paper's setup. Treat it as a magnitude, not a universal constant.
+The lecture surveys the five challenges rather than solving them. Each
+gets deeper treatment later in the course. No lecture video is on
+record. The embeds above are third-party explainers, verified live.
 
 ## Connections to the other courses
 
@@ -357,7 +510,7 @@ gets deeper treatment later in the course. No video ID is on record.
   rewards verifiable tool outcomes.
 - **CS329H L02:** sycophancy is a preference-learning failure. The
   preference pair explains the incentive behind reward tampering.
-- **CS329A:** studies agents as research systems; its loop symbol is
+- **CS329A:** studies agents as research systems. Its loop symbol is
   the one owned here.
 - **This course:** the reasoning-and-context lesson moves validation
   into the decoder (constrained decoding). The failure-modes lesson

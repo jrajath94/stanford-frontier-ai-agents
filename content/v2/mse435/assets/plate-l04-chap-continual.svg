@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="620" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: continual learning</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. A deployed model that improves from real-world use: the hot-stove problem.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT the loop</text>
+<text x="404" y="124">the rule: telemetry as reward</text>
+<text x="648" y="124">WITH the loop</text>
+</g>
+<g font-size="15" font-weight="500">
+<rect x="48" y="140" width="284" height="300" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="190" y="184" text-anchor="middle" fill="#1B2838">one training run,</text>
+<text x="190" y="208" text-anchor="middle" fill="#1B2838">then frozen</text>
+<text x="190" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">real-world use teaches</text>
+<text x="190" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">the model nothing</text>
+<text x="190" y="324" text-anchor="middle" fill="#C46B2C" font-size="14">downstream consequences</text>
+<text x="190" y="348" text-anchor="middle" fill="#C46B2C" font-size="14">never flow back</text>
+<text x="190" y="392" text-anchor="middle" fill="#5C6B7A" font-size="14">the model learns once,</text>
+<text x="190" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">the world moves on</text>
+<rect x="348" y="140" width="284" height="300" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="490" y="184" text-anchor="middle" fill="#1B2838">implicit rewards from</text>
+<text x="490" y="208" text-anchor="middle" fill="#1B2838">production behavior</text>
+<text x="490" y="252" text-anchor="middle" fill="#5C6B7A" font-size="14">accept a suggestion: 1</text>
+<text x="490" y="280" text-anchor="middle" fill="#5C6B7A" font-size="14">revert it: 0</text>
+<text x="490" y="324" text-anchor="middle" fill="#1E4D8C" font-size="14">collect data, take a step,</text>
+<text x="490" y="348" text-anchor="middle" fill="#1E4D8C" font-size="14">repeat: online training</text>
+<text x="490" y="392" text-anchor="middle" fill="#5C6B7A" font-size="14">massive batches denoise</text>
+<text x="490" y="416" text-anchor="middle" fill="#5C6B7A" font-size="14">the gradient</text>
+<rect x="648" y="140" width="264" height="300" rx="12" fill="#E7F4EF" stroke="#1F7A72" stroke-width="2"/>
+<text x="780" y="184" text-anchor="middle" fill="#1B2838">Composer: the slow loop</text>
+<text x="780" y="212" text-anchor="middle" fill="#5C6B7A" font-size="14">hours per step, huge batches,</text>
+<text x="780" y="236" text-anchor="middle" fill="#5C6B7A" font-size="14">days to weeks to see gains</text>
+<text x="780" y="280" text-anchor="middle" fill="#1B2838">Tab: the fast loop</text>
+<text x="780" y="308" text-anchor="middle" fill="#5C6B7A" font-size="14">retrain every 90 minutes</text>
+<text x="780" y="332" text-anchor="middle" fill="#5C6B7A" font-size="14">400M requests a day,</text>
+<text x="780" y="356" text-anchor="middle" fill="#5C6B7A" font-size="14">about 4,600 a second</text>
+<text x="780" y="400" text-anchor="middle" fill="#1F7A72" font-size="14">same pattern, different</text>
+<text x="780" y="424" text-anchor="middle" fill="#1F7A72" font-size="14">timescales: instant rewards</text>
+</g>
+<rect x="48" y="456" width="864" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="488" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: the privacy wall. Consent, privacy mode, and the scrubbing cost sit between the signal and the gradient.</text>
+<text x="480" y="512" text-anchor="middle" font-size="15" fill="#5C6B7A">Whoever has the users has the reward signal, but having users is not being allowed to learn from them.</text>
+<text x="48" y="566" font-size="16" font-weight="500" fill="#1B2838">One connection: the next gains go to whoever solves the permission problem, not just the gradient problem.</text>
+</svg>

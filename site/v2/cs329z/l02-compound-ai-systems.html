@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -324,6 +321,25 @@ the API. OpenAI&rsquo;s function calling and Anthropic&rsquo;s tool use both wor
 the same way: the request carries a <code>tools</code> array of JSON schemas, and
 the model returns <code>tool_calls</code> with arguments as JSON, not prose.</p>
 <figure><img alt="Function calling" src="assets/l02-function-call.svg"><figcaption>The request carries the schemas. The model returns arguments as JSON. The runtime validates before executing. Project: Stanford Frontier AI. Source: original.</figcaption></figure>
+<p>What the wire actually looks like, on the &ldquo;What does test.py contain?&rdquo;
+task:</p>
+<pre><code class="language-json">// the request carries the schema (STAGE 1 + 2 scaffolding)
+{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What does test.py contain?&quot;,
+ &quot;tools&quot;: [{&quot;name&quot;: &quot;read_file&quot;,
+             &quot;description&quot;: &quot;Return the contents of a file.&quot;,
+             &quot;input_schema&quot;: {&quot;type&quot;: &quot;object&quot;,
+               &quot;properties&quot;: {&quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}},
+               &quot;required&quot;: [&quot;path&quot;]}}]}
+
+// the model answers with a typed call, not prose (STAGES 1-3)
+{&quot;role&quot;: &quot;assistant&quot;,
+ &quot;tool_calls&quot;: [{&quot;name&quot;: &quot;read_file&quot;,
+                 &quot;arguments&quot;: &quot;{\&quot;path\&quot;: \&quot;test.py\&quot;}&quot;}]}
+
+// the runtime validates, executes, and returns (STAGE 4)
+{&quot;role&quot;: &quot;tool_result&quot;,
+ &quot;content&quot;: &quot;def add(a, b):\n    return a + b\n&quot;}
+</code></pre>
 <p>The consequence is architectural. Because the contract is typed JSON
 in the API itself, the validate stage can live in three places: in
 your scaffold (check before executing), in the API (the provider
@@ -352,8 +368,11 @@ checklist, made explicit:</p>
 </ol>
 <p>The common mistake is exposing the database directly: fifty tables as
 fifty tools, each with fifteen optional arguments. The model drowns in
-choice. Pi&rsquo;s four tools (read, write, edit, bash) are the counterexample
-the context lesson returns to: a few sharp tools beat fifty dull ones.</p>
+choice. <strong>Pi</strong>, Mario Zechner&rsquo;s minimal open-source terminal coding
+agent, is the counterexample the context lesson returns to: it ships
+exactly four tools (read, write, edit, bash) and a system prompt under
+1,000 tokens, on the thesis that a capable model needs almost no
+scaffolding. A few sharp tools beat fifty dull ones.</p>
 <h3 id="error-handling-append-the-error-do-not-raise-it">Error handling: append the error, do not raise it</h3>
 <p>When a tool fails, the scaffold faces a choice. Raise the exception, or
 append the error as a tool result and let the model read it. The right
@@ -418,7 +437,7 @@ variation is in the data. Use an agent when the next step depends on
 what the last step found. Good systems mix them: a workflow of agents
 (fixed outer steps, agentic inner steps), or an agent that calls
 workflows as tools.</p>
-<p>A note on RAG, the third compound system in this lecture. Retrieval
+<p>A note on RAG (retrieval-augmented generation), the third compound system in this lecture. Retrieval
 connects the LLM to external knowledge in real time: retrieve, augment,
 generate. It gets its own full treatment in the three RAG lessons.
 Here it is one instance of the pattern: the model plus a component, the
@@ -507,9 +526,9 @@ Each rung compresses the one below.</p>
 </tr>
 <tr>
 <td>Agent-to-agent</td>
-<td>A2A (Google&rsquo;s agent protocol)</td>
-<td>agents calling agents across vendors</td>
-<td>[uncertain: adoption depth as of Oct 2026]</td>
+<td>A2A (Google, donated to the Linux Foundation June 2025; v1.0 March 2026)</td>
+<td>agents calling agents across vendors: Agent Cards at a well-known endpoint, task lifecycle, SSE streaming</td>
+<td>real adoption: 150+ organizations, integrated into Azure AI Foundry and Bedrock AgentCore</td>
 </tr>
 <tr>
 <td>Framework</td>
@@ -575,7 +594,8 @@ because every layer is a place where crack 1 can hide.</p>
 <h2 id="the-honest-price-what-breaks-at-scale">The honest price: what breaks at scale</h2>
 <p>Tools make the agent powerful and breakable in new ways. The lecture
 names five challenges. They are the price of everything built so far.</p>
-<p><strong>Reliability: errors compound.</strong> One bad observation poisons the plan,
+<h3 id="reliability-errors-compound">Reliability: errors compound</h3>
+<p>One bad observation poisons the plan,
 which poisons the next action. The lecture frames it as the
 capability-reliability gap: capability climbs, reliability lags. Three
 questions measure the gap. Consistency: does the agent produce the same
@@ -584,22 +604,38 @@ small, realistic shifts in prompts or tools? Predictable failure modes:
 when it fails, does it fail legibly and recoverably, or unpredictably?
 The HAL reliability dashboard at Princeton tracks this gap.</p>
 <figure><img alt="The capability-reliability gap" src="assets/l02-capability-gap.svg"><figcaption>Capability climbs. Reliability lags. Three questions measure the gap. Project: Stanford Frontier AI. Source: source.</figcaption></figure>
-<p><strong>Training: sparse reward, expensive rollouts.</strong> The reward arrives once
+<h3 id="training-sparse-reward-expensive-rollouts">Training: sparse reward, expensive rollouts</h3>
+<p>The reward arrives once
 at the end of a fifty-step trajectory: did the task succeed? Each
 rollout is a model call plus tool latency per step. Learning from that
 signal is slow and costly.</p>
-<p><strong>Long-horizon: context grows and drifts.</strong> The context fills with stale
+<h3 id="long-horizon-context-grows-and-drifts">Long-horizon: context grows and drifts</h3>
+<p>The context fills with stale
 attempts and the plan degrades. Compaction and retrieval exist to fight
 this. The context lesson works them in full.</p>
-<p><strong>Safety: task success is not safe behavior.</strong> Four cases. Pop-up
-attacks hijack agents with 87 percent success. PrivacyLens (Shao et
-al., 2024) shows agents with file and email access leaking what they
-should not. Anthropic&rsquo;s reward-tampering research shows sycophancy:
-models optimizing for approval rather than truth. And multi-agent
-collusion: the lecture cites a 2026 incident investigation where agents
-from different providers colluded.</p>
+<h3 id="pop-up-hijack-the-observation-steers-the-agent">Pop-up hijack: the observation steers the agent</h3>
+<p>Task success is not safe behavior. Four cases, each its own failure mode.</p>
+<p><strong>Pop-up hijack.</strong> Zhang, Yu, and Yang (2024) show vision-language
+computer agents abandoning their task for a pop-up window. Attack
+success rate: 87 percent. Nearly nine runs in ten, the observation
+steers the agent.</p>
 <figure><img alt="Pop-ups break the agent" src="assets/l02-popup-attack.svg"><figcaption>On task: book the flight. After a pop-up: the agent clicks. Zhang, Yu, and Yang report 87 percent attack success. Project: Stanford Frontier AI. Source: paper.</figcaption></figure>
-<p><strong>Evaluation: what and how.</strong> Benchmarks measure the scaffold as much as
+<h3 id="privacy-leak-tool-use-leaks-what-it-touches">Privacy leak: tool use leaks what it touches</h3>
+<p><strong>Privacy leak.</strong> PrivacyLens (Shao et al., 2024) shows agents with
+file and email access leaking what they should not. The leak is a
+tool-use property: the more tools the agent holds, the more private
+data sits one careless call away.</p>
+<h3 id="reward-tampering-the-model-games-the-grader">Reward tampering: the model games the grader</h3>
+<p><strong>Reward tampering.</strong> Anthropic&rsquo;s reward-tampering research shows
+sycophancy: models optimizing for approval rather than truth. The
+model learns what the grader rewards, not what the task needs.</p>
+<h3 id="multi-agent-collusion-every-agent-is-a-trust-decision">Multi-agent collusion: every agent is a trust decision</h3>
+<p><strong>Multi-agent collusion.</strong> The lecture cites a 2026 incident
+investigation where agents from different providers colluded.
+Delegation multiplies the attack surface: every agent in the crew is a
+trust decision.</p>
+<h3 id="evaluation-what-and-how">Evaluation: what and how</h3>
+<p>Benchmarks measure the scaffold as much as
 the model. The course&rsquo;s eval lesson builds the full machinery. The
 project rubric already states the bar: a demo that works once will not
 score highly.</p>
@@ -661,6 +697,7 @@ Usually a tool problem. Overlapping tools with vague descriptions make the selec
 </ul>
 <p>Further:
 - Model Context Protocol specification: https://modelcontextprotocol.io, the normative doc: lifecycle, primitives, transports.
+- Google Cloud, A2A protocol upgrade: https://cloud.google.com/blog/products/ai-machine-learning/agent2agent-protocol-is-getting-an-upgrade, A2A v1.0, the Linux Foundation donation, and enterprise adoption.
 - Anthropic, Building Effective Agents: https://www.anthropic.com/engineering/building-effective-agents, workflows versus agents from production experience.
 - Zaharia et al., The Shift from Models to Compound AI Systems: https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/, the lecture&rsquo;s framing essay.</p>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
@@ -670,8 +707,7 @@ Usually a tool problem. Overlapping tools with vague descriptions make the selec
 <p><strong>Further reading:</strong>
 - HAL reliability dashboard: http://hal.cs.princeton.edu, the
   capability-reliability measurements the lecture cites.
-- HarnessAudit bench: https://harnessaudit.github.io, agent scaffold auditing
-  auditing.
+- HarnessAudit bench: https://harnessaudit.github.io, agent scaffold auditing.
 - PrivacyLens (Shao et al., 2024): agents leaking what they should not.
 - Zhang, Yu, and Yang (2024), pop-up attacks: https://arxiv.org/abs/2411.02391.</p>
 <p><strong>Caveats from these sources.</strong> The 87 percent pop-up figure is from

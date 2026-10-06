@@ -219,7 +219,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 10: Measuring Agents and the Road Ahead</nav>
       <h1>Lecture 10: Measuring Agents and the Road Ahead</h1>
       <p class="meta-line">2025-11-12 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
-      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="8JAqLnTaZu4"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/8JAqLnTaZu4" title="Lecture 10: Measuring Agents and the Road Ahead" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Original Stanford lecture. Timestamps in the text link to the exact moment.</p></div><h2 id="the-problem-benchmarks-say-better-users-say-unreliable">The problem: benchmarks say &ldquo;better&rdquo;, users say &ldquo;unreliable&rdquo;</h2>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="8JAqLnTaZu4"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/8JAqLnTaZu4" title="CS329A Part 8: Agentic Evaluations and Long-Horizon Tasks (Autumn 2025)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Aakanksha Chowdhery on METR time horizons, GDPval, DeepScholar-Bench, and the failure modes of long-horizon agents. Part 9 (recap and open problems) is embedded below.</p></div><h2 id="the-problem-benchmarks-say-better-users-say-unreliable">The problem: benchmarks say &ldquo;better&rdquo;, users say &ldquo;unreliable&rdquo;</h2>
 <p>Every method in this course reports wins: higher coverage,
 better pass rates, climbing proof scores. But ask anyone who
 has delegated a real afternoon of work to an agent, and the
@@ -228,12 +228,19 @@ sometimes confidently finishes the wrong task. Benchmark
 scores and lived reliability disagree. This chapter is about
 measuring what actually matters: how long a task an agent can
 complete, and how reliably.</p>
+<h3 id="subchapter-agentic-evals-versus-qa-benchmarks">Subchapter: agentic evals versus QA benchmarks</h3>
 <p>An <strong>agentic evaluation</strong> differs from a question-answering
 benchmark in one way: the task takes time. Not seconds, but
 minutes to hours of skilled human work: debugging a real
 repository, reproducing a machine learning result, planning
 under constraints. The unit of difficulty is the <strong>time
 horizon</strong>: how long the task would take a skilled human.</p>
+<p>QA benchmarks measure knowledge. Agentic evals measure what
+the model can <em>do</em> with that knowledge over time: plan, act,
+recover, persist. A model can ace a QA benchmark about
+debugging and still fail to debug a real repository, because
+the repository task needs an hour of sustained, error-prone
+work and the benchmark needs one right answer.</p>
 <h2 id="the-measurement-worked-concretely">The measurement, worked concretely</h2>
 <p>The METR methodology the lecture presents works like this.
 Take a battery of tasks spanning seconds to many hours. For
@@ -242,6 +249,17 @@ experience, record how long successful completion takes, and
 take the geometric mean as the task&rsquo;s difficulty rating. Then
 run models on the tasks and record the success rate at each
 horizon.</p>
+<figure><img alt="The 50% horizon doubles every 7 months" src="assets/plate-l10-horizon.svg"><figcaption>2 seconds (2019) to 59 minutes (2025): six years, eleven doublings. Shell 2. Source: lecture-reported (METR). Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-methodology-deep">Subchapter: the methodology, deep</h3>
+<p>Three choices make the metric work. First, the geometric mean
+of expert times, not the arithmetic mean: task times are
+log-normally distributed, and the geometric mean is the right
+center for a multiplicative scale. Second, experts with about
+five years of experience: skilled enough that their times
+reflect the task, not their learning curve. Third, success
+rate at each horizon, not average score: the metric asks &ldquo;can
+it finish&rdquo;, not &ldquo;how close did it get&rdquo;.</p>
+<h3 id="subchapter-the-trend-worked">Subchapter: the trend, worked</h3>
 <p>The headline numbers, read off the lecture&rsquo;s trend line:</p>
 <pre class="ascii">model (year)          task horizon at 50% success
 GPT-2 (2019)          2 seconds
@@ -250,10 +268,14 @@ Claude 3.7 (2025)     59 minutes
 </pre>
 <p>From 2 seconds to 59 minutes in six years. The doubling time
 is about 7 months: every 7 months, the task length the model
-handles half the time doubles. That is the capability trend,
-and it is steep.</p>
+handles half the time doubles. Six years is 72 months, about
+10 doubling periods, and 2 seconds doubled 10 times is 2,048
+seconds, 34 minutes, in the right ballpark of the measured 59.
+That is the capability trend, and it is steep.</p>
+<h3 id="subchapter-the-80-percent-gap">Subchapter: the 80 percent gap</h3>
 <p>Now the number that matters for deployment. Redo the
 measurement at 80 percent success instead of 50:</p>
+<figure><img alt="50% is not deployable" src="assets/plate-l10-gap.svg"><figcaption>Claude 3.7: 59 minutes at 50% success, about 15 minutes at 80%. Shell 2. Source: lecture-reported (METR). Project: Stanford Frontier AI.</figcaption></figure>
 <pre class="ascii">Claude 3.7 (2025):    59 minutes at 50% success
                       ~15 minutes at 80% success
 </pre>
@@ -263,69 +285,117 @@ is always uncertainty. Capability at 50 percent is years
 ahead of reliability at 80 percent. The gap between the two
 curves is the headroom the field has not closed, and it is
 large.</p>
+<h3 id="subchapter-the-methodologys-weak-point">Subchapter: the methodology&rsquo;s weak point</h3>
 <p>The lecture is also honest about the methodology&rsquo;s weak
 point. Experts underestimate task difficulty: people fluent
 in a field are conditioned to what success looks like, and
 their times do not reflect how hard the task feels to a
 model. Human difficulty and model difficulty are different
-rulers.</p>
+rulers. A task that takes an expert 10 minutes because she
+knows exactly where to look can take a model an hour of
+fumbling. The horizon numbers are in human-minutes, and the
+translation to model-minutes is lossy.</p>
 <h2 id="where-agents-fail-the-failure-modes">Where agents fail: the failure modes</h2>
 <p>The lecture walks through a failure-mode analysis comparing
-a non-reasoning model (GPT-4) with a reasoning model (o1).
-The categories recur across the field:</p>
-<ul>
-<li><strong>Poor planning.</strong> The model does not break the task into
-  steps, or breaks it wrongly. It acts before it has a plan,
-  or plans at the wrong granularity.</li>
-<li><strong>Poor tool choice.</strong> Wrong tool, or right tool with a bad
-  query. The trajectory grounds itself in the wrong facts.</li>
-<li><strong>No error recovery.</strong> Something goes wrong mid-task, as it
-  always does in an hour-long task, and the agent cannot
-  detect it or replan. It repeats the failing behavior.</li>
-<li><strong>Lost goal state.</strong> Over a long horizon the agent forgets
-  what it is optimizing: no memory of the final goal, no
-  sense of progress. It optimizes a subtask as if it were
-  the task.</li>
-</ul>
-<p>Read these against the earlier chapters. Poor planning is
-what Lecture 5&rsquo;s tree search addresses. Poor tool choice is
-Lecture 3&rsquo;s failure mode. No error recovery is the
-compounding-error arithmetic of Lecture 3, now measured.
-Lost goal state is the memory problem the lectures keep
-naming and never fully solving: the agent needs a notion of
-where it is and what remains.</p>
+a non-reasoning model (GPT-4) with a reasoning model (o1).</p>
+<figure><img alt="Four ways long tasks fail" src="assets/plate-l10-failures.svg"><figcaption>Every failure mode compounds with trajectory length. Shell 2. Source: lecture-reported. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-poor-planning">Subchapter: poor planning</h3>
+<p>The model does not break the task into steps, or breaks it
+wrongly. It acts before it has a plan, or plans at the wrong
+granularity. Read against Lecture 5: this is what tree search
+addresses, by comparing plans before committing.</p>
+<h3 id="subchapter-poor-tool-choice">Subchapter: poor tool choice</h3>
+<p>Wrong tool, or right tool with a bad query. The trajectory
+grounds itself in the wrong facts. Read against Lecture 3:
+grounding in the wrong place is worse than no grounding,
+because the trace builds confidently on it.</p>
+<h3 id="subchapter-no-error-recovery">Subchapter: no error recovery</h3>
+<p>Something goes wrong mid-task, as it always does in an
+hour-long task, and the agent cannot detect it or replan. It
+repeats the failing behavior. This is the compounding-error
+arithmetic of Lecture 3, now measured: 0.9^n with n in the
+dozens.</p>
+<h3 id="subchapter-lost-goal-state">Subchapter: lost goal state</h3>
+<p>Over a long horizon the agent forgets what it is optimizing:
+no memory of the final goal, no sense of progress. It
+optimizes a subtask as if it were the task. The honest
+scorecard: planning gets LATS, tool choice gets grounding,
+error recovery gets reflection and retries. Lost goal state
+is named repeatedly and never fully solved. Memory structures
+for agents remain an open research area.</p>
+<h3 id="subchapter-what-drove-the-gains-anyway">Subchapter: what drove the gains anyway</h3>
 <p>The lecture notes what has been driving the gains anyway:
 better reasoning, better code generation, tool use, less
 repetitive behavior, and crucially, <strong>context engineering</strong>,
 structuring what the agent sees across steps so the tools
 work better. Reliability engineering around the model, not
-just the model, moves the curves.</p>
+just the model, moves the curves. The model gets the
+headlines. The harness gets the reliability.</p>
+<h3 id="subchapter-gdpval-and-deepscholar-bench">Subchapter: GDPval and DeepScholar-Bench</h3>
+<p>Two more evals from the lecture, each probing a different
+weakness. <strong>GDPval</strong> measures win rate against experts with a
+decade of experience on real professional tasks. The top
+failure: instruction following. Under-specified prompts fall
+apart: the agent does something reasonable that is not what
+was wanted. The lesson: on expert tasks, the binding
+constraint is often the prompt, not the model.</p>
+<p><strong>DeepScholar-Bench</strong> tests research synthesis: no system
+scores above 19%. The failure pattern: foundational sources
+missed, fluency high, verifiability low. The models write
+beautiful literature reviews that cite the wrong papers or
+misstate what they say. Fluency and verifiability trade off,
+and current systems sit on the wrong end. Read it as the
+measurement of Lecture 7&rsquo;s problem: the agents do not know
+what they do not know, and they write smoothly past the gaps.</p>
 <h2 id="the-key-question">The key question</h2>
 <p>If capability doubles every 7 months but reliability lags
 years behind, what are the actual open problems?</p>
 <h2 id="the-road-ahead-from-the-recap-lecture">The road ahead, from the recap lecture</h2>
 <p>The course&rsquo;s closing lecture names the frontier explicitly.
-Each item is a research problem, not a solved one:</p>
-<ol>
-<li><strong>Diversity of reasoning chains.</strong> Self-improvement feeds
-   on varied attempts. Keeping them diverse, across rounds
-   of training, is unsolved. Multi-agent debate is a start.</li>
-<li><strong>Breaking the verifier bottleneck.</strong> Everything needs
-   fast, honest judges. Outcome checks are blind, model
-   judges are gullible, and slow domains have no judges at
-   all. Better verifiers improve everything downstream.</li>
-<li><strong>Data selection.</strong> Only so much can be curated by humans.
-   Which problems go into the loop, in which order, a
-   <strong>curriculum</strong>, matters enormously and is barely studied.</li>
-<li><strong>Non-verifiable domains.</strong> Creative writing, open-ended
-   design, science with slow experiments. The loop does not
-   reach them today. Learned reward stand-ins invite hacking.</li>
-<li><strong>The cost of intelligence.</strong> Test-time scaling burns
-   compute per question. Demand is exploding: the lecture
-   cites Google&rsquo;s served tokens jumping from 160 trillion to
-   1.3 quadrillion in months, and data-center energy demand
-   in the hundreds of gigawatts. Efficiency is not optional.</li>
-</ol>
+Each item is a research problem, not a solved one.</p>
+<figure><img alt="The engine and its stalls" src="assets/plate-l10-engine.svg"><figcaption>Every open problem is a way the generate-verify-train engine stalls. Shell 4. Source: original. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-diversity-of-reasoning-chains">Subchapter: diversity of reasoning chains</h3>
+<p>Self-improvement feeds on varied attempts. Keeping them
+diverse, across rounds of training, is unsolved. Multi-agent
+debate is a start. The deeper problem: every training method
+in the course is a filter, and filters converge. The loop
+eats its own diversity unless something actively maintains it.</p>
+<h3 id="subchapter-breaking-the-verifier-bottleneck">Subchapter: breaking the verifier bottleneck</h3>
+<p>Everything needs fast, honest judges. Outcome checks are blind,
+model judges are gullible, and slow domains have no judges at
+all. Better verifiers improve everything downstream. The
+lecturers&rsquo; framing points here as the highest-impact open
+problem: every loop consumes verifier judgments, so a
+breakthrough in fast, trustworthy, process-level verification
+speeds up all of them at once.</p>
+<h3 id="subchapter-data-selection-and-curriculum">Subchapter: data selection and curriculum</h3>
+<p>Only so much can be curated by humans. Which problems go into
+the loop, in which order, a <strong>curriculum</strong>, matters enormously
+and is barely studied. DAPO&rsquo;s dynamic sampling is a first
+step: drop the prompts with no signal. But the full question,
+what sequence of problems teaches fastest, is open. The
+lectures treat it as the most underrated lever.</p>
+<h3 id="subchapter-non-verifiable-domains">Subchapter: non-verifiable domains</h3>
+<p>Creative writing, open-ended design, science with slow
+experiments. The loop does not reach them today. Learned
+reward stand-ins invite hacking. Absolute Zero shows the
+pattern for escaping: find an executable verifier, even a
+narrow one, and the loop can turn. The open question is how
+far that pattern stretches.</p>
+<h3 id="subchapter-the-cost-of-intelligence">Subchapter: the cost of intelligence</h3>
+<p>Test-time scaling burns compute per question. Demand is
+exploding: the lecture cites Google&rsquo;s served tokens jumping
+from 160 trillion to 1.3 quadrillion in months, and
+data-center energy demand in the hundreds of gigawatts.
+Efficiency is not optional.</p>
+<figure><img alt="Intelligence has a power bill" src="assets/plate-l10-cost.svg"><figcaption>Google served tokens: 160 trillion to 1.3 quadrillion in months. Shell 2. Source: lecture-reported. Project: Stanford Frontier AI.</figcaption></figure>
+<p>The recap adds the efficiency counterpoint: <strong>intelligence
+per watt</strong>. Local models at or under 20B parameters now cover
+most real chat queries. Not every question needs the
+frontier. The open problem is routing: knowing which
+questions earn the big model and which the small one answers
+fine. The cost curve and the capability curve are racing, and
+routing is where they meet.</p>
 <p>And the through-line the lecturers keep returning to: the
 self-improvement loop, generate, verify, train, is the
 engine. Every open problem is a way the engine stalls.
@@ -410,12 +480,34 @@ research result, not a coworker. The reliability gap, the
 verifier bottleneck, and the cost curve are the three walls.
 The doubling trend says the walls are moving. Nothing in the
 lectures says they fall on their own.</p>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/jXtk68Kzmms" title="Beth Barnes (METR): the most important graph in AI right now" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/AyO6wyu4DEg" title="CS329A Part 9: Future Research Areas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li>Beth Barnes (METR) on the time-horizon graph: why the 50% horizon doubles every 7 months, and what the trend does and does not say. https://www.youtube.com/watch?v=jXtk68Kzmms</li>
+<li>CS329A Part 9: Future Research Areas (Autumn 2025): the recap lecture&rsquo;s open problems. https://www.youtube.com/watch?v=AyO6wyu4DEg</li>
+<li>Kwa et al., Measuring AI Ability to Complete Long Tasks (METR, 2025): the methodology and the doubling trend. https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/</li>
+</ul>
 <div class="qa"><div class="q">What is the METR time-horizon result?</div><div class="a"><p>The task length a model completes 50 percent of the time doubles roughly every 7 months: GPT-2 in 2019 managed 2 seconds, GPT-4 in 2023 managed 8 minutes, Claude 3.7 Sonnet in 2025 manages 59 minutes. Task difficulty is rated by the geometric mean of skilled professionals&rsquo; completion times. It is a capability trend, not a reliability claim.
 Because deployment needs reliability. At 80 percent success, Claude 3.7&rsquo;s horizon drops from 59 minutes to about 15. The gap between the 50-percent curve and the 80-percent curve is years of headroom. An agent that finishes half its hour-long tasks is a demo. One that finishes 80 percent of 15-minute tasks is a tool. The field has the first, not the second.</p><div class="followup"><strong>Follow-up:</strong> Why is not 50 percent enough?</div></div></div>
+<div class="qa"><div class="q">Walk me through the METR methodology.</div><div class="a"><p>Assemble tasks spanning seconds to many hours: debugging repos, reproducing ML results, constrained planning. For each, record completion times from professionals with about five years of experience and take the geometric mean as the difficulty rating. Run models on the battery and record success rate at each horizon. Read off the horizon where success hits 50%: that is the headline number. The geometric mean matters because task times are log-normal: the arithmetic mean would be dominated by the longest tasks.
+The human-to-model difficulty translation. Experts underestimate difficulty because fluency looks like ease, and tasks that are easy for experts (knowing where to look) can be hard for models (fumbling through search). The horizons are in human-minutes. The model-minutes equivalent is unknown and probably larger.</p><div class="followup"><strong>Follow-up:</strong> What is the biggest threat to the metric&#x27;s validity?</div></div></div>
 <div class="qa"><div class="q">What are the main failure modes of long-horizon agents?</div><div class="a"><p>Four, from the lecture&rsquo;s analysis. Poor planning: the task is not broken into workable steps. Poor tool choice: wrong tool or bad query grounds the trace in wrong facts. No error recovery: mid-task failures go undetected and un-replanned. Lost goal state: over long horizons the agent forgets the objective and optimizes a subtask. Every one of them compounds with trajectory length.
 Planning: LATS tree search. Tool choice: ReAct grounding, plus learned selectors in AlphaCode 2. Error recovery: reflection in LATS, retry loops in RLEF. Lost goal state: named repeatedly, never fully solved. Memory structures for agents remain an open research area. The honest scorecard is three partials and one open.</p><div class="followup"><strong>Follow-up:</strong> Which of these did the course&#x27;s methods address?</div></div></div>
+<div class="qa"><div class="q">What do GDPval and DeepScholar-Bench add?</div><div class="a"><p>Different weaknesses. GDPval pits agents against decade-experience experts on professional tasks: the top failure is instruction following, and under-specified prompts fall apart. The binding constraint is the prompt, not the model. DeepScholar-Bench tests research synthesis: no system breaks 19%, foundational sources get missed, and fluency trades off against verifiability. Together they say: agents fail at doing what was asked and at knowing what they do not know.
+Because the training rewards fluent, confident text, and hedging or checking breaks the flow the reward prefers. A model that writes &ldquo;the evidence is mixed&rdquo; gets less reward than one that writes a crisp, wrong claim. Until verification is in the reward, fluency wins and verifiability loses.</p><div class="followup"><strong>Follow-up:</strong> Why does fluency trade off against verifiability?</div></div></div>
 <div class="qa"><div class="q">What are the open problems the course leaves?</div><div class="a"><p>Five from the recap lecture. Keeping reasoning chains diverse across training rounds. Building fast honest verifiers, especially process-level ones. Data selection and curriculum: which problems feed the loop in which order. Reaching non-verifiable domains: creativity, slow science, where no fast judge exists. And the cost of intelligence: test-time scaling&rsquo;s compute demand against exploding usage.
 The lecturers&rsquo; framing points at verification. Every loop, sampling, RL, debate, meta-verification, consumes verifier judgments. A breakthrough in fast, trustworthy, process-level verification would speed up all of them at once.</p><div class="followup"><strong>Follow-up:</strong> Which one helps the most downstream?</div></div></div>
+<div class="qa"><div class="q">What is &quot;intelligence per watt&quot; and why does the lecture raise it?</div><div class="a"><p>Capability per unit of compute: how much task the model completes per joule. The lecture notes that local models at or under 20B parameters now cover most real chat queries, so not every question needs the frontier. The open problem is routing: sending each question to the cheapest model that handles it. The cost curve (tokens up 8x in months) and the capability curve (horizons doubling) are racing, and routing is where they meet.
+No, it scopes it. The loop builds the frontier models. Routing decides which questions earn them. A cheap model handling easy queries is test-time scaling&rsquo;s complement: spend the sampling budget where the difficulty is, which is Lecture 2&rsquo;s frontier logic applied across models instead of across samples.</p><div class="followup"><strong>Follow-up:</strong> Does routing undercut the self-improvement loop?</div></div></div>
+<div class="qa"><div class="q">You must decide whether an agent is ready for deployment on 30-minute tasks. How do you evaluate it?</div><div class="a"><p>Do not trust benchmark accuracy. Build an agentic eval: 50 real 30-minute tasks from your domain, rated by your own experts&rsquo; completion times. Run the agent, measure success rate, and demand 80%, not 50%: the lecture&rsquo;s gap says 50% capability is years from deployable. Log every failure into the four modes (planning, tool choice, recovery, goal state) and fix the dominant one first. Re-measure. Ship only when the 80% number holds for two consecutive eval rounds, because single rounds are noisy.
+Measuring the model instead of the system. The agent is model plus harness: prompts, tools, retries, context engineering. Evaluate the whole thing end to end, with production tools and production latency. A model that scores well in a sandbox with perfect tools fails with flaky ones, and flaky tools are what production has.</p><div class="followup"><strong>Follow-up:</strong> What is the most common evaluation mistake?</div></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
 <ol>
 <li><strong>Benchmarks vs reliability.</strong> Scores climb. Users still
@@ -427,6 +519,9 @@ The lecturers&rsquo; framing points at verification. Every loop, sampling, RL, d
    reliability.</li>
 <li><strong>Failure modes.</strong> Poor planning, poor tool choice, no
    error recovery, lost goal state. All compound with length.</li>
+<li><strong>GDPval, DeepScholar.</strong> Instruction following fails on
+   expert tasks. No system breaks 19% on research synthesis.
+   Fluency trades off against verifiability.</li>
 <li><strong>What drove gains.</strong> Reasoning, code, tools, less
    repetition, and context engineering around the model.</li>
 <li><strong>The key question.</strong> Capability doubles. Reliability
@@ -439,18 +534,18 @@ The lecturers&rsquo; framing points at verification. Every loop, sampling, RL, d
 </ol>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
-- CS329A Lecture 8 (Autumn 2025): the lecture this chapter
-  follows. https://www.youtube.com/watch?v=8JAqLnTaZu4
+- CS329A Part 8: Agentic Evaluations and Long-Horizon Tasks
+  (Autumn 2025): the lecture this chapter follows. <a href="https://www.youtube.com/watch?v=8JAqLnTaZu4">link</a>
 - METR, &ldquo;Measuring AI Ability to Complete Long Tasks&rdquo;
-  (2025): the time-horizon methodology and doubling trend.</p>
+  (2025): the time-horizon methodology and doubling trend. <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/">link</a></p>
 <p><strong>Further reading:</strong>
-- The recap lecture&rsquo;s open-problems discussion (Lecture 7):
-  https://www.youtube.com/watch?v=AyO6wyu4DEg</p>
+- The recap lecture&rsquo;s open-problems discussion (Part 9): <a href="https://www.youtube.com/watch?v=AyO6wyu4DEg">paper</a></p>
 <p><strong>Caveats from these sources.</strong> Horizon numbers are the
 lecture&rsquo;s readings from METR plots, approximate. The 7-month
 doubling is a fitted trend, not a law. Expert time estimates
 underestimate difficulty, per the lecture itself. Model names
-are Autumn 2025 snapshots.</p>
+are Autumn 2025 snapshots. The METR blog URL is the March
+2025 post. Verify it loads.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS329Z:</strong> evaluation engineering: building the
@@ -462,7 +557,7 @@ are Autumn 2025 snapshots.</p>
 <li><strong>CS329A L01:</strong> the full circle: the loop this chapter&rsquo;s
   open problems are all trying to unstall.</li>
 </ul>
-      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">CS329A Lecture 8: agentic evaluations and long-horizon tasks (Autumn 2025)</a></li><li><span class="src-tag">PAPER</span>METR, Measuring AI Ability to Complete Long Tasks (2025)</li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=8JAqLnTaZu4" target="_blank" rel="noopener">CS329A Part 8: Agentic Evaluations and Long-Horizon Tasks (Autumn 2025)</a></li><li><span class="src-tag">PAPER</span><a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank" rel="noopener">Kwa et al., Measuring AI Ability to Complete Long Tasks (METR, 2025)</a></li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
       <nav class="pager"><a href="../cs329a/l09-verifier-bottleneck.html"><span class="lbl">← Previous</span>Lecture 9: The Verifier Bottleneck: Who Judges the Judge</a><a href="../cs329a/cheatsheet.html"><span class="lbl">Next →</span>CS329A Cheatsheet</a></nav>
     </article>
     <footer class="pagefoot">

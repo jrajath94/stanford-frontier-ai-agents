@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Lecture 1: The Self-Improving Agent — Stanford Frontier AI</title>
+<meta name="description" content="One-shot answers waste what the model knows. The course opens with the loop that fixes it: generate many attempts, check them with a verifier, and train on the ">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-l01" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS336: Language Modeling from Scratch</h3><ul>
+<li><a href="../cs336/index.html" data-page="cs336-index">CS336 · Overview</a></li>
+<li><a href="../cs336/l01-tokenization.html" data-page="cs336-l01">L01 · Tokenization</a></li>
+<li><a href="../cs336/l02-resource-accounting.html" data-page="cs336-l02">L02 · Resource Accounting</a></li>
+<li><a href="../cs336/l03-architecture.html" data-page="cs336-l03">L03 · Architecture</a></li>
+<li><a href="../cs336/l04-linear-attention-moe.html" data-page="cs336-l04">L04 · Attention Alternatives + MoE</a></li>
+<li><a href="../cs336/l05-gpus.html" data-page="cs336-l05">L05 · GPUs</a></li>
+<li><a href="../cs336/l06-triton-kernels.html" data-page="cs336-l06">L06 · Triton Kernels</a></li>
+<li><a href="../cs336/l07-parallelism.html" data-page="cs336-l07">L07 · Parallelism</a></li>
+<li><a href="../cs336/l08-4d-parallelism.html" data-page="cs336-l08">L08 · 4D Parallelism</a></li>
+<li><a href="../cs336/l09-scaling-laws.html" data-page="cs336-l09">L09 · Scaling Laws</a></li>
+<li><a href="../cs336/l10-inference.html" data-page="cs336-l10">L10 · Inference</a></li>
+<li><a href="../cs336/l11-scaling-advanced.html" data-page="cs336-l11">L11 · Scaling Advanced</a></li>
+<li><a href="../cs336/l12-evaluation.html" data-page="cs336-l12">L12 · Evaluation</a></li>
+<li><a href="../cs336/l13-training-data.html" data-page="cs336-l13">L13 · Training Data</a></li>
+<li><a href="../cs336/l14-data-pipeline.html" data-page="cs336-l14">L14 · Data Pipeline</a></li>
+<li><a href="../cs336/l15-post-training.html" data-page="cs336-l15">L15 · Post-training</a></li>
+<li><a href="../cs336/l16-rlvr.html" data-page="cs336-l16">L16 · RLVR</a></li>
+<li><a href="../cs336/l17-multimodality.html" data-page="cs336-l17">L17 · Multimodality</a></li>
+<li><a href="../cs336/l18-inference.html" data-page="cs336-l18">L18 · Serving Inference</a></li>
+<li><a href="../cs336/cheatsheet.html" data-page="cs336-cheatsheet">CS336 · Cheatsheet</a></li>
+<li><a href="../cs336/crash-course.html" data-page="cs336-crash">CS336 · Crash course</a></li>
+</ul>
+<h3>CS229: Machine Learning</h3><ul>
+<li><a href="../cs229/index.html" data-page="cs229-index">CS229 · Overview</a></li>
+<li><a href="../cs229/l01-introduction.html" data-page="cs229-l01">L01 · Introduction</a></li>
+<li><a href="../cs229/l02-linear-regression.html" data-page="cs229-l02">L02 · Linear Regression</a></li>
+<li><a href="../cs229/l03-logistic-regression.html" data-page="cs229-l03">L03 · Logistic Regression</a></li>
+<li><a href="../cs229/l04-glms-softmax.html" data-page="cs229-l04">L04 · GLMs and Softmax</a></li>
+<li><a href="../cs229/l05-gda-naive-bayes.html" data-page="cs229-l05">L05 · GDA and Naive Bayes</a></li>
+<li><a href="../cs229/l06-bias-variance.html" data-page="cs229-l06">L06 · Bias, Variance, Model Selection</a></li>
+<li><a href="../cs229/l07-neural-networks-1.html" data-page="cs229-l07">L07 · Neural Networks 1</a></li>
+<li><a href="../cs229/l08-backpropagation.html" data-page="cs229-l08">L08 · Backpropagation</a></li>
+<li><a href="../cs229/l09-kmeans-gmm.html" data-page="cs229-l09">L09 · K-Means and GMM</a></li>
+<li><a href="../cs229/l10-em-pca.html" data-page="cs229-l10">L10 · EM and PCA</a></li>
+<li><a href="../cs229/l11-diffusion-models.html" data-page="cs229-l11">L11 · Diffusion Models</a></li>
+<li><a href="../cs229/l12-foundation-models.html" data-page="cs229-l12">L12 · Foundation Models</a></li>
+<li><a href="../cs229/l13-contrastive-rag.html" data-page="cs229-l13">L13 · Contrastive, Search, RAG</a></li>
+<li><a href="../cs229/l14-transformers.html" data-page="cs229-l14">L14 · Transformers</a></li>
+<li><a href="../cs229/l15-efficient-icl-sft.html" data-page="cs229-l15">L15 · Efficient Attention, ICL, SFT</a></li>
+<li><a href="../cs229/l16-reinforcement-learning.html" data-page="cs229-l16">L16 · Reinforcement Learning</a></li>
+<li><a href="../cs229/l17-rl-for-llms.html" data-page="cs229-l17">L17 · RL for LLMs</a></li>
+<li><a href="../cs229/cheatsheet.html" data-page="cs229-cheatsheet">CS229 · Cheatsheet</a></li>
+<li><a href="../cs229/crash-course.html" data-page="cs229-crash">CS229 · Crash course</a></li>
+</ul>
+<h3>CS229S: Systems for Machine Learning</h3><ul>
+<li><a href="../cs229s/index.html" data-page="cs229s-index">CS229S · Overview</a></li>
+<li><a href="../cs229s/l01-introduction.html" data-page="cs229s-l01">L01 · Introduction</a></li>
+<li><a href="../cs229s/l02-sequence-models.html" data-page="cs229s-l02">L02 · Sequence Models</a></li>
+<li><a href="../cs229s/l03-hardware-aware-design.html" data-page="cs229s-l03">L03 · Hardware-Aware Design</a></li>
+<li><a href="../cs229s/l04-transformer-performance.html" data-page="cs229s-l04">L04 · Transformer Performance</a></li>
+<li><a href="../cs229s/l05-gpu-execution-model.html" data-page="cs229s-l05">L05 · GPU Execution Model</a></li>
+<li><a href="../cs229s/l06-flash-attention.html" data-page="cs229s-l06">L06 · FlashAttention</a></li>
+<li><a href="../cs229s/l07-memory-efficient-networks.html" data-page="cs229s-l07">L07 · Memory Efficiency</a></li>
+<li><a href="../cs229s/l08-finetuning-and-peft.html" data-page="cs229s-l08">L08 · Fine-tuning and PEFT</a></li>
+<li><a href="../cs229s/l09-efficient-architectures.html" data-page="cs229s-l09">L09 · Attention-Free Architectures</a></li>
+<li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
+<li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
+<li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+</ul>
+<h3>CS224N: NLP with Deep Learning</h3><ul>
+<li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
+<li><a href="../cs224n/l01-intro-word-vectors.html" data-page="cs224n-l01">L01 · Intro and Word Vectors</a></li>
+<li><a href="../cs224n/l02-word-vectors-2.html" data-page="cs224n-l02">L02 · Word Vectors 2</a></li>
+<li><a href="../cs224n/l03-neural-networks-backprop.html" data-page="cs224n-l03">L03 · Neural Nets and Backprop</a></li>
+<li><a href="../cs224n/l04-dependency-parsing.html" data-page="cs224n-l04">L04 · Dependency Parsing</a></li>
+<li><a href="../cs224n/l05-language-modeling-rnns.html" data-page="cs224n-l05">L05 · Language Modeling and RNNs</a></li>
+<li><a href="../cs224n/l06-lstms-nmt.html" data-page="cs224n-l06">L06 · LSTMs and NMT</a></li>
+<li><a href="../cs224n/l07-attention.html" data-page="cs224n-l07">L07 · Attention</a></li>
+<li><a href="../cs224n/l08-transformers.html" data-page="cs224n-l08">L08 · Transformers</a></li>
+<li><a href="../cs224n/l09-pretraining.html" data-page="cs224n-l09">L09 · Pretraining</a></li>
+<li><a href="../cs224n/l10-prompting-post-training.html" data-page="cs224n-l10">L10 · Prompting and Post-Training</a></li>
+<li><a href="../cs224n/l11-evaluation.html" data-page="cs224n-l11">L11 · Evaluation</a></li>
+<li><a href="../cs224n/l12-efficient-training.html" data-page="cs224n-l12">L12 · Efficient Training</a></li>
+<li><a href="../cs224n/l13-speech-bci.html" data-page="cs224n-l13">L13 · Speech Brain-Computer Interfaces</a></li>
+<li><a href="../cs224n/l14-reasoning-agents.html" data-page="cs224n-l14">L14 · Reasoning and Agents</a></li>
+<li><a href="../cs224n/l15-life-after-dpo.html" data-page="cs224n-l15">L15 · Life After DPO</a></li>
+<li><a href="../cs224n/cheatsheet.html" data-page="cs224n-cheatsheet">CS224N · Cheatsheet</a></li>
+<li><a href="../cs224n/crash-course.html" data-page="cs224n-crash">CS224N · Crash course</a></li>
+</ul>
+<h3>CME295: Transformers and Large Language Models</h3><ul>
+<li><a href="../cme295/index.html" data-page="cme295-index">CME295 · Overview</a></li>
+<li><a href="../cme295/l01-transformers-overview.html" data-page="cme295-l01">L01 · Transformers overview</a></li>
+<li><a href="../cme295/l02-attention-position-bert.html" data-page="cme295-l02">L02 · Attention and BERT</a></li>
+<li><a href="../cme295/l03-llms-decoding-inference.html" data-page="cme295-l03">L03 · LLMs and decoding</a></li>
+<li><a href="../cme295/l04-pretraining-scaling-finetuning.html" data-page="cme295-l04">L04 · Training at scale</a></li>
+<li><a href="../cme295/l05-preference-tuning.html" data-page="cme295-l05">L05 · Preference tuning</a></li>
+<li><a href="../cme295/l06-reasoning-models-grpo.html" data-page="cme295-l06">L06 · Reasoning models</a></li>
+<li><a href="../cme295/l07-rag-tool-calling-agents.html" data-page="cme295-l07">L07 · RAG and agents</a></li>
+<li><a href="../cme295/l08-evaluation.html" data-page="cme295-l08">L08 · Evaluation</a></li>
+<li><a href="../cme295/l09-course-recap-frontiers.html" data-page="cme295-l09">L09 · Recap and frontiers</a></li>
+<li><a href="../cme295/cheatsheet.html" data-page="cme295-cheatsheet">CME295 · Cheatsheet</a></li>
+<li><a href="../cme295/crash-course.html" data-page="cme295-crash">CME295 · Crash course</a></li>
+</ul>
+<h3>CS329H: Machine Learning from Human Preferences</h3><ul>
+<li><a href="../cs329h/index.html" data-page="cs329h-index">CS329H · Overview</a></li>
+<li><a href="../cs329h/l01-preference-foundations.html" data-page="cs329h-l01">L01 · Preference Foundations</a></li>
+<li><a href="../cs329h/l02-choice-models.html" data-page="cs329h-l02">L02 · Choice Models</a></li>
+<li><a href="../cs329h/l03-iia-identification.html" data-page="cs329h-l03">L03 · IIA and Identification</a></li>
+<li><a href="../cs329h/l04-learning-rewards.html" data-page="cs329h-l04">L04 · Learning Rewards</a></li>
+<li><a href="../cs329h/l05-metric-elicitation.html" data-page="cs329h-l05">L05 · Metric Elicitation</a></li>
+<li><a href="../cs329h/l06-bandits-exploration.html" data-page="cs329h-l06">L06 · Bandits and Exploration</a></li>
+<li><a href="../cs329h/l07-rlhf.html" data-page="cs329h-l07">L07 · RLHF</a></li>
+<li><a href="../cs329h/l08-social-choice.html" data-page="cs329h-l08">L08 · Social Choice</a></li>
+<li><a href="../cs329h/l09-mechanism-design.html" data-page="cs329h-l09">L09 · Mechanism Design</a></li>
+<li><a href="../cs329h/l10-alignment-practice.html" data-page="cs329h-l10">L10 · Alignment in Practice</a></li>
+<li><a href="../cs329h/cheatsheet.html" data-page="cs329h-cheatsheet">CS329H · Cheatsheet</a></li>
+<li><a href="../cs329h/crash-course.html" data-page="cs329h-crash">CS329H · Crash course</a></li>
+</ul>
+<h3>CS329Z: Engineering AI Agents</h3><ul>
+<li><a href="../cs329z/index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="../cs329z/l01-intro-agentic-systems.html" data-page="cs329z-l01">L01 · Intro to Agentic Systems</a></li>
+<li><a href="../cs329z/l02-compound-ai-systems.html" data-page="cs329z-l02">L02 · Compound AI Systems</a></li>
+<li><a href="../cs329z/l03-llms-for-builders.html" data-page="cs329z-l03">L03 · LLMs for Builders</a></li>
+<li><a href="../cs329z/l04-reasoning-and-context.html" data-page="cs329z-l04">L04 · Reasoning and Context</a></li>
+<li><a href="../cs329z/l05-rag-pipeline.html" data-page="cs329z-l05">L05 · RAG Pipeline</a></li>
+<li><a href="../cs329z/l06-retrieval-methods.html" data-page="cs329z-l06">L06 · Retrieval Methods</a></li>
+<li><a href="../cs329z/l07-agentic-retrieval-failure-modes.html" data-page="cs329z-l07">L07 · Agentic Retrieval</a></li>
+<li><a href="../cs329z/l08-evaluating-agents.html" data-page="cs329z-l08">L08 · Evaluating Agents</a></li>
+<li><a href="../cs329z/cheatsheet.html" data-page="cs329z-cheatsheet">CS329Z · Cheatsheet</a></li>
+<li><a href="../cs329z/crash-course.html" data-page="cs329z-crash">CS329Z · Crash course</a></li>
+</ul>
+<h3>CS329A: Self-Improving AI Agents</h3><ul>
+<li><a href="../cs329a/index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01" class="active">L01 · The Self-Improving Agent</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
+<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
+<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
+<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
+<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
+<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
+<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
+<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
+<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
+<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+</ul>
+<h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
+<li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
+<li><a href="../mse435/l01-electrons-to-tokens.html" data-page="mse435-l01">L01 · From Electrons to Tokens</a></li>
+<li><a href="../mse435/l02-sixty-million-megawatt.html" data-page="mse435-l02">L02 · The $60M Megawatt</a></li>
+<li><a href="../mse435/l03-how-models-get-smarter.html" data-page="mse435-l03">L03 · How Models Get Smarter</a></li>
+<li><a href="../mse435/l04-evals-rlvr-enterprise.html" data-page="mse435-l04">L04 · Evals and Enterprise AI</a></li>
+<li><a href="../mse435/l05-software-is-dead.html" data-page="mse435-l05">L05 · The SaaS Reckoning</a></li>
+<li><a href="../mse435/l06-where-value-accrues.html" data-page="mse435-l06">L06 · Where Value Accrues</a></li>
+<li><a href="../mse435/cheatsheet.html" data-page="mse435-cheatsheet">MS&amp;E 435 · Cheatsheet</a></li>
+<li><a href="../mse435/crash-course.html" data-page="mse435-crash">MS&amp;E 435 · Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Machine Learning</h3><ul>
+<li><a href="../math-ml/index.html" data-page="math-ml-index">MATH-ML · Overview</a></li>
+<li><a href="../math-ml/l01-vectors-as-data.html" data-page="math-ml-l01">L01 · Vectors as Data</a></li>
+<li><a href="../math-ml/l02-matrices-as-machines.html" data-page="math-ml-l02">L02 · Matrices as Machines</a></li>
+<li><a href="../math-ml/l03-eigendecomposition-pca.html" data-page="math-ml-l03">L03 · Eigen-decomposition</a></li>
+<li><a href="../math-ml/l04-svd-low-rank.html" data-page="math-ml-l04">L04 · SVD and Low Rank</a></li>
+<li><a href="../math-ml/l05-probability-bayes.html" data-page="math-ml-l05">L05 · Probability and Bayes</a></li>
+<li><a href="../math-ml/l06-distributions-covariance.html" data-page="math-ml-l06">L06 · Distributions and Covariance</a></li>
+<li><a href="../math-ml/l07-calculus-gradients-chainrule.html" data-page="math-ml-l07">L07 · Calculus for ML</a></li>
+<li><a href="../math-ml/l08-convexity-gradient-descent.html" data-page="math-ml-l08">L08 · Convexity and Gradient Descent</a></li>
+<li><a href="../math-ml/l09-least-squares-regression.html" data-page="math-ml-l09">L09 · Least Squares</a></li>
+<li><a href="../math-ml/l10-information-theory.html" data-page="math-ml-l10">L10 · Information Theory</a></li>
+<li><a href="../math-ml/cheatsheet.html" data-page="math-ml-cheatsheet">MATH-ML · Cheatsheet</a></li>
+<li><a href="../math-ml/crash-course.html" data-page="math-ml-crash-course">MATH-ML · Crash Course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative AI</h3><ul>
+<li><a href="../math-genai/index.html" data-page="math-genai-index">Mathematical Foundations of Generative AI · Overview</a></li>
+<li><a href="../math-genai/l01-the-job.html" data-page="math-genai-l01">L01 · The Job</a></li>
+<li><a href="../math-genai/l02-kl-and-mle.html" data-page="math-genai-l02">L02 · KL Divergence and MLE</a></li>
+<li><a href="../math-genai/l03-f-divergences.html" data-page="math-genai-l03">L03 · f-Divergences</a></li>
+<li><a href="../math-genai/l04-gans.html" data-page="math-genai-l04">L04 · GANs</a></li>
+<li><a href="../math-genai/l05-wgan-evaluation.html" data-page="math-genai-l05">L05 · WGAN and Evaluation</a></li>
+<li><a href="../math-genai/l06-latent-variables-elbo.html" data-page="math-genai-l06">L06 · ELBO</a></li>
+<li><a href="../math-genai/l07-vae.html" data-page="math-genai-l07">L07 · VAE</a></li>
+<li><a href="../math-genai/l08-ddpm-forward.html" data-page="math-genai-l08">L08 · DDPM Forward</a></li>
+<li><a href="../math-genai/l09-ddpm-loss.html" data-page="math-genai-l09">L09 · DDPM Loss</a></li>
+<li><a href="../math-genai/l10-score-ddim-ar.html" data-page="math-genai-l10">L10 · Score, DDIM, AR</a></li>
+<li><a href="../math-genai/cheatsheet.html" data-page="math-genai-cheatsheet">Cheatsheet</a></li>
+<li><a href="../math-genai/crash-course.html" data-page="math-genai-crash-course">Crash course</a></li>
+</ul>
+<h3>Mathematical Foundations of Generative Models</h3><ul>
+<li><a href="../math-genmodels/index.html" data-page="math-genmodels-index">Math · Generative Models · Overview</a></li>
+<li><a href="../math-genmodels/l01-the-one-question.html" data-page="math-genmodels-l01">L01 · The One Question</a></li>
+<li><a href="../math-genmodels/l02-autoregressive-models.html" data-page="math-genmodels-l02">L02 · Autoregressive Models</a></li>
+<li><a href="../math-genmodels/l03-variational-autoencoders.html" data-page="math-genmodels-l03">L03 · Variational Autoencoders</a></li>
+<li><a href="../math-genmodels/l04-normalizing-flows.html" data-page="math-genmodels-l04">L04 · Normalizing Flows</a></li>
+<li><a href="../math-genmodels/l05-diffusion-ddpm.html" data-page="math-genmodels-l05">L05 · Diffusion I: DDPM</a></li>
+<li><a href="../math-genmodels/l06-score-matching-ddim.html" data-page="math-genmodels-l06">L06 · Score Matching &amp; Fast Diffusion</a></li>
+<li><a href="../math-genmodels/l07-energy-based-models.html" data-page="math-genmodels-l07">L07 · Energy-Based Models</a></li>
+<li><a href="../math-genmodels/l08-judging-a-creator.html" data-page="math-genmodels-l08">L08 · Judging a Creator</a></li>
+<li><a href="../math-genmodels/cheatsheet.html" data-page="math-genmodels-cheatsheet">Math · Generative Models · Cheatsheet</a></li>
+<li><a href="../math-genmodels/crash-course.html" data-page="math-genmodels-crash">Math · Generative Models · Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / Lecture 1: The Self-Improving Agent</nav>
+      <h1>Lecture 1: The Self-Improving Agent</h1>
+      <p class="meta-line">2025-09-24 · Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><div class="video-block" data-vid="6YnLB0XbTnI"><div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/6YnLB0XbTnI" title="Lecture 1: The Self-Improving Agent" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="video-blocked" hidden><p>Video blocked (ad-blocker or local file mode).</p><a class="watch-btn" href="https://www.youtube.com/watch?v=6YnLB0XbTnI" target="_blank" rel="noopener">Watch on YouTube</a></div></div><p class="video-fallback">Video not loading? <a href="https://www.youtube.com/watch?v=6YnLB0XbTnI" target="_blank" rel="noopener">Watch on YouTube</a></p><p class="video-cap">Original Stanford lecture. Timestamps in the text link to the exact moment.</p></div><h2 id="the-problem-one-shot-is-not-enough">The problem: one shot is not enough</h2>
+<p>You ask a chatbot a hard math question. It answers in one try. The
+answer is wrong. You ask again, phrased a little differently. This
+time it is right. The model knew the answer all along. It just did
+not say it the first time.</p>
+<p>This gap, between what a model can say once and what it knows, is
+the subject of this course. A <strong>language model</strong> is a machine that
+predicts the next word, over and over, until a full answer appears.
+An <strong>agent</strong> is a language model that does more than answer: it
+reasons, takes actions with tools, reads the results, and keeps
+going until a task is done. Fixing a bug, planning a trip, proving
+a theorem: these are agent tasks. None of them fits in one shot.</p>
+<p>The lectures build one argument across the quarter. The model can
+improve itself. It can try many times and keep the good tries. It
+can check its work with tools. It can search over plans. It can
+train on its own best attempts. Each lecture adds one piece of
+that loop. This chapter opens the loop and names its parts.</p>
+<h2 id="how-we-got-here-scaling-then-a-wall">How we got here: scaling, then a wall</h2>
+<p>From 2018 to 2024 the field had one reliable recipe: make the
+model bigger. The <strong>scaling laws</strong> say that as you raise compute,
+data, and parameter count, the test loss falls in a predictable
+curve. BERT had 340 million parameters. GPT-2 had 1.5 billion.
+GPT-3 had 175 billion. PaLM had 540 billion. Each step brought
+better scores on language and reasoning benchmarks.</p>
+<p>Bigger models also gained abilities nobody trained directly.
+<strong>Few-shot learning</strong> means the model follows a task from a few
+examples in the prompt, with no retraining. Show it two English to
+French pairs, then ask for a third, and it translates. These
+abilities appear only past a size threshold. They are called
+<strong>emergent</strong> because no one predicted them from the small models.</p>
+<p>Then the recipe started to saturate. Around 2024, throwing more
+pretraining compute at the same data stopped buying as much. The
+field needed a new axis of improvement. The lectures argue the new
+axis is the model improving itself: better answers at test time,
+and better models from those answers at train time.</p>
+<h2 id="first-tool-thinking-out-loud">First tool: thinking out loud</h2>
+<p>Before the loop, the model needs one skill: showing its work. A
+<strong>chain of thought</strong> is a step-by-step trace the model writes
+before the final answer. The lecture&rsquo;s toy is almost insultingly
+simple, which is the point: the mechanism is visible.</p>
+<pre class="ascii">prompt:  Roger has 5 tennis balls. He buys 2 cans.
+         Each can has 3 tennis balls. How many total?
+
+model:   Roger started with 5 balls.
+         2 cans of 3 balls is 6 balls.
+         5 + 6 = 11.
+answer:  11
+</pre>
+<p>The model does not jump to 11. It writes the steps, and each step
+is easy on its own. The lecture reports a striking fact: small
+models, around 8 billion parameters, gain nothing from chain of
+thought. Larger models gain a lot. The ability to use a reasoning
+trace is itself emergent. It appears only at scale.</p>
+<p>Watch what the trace buys. The steps are checkable. A wrong step
+can be spotted. The model can also correct itself mid-trace: start
+down a path, write &ldquo;wait, that is wrong&rdquo;, and backtrack. This
+<strong>self-correction</strong> is a small thing in a toy. In hard problems it
+is the difference between a dead end and a solution. Reasoning
+models, the o1 series, Gemini thinking, DeepSeek, are built on
+this: long traces of analysis, decomposition, trial, correction.</p>
+<h2 id="where-one-shot-breaks">Where one shot breaks</h2>
+<p>Now put the model on a hard problem, say an olympiad-level math
+question. One attempt, one answer. The model fails. This is
+expected: a single forward pass is a single draw from the model&rsquo;s
+distribution over answers, and hard problems sit in the tail.</p>
+<p>Here is the fact that opens the whole course. The Large Language
+Monkeys result, which the lectures return to again and again:
+sample the same problem many times, and small models solve
+problems far above their apparent level. A Llama 3 8B model, asked
+ten thousand times with a way to check which answers are right,
+solves IMO-level problems from the F2F benchmark. The knowledge
+was in the weights. One shot could not reach it. Ten thousand
+shots could.</p>
+<p>Two lessons fall out. First, the model&rsquo;s single-attempt score
+understates what it knows. Second, reaching the knowledge needs
+two things: many attempts, and a way to tell the good ones from
+the bad. The checker has a name in this course: the <strong>verifier</strong>.</p>
+<h2 id="the-key-question">The key question</h2>
+<p>What if the model generates many attempts, keeps the ones a
+verifier approves, and trains on them to get better?</p>
+<h2 id="the-self-improvement-loop">The self-improvement loop</h2>
+<p>A <strong>verifier</strong> is any procedure that judges an answer without a
+human in the loop. For math, it can be the known correct answer.
+For code, it can be unit tests: the program passes or it fails.
+The verifier must be fast and automatic, because the loop will
+call it thousands of times.</p>
+<p>The loop has three stages, and the lecture names them plainly:</p>
+<pre class="ascii">1. generate    the model tries the problem many times
+                  (test-time compute: more tries, no new training)
+                  |
+2. verify      a verifier scores every attempt
+                  keep the winners, drop the losers
+                  |
+3. train       fine-tune the model on the winners
+                  (train-time compute: the weights change)
+                  |
+               repeat: the better model generates better attempts
+</pre>
+<p><strong>Test-time compute</strong> is effort spent answering: more samples,
+longer reasoning traces, tool calls. The weights do not change.
+<strong>Train-time compute</strong> is effort spent learning: gradient updates
+on the winners. The weights change. The DeepSeek and o1 breakthrough
+the lecture describes was joining the two: use test-time scaling
+to manufacture high-quality training data, then train on it, then
+scale test time again. Each turn of the crank lifts the next.</p>
+<p>A concrete instance from the lecture: for math problems with known
+answers, generate many candidate solutions, keep the ones that
+reach the right answer, and fine-tune on them. For coding, generate
+many programs, keep the ones that pass the tests, and fine-tune on
+those. The model&rsquo;s own outputs become its training set. That is
+what &ldquo;self-improving&rdquo; means here: no new human labels, just the
+model, the verifier, and the loop.</p>
+<h2 id="mapping-back-what-the-loop-fixes">Mapping back: what the loop fixes</h2>
+<p>One-shot answering fails in two ways, and the loop answers both:</p>
+<table>
+<thead>
+<tr>
+<th>One-shot failure</th>
+<th>Loop answer</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The model knows more than one try shows</td>
+<td>Generate many attempts</td>
+<td>Test-time sampling surfaces answers that live in the tail of the distribution.</td>
+</tr>
+<tr>
+<td>No signal tells good tries from bad</td>
+<td>Verify automatically</td>
+<td>A fast verifier (answer match, unit tests) selects winners with no human in the loop.</td>
+</tr>
+<tr>
+<td>Winners are thrown away after use</td>
+<td>Train on the winners</td>
+<td>Fine-tuning on verified attempts moves the knowledge from the tail into the first try.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-honest-price-the-verifier-is-the-bottleneck">The honest price: the verifier is the bottleneck</h2>
+<p>The loop has one load-bearing part, and it is not the model. It is
+the verifier. Every turn of the crank needs thousands of fast,
+trustworthy judgments. Math with known answers qualifies. Code
+with unit tests qualifies. Creative writing does not: there is no
+fast automatic judge of a good essay, and a learned judge can be
+gamed by the model, a failure called <strong>reward hacking</strong>.</p>
+<p>Speed matters as much as correctness. The lectures stress that
+verifiers must be near-instant. A chip-design simulation that takes
+days to return one score cannot sit inside a training loop that
+needs thousands of iterations. Domains with slow verification are,
+for now, outside the loop&rsquo;s reach. The price of self-improvement
+is a fast, honest judge. Where no such judge exists, the loop does
+not turn.</p>
+<p>That price shapes the whole course. Lecture 2 scales the
+generate step. Lectures 3 through 5 add tools, planning, and
+search to make attempts stronger. Lecture 6 turns attempts into
+training data. Lecture 7 asks who verifies the verifier. Lecture
+8 measures whether any of it works on long tasks.</p>
+<div class="qa"><div class="q">What does &quot;self-improving&quot; mean in this course?</div><div class="a"><p>A loop with no new human labels. The model generates many attempts at problems, a fast automatic verifier picks the winners, and the model trains on those winners. The improved model then generates better attempts. Test-time compute makes the data. Train-time compute absorbs it.
+Human labels are slow and expensive, and for hard reasoning there are few sources with step-by-step traces on the internet. The loop manufactures its own supervision. Its limit is the verifier: it only works where answers can be checked automatically and fast.</p><div class="followup"><strong>Follow-up:</strong> Why not just train on more human-written data?</div></div></div>
+<div class="qa"><div class="q">What is the difference between test-time compute and train-time compute?</div><div class="a"><p>Test-time compute is effort spent producing an answer: sampling many candidates, writing long reasoning traces, calling tools. The model&rsquo;s weights stay fixed. Train-time compute is effort spent updating the weights: fine-tuning or reinforcement learning on data. The lectures&rsquo; key move is joining them: test-time scaling manufactures training data, which train-time scaling absorbs, which makes the next round of test-time scaling stronger.
+The combination. Test-time scaling alone needs a verifier at answer time and pays per question. Training on the verified attempts raises the single-attempt accuracy, so you pay less per question later. The lecture presents them as one flywheel, not two alternatives.</p><div class="followup"><strong>Follow-up:</strong> Which one mattered more in the DeepSeek and o1 results?</div></div></div>
+<div class="qa"><div class="q">Why is chain of thought a big deal if the toy is just tennis balls?</div><div class="a"><p>The toy shows the mechanism, not the power. Writing steps turns one hard leap into many easy steps, and each step can be checked or corrected. The striking fact is that only large models benefit: at around 8 billion parameters, chain of thought does nothing. At larger sizes it unlocks reasoning. The ability itself is emergent.
+Yes, and the lecture calls this out as a core reasoning-model behavior. Mid-trace the model writes that something looks wrong and backtracks. That self-correction, plus task decomposition and trying alternatives, is what the long thinking traces of o1-style models consist of.</p><div class="followup"><strong>Follow-up:</strong> Does the model ever correct itself?</div></div></div>
+<h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
+<ol>
+<li><strong>One shot wastes knowledge.</strong> A model can know an answer it
+   will not give on the first try. Agent tasks, multi-step work
+   with tools and feedback, never fit in one shot.</li>
+<li><strong>Scaling hit a wall.</strong> Bigger models, more data, more compute
+   drove a decade of gains, then saturated around 2024. The new
+   axis is the model improving itself.</li>
+<li><strong>Thinking out loud.</strong> Chain of thought breaks one hard leap
+   into checkable steps. Roger has 5 balls, buys 2 cans of 3:
+   5 + 6 = 11. Only large models can use it.</li>
+<li><strong>The monkeys result.</strong> Sampled 10,000 times with a verifier,
+   a small 8B model solves IMO-level problems. The knowledge is
+   in the weights. One shot cannot reach it.</li>
+<li><strong>The key question.</strong> What if the model generates many
+   attempts, keeps the verified winners, and trains on them?</li>
+<li><strong>The loop.</strong> Generate many tries, verify automatically, train
+   on winners, repeat. Test-time compute makes data. Train-time
+   compute absorbs it.</li>
+<li><strong>Map back.</strong> Sampling surfaces tail knowledge. The verifier
+   selects without humans. Training moves winners into the first
+   try.</li>
+<li><strong>The honest price.</strong> The verifier is the bottleneck. It must
+   be fast and honest. Slow or subjective domains stay outside
+   the loop.</li>
+</ol>
+<h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
+<p><strong>Official:</strong>
+- CS329A Lecture 1 (Autumn 2025): the lecture this chapter
+  follows, in its order. https://www.youtube.com/watch?v=6YnLB0XbTnI
+- CS329A course site: https://cs329a.stanford.edu</p>
+<p><strong>Further reading:</strong>
+- Brown et al., &ldquo;Large Language Monkeys&rdquo; (2024): the repeated
+  sampling result the lecture leans on.
+- OpenAI o1 release notes (Sept 2024): log-linear test-time
+  scaling on hard math, cited in lecture.</p>
+<p><strong>Caveats from these sources.</strong> The lecture dates are Autumn
+2025. Model names and benchmark numbers are snapshots from then.
+The &ldquo;ten thousand samples&rdquo; monkeys figure is for coverage with an
+oracle verifier, not single-attempt accuracy. Saturation of
+pretraining scaling is the lecturers&rsquo; framing of 2024, not a
+measured constant.</p>
+<h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
+<ul>
+<li><strong>CS329Z:</strong> the engineering counterpart. This course asks how
+  agents can improve themselves. CS329Z covers how to build them:
+  tool use, function calling, ReAct, evaluation, infrastructure.</li>
+<li><strong>CS336:</strong> where the base models come from: pretraining,
+  scaling laws, and the transformer the agents are built on.</li>
+<li><strong>CS229S:</strong> the systems view of the compute the loop burns:
+  training cost, inference cost, and why test-time scaling is a
+  systems problem too.</li>
+</ul>
+      <section class="sources"><h2>Sources</h2><ul><li><span class="src-tag">LECTURE</span><a href="https://www.youtube.com/watch?v=6YnLB0XbTnI" target="_blank" rel="noopener">CS329A Lecture 1: course introduction and LLM overview (Autumn 2025)</a></li><li><span class="src-tag">SITE</span><a href="https://cs329a.stanford.edu" target="_blank" rel="noopener">CS329A course site</a></li></ul></section>
+      <nav class="pager"><a href="../cs329a/index.html"><span class="lbl">← Previous</span>CS329A: Self-Improving AI Agents</a><a href="../cs329a/l02-test-time-scaling.html"><span class="lbl">Next →</span>Lecture 2: Test-Time Scaling: Ask Again and Again</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

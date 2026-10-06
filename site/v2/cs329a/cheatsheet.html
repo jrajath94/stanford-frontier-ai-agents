@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.classList.remove('no-js');</script>
 <title>CS329A Cheatsheet — Stanford Frontier AI</title>
-<meta name="description" content="Every key fact from CS329A on one dense page: definitions, numbers, mechanisms, failure modes, interview lines.">
+<meta name="description" content="Every key fact from CS329A on one dense page: definitions, numbers, mechanisms, failure modes, interview lines, memory aids, and self-tests.">
 <link rel="stylesheet" href="../assets/vendor/katex.min.css">
 <link rel="stylesheet" href="../assets/style.css">
 </head>
@@ -222,13 +222,16 @@
       <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><p>The whole course as a set of short stories. Each block tells one
 idea the way the lesson tells it: the problem, the number, the
 fix. Follow the links for the full derivations.</p>
+<figure><img alt="The course on one plate" src="assets/plate-crash-flywheel.svg"><figcaption>Generate, verify, train. Each lecture strengthens one stage or names its price. Shell 4. Source: original. Project: Stanford Frontier AI.</figcaption></figure>
+<figure><img alt="The numbers that matter" src="assets/plate-crash-numbers.svg"><figcaption>Every number on this plate is computed or lecture-reported in the lessons. Shell 2. Source: lessons. Project: Stanford Frontier AI.</figcaption></figure>
 <div class="cheat-cols">
 <div class="cheat-block">
 <h3 id="the-loop">The loop</h3>
 <p>Generate many attempts. Verify automatically. Train on winners.
 Repeat. Test-time compute makes data. Train-time compute absorbs
-it. The verifier is the bottleneck: it must be fast and honest.
-Slow or subjective domains stay outside the loop.
+it. The verifier is the bottleneck: it must be fast, automatic,
+and honest. Slow or subjective domains stay outside the loop.
+Mnemonic: <strong>GVT</strong>, generate, verify, train.
 <a href="l01-self-improving-agents.html">L01</a></p>
 </div>
 <div class="cheat-block">
@@ -237,18 +240,23 @@ Slow or subjective domains stay outside the loop.
 100 give 99.4%. Log-linear in samples. Llama 3 8B with thousands
 of verified samples beats GPT-4o-class at one try. DeepSeek v3
 at 1,000 samples beats Claude 3.5 Sonnet and o1-preview on
-SWE-bench-style tasks. Archon: composed inference systems,
-+14.1% average pass@1 over frontier closed models. Price: pays
-per question, needs the verifier at answer time.
+SWE-bench-style tasks. Majority vote plateaus at 10-50 samples:
+the generation-verification gap. Archon: generators, critic,
+ranker, fuser, tuned by search, +14.1% average pass@1 over
+frontier closed models, open models only. Price: pays per
+question, needs the verifier at answer time.
 <a href="l02-test-time-scaling.html">L02</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="react">ReAct</h3>
-<p>Thought, action, observation, repeat. Tools ground reasoning in
-facts from the world. Price: compounding error. Ten 90%-reliable
-steps give 0.9^10 = 35% task success. Poor tool choice grounds
-the trace in wrong facts. Overthinking stalls. Underthinking
-acts blind. Memory across tasks is named and unsolved.
+<p>Thought, action, observation, repeat. Mnemonic: <strong>TAO</strong>. Tools
+ground reasoning in facts from the world. Paper numbers:
+ALFWorld +34 points absolute, WebShop +10, best trial 71%, from
+1-2 examples. Price: compounding error. Ten 90%-reliable steps
+give 0.9^10 = 35% task success. Poor tool choice grounds the
+trace in wrong facts. Tool descriptions are prompts, not docs.
+Overthinking stalls. Underthinking acts blind. Memory across
+tasks is named and unsolved.
 <a href="l03-agents-that-act.html">L03</a></p>
 </div>
 <div class="cheat-block">
@@ -257,42 +265,51 @@ acts blind. Memory across tasks is named and unsolved.
 test failure, retry. Train-time: PPO on binary reward from
 hidden private tests. Public tests guide iteration. Private
 tests grade, blocking memorization. Turn-level value: one
-advantage for all tokens in the program. Price: sparse signal,
-needs executable tests, failures teach nothing.
+advantage for all tokens in the program. PPO&rsquo;s clip caps each
+update for stability. Price: sparse signal, needs executable
+tests, failures teach nothing, never start from a model that
+passes nothing.
 <a href="l04-learning-from-execution.html">L04</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="lats">LATS</h3>
-<p>ReAct walks one path. LATS grows a tree. Six stages: select by
-UCT, expand, evaluate (LLM-judge 0-1 plus self-consistency
-frequency), simulate, backpropagate running averages, reflect in
-words. UCT = value + c<em>sqrt(ln(parent visits)/node visits):
-exploit plus explore. Toy: judge 0.6 + consistency 0.75 = 1.35.
-Backprop (1.35</em>3+1)/4 = 1.26. Price: hundreds of model calls per
-task. The judge can mislead the tree.
+<p>ReAct walks one path. LATS grows a tree. Six stages, mnemonic
+<strong>SEESBR</strong>: select by UCT, expand, evaluate, simulate,
+backpropagate, reflect. Evaluate: LLM-judge 0-1 plus
+self-consistency frequency. Toy: judge 0.6 + consistency 0.75
+= 1.35. Backprop (1.35<em>3+1)/4 = 1.26. UCT = value +
+c</em>sqrt(ln(parent visits)/node visits): exploit plus explore.
+Toy: 2.13 beats 1.55. SPRINT: parallel plan-execute baked in.
+SWiRL: process rewards before tools answer, transfers across
+tools. Price: hundreds of model calls per task. The judge can
+mislead the tree. Irreversible actions out of scope.
 <a href="l05-planning-with-search.html">L05</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="alphacode-to-alphacode-2">AlphaCode to AlphaCode 2</h3>
-<p>10@k: generate k programs, submit at most 10. Clustering by
-behavior buys diversity: 41B+clustering beats 41B beats 9B.
-Log-linear in samples. Bigger models steeper slopes. Selection
-bottleneck: unlimited pass@k passes 40%, 10@k stalls near 30%.
-AlphaCode 2: fine-tune Gemini Pro family for diversity, learned
-scoring model replaces heuristic clustering. Price: diversity
-must keep growing with samples. Loss is a poor proxy for solve
-rate.
+<p>10@k: generate k programs, submit at most 10. Example tests
+remove ~95%. Clustering by behavior buys diversity: 41B plus
+clustering beats 41B beats 9B. Log-linear in samples. Bigger
+models steeper slopes. Selection bottleneck: unlimited pass@k
+passes 40%, 10@k stalls near 30%. AlphaCode 2: fine-tune Gemini
+Pro family for diversity, learned scoring model replaces
+heuristic clustering. 100 samples matched AlphaCode&rsquo;s million.
+~85% of Codeforces participants beaten. Price: diversity must
+keep growing with samples. Loss is a poor proxy for solve rate.
+Breadth for one-artifact problems, depth for dependent steps.
 <a href="l06-sampling-at-scale.html">L06</a></p>
 </div>
 <div class="cheat-block">
 <h3 id="deep-research-agents">Deep research agents</h3>
-<p>Knowledge cutoffs plus silent guessing. Uncertainty words mark
-gaps. Single-shot RAG dumps 10 documents and still fails.
-Agentic RAG: search mid-reasoning per gap. Search-o1: reason in
+<p>Knowledge cutoffs plus silent guessing. Uncertainty words
+(&ldquo;perhaps&rdquo;, &ldquo;wait&rdquo;) mark gaps. Single-shot RAG dumps 10
+documents and still fails. Agentic RAG: search mid-reasoning
+per gap, query the gap not the question. Search-o1: reason in
 documents, extract chunks, file notes not documents. Chemistry
 toy: guess 14 wrong, dump wrong, search plus read 10 right.
-Price: trigger heuristics miss gaps. Every search costs latency
-and context.
+Context length is not reasoning capacity. Price: trigger
+heuristics miss gaps both ways. Every search costs latency and
+context. Stop when chunks stop changing the answer.
 <a href="l07-search-that-reads.html">L07</a></p>
 </div>
 <div class="cheat-block">
@@ -301,10 +318,14 @@ and context.
 10k problems, keep the 3k with correct answers, fine-tune,
 repeat. Rationalization: for failures, hand the model the
 answer as hint, keep the rationale, train without the hint.
-Assumptions: correct answer implies good rationale. The model
-can rationalize. The base can bootstrap. Price: unfiltered
+Construction is easier than search. Assumptions: correct answer
+implies good rationale (the live wire), the model can
+rationalize, the base can bootstrap. Price: unfiltered
 rationales bake in bad reasoning. Needs answer keys. Negatives
-teach nothing. Industrial form: DeepSeekMath with GRPO.
+teach nothing. Industrial form: DeepSeekMath (120B curated
+tokens, 51.7% MATH at 7B) with GRPO (group-relative
+advantages, majority@K not pass@K). DAPO: dynamic sampling,
+watch entropy and response length.
 <a href="l08-teaching-reason.html">L08</a></p>
 </div>
 <div class="cheat-block">
@@ -313,11 +334,15 @@ teach nothing. Industrial form: DeepSeekMath with GRPO.
 LLM-as-judge certifies invalid proofs as valid. DeepSeek-Math
 V2: meta-verifier judges the judge, generator and verifier lift
 each other. 8 iterations climbing, best-of-32 reaches 42% proof
-score on IMO 2024 shortlist. Multi-agent debate: generators
-plus critic keep chains diverse where single-agent fine-tuning
-collapses. Gains transfer to adjacent domains. Price:
-human-seeded standards. Slow domains (chip sims, wet labs)
-have no fast judge. Stand-in reward models invite hacking.
+score on IMO 2024 shortlist. Absolute Zero: no answer keys,
+model proposes its own tasks scored by learnability
+(1 - success rate), verified by execution. Multi-agent debate:
+generators plus critic keep chains diverse where single-agent
+fine-tuning collapses. Gains transfer to adjacent domains.
+Weaver: filter weak verifiers, weight on ~1% labels, distill
+small. Price: human-seeded standards. Slow domains (chip sims,
+wet labs) have no fast judge. Stand-in reward models invite
+hacking.
 <a href="l09-verifier-bottleneck.html">L09</a></p>
 </div>
 <div class="cheat-block">
@@ -325,13 +350,136 @@ have no fast judge. Stand-in reward models invite hacking.
 <p>METR time horizon at 50% success doubles every 7 months: 2
 seconds (GPT-2, 2019), 8 minutes (GPT-4, 2023), 59 minutes
 (Claude 3.7, 2025). At 80% success the frontier drops to about
-15 minutes. Failure modes: poor planning, poor tool choice, no
-error recovery, lost goal state. Open problems: diversity,
+15 minutes. 50% is not deployable. Failure modes: poor
+planning, poor tool choice, no error recovery, lost goal state
+(the unsolved one). GDPval: instruction following fails on
+expert tasks. DeepScholar: no system above 19%, fluency trades
+off against verifiability. Open problems: diversity,
 verifiers, curriculum, non-verifiable domains, cost of
-intelligence.
+intelligence. Intelligence per watt: local &lt;=20B models cover
+most chat queries.
 <a href="l10-measuring-agents.html">L10</a></p>
 </div>
 </div>
+<h2 id="one-glance-decision-tables">One-glance decision tables</h2>
+<h3 id="which-method-for-which-problem">Which method for which problem</h3>
+<table>
+<thead>
+<tr>
+<th>Your problem</th>
+<th>Reach for</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Answers exist but one try misses them</td>
+<td>Repeated sampling + verifier (L02)</td>
+<td>Log-linear coverage, cheapest capability gain</td>
+</tr>
+<tr>
+<td>Model cannot check facts or run code</td>
+<td>ReAct (L03)</td>
+<td>Grounds each step in tool observations</td>
+</tr>
+<tr>
+<td>Coding agent must improve itself</td>
+<td>RLEF (L04)</td>
+<td>Execution is a free, honest teacher</td>
+</tr>
+<tr>
+<td>One path keeps failing, need alternatives</td>
+<td>LATS (L05)</td>
+<td>Tree keeps untried branches alive</td>
+</tr>
+<tr>
+<td>Competition coding, one program per problem</td>
+<td>AlphaCode pattern (L06)</td>
+<td>Breadth + learned selector</td>
+</tr>
+<tr>
+<td>Knowledge cutoff, silent guesses</td>
+<td>Agentic search (L07)</td>
+<td>Fill gaps mid-thought, read the docs</td>
+</tr>
+<tr>
+<td>No reasoning data, but answer keys exist</td>
+<td>STaR (L08)</td>
+<td>Manufactures rationales from answers</td>
+</tr>
+<tr>
+<td>Verifier is weak or learned</td>
+<td>Meta-verifier / Weaver / debate (L09)</td>
+<td>Judge the judge, maintain diversity</td>
+</tr>
+<tr>
+<td>&ldquo;Is it ready to deploy?&rdquo;</td>
+<td>METR-style eval at 80% (L10)</td>
+<td>50% capability is not reliability</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-time-vs-train-time-fast-lookup">Test-time vs train-time, fast lookup</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Test-time compute</th>
+<th>Train-time compute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Weights</td>
+<td>Fixed</td>
+<td>Change</td>
+</tr>
+<tr>
+<td>Examples</td>
+<td>Sampling, traces, tools, search</td>
+<td>Fine-tuning, RL on winners</td>
+</tr>
+<tr>
+<td>Pays</td>
+<td>Per question, forever</td>
+<td>Once, up front</td>
+</tr>
+<tr>
+<td>Needs</td>
+<td>Verifier at answer time</td>
+<td>Verifier during training</td>
+</tr>
+<tr>
+<td>Fails when</td>
+<td>No checkable answer</td>
+<td>No training signal</td>
+</tr>
+</tbody>
+</table>
+<h2 id="never-confuse-pairs">Never-confuse pairs</h2>
+<ul>
+<li><strong>Coverage vs pass@k.</strong> Coverage: at least one of k solves it, oracle assumed. Pass@k: the same, verifier folded in. Same curve, different honesty about the judge.</li>
+<li><strong>Test-time vs train-time compute.</strong> Test-time: weights fixed, answers improve per question. Train-time: weights change, answers get cheaper forever after.</li>
+<li><strong>Outcome vs process reward.</strong> Outcome: checks the ending, cheap, blind to broken steps. Process: checks the steps, expensive, mostly does not exist yet.</li>
+<li><strong>ReAct vs chain of thought.</strong> CoT: reasoning only, inside the box. ReAct: reasoning interleaved with tool actions, outside contact.</li>
+<li><strong>Generation vs selection.</strong> Generation: is the winner in the set (coverage). Selection: can the filter pick it (10@k). The bottleneck moved from the first to the second.</li>
+<li><strong>Verifier vs reward model.</strong> Verifier: any judge, including answer keys and tests. Reward model: a learned verifier, gameable, the hacking risk.</li>
+<li><strong>Majority@K vs pass@K.</strong> Majority@K: the most common answer is right (consistency). Pass@K: any of K is right (capability). GRPO improves the first, not the second.</li>
+<li><strong>50% horizon vs 80% horizon.</strong> 50%: capability trend, steep. 80%: deployability, lags years behind.</li>
+</ul>
+<h2 id="if-this-then-that-rules">If-this-then-that rules</h2>
+<ul>
+<li>If samples are not diverse, then the effective k is the cluster count, not the sample count. Stop sampling, fix the generator.</li>
+<li>If the verifier is learned, then hold out a trusted check the loop cannot see. Rising loop scores with a flat held-out check means hacking.</li>
+<li>If the task has irreversible actions, then tree search is out. Simulate or do not search.</li>
+<li>If every training prompt is all-pass or all-fail, then the batch carries no gradient. Drop them (DAPO&rsquo;s rule).</li>
+<li>If entropy falls while loss falls, then the policy is collapsing. Stop, do not celebrate.</li>
+<li>If response length grows with flat scores, then the model is padding, not reasoning.</li>
+<li>If the question is easy, then spend 1-2 samples. If hard, then sequential revision beats parallel sampling.</li>
+<li>If the judge must be fast, then answer keys and tests qualify, learned judges risk honesty, humans do not qualify at all.</li>
+<li>If deploying, then measure at 80% success, not 50%. 50% is a research result.</li>
+<li>If the trigger fires constantly, then calibrate it: keep only searches that change answers.</li>
+</ul>
 <h2 id="interview-lines">Interview lines</h2>
 <ul>
 <li>&ldquo;Test-time compute is a real axis: coverage is 1-(1-p)^k, log-linear in samples, and small models with verification beat giants at one try.&rdquo;</li>
@@ -339,9 +487,11 @@ intelligence.
 <li>&ldquo;RLEF&rsquo;s two-tier tests block memorization: public tests for iteration, hidden tests for reward.&rdquo;</li>
 <li>&ldquo;LATS replaces greedy trajectories with tree search: UCT balances exploiting good branches against exploring rare ones.&rdquo;</li>
 <li>&ldquo;AlphaCode&rsquo;s binding constraint is selection, not generation: 10@k stalls near 30 percent while unlimited attempts pass 40.&rdquo;</li>
+<li>&ldquo;Agentic search queries the gap, not the question, and files notes, not documents: context length is not reasoning capacity.&rdquo;</li>
 <li>&ldquo;STaR bootstraps reasoning from answer keys, but correct answers do not imply correct reasoning, which is the leak process rewards must fix.&rdquo;</li>
+<li>&ldquo;GRPO sharpens the distribution without widening it: majority@K up, pass@K flat. More consistent, not smarter.&rdquo;</li>
 <li>&ldquo;The verifier is the bottleneck behind every loop: outcome checks are blind, model judges are gullible, and the meta-verifier judges the judge.&rdquo;</li>
-<li>&ldquo;Capability doubles every 7 months. 80-percent reliability lags years behind 50-percent capability.&rdquo;</li>
+<li>&ldquo;Capability doubles every 7 months. 80-percent reliability lags years behind 50-percent capability. 50% is not deployable.&rdquo;</li>
 </ul>
       
       <nav class="pager"><a href="../cs329a/l10-measuring-agents.html"><span class="lbl">← Previous</span>Lecture 10: Measuring Agents and the Road Ahead</a><a href="../cs329a/crash-course.html"><span class="lbl">Next →</span>CS329A Crash Course</a></nav>

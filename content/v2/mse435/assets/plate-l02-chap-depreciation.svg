@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
+<rect width="960" height="600" fill="#F7F4EE"/>
+<text x="48" y="56" font-size="30" font-weight="600" fill="#1B2838">Chapter plate: the depreciation fight</text>
+<text x="48" y="86" font-size="17" fill="#5C6B7A">Chapter plate. Book life against economic life. Source: original synthesis; Research Affiliates.</text>
+<g font-size="18" font-weight="600" fill="#1B2838">
+<text x="48" y="124">WITHOUT the critique: 6 years</text>
+<text x="328" y="124">the stored object: the GPU</text>
+<text x="648" y="124">WITH the critique: 3 years</text>
+</g>
+<g font-size="14" font-weight="500">
+<rect x="48" y="140" width="264" height="330" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="180" y="180" text-anchor="middle" fill="#1B2838">"six is the standard"</text>
+<text x="180" y="204" text-anchor="middle" fill="#5C6B7A">the guest's book life</text>
+<text x="180" y="244" text-anchor="middle" fill="#1B2838">$60M over 6 years</text>
+<text x="180" y="268" text-anchor="middle" fill="#1B2838">= $10M per year</text>
+<text x="180" y="308" text-anchor="middle" fill="#1B2838">defense: abstraction</text>
+<text x="180" y="332" text-anchor="middle" fill="#5C6B7A">customers buy tokens</text>
+<text x="180" y="356" text-anchor="middle" fill="#5C6B7A">never see the chip</text>
+<text x="180" y="396" text-anchor="middle" fill="#1B2838">H100 repriced upward</text>
+<text x="180" y="420" text-anchor="middle" fill="#5C6B7A">~$3.28/hr, Sept 2026</text>
+<rect x="328" y="140" width="304" height="330" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="1.5"/>
+<text x="480" y="200" text-anchor="middle" fill="#1B2838" font-size="20" font-weight="600">year 2: +$36k</text>
+<text x="480" y="226" text-anchor="middle" fill="#5C6B7A">137% ROI per chip</text>
+<text x="480" y="266" text-anchor="middle" fill="#1B2838" font-size="24" font-weight="600">-&gt;</text>
+<text x="480" y="316" text-anchor="middle" fill="#1B2838" font-size="20" font-weight="600">year 4: -$4.4k</text>
+<text x="480" y="342" text-anchor="middle" fill="#5C6B7A">-34% ROI, economically dead</text>
+<text x="480" y="382" text-anchor="middle" fill="#1B2838">driver: compute per watt</text>
+<text x="480" y="406" text-anchor="middle" fill="#5C6B7A">fixed power ceiling forces swaps</text>
+<text x="480" y="440" text-anchor="middle" fill="#5C6B7A">Fortune's reading of Table 1</text>
+<rect x="648" y="140" width="264" height="330" rx="12" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5"/>
+<text x="780" y="180" text-anchor="middle" fill="#1B2838">economic life ~3 years</text>
+<text x="780" y="204" text-anchor="middle" fill="#5C6B7A">Research Affiliates, Apr 2026</text>
+<text x="780" y="244" text-anchor="middle" fill="#1B2838">two thirds of capex</text>
+<text x="780" y="268" text-anchor="middle" fill="#1B2838">is maintenance</text>
+<text x="780" y="308" text-anchor="middle" fill="#1B2838">$125B net of $650B</text>
+<text x="780" y="332" text-anchor="middle" fill="#5C6B7A">at a 2-year life (L01)</text>
+<text x="780" y="372" text-anchor="middle" fill="#1B2838">treadmill, not growth</text>
+<text x="780" y="396" text-anchor="middle" fill="#5C6B7A">replacement, not expansion</text>
+<text x="780" y="436" text-anchor="middle" fill="#1B2838">Brookings: $6.0T needed</text>
+</g>
+<rect x="48" y="486" width="864" height="56" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="480" y="521" text-anchor="middle" font-size="15" fill="#1B2838">Tradeoff: hold both schedules. The 2-year payback clears either. The 4-year payback survives only the 6-year book.</text>
+<text x="48" y="578" font-size="15" font-weight="500" fill="#1B2838">One connection: the schedule does not change the cash. It changes whether the cash was a return or a refund.</text>
+</svg>

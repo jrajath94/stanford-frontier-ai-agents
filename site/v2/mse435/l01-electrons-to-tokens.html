@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.classList.remove('no-js');</script>
 <title>Lecture 1: From Electrons to Tokens — Stanford Frontier AI</title>
-<meta name="description" content="Why the five hyperscalers are spending $650B: the AI production function, the Cobb-Douglas growth equation, and digital labor as the first digitally scalable la">
+<meta name="description" content="Why the five hyperscalers are spending ~$750B: the AI production function, the Cobb-Douglas growth equation, and digital labor as the first digitally scalable l">
 <link rel="stylesheet" href="../assets/vendor/katex.min.css">
 <link rel="stylesheet" href="../assets/style.css">
 </head>
@@ -235,6 +235,28 @@ it takes to produce AI at all, then shows why the spending is
 rational under one economic model, and then follows the money
 down into the physical stack. The next chapter opens the
 dollar itself.</p>
+<h3 id="subchapter-the-chart-updated-to-october-2026">Subchapter: the chart, updated to October 2026</h3>
+<p>The session&rsquo;s $650B framing is a host&rsquo;s estimate from spring
+2026. What happened next makes the chart steeper, not flatter.
+Reported 2026 capital expenditure plans: Amazon roughly
+$200-220 billion, Alphabet $195-205 billion, Meta $115-135
+billion, Microsoft roughly $175 billion. Analyst estimates
+put the combined hyperscaler total for 2026 around $730
+billion, nearly triple the 2024 total. The majority is
+directed at AI data centers, GPU clusters, and custom
+silicon. In July 2026, US private data-center construction
+spending hit a $75 billion annualized pace, passing
+residential homebuilding for the first time in modern
+records. The thesis from the session held up: the money
+kept flowing, and it flowed to the same three inputs this
+chapter identifies.</p>
+<p>A later Fortune piece, citing Research Affiliates, added a
+warning the session did not fully price: hyperscaler AI
+hardware may become economically obsolete in about three
+years, not the five to six years companies use on their
+books. Two thirds of the spend may be replacement, not
+growth. That critique lands on L02&rsquo;s depreciation debate,
+not on this chapter&rsquo;s thesis.</p>
 <h2 id="the-ai-production-function">The AI production function</h2>
 <p>Before the money, the recipe. The guest, Chase Lochmiller of
 Crusoe, starts with a plain question: what does it take to
@@ -249,7 +271,7 @@ data centers  the buildings that house and cool the machines
 </pre>
 <p>Read each ingredient the way an economist reads an input to a
 factory. <strong>Data</strong> is raw material. Companies like Scale AI buy
-and label it; the transcript also names Mercor
+and label it. the transcript also names Mercor
 [uncertain: the transcript reads &ldquo;Merkur&rdquo;] and Handshake as
 players in this market. <strong>Algorithms</strong> are the process
 technology, invented mostly inside the research labs: new
@@ -263,6 +285,27 @@ concentrates on the last three: compute, energy, and data
 centers. That is where Crusoe sits, and that is where the
 CapEx chart is pointing. The rest of this chapter explains
 why investors believe the return justifies it.</p>
+<figure><img alt="The AI production function: five inputs, money on the last three" src="assets/plate-l01-production-function.svg"><figcaption>Plate L01-F1. The five inputs; spending concentrates on compute, energy, and data centers. Shell 2. Source: original, numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-data-and-algorithms-the-unspent-inputs">Subchapter: data and algorithms, the unspent inputs</h3>
+<p>Data and algorithms are real costs, but they do not absorb
+CapEx at the factory scale. Data labeling is a services
+business with thin margins and no capacity constraint that
+gates anything. Algorithms are labor costs inside labs: a few
+hundred researchers, salaries in the millions, against a
+$60B-per-gigawatt build. The guest&rsquo;s point is about marginal
+bottlenecks: doubling the data budget buys no AI factory.
+Doubling the energy budget buys a gigawatt of output. Money
+flows to the inputs that gate output, and those are the last
+three.</p>
+<h3 id="subchapter-compute-energy-data-centers-where-the-money-lands">Subchapter: compute, energy, data centers, where the money lands</h3>
+<p>The last three inputs share one property: each is bought by
+the megawatt. A megawatt is one million watts of power draw,
+and it prices everything: the substation, the cooling plant,
+the rack count. Think of it as the &ldquo;per seat&rdquo; of the data
+center business. L02 prices it exactly: about $20M per MW
+for the factory, about $40M per MW for the machines inside.
+The production function is a menu. The megawatt is the
+unit price.</p>
 <h2 id="the-growth-equation">The growth equation</h2>
 <p>The guest reaches for a classic economics model to explain
 the bet. It is called the <strong>Cobb-Douglas</strong> model of
@@ -286,12 +329,31 @@ through the birth rate: a 20-year lead time, because a new
 worker must be born, raised, schooled, fed, and housed
 before producing anything. Labor was the slow term. Capital
 could move fast. Labor could not.</p>
-<p>Now run the toy version. Suppose an economy grows 3 percent
-a year, split evenly: 1 point from labor, 1 from capital, 1
-from technology. The labor point is capped by demography.
-No investment decision made this quarter changes how many
+<figure><img alt="The growth equation, and the capped labor term" src="assets/plate-l01-cobb-douglas.svg"><figcaption>Plate L01-F2. A 3 percent growth split three ways. The labor point is capped by demography. Shell 2. Source: original toy for the Cobb-Douglas decomposition. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-toy-version-with-numbers">Subchapter: the toy version, with numbers</h3>
+<p>Run the toy. Suppose an economy grows 3 percent a year,
+split evenly: 1 point from labor, 1 from capital, 1 from
+technology. The labor point is capped by demography. No
+investment decision made this quarter changes how many
 20-year-olds exist. The term is, for all practical purposes,
 fixed on any horizon a company plans against.</p>
+<p>Now suppose an investment could buy 0.5 points of labor
+growth the way capital buys 1 point. Total growth moves
+from 3 percent to 3.5 percent, and the buyer captures the
+surplus. Compounded over a decade, that half point is the
+difference between $1.34 and $1.41 on every dollar of GDP,
+a 5 percent larger economy. The $650 billion is a bid on
+that half point.</p>
+<h3 id="subchapter-why-labor-was-the-slow-term">Subchapter: why labor was the slow term</h3>
+<p>Birth rate is not a dial. Raising a worker costs two decades
+of food, schooling, and housing before the first productive
+hour. Immigration moves labor across borders but does not
+create it. Training changes quality, not headcount. Every
+lever on the labor term has a lead time measured in years
+or decades. Capital, by contrast, deploys in quarters: a
+loan becomes a factory. The guest&rsquo;s insight is that the
+asymmetry, not the technology itself, is the opportunity.</p>
+<h2 id="digital-labor-the-term-that-became-investable">Digital labor: the term that became investable</h2>
 <p>AI breaks the cap. When you hand a task to a coding agent
 (&ldquo;build a CRM for my new product&rdquo;) and it does the work,
 that is labor being produced. Not a tool assisting a worker.
@@ -299,9 +361,22 @@ Labor itself, created by buying data centers and GPUs. The
 guest&rsquo;s phrase is <strong>digital labor</strong>: the first labor force
 in history whose size changes through an investment
 decision instead of a birth rate.</p>
-<pre class="ascii">traditional labor:  birth rate --&gt; 20-year wait --&gt; new worker
-digital labor:      CapEx     --&gt; build data center --&gt; new workers
-</pre>
+<figure><img alt="Digital labor: the labor term becomes an investment decision" src="assets/plate-l01-digital-labor.webp"><figcaption>Plate L01-F3. Traditional labor waits on the birth rate. Digital labor scales with CapEx. Shell 3. Source: original diagram for Stanford Frontier AI. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-the-mechanism-step-by-step">Subchapter: the mechanism, step by step</h3>
+<p>Step one: a task exists that a human would do for wages.
+Step two: an agent does it, consuming tokens. Step three:
+tokens cost power, chips, and buildings, all bought with
+capital. The wage becomes a CapEx line. The labor term
+moves when money moves, on a quarterly horizon, like
+capital always did.</p>
+<h3 id="subchapter-what-it-replaces-and-what-it-does-not">Subchapter: what it replaces and what it does not</h3>
+<p>Digital labor substitutes for routine cognitive work:
+drafting, summarizing, triaging, coding boilerplate. It
+does not substitute for physical presence, trust
+relationships, or judgment under ambiguity. The guest&rsquo;s
+thesis does not require replacing all labor. It requires
+replacing enough that the labor term of GDP growth moves.
+Even a fraction is a first in history.</p>
 <p>That is the thesis behind the chart. The $650 billion is
 not a bet that chatbots are fun. It is a bet that the labor
 term of the growth equation can now be scaled the way
@@ -313,14 +388,17 @@ implies. If digital labor is the prize, the bottleneck is
 whatever gates the factories. The guest&rsquo;s founding insight,
 from just under a decade of building, was that the scarce
 resource was <strong>energy</strong>, not chips.</p>
+<h3 id="subchapter-why-the-hubs-filled-first">Subchapter: why the hubs filled first</h3>
 <p>The reasoning is market logic. Data center capacity had
 grown steadily through the web 2.0 era, clustering in
 established hubs. Northern Virginia, which the guest names,
 runs a large share of the internet. Building &ldquo;the next data
-center in Northern Virginia&rdquo; was a crowded trade. Meanwhile
-the new workloads, AI training with backpropagation and
-proof-of-work crypto, shared one trait: at scale, they are
-limited by energy.</p>
+center in Northern Virginia&rdquo; was a crowded trade: land
+costs more, permitting queues are long, and power prices
+reflect competition. Meanwhile the new workloads, AI
+training with backpropagation and proof-of-work crypto,
+shared one trait: at scale, they are limited by energy.</p>
+<h3 id="subchapter-the-inversion">Subchapter: the inversion</h3>
 <p>So Crusoe inverted the usual plan. Instead of moving energy
 to the computers, move the computers to the energy. Find
 places with abundant cheap power that are not historical
@@ -334,12 +412,7 @@ marginal buyer. Power prices went negative. Crusoe signed
 its first two buildings there in June 2024, and the site
 is now described as one of the largest AI computing
 campuses in the world, possibly the largest.</p>
-<p>Figure L01-F1. The energy-first inversion. Source: original
-diagram for Stanford Frontier AI, drawn from the session.</p>
-<pre class="ascii">usual plan:        build data center in hub --&gt; buy expensive power
-Crusoe plan:       find cheap stranded power --&gt; build data center there
-Abilene trigger:   tax credits --&gt; renewable overbuild --&gt; negative prices
-</pre>
+<figure><img alt="The energy-first inversion, with the Abilene arithmetic" src="assets/plate-l01-abilene.svg"><figcaption>Plate L01-F4. Tax credits to overbuild to negative prices to a 2.1 GW campus. Shell 3. Source: original, numbers from the session. Project: Stanford Frontier AI.</figcaption></figure>
 <p>The campus numbers set the scale for the whole course.
 A 200 MW substation and a 1 GW substation, the latter
 described as the largest privately owned substation in the
@@ -350,43 +423,56 @@ feeding computers. Eight buildings serve Oracle and
 OpenAI, the project known as Project Stargate, plus a
 350 MW natural gas plant built to energize the cluster
 and an expansion planned for Microsoft.</p>
+<h3 id="subchapter-what-is-used-where-october-2026">Subchapter: what is used where, October 2026</h3>
+<p>The energy-first playbook is now the industry&rsquo;s default
+strategy. Hyperscalers announce sites by their power
+first: the Nvidia-SB Energy PORTS-Pike campus in Ohio
+targets 8 GW of AI compute with at least 10 GW of new
+power generation, backed by a 20-year lease with OpenAI.
+Microsoft reported adding a gigawatt of capacity in a
+single quarter. The pattern repeats the Abilene logic at
+national scale: secure generation, transmission, and
+permits before the GPUs arrive, because power is the
+longest lead-time input.</p>
 <h2 id="the-moving-bottleneck">The moving bottleneck</h2>
 <p>A common misunderstanding is that the binding constraint
 in AI is fixed. The guest insists it moves, and the
 history of the last four years proves it.</p>
-<pre class="ascii">4 years ago:    compute (get the chips)
-then:          memory (memory stocks ripping)
-today:         energized data centers (power shells you can plug into)
-always:        labor (electricians, welders, plumbers, construction)
-</pre>
-<p><strong>Chips have softened as the bottleneck.</strong> Access to GPUs
+<figure><img alt="The bottleneck timeline, with the labor floor" src="assets/plate-l01-bottleneck.svg"><figcaption>Plate L01-F5. Chips, then memory, then energized shells, with skilled labor binding underneath. Shell 2. Source: original diagram for Stanford Frontier AI, drawn from the session. Project: Stanford Frontier AI.</figcaption></figure>
+<h3 id="subchapter-chips-four-years-ago">Subchapter: chips, four years ago</h3>
+<p>The first bottleneck was compute itself: getting the
+chips. Training runs competed for scarce GPUs, and
+allocation was the strategy. Whoever held the most H100s
+held the lead.</p>
+<h3 id="subchapter-memory-then">Subchapter: memory, then</h3>
+<p>Memory stocks ripped next. High-bandwidth memory and the
+memory subsystem of the chip package gated how many
+training clusters could ship. The constraint moved one
+layer inside the machine.</p>
+<h3 id="subchapter-energized-shells-today">Subchapter: energized shells, today</h3>
+<p>Chips have softened as the bottleneck. Access to GPUs
 is better than it was. The binding constraint today is
 finding places where you can put the chips and turn them
 on: powered shells with the electrical and cooling plant
-ready. And underneath every phase, labor: the guest calls
-the shortage of tradespeople a bottleneck in its own
-right, with 9,000 people on site at Abilene every day
-against a town of 120,000.</p>
+ready. A <strong>power shell</strong> is an energized data center:
+the building, the substation, the cooling, everything
+needed so that you can plug in chips and start computing.</p>
+<h3 id="subchapter-labor-always">Subchapter: labor, always</h3>
+<p>Underneath every phase, labor. The guest calls the
+shortage of tradespeople a bottleneck in its own right,
+with 9,000 people on site at Abilene every day against a
+town of 120,000. Electricians, welders, plumbers,
+construction workers: the factories need hands as much
+as they need electrons.</p>
 <p>This is why Crusoe is <strong>vertically integrated</strong>, meaning
 it owns multiple layers of the stack instead of one. The
 company works from energy development at the bottom,
 through the data center buildings, up to GPU cluster
 deployment and managed services at the top. When the
-bottleneck moves, a single-layer company is stuck; a
+bottleneck moves, a single-layer company is stuck. a
 vertically integrated one retools. The guest is explicit
 about the boundary: not in the chip business, not in the
 model business. Everything between energy and tokens.</p>
-<p>Figure L01-F2. The bottleneck timeline. Source: original
-diagram for Stanford Frontier AI, drawn from the session.</p>
-<div class="mermaid">flowchart LR
-  A["4 years ago: chips"] --> B["then: memory"]
-  B --> C["today: energized shells"]
-  C --> D["underneath: skilled labor"]
-</div><pre class="mermaid-fallback"><code>flowchart LR
-  A[&quot;4 years ago: chips&quot;] --&gt; B[&quot;then: memory&quot;]
-  B --&gt; C[&quot;today: energized shells&quot;]
-  C --&gt; D[&quot;underneath: skilled labor&quot;]
-</code></pre>
 <h2 id="mapping-back-why-the-money-is-rational">Mapping back: why the money is rational</h2>
 <p>Each piece of this chapter answers the opening question.</p>
 <table>
@@ -413,6 +499,10 @@ diagram for Stanford Frontier AI, drawn from the session.</p>
 <td>What gates growth?</td>
 <td>A moving bottleneck: chips, then memory, now energized shells, always skilled labor. Vertical integration is the hedge.</td>
 </tr>
+<tr>
+<td>What changed by Oct 2026?</td>
+<td>The spend kept rising: ~$730B combined hyperscaler CapEx. Power is now the lead-time input for every site.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="the-honest-price-the-thesis-can-be-wrong">The honest price: the thesis can be wrong</h2>
@@ -429,19 +519,38 @@ ones, and the legacy electrical stack being disrupted by
 power electronics. The price of the thesis is that it must
 be right about demand for a decade. The next chapter
 checks whether the unit economics give it that decade.</p>
+<h3 id="subchapter-the-three-year-obsolescence-critique">Subchapter: the three-year obsolescence critique</h3>
+<p>A 2026 Fortune piece, summarizing Research Affiliates
+research, argues hyperscaler AI hardware becomes
+economically obsolete in about three years, because each
+new chip generation delivers sharply better
+compute-per-watt and data centers face hard power
+ceilings: old chips must be swapped for new ones to hold
+capacity. On this view, roughly two thirds of the CapEx
+is maintenance, replacing dead hardware, not growth.
+The thesis survives only if token revenue per megawatt
+stays ahead of the replacement treadmill. That is the
+race the next chapter prices.</p>
 <div class="qa"><div class="q">What is the AI production function, in plain words?</div><div class="a"><p>Five inputs make AI: data, algorithms, compute, energy, and data centers. Data is the raw material, algorithms are the process technology, GPUs are the machinery, electricity is the fuel, and data centers are the factory buildings. The guest&rsquo;s key claim is that the money concentrates on the last three. Data labeling created a real market (Scale AI and others), and algorithms live in the labs, but the CapEx chart is compute, energy, and buildings.
 Because it tells you where the spending must flow. If AI output scales with compute and energy, then every unit of AI demand converts mechanically into demand for GPUs, power plants, and data centers. The investor question becomes unit economics per megawatt, which is the next chapter.</p><div class="followup"><strong>Follow-up:</strong> Why would an investor care about this decomposition?</div></div></div>
 <div class="qa"><div class="q">Explain the Cobb-Douglas argument for the AI supercycle.</div><div class="a"><p>Cobb-Douglas decomposes GDP growth into three parts: change in labor, change in capital, and change in technology. Historically the labor term moved only through the birth rate, with a 20-year lead time, so it was the slow term. Digital labor breaks that: an agent doing real work is labor produced by an investment decision. For the first time, the labor term can scale the way capital always could, which is the economic case for building AI factories at gigawatt scale.
 Token demand stalling. If digital labor does not substitute for human labor at prices that cover the factories, the CapEx is overbuild. The guest&rsquo;s own bear cases point the same way: open source eroding closed-model pricing power would compress the revenue side of the trade.</p><div class="followup"><strong>Follow-up:</strong> What would falsify this thesis?</div></div></div>
+<div class="qa"><div class="q">Walk me through the 3 percent toy economy.</div><div class="a"><p>Split 3 percent annual growth into 1 point from labor, 1 from capital, and 1 from technology. The labor point is fixed by demography on any planning horizon. Now imagine investment could buy half a point of labor growth, the way capital buys its point. Total growth rises from 3 percent to 3.5 percent. Compounded over ten years, $1 grows to $1.34 at 3 percent and $1.41 at 3.5 percent: a 5 percent larger economy. The hyperscaler CapEx is a bid on that half point, not on chatbots.
+It does not need to be. The toy only needs one fact: the labor term is the one that could not move on an investment horizon. Whatever its share, making it investable is a first in economic history, which is the guest&rsquo;s whole argument.</p><div class="followup"><strong>Follow-up:</strong> Why does the toy assume the split is even?</div></div></div>
 <div class="qa"><div class="q">Why did Crusoe start from energy instead of compute?</div><div class="a"><p>At scale, energy was the scarce input, and markets are reasonably efficient everywhere else. The web 2.0 era had already filled the established hubs like Northern Virginia. The new workloads (AI training, proof-of-work) are energy-hungry at scale, so the winning move was to find cheap stranded power and bring the computers to it. Abilene is the worked example: renewable overbuild from production tax credits pushed power prices negative, and Crusoe built one of the world&rsquo;s largest AI campuses there, now 2.1 gigawatts in aggregate.
 Stranded power is stranded for a reason: no transmission, no local demand. If the grid buildout catches up or the tax regime changes, the cost advantage narrows. The Abilene answer was to build its own 1 GW substation and a 350 MW gas plant, which converts the risk into more CapEx.</p><div class="followup"><strong>Follow-up:</strong> What is the risk of the energy-first strategy?</div></div></div>
 <div class="qa"><div class="q">What is a power shell, and why is it the bottleneck today?</div><div class="a"><p>A power shell is an energized data center: the building, the substation, the cooling, everything needed so that you can plug in chips and start computing. Chips themselves have become easier to get. The scarce thing is a place to turn them on. Underneath that, skilled labor binds too: electricians, welders, plumbers, and construction workers, with projects like Abilene putting 9,000 people on site daily in a town of 120,000.
 Because the bottleneck moves: chips four years ago, memory after that, energized shells today. A company that owns one layer is hostage to whichever layer binds. Crusoe spans energy development, buildings, GPU clusters, and managed services, so it can attack whichever layer is gating growth, while staying out of chips and models.</p><div class="followup"><strong>Follow-up:</strong> Why does vertical integration help with a moving bottleneck?</div></div></div>
+<div class="qa"><div class="q">How did the session&#x27;s numbers hold up by October 2026?</div><div class="a"><p>The spend kept rising. Reported 2026 plans: Amazon roughly $200-220B, Alphabet $195-205B, Meta $115-135B, Microsoft about $175B, roughly $730B combined, nearly triple 2024. US private data-center construction hit a $75B annualized pace in July 2026 and passed homebuilding. The energy-first playbook is now default: the Nvidia-SB Energy PORTS-Pike campus in Ohio targets 8 GW of compute with 10 GW of new power, backed by a 20-year OpenAI lease.
+The three-year obsolescence argument: if each chip generation&rsquo;s compute-per-watt gain forces hardware swaps inside a fixed power ceiling, then two thirds of CapEx is maintenance, not growth, and books that depreciate over six years overstate asset life. The thesis then needs token revenue per megawatt to beat the replacement treadmill, which is L02&rsquo;s race.</p><div class="followup"><strong>Follow-up:</strong> What is the strongest bear case now?</div></div></div>
+<div class="qa"><div class="q">What would you ask a data-center CEO to test the digital labor thesis?</div><div class="a"><p>Three questions. First, what share of your contracted capacity is token revenue versus chip rental: the thesis needs tokens, not leases. Second, how fast can you turn a power shell, in months from energized to revenue, because the payback math depends on it. Third, what breaks first if token prices fall 50 percent: that is the margin of safety. The first question separates believers from landlords. The third separates the durable from the cyclical.</p></div></div>
 <h2 id="recap-the-whole-lesson-on-one-screen">Recap: the whole lesson on one screen</h2>
 <ol>
 <li><strong>The chart.</strong> Hyperscaler AI CapEx goes up and to the
-   right, fast. Roughly $650 billion. Bigger than the space
-   program, the highways, the Manhattan Project.</li>
+   right, fast. Roughly $650 billion in the session&rsquo;s
+   framing. about $730 billion in reported 2026 plans by
+   October. Bigger than the space program, the highways,
+   the Manhattan Project.</li>
 <li><strong>The recipe.</strong> AI needs data, algorithms, compute,
    energy, and data centers. The money concentrates on the
    last three.</li>
@@ -451,6 +560,10 @@ Because the bottleneck moves: chips four years ago, memory after that, energized
 <li><strong>The slow term.</strong> Labor historically moved only via
    the birth rate: a 20-year lead time. Fixed on any
    planning horizon.</li>
+<li><strong>The toy.</strong> 3 percent growth split three ways. Buying
+   half a point of labor growth means a 5 percent larger
+   economy in ten years. The CapEx is a bid on that half
+   point.</li>
 <li><strong>Digital labor.</strong> Agents doing real work are labor
    produced by investment. The labor term is now scalable
    like capital. That is the $650B thesis.</li>
@@ -463,26 +576,41 @@ Because the bottleneck moves: chips four years ago, memory after that, energized
    energized shells, always skilled labor. Vertical
    integration is the hedge. Next: the dollar anatomy.</li>
 </ol>
+<h2 id="go-deeper">Go deeper</h2>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/GcCGzfKdCd0" title="Building AI Factories (MS&E 435, Chase Lochmiller)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=GcCGzfKdCd0">Building AI Factories (MS&amp;E 435)</a></li>
+<li>The session this lesson follows, in full.</li>
+<li><a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></li>
+<li><a href="https://valueaddvc.com/blog/big-tech-ai-capex-in-2025-microsoft-google-meta-amazon-and-the-spending-race">Hyperscaler AI capex tracker, 2026</a></li>
+<li><a href="https://www.theglobalstatistics.com/new-data-center-investments-in-us/">US data-center investment overview, 2026</a></li>
+<li><a href="https://github.com/jrob5756/news/blob/HEAD/reports/2026/04/16.md">The three-year obsolescence argument (Fortune / Research Affiliates, April 2026)</a></li>
+</ul>
 <h2 id="official-sources-and-further-reading">Official sources and further reading</h2>
 <p><strong>Official:</strong>
 - Building AI Factories (MS&amp;E 435, Spring 2026), guest
-  Chase Lochmiller, Crusoe:
-  https://www.youtube.com/watch?v=GcCGzfKdCd0
-- MS&amp;E 435 course site: https://mse435.stanford.edu/</p>
+  Chase Lochmiller, Crusoe: <a href="https://www.youtube.com/watch?v=GcCGzfKdCd0">link</a>
+- <a href="https://mse435.stanford.edu/">MS&amp;E 435 course site</a></p>
 <p><strong>Further reading:</strong>
 - The course site&rsquo;s framing line: AI is &ldquo;the biggest
   technology supercycle since the PC, Internet, and
   Mobile.&rdquo;</p>
 <p><strong>Caveats from these sources.</strong> The $650B figure is the
 host&rsquo;s framing of hyperscaler spend, not an audited total.
-The transcript spells the guest&rsquo;s name &ldquo;Lockmiller&rdquo; in
-places; the course site spells it &ldquo;Lochmiller,&rdquo; used
-here. One data-labeling company is transcribed as
-&ldquo;Merkur&rdquo; [uncertain: likely Mercor]. The Cobb-Douglas
-treatment is the guest&rsquo;s intuitive version (growth as a
-sum of three changes), not the formal multiplicative
-production function. Abilene &ldquo;largest campus&rdquo; is the
-guest&rsquo;s claim, stated with hedging.</p>
+The October 2026 capex numbers are analyst and press
+estimates from company guidance, not audited totals, and
+ranges differ across sources. The transcript spells the
+guest&rsquo;s name &ldquo;Lockmiller&rdquo; in places. the course site
+spells it &ldquo;Lochmiller,&rdquo; used here. One data-labeling
+company is transcribed as &ldquo;Merkur&rdquo; [uncertain: likely
+Mercor]. The Cobb-Douglas treatment is the guest&rsquo;s
+intuitive version (growth as a sum of three changes), not
+the formal multiplicative production function. Abilene
+&ldquo;largest campus&rdquo; is the guest&rsquo;s claim, stated with
+hedging.</p>
 <h2 id="connections-to-the-other-courses">Connections to the other courses</h2>
 <ul>
 <li><strong>CS229S:</strong> the systems course prices the same stack

@@ -1,35 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Inter, 'Source Sans 3', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="Anthropic Sans, Inter, 'Source Sans 3', 'IBM Plex Sans', sans-serif">
 <rect width="960" height="620" fill="#F7F4EE"/>
 <text x="48" y="60" font-size="30" font-weight="600" fill="#1B2838">The bottleneck tour: what gated each era</text>
-<text x="48" y="92" font-size="17" fill="#5C6B7A">One binding constraint per era. Now: RL environments. Next: continual learning. Shell 3. Source: original, drawn from the session.</text>
+<text x="48" y="92" font-size="17" fill="#5C6B7A">One binding constraint per era, and the break. Shell 3. Source: original, drawn from the session.</text>
 <g font-size="14" font-weight="500">
-<rect x="48" y="128" width="412" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="76" y="156" fill="#5C6B7A">then</text>
-<text x="76" y="184" fill="#1B2838" font-size="17" font-weight="600">compute to train</text>
-<text x="320" y="184" fill="#5C6B7A">get the GPUs</text>
-<rect x="48" y="216" width="412" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="76" y="244" fill="#5C6B7A">then</text>
-<text x="76" y="272" fill="#1B2838" font-size="17" font-weight="600">architecture</text>
-<text x="320" y="272" fill="#5C6B7A">needs the transformer</text>
-<rect x="48" y="304" width="412" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="76" y="332" fill="#5C6B7A">then</text>
-<text x="76" y="360" fill="#1B2838" font-size="17" font-weight="600">pre-training data</text>
-<text x="320" y="360" fill="#5C6B7A">the whole internet</text>
-<rect x="48" y="392" width="412" height="72" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="76" y="420" fill="#5C6B7A">then</text>
-<text x="76" y="448" fill="#1B2838" font-size="17" font-weight="600">usability</text>
-<text x="320" y="448" fill="#5C6B7A">steer it with RLHF</text>
-<rect x="500" y="128" width="412" height="160" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="2"/>
-<text x="528" y="160" fill="#1E4D8C">now</text>
-<text x="528" y="192" fill="#1B2838" font-size="17" font-weight="600">RL environments</text>
-<text x="528" y="220" fill="#5C6B7A">worlds with rewards,</text>
-<text x="528" y="244" fill="#5C6B7A">for reasoning models</text>
-<rect x="500" y="304" width="412" height="160" rx="12" fill="#F3D4D8" stroke="#1B2838" stroke-width="1.5"/>
-<text x="528" y="336" fill="#5C6B7A">next</text>
-<text x="528" y="368" fill="#1B2838" font-size="17" font-weight="600">continual learning</text>
-<text x="528" y="396" fill="#5C6B7A">the hot stove: learn from</text>
-<text x="528" y="420" fill="#5C6B7A">one loud signal, forever</text>
+<!-- left column: then -->
+<rect x="48" y="128" width="412" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="76" y="158" fill="#5C6B7A">2012, then</text>
+<text x="76" y="186" fill="#1B2838" font-size="16" font-weight="600">handcrafted features</text>
+<text x="432" y="186" text-anchor="end" fill="#5C6B7A">AlexNet: GPUs + ImageNet</text>
+<rect x="48" y="224" width="412" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="76" y="254" fill="#5C6B7A">2017, then</text>
+<text x="76" y="282" fill="#1B2838" font-size="16" font-weight="600">serial RNNs</text>
+<text x="432" y="282" text-anchor="end" fill="#5C6B7A">self-attention, parallel</text>
+<rect x="48" y="320" width="412" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="76" y="350" fill="#5C6B7A">2018-19, then</text>
+<text x="76" y="378" fill="#1B2838" font-size="16" font-weight="600">no architecture at scale</text>
+<text x="432" y="378" text-anchor="end" fill="#5C6B7A">transformer pre-training</text>
+<rect x="48" y="416" width="412" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="76" y="446" fill="#5C6B7A">2020-22, then</text>
+<text x="76" y="474" fill="#1B2838" font-size="16" font-weight="600">no allocation rule</text>
+<text x="432" y="474" text-anchor="end" fill="#5C6B7A">Kaplan, then Chinchilla</text>
+<!-- right column: then, now, next -->
+<rect x="500" y="128" width="412" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="528" y="158" fill="#5C6B7A">2022-23, then</text>
+<text x="528" y="186" fill="#1B2838" font-size="16" font-weight="600">unsteerable models</text>
+<text x="884" y="186" text-anchor="end" fill="#5C6B7A">RLHF: human preferences</text>
+<rect x="500" y="224" width="412" height="80" rx="12" fill="#FFFDF8" stroke="#1B2838" stroke-width="1.5"/>
+<text x="528" y="254" fill="#5C6B7A">2024, then</text>
+<text x="528" y="282" fill="#1B2838" font-size="16" font-weight="600">training-only scaling</text>
+<text x="884" y="282" text-anchor="end" fill="#5C6B7A">test-time compute (o1)</text>
+<rect x="500" y="320" width="412" height="80" rx="12" fill="#E7F1F8" stroke="#1E4D8C" stroke-width="2"/>
+<text x="528" y="350" fill="#1E4D8C">now</text>
+<text x="528" y="378" fill="#1B2838" font-size="16" font-weight="600">RL environments</text>
+<text x="884" y="378" text-anchor="end" fill="#5C6B7A">reward-bearing worlds</text>
+<rect x="500" y="416" width="412" height="80" rx="12" fill="#F4E6D4" stroke="#1B2838" stroke-width="1.5"/>
+<text x="528" y="446" fill="#5C6B7A">next</text>
+<text x="528" y="474" fill="#1B2838" font-size="16" font-weight="600">continual learning</text>
+<text x="884" y="474" text-anchor="end" fill="#5C6B7A">the hot stove: one loud signal</text>
 </g>
-<text x="48" y="516" font-size="16" fill="#1B2838">Data wall: 31% of filtered web text was AI-generated by Aug 2026, up from 10% in mid-2024.</text>
-<text x="48" y="552" font-size="16" font-weight="500" fill="#1B2838">One claim: whoever cracks learning from sparse real-world reward owns the next era.</text>
+<text x="48" y="544" font-size="15" fill="#1B2838">Data wall: 35% of web pages published after ChatGPT's debut show significant AI authorship</text>
+<text x="48" y="566" font-size="15" fill="#5C6B7A">(Pew, July 2026 sample; 10% of the unfiltered sample). The public web weakens as a training resource.</text>
+<text x="48" y="600" font-size="16" font-weight="500" fill="#1B2838">One claim: whoever cracks learning from sparse real-world reward owns the next era.</text>
 </svg>

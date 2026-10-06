@@ -81,6 +81,7 @@
 <li><a href="../cs229s/l10-parallelism.html" data-page="cs229s-l10">L10 · Parallelism</a></li>
 <li><a href="../cs229s/cheatsheet.html" data-page="cs229s-cheatsheet">CS229S · Cheatsheet</a></li>
 <li><a href="../cs229s/crash-course.html" data-page="cs229s-crash">CS229S · Crash course</a></li>
+<li><a href="../cs229s/crash-course-02.html" data-page="cs229s-crash-02">CS229S · Crash course 2</a></li>
 </ul>
 <h3>CS224N: NLP with Deep Learning</h3><ul>
 <li><a href="../cs224n/index.html" data-page="cs224n-index">CS224N · Overview</a></li>
@@ -146,18 +147,14 @@
 </ul>
 <h3>CS329A: Self-Improving AI Agents</h3><ul>
 <li><a href="../cs329a/index.html" data-page="cs329a-index" class="active">CS329A · Overview</a></li>
-<li><a href="../cs329a/l01-self-improving-agents.html" data-page="cs329a-l01">L01 · The Self-Improving Agent</a></li>
-<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Scaling</a></li>
-<li><a href="../cs329a/l03-agents-that-act.html" data-page="cs329a-l03">L03 · Agents That Act</a></li>
-<li><a href="../cs329a/l04-learning-from-execution.html" data-page="cs329a-l04">L04 · Learning from Execution</a></li>
-<li><a href="../cs329a/l05-planning-with-search.html" data-page="cs329a-l05">L05 · Planning with Search</a></li>
-<li><a href="../cs329a/l06-sampling-at-scale.html" data-page="cs329a-l06">L06 · Sampling at Scale</a></li>
-<li><a href="../cs329a/l07-search-that-reads.html" data-page="cs329a-l07">L07 · Search That Reads</a></li>
-<li><a href="../cs329a/l08-teaching-reason.html" data-page="cs329a-l08">L08 · Teaching Reason</a></li>
-<li><a href="../cs329a/l09-verifier-bottleneck.html" data-page="cs329a-l09">L09 · The Verifier Bottleneck</a></li>
-<li><a href="../cs329a/l10-measuring-agents.html" data-page="cs329a-l10">L10 · Measuring Agents</a></li>
-<li><a href="../cs329a/cheatsheet.html" data-page="cs329a-cheatsheet">CS329A · Cheatsheet</a></li>
-<li><a href="../cs329a/crash-course.html" data-page="cs329a-crash">CS329A · Crash course</a></li>
+<li><a href="../cs329a/l01-course-overview.html" data-page="cs329a-l01">L01 · Course Overview</a></li>
+<li><a href="../cs329a/l02-test-time-scaling.html" data-page="cs329a-l02">L02 · Test-Time Compute Scaling</a></li>
+<li><a href="../cs329a/l03-feedback-tools-code.html" data-page="cs329a-l03">L03 · Feedback, Tools, Code</a></li>
+<li><a href="../cs329a/l04-planning-multistep-reasoning.html" data-page="cs329a-l04">L04 · Planning and Multi-Step Reasoning</a></li>
+<li><a href="../cs329a/l05-search-at-scale.html" data-page="cs329a-l05">L05 · Sampling at Scale</a></li>
+<li><a href="../cs329a/l06-train-time-scaling.html" data-page="cs329a-l06">L06 · Train-Time Scaling</a></li>
+<li><a href="../cs329a/l07-agentic-evaluations.html" data-page="cs329a-l07">L07 · Agentic Evaluations</a></li>
+<li><a href="../cs329a/l08-future-directions.html" data-page="cs329a-l08">L08 · Future Directions</a></li>
 </ul>
 <h3>MS&amp;E 435: Economics of the AI Supercycle</h3><ul>
 <li><a href="../mse435/index.html" data-page="mse435-index">MS&amp;E 435 · Overview</a></li>
@@ -219,35 +216,40 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Self-Improving AI Agents</a> / CS329A: Self-Improving AI Agents</nav>
       <h1>CS329A: Self-Improving AI Agents</h1>
       <p class="meta-line">Instructor: Azalia Mirhoseini, Aakanksha Chowdhery · Autumn 2025</p>
-      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><p>One argument, ten chapters. A language model can improve itself.
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><p>One argument, eight lessons. A language model can improve itself.
 It generates many attempts, checks them with a verifier, and
-trains on the winners. Each chapter adds one piece of that loop,
+trains on the winners. Each lesson adds one piece of that loop,
 demonstrates it with numbers, and names its price.</p>
 <h2 id="the-arc">The arc</h2>
 <p>The course opens with the loop itself: one-shot answers waste
 what the model knows, and a generate-verify-train cycle recovers
-it. Then it scales each stage. Sampling hundreds of times makes
-small models beat giants. Giving the model tools grounds its
-reasoning in the world. Searching over plans instead of walking
-one path fixes greedy commitment. Training on execution feedback
-turns tries into weights. Sampling a million programs exposes
-the selection problem. Searching mid-thought fills knowledge
-gaps. Bootstrapping rationales from answer keys teaches
-reasoning. Judging the judge attacks the verifier bottleneck.
-Measuring long-horizon tasks shows how far capability has come
-and how far reliability lags.</p>
+it. Then it scales each stage. Sampling thousands of times makes
+small models beat giants, and architecture search stacks
+inference-time components to beat them further. Giving the model
+tools grounds its reasoning in the world, execution feedback
+trains code models, and constitutions replace human labelers.
+Searching over plans instead of walking one path fixes greedy
+commitment, interleaved planning parallelizes execution, and
+step-level RL beats imitation. Sampling a million programs
+exposes the selection bottleneck, and agentic search fills
+knowledge gaps mid-thought. Bootstrapping rationales from answer
+keys teaches reasoning, GRPO normalizes advantages by group, and
+the DAPO ladder writes down the stable RL recipe. Measuring
+long-horizon tasks shows how far capability has come and how far
+reliability lags. The close looks forward: agents debating,
+verifiers checking verifiers, self-play with zero human data,
+and the open problems of non-verifiable domains,
+intelligence per watt, and continual learning.</p>
 <h2 id="the-lessons">The lessons</h2>
 <ol>
-<li><a href="l01-self-improving-agents.html">L01 · The Self-Improving Agent</a>: the generate-verify-train loop, chain of thought, and why the verifier is the bottleneck.</li>
-<li><a href="l02-test-time-scaling.html">L02 · Test-Time Scaling</a>: repeated sampling, the log-linear coverage law, and Archon&rsquo;s inference-time architectures.</li>
-<li><a href="l03-agents-that-act.html">L03 · Agents That Act</a>: ReAct, grounding thought in tool calls, and compounding error.</li>
-<li><a href="l04-learning-from-execution.html">L04 · Learning from Execution</a>: RLEF, two-tier tests, and binary rewards from running code.</li>
-<li><a href="l05-planning-with-search.html">L05 · Planning with Search</a>: LATS, tree search over plans, UCT, and reflection.</li>
-<li><a href="l06-sampling-at-scale.html">L06 · Sampling at Scale</a>: AlphaCode to AlphaCode 2, the 10@k metric, and the selection bottleneck.</li>
-<li><a href="l07-search-that-reads.html">L07 · Search That Reads</a>: deep research agents, agentic RAG, and reading documents instead of dumping them.</li>
-<li><a href="l08-teaching-reason.html">L08 · Teaching the Model to Reason</a>: STaR, rationalization, and bootstrapping reasoning from answer keys.</li>
-<li><a href="l09-verifier-bottleneck.html">L09 · The Verifier Bottleneck</a>: outcome vs process rewards, the meta-verifier, and multi-agent debate.</li>
-<li><a href="l10-measuring-agents.html">L10 · Measuring Agents</a>: METR time horizons, the reliability gap, and the open problems.</li>
+<li><a href="l01-course-overview.html">L01 · The Self-Improving Agent</a>: scaling laws and the wall, chain of thought as emergence, instruction tuning and RLHF, the monkeys teaser, reasoning models, and the generate-verify-train loop.</li>
+<li><a href="l02-test-time-scaling.html">L02 · Test-Time Compute Scaling</a>: Large Language Monkeys, the coverage power law, the generation-verification gap, parallel versus sequential budgets, and Archon.</li>
+<li><a href="l03-feedback-tools-code.html">L03 · Learning from Feedback with Tools and Code</a>: ReAct, RLEF with two-tier tests, and Constitutional AI.</li>
+<li><a href="l04-planning-multistep-reasoning.html">L04 · Planning and Multi-Step Reasoning</a>: LATS tree search, SPRINT interleaved planning, and SWiRL multi-step RL.</li>
+<li><a href="l05-search-at-scale.html">L05 · Self-Improvement and Deep Research Agents</a>: AlphaCode to AlphaCode 2, the selection bottleneck, and Search-o1.</li>
+<li><a href="l06-train-time-scaling.html">L06 · Train-Time Scaling and Scaling RL</a>: STaR, DeepSeekMath and GRPO, DAPO, and SFT versus RL.</li>
+<li><a href="l07-agentic-evaluations.html">L07 · Agentic Evaluations and Long-Horizon Tasks</a>: METR time horizons, GDPval against professionals, and DeepScholar-Bench.</li>
+<li><a href="l08-future-directions.html">L08 · Future Research Areas</a>: multi-agent fine-tuning, DeepSeekMath-V2 meta-verification, Absolute Zero, and the open problems.</li>
 </ol>
 <h2 id="how-this-differs-from-cs329z">How this differs from CS329Z</h2>
 <p>CS329Z is the engineering course: how to build agents with
@@ -260,11 +262,16 @@ studies becomes something CS329Z has to build.</p>
 <h2 id="sources">Sources</h2>
 <p>Eight lecture transcripts from the Autumn 2025 offering, taught
 by Azalia Mirhoseini and Aakanksha Chowdhery, plus the papers
-each lecture cites: Large Language Monkeys, ReAct, RLEF, LATS,
-AlphaCode, Search-o1, STaR, DeepSeekMath, DeepSeek-Math V2, and
-the METR long-task study. Full citations close every chapter.</p><div class="course-tools"><a class="tool-card" href="cheatsheet.html"><strong>Cheatsheet</strong><span>Every key fact on one dense page.</span></a><a class="tool-card" href="crash-course.html"><strong>Crash course</strong><span>Interview-speed review with images.</span></a></div>
+each lecture cites: Large Language Monkeys, Snell et al.,
+Archon, ReAct, RLEF, Constitutional AI, LATS, SPRINT, SWiRL,
+AlphaCode, Search-o1, STaR, DeepSeekMath, DAPO, METR, GDPval,
+DeepScholar-Bench, multi-agent fine-tuning, DeepSeekMath-V2,
+Absolute Zero, and AlphaEvolve. Full citations close every lesson.</p>
+<p>Note: the playlist&rsquo;s Part 3, on reliable verification, has no
+transcript in the course sources. Verification is covered from
+what the other eight lectures say about verifiers.</p><div class="course-tools"><a class="tool-card" href="cheatsheet.html"><strong>Cheatsheet</strong><span>Every key fact on one dense page.</span></a><a class="tool-card" href="crash-course.html"><strong>Crash course</strong><span>Interview-speed review with images.</span></a></div>
       
-      <nav class="pager"><span></span><a href="../cs329a/l01-self-improving-agents.html"><span class="lbl">Next →</span>Lecture 1: The Self-Improving Agent</a></nav>
+      <nav class="pager"><span></span><a href="../cs329a/l01-course-overview.html"><span class="lbl">Next →</span>Lecture 1: The Self-Improving Agent</a></nav>
     </article>
     <footer class="pagefoot">
       <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>

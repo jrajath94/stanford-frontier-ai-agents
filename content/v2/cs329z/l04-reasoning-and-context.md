@@ -10,7 +10,7 @@ summary: "Spend compute after training: chain of thought, reasoning effort, repe
 date: "[uncertain: Fall 2026]"
 instructor: "Diyi Yang, Michael Ryan, John Yang"
 offering: "Fall 2026"
-concepts: [inference-time-scaling, chain-of-thought, reasoning-effort, repeated-sampling, structured-io, constrained-decoding, dspy, context-engineering, context-rot, compaction, kv-cache, recursive-lm]
+concepts: [inference-time-scaling, chain-of-thought, tree-of-thoughts, reasoning-effort, repeated-sampling, self-consistency, verifiers, outcome-reward, process-reward, structured-io, constrained-decoding, dspy, context-engineering, context-rot, compaction, kv-cache, recursive-lm]
 sources:
   - tag: slides
     label: "Lecture 2 slides: LLMs for Builders (local: sources/agents/cs329z/lecture02.pdf)"
@@ -23,6 +23,9 @@ sources:
   - tag: supplement
     label: "Anthropic Engineering: Effective context engineering for AI agents"
     url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+  - tag: supplement
+    label: "Yao et al., Tree of Thoughts: Deliberate Problem Solving with Large Language Models (2023)"
+    url: https://arxiv.org/abs/2305.10601
 ---
 
 ## The job: training is frozen, queries are not
@@ -87,6 +90,23 @@ confident-sounding errors. The steps are in the open, but open errors
 are still errors. The fix is the same as in agents: verify the steps,
 do not just admire them.
 
+### Tree of thoughts: search over reasoning
+
+Chain of thought walks one path. **Tree of thoughts** (Yao et al.,
+2023) branches: at each step, generate several candidate thoughts,
+score them with an evaluator, keep the best, and continue. Search over
+reasoning steps, not just tokens.
+
+![Tree of thoughts](assets/l04-tot.svg "One chain walks into a dead end. A tree explores several candidates and keeps the best. Project: Stanford Frontier AI. Source: original.")
+
+The evaluator is the load-bearing part. It can be the model itself
+("is this step promising?"), a learned value function, or a hard check
+("does this partial solution still satisfy the constraints?"). The cost
+is the evaluator: every branch scored is tokens spent. The decision
+rule: reach for the tree when one chain keeps walking into dead ends
+on the same problem class. For problems where the first path usually
+works, the tree is expensive insurance.
+
 ## The effort dial
 
 Reasoning models expose an **effort** setting: low, medium, high. Low
@@ -131,13 +151,33 @@ candidate plans, execute the best-scoring one. Sampling is cheap.
 Checking is dear. The verifier is the scarce resource, which is why
 the builders lesson spent so long on verifier design.
 
+### Verifiers: outcome versus process
+
+A verifier checks work. Two kinds, and they fail differently. An
+**outcome** verifier checks the final answer: 75 or not, 1 or 0.
+A **process** verifier checks each step: which step went wrong.
+
+![Verifiers](assets/l04-verifier.svg "Outcome checks the answer. Process checks each step. Process reward teaches where the error is. Project: Stanford Frontier AI. Source: original.")
+
+Outcome reward is cheap: one check at the end. It is also blind: a
+lucky wrong path scores 1, and the model learns nothing about where
+it succeeded. Process reward teaches the model where it went wrong,
+step by step, but it needs step-level labels, which are expensive to
+write. The builders lesson's RLVR is outcome reward at scale. Process
+supervision is the premium version teams buy when outcome reward
+plateaus. For agents, the check step of the loop is usually an outcome
+verifier (tests pass), and the debugging skill is process verification
+done by hand.
+
 ## Mapping back I: what inference-time compute buys
 
 | Direct-answer crack | The answer | How |
 |---|---|---|
 | Pattern-match says $80 | Chain of thought | The steps $80 to $100 to $75 expose the base change |
+| One chain walks into dead ends | Tree of thoughts | Branch, score with an evaluator, keep the best |
 | Every query costs the same | Effort dial | Low for lookups, high for hard bugs; Kimi K3's -1 teaches the budget |
 | One shot, one chance | Repeated sampling | 1 - 0.7^10 = 0.97 coverage from a 0.3 model, with a verifier |
+| The verifier only sees the answer | Process reward | Check each step; teach where it went wrong |
 
 The honest price of this half: tokens are money and latency. A small
 model with a big inference budget can beat a big model with none, but
@@ -180,11 +220,23 @@ output fields:
 ```
 
 The compiled prompt wraps each field in markers and states the type
-constraints in prose. The signature is the contract; the compiled
+constraints in prose. The signature is the contract. The compiled
 prompt is the implementation. Two lighter constraining tools: a small
 classifier head on embeddings for fixed label sets (cheap, fast, no
 generation), and the Toolformer pattern, where the tool's argument
 schema is the structured output.
+
+### Structured output in production
+
+The providers productized this contract. OpenAI's structured outputs
+and Anthropic's tool-use schemas both guarantee JSON matching a given
+schema: the grammar approach, as an API feature. The decision rule for
+builders: use the provider's structured output for tool calls and
+handoff payloads (the shape must hold every time), and reserve
+full constrained decoding (SGLang, Outlines, Guidance) for grammars
+the API cannot express: nested conditionals, custom DSLs, exact-length
+fields. Shape is a solved problem at the API layer. Spend your
+engineering on meaning.
 
 ## The third contract: the context
 
@@ -229,7 +281,7 @@ new position embeddings, and their cached keys and values are wrong.
 
 The design rule: the loop appends. Tool results go at the end of the
 context, never spliced into history. Rewriting history is not just
-confusing for the model; it is expensive, forcing recomputation of the
+confusing for the model. It is expensive, forcing recomputation of the
 whole suffix.
 
 ### Compaction: the keep-or-drop dilemma
@@ -262,9 +314,25 @@ summaries.
 Each call sees a small context, so there is no rot and no quadratic
 blowup. The tradeoff: detail is lost in the summaries, and errors in a
 sub-call propagate silently upward. Compare with RAG: RAG retrieves
-chunks into one context; RLM recurses over chunks with separate calls.
+chunks into one context. RLM recurses over chunks with separate calls.
 Both fight the same enemy, the O(n^2) context. RAG is retrieval plus
 one reader. RLM is divide and conquer with the model as the divider.
+
+## What is used where: inference-time in production
+
+| Technique | Production form | The check it needs |
+|---|---|---|
+| Reasoning effort | o-series, DeepSeek-R1, Claude extended thinking: the dial is a product feature | none extra: the model was trained for it |
+| Repeated sampling | AlphaCode 2 samples up to 1M; SWE agents sample N patches | the verifier: tests, or the task fails |
+| Self-consistency | cheap accuracy boost where no verifier exists | majority vote is the check |
+| Constrained decoding | OpenAI structured outputs; SGLang grammars | the schema: shape guaranteed, meaning not |
+| DSPy | signatures compiled to prompts; optimizers tune them | the metric the optimizer targets |
+| Context engineering | Anthropic's agent guide: the five ingredients | a small eval set per context choice |
+| Compaction | long-horizon agents summarize the trace | the keep list: goal, open loops, key facts |
+
+The pattern: every production system pairs an inference-time spend
+with a check. Effort without a verifier is hope. Sampling without a
+test suite is noise. The check is the scarce resource in every row.
 
 ## Mapping back II: what the contracts fix
 
@@ -291,7 +359,7 @@ lecture's final word on context stands: experiment, and measure.
 
 > [!QA]
 > Q: Why does chain of thought help on the jacket problem, and what does that tell you about what CoT actually is?
-> A: The naive answer pattern-matches: plus 25 minus 25 looks like zero change, so $80. Writing the steps forces the model to compute each stage: 80 to 100, then 100 to 75, exposing that the discount applies to a different base. The check, $80 + $20 - $25 = $75, closes it. What this tells you: CoT is working memory, not intelligence. Each step is a small, checkable claim committed to text. It does not make the model smarter; it gives errors a place to be caught.
+> A: The naive answer pattern-matches: plus 25 minus 25 looks like zero change, so $80. Writing the steps forces the model to compute each stage: 80 to 100, then 100 to 75, exposing that the discount applies to a different base. The check, $80 + $20 - $25 = $75, closes it. What this tells you: CoT is working memory, not intelligence. Each step is a small, checkable claim committed to text. It does not make the model smarter. It gives errors a place to be caught.
 > Follow-up: When does chain of thought hurt?
 > A: When the steps are uncheckable and the model is confident anyway. Long reasoning traces on ambiguous questions accumulate confident-sounding errors, each step building on the last. The fix is the agent's fix: verify the steps against the world or a verifier. Open errors are still errors.
 
@@ -299,13 +367,25 @@ lecture's final word on context stands: experiment, and measure.
 > Q: You have a verifier and a fixed budget. One careful high-effort sample or 50 quick samples?
 > A: Usually the 50 quick samples with the verifier picking. Coverage grows fast: at 0.3 success per sample, ten samples give 1 - 0.7^10 = 0.97 coverage. High effort wins when the task needs deep sequential reasoning that quick samples never stumble into: a proof with a 20-step dependency chain, a bug that needs sustained attention. Spend the budget where the errors are: breadth when solutions are scattered, depth when they are buried.
 > Follow-up: What breaks repeated sampling?
-> A: A bad verifier. If the check accepts wrong answers, more samples just find more ways to be wrong. This is the verifier-design warning from the builders lesson, applied at inference time. Sampling is cheap; checking is dear; a cheap check is worse than none because it certifies garbage.
+> A: A bad verifier. If the check accepts wrong answers, more samples just find more ways to be wrong. This is the verifier-design warning from the builders lesson, applied at inference time. Sampling is cheap. Checking is dear. A cheap check is worse than none because it certifies garbage.
+
+> [!QA]
+> Q: When does tree-of-thoughts beat chain-of-thought, and what does it cost?
+> A: When one chain keeps walking into dead ends on the same problem class: puzzles, planning, multi-step math where an early wrong turn poisons everything after. The tree branches at each step, scores candidates with an evaluator, and keeps the best. The cost is the evaluator: every branch scored is tokens spent. For problems where the first path usually works, the tree is expensive insurance. The decision rule: reach for the tree when chains fail systematically, not when they fail once.
+> Follow-up: What makes a good evaluator for the tree?
+> A: A cheap, reliable signal about partial solutions: constraint checks ("does this partial plan still satisfy the requirements?"), the model itself judging promise, or a learned value function. The evaluator is load-bearing: a bad one prunes the good branches and the tree is worse than one chain. This is the verifier problem again, one level up.
+
+> [!QA]
+> Q: Outcome reward versus process reward: what does each buy?
+> A: Outcome reward checks the final answer: cheap, one check, but blind. A lucky wrong path scores 1 and the model learns nothing about where it succeeded. Process reward checks each step: it teaches the model where it went wrong, but it needs step-level labels, which are expensive to write. RLVR at scale is outcome reward. Process supervision is the premium version teams buy when outcome reward plateaus. For agents, the loop's check step is usually outcome (tests pass). Debugging skill is process verification done by hand.
+> Follow-up: Why is process reward not always better?
+> A: Label cost and label quality. Someone must judge every step, and step-level judges disagree more than answer-level judges. Noisy process labels teach the model to game the step judge instead of solving the task. Outcome reward has one judge and one verdict. Process reward has N judges and N chances to be wrong.
 
 > [!QA]
 > Q: Why does constrained decoding matter more for agents than for chatbots?
 > A: A chatbot's output goes to a human who tolerates a malformed sentence. An agent's output goes to a parser, a tool, or another agent. One bad token breaks the tool call and burns a loop turn. Constrained decoding turns "usually valid JSON" into "always valid JSON" by masking every token the grammar forbids, as it is generated. It is the validate stage of the tool call moved into the decoder itself.
 > Follow-up: What can constrained decoding not fix?
-> A: Semantics. The output parses but can still be wrong: a valid tool call with the wrong arguments, a well-formed plan that misunderstands the goal. The grammar constrains shape, not meaning. Meaning needs the check step of the agent loop. Shape guarantees are cheap; meaning guarantees are the whole hard problem.
+> A: Semantics. The output parses but can still be wrong: a valid tool call with the wrong arguments, a well-formed plan that misunderstands the goal. The grammar constrains shape, not meaning. Meaning needs the check step of the agent loop. Shape guarantees are cheap. Meaning guarantees are the whole hard problem.
 
 > [!QA]
 > Q: What is context rot, and what are the three practical defenses?
@@ -313,32 +393,53 @@ lecture's final word on context stands: experiment, and measure.
 > Follow-up: Why must the loop append rather than edit the context?
 > A: The KV cache is positional. Appending at the end keeps every existing position unchanged, so the cache stays valid. Editing in the middle shifts positions: every token after the edit gets new position embeddings and its cached keys and values are wrong. Rewriting history forces recomputation of the whole suffix. The rule is append-only, with compaction as the one expensive rewrite.
 
+> [!QA]
+> Q: Your agent's context keeps filling up mid-task. Walk me through your options.
+> A: First, stop the bleeding: cut the tool set to what the task needs, and retrieve memories and files on demand instead of stuffing them in. Second, compact: summarize the trace to the goal, the open loops, and the key facts, and restart the context from the summary. Third, consider recursion: a recursive LM delegates chunks to sub-calls instead of one giant context. The choice depends on the failure: bloat means curation, stale history means compaction, and a fundamentally too-large document means recursion or retrieval. In all cases, measure on a small eval set: the right context is empirical.
+> Follow-up: What do you keep in a compaction summary?
+> A: The goal, the open loops (what is still undone), the key facts discovered, and the current plan. Drop stale tool outputs, superseded plans, and dead-end attempts. The summary is a new perceive step for a fresh loop. The keep-or-drop dilemma has no principled answer: test what the summary must contain for your task class.
+
 ## Recap: the whole lesson on one screen
 
-The story in eight steps. Each step answers the one before it.
+The story in nine steps. Each step answers the one before it.
 
-1. **Training is frozen; queries vary.** "What is 2+2" and "debug this
+1. **Training is frozen. Queries vary.** "What is 2+2" and "debug this
    race condition" should not cost the same. Spend compute per query.
 2. **Direct answers pattern-match.** +25% then -25% looks like
    cancellation. $80. Wrong by $5.
 3. **The steps expose the base.** $80 x 1.25 = $100, $100 x 0.75 =
    $75. Each step is a checkable claim. CoT is working memory, not
    smarts.
-4. **Effort is a dial.** Low, medium, high, set per step. Kimi K3's
+4. **Search the reasoning when chains die.** Tree of thoughts branches
+   and scores. The evaluator is load-bearing.
+5. **Effort is a dial.** Low, medium, high, set per step. Kimi K3's
    reward: +1 correct, 0 wrong, -1 wrong and over budget. The -1
    teaches the budget.
-5. **Sample many, verify once.** 1 - 0.7^10 = 0.97 coverage from a
-   0.3 model. Without a verifier, vote (self-consistency). Checking
-   is the scarce resource.
-6. **Force the shape.** Constrained decoding masks forbidden tokens;
+6. **Sample many, verify once.** 1 - 0.7^10 = 0.97 coverage from a
+   0.3 model. Outcome reward checks the answer. Process reward checks
+   each step. Checking is the scarce resource.
+7. **Force the shape.** Constrained decoding masks forbidden tokens.
    output always parses. DSPy signatures declare the contract. Shape,
    not meaning.
-7. **Engineer the context.** Five ingredients. Defenses against rot:
+8. **Engineer the context.** Five ingredients. Defenses against rot:
    few tools, retrieve on demand, compact. Append, never edit: the KV
    cache is positional.
-8. **The price is tokens.** Latency and money per step. Compaction's
+9. **The price is tokens.** Latency and money per step. Compaction's
    keep-or-drop dilemma is empirical. RLM dodges the quadratic
    context but propagates sub-call errors silently.
+
+## Go deeper
+
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;margin:16px 0;">
+<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" src="https://www.youtube-nocookie.com/embed/DTuhy_EGnBY" title="Why Thinking AI Models Are Different" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+- Why "Thinking" AI Models Are Different (the embed above): https://www.youtube.com/watch?v=DTuhy_EGnBY, chain of thought, test-time compute, how thinking models are trained with RL, and the honest caveats.
+
+Further:
+- Anthropic, Effective context engineering for AI agents: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents, the five ingredients in production form.
+- Yao et al., Tree of Thoughts (2023): https://arxiv.org/abs/2305.10601, deliberate search over reasoning steps.
+- Brown et al., Large Language Monkeys (2024): https://arxiv.org/abs/2407.21787, inference compute keeps helping far past intuition.
+- SGLang documentation: constrained decoding with finite state machines. [uncertain: exact docs URL. Search "SGLang structured generation".]
 
 ## Official sources and further reading
 
@@ -347,18 +448,17 @@ The story in eight steps. Each step answers the one before it.
 - Course site: http://web.stanford.edu/class/cs329z.
 
 **Further reading:**
-- SGLang paper: constrained decoding with finite state machines.
+- Wei et al., Chain-of-Thought (2022): https://arxiv.org/abs/2201.11903.
 - DSPy documentation: signatures and compilation.
 - OOLONG paper (2025): long-context reasoning and aggregation.
 - Recursive Language Models paper (2025): the recursion philosophy.
-- Anthropic, "Effective context engineering for AI agents": the five
-  ingredients in production form.
 
 **Caveats from these sources.** The slides cite blog and paper figures
-for several claims; the plates here are original. Effort-level
-mechanics differ across providers; the Kimi K3 reward numbers are the
+for several claims. The plates here are original. Effort-level
+mechanics differ across providers. The Kimi K3 reward numbers are the
 lecture's. The coverage arithmetic is a worked toy, not a measured
-rate. No video ID is on record.
+rate. No lecture video is on record. The embed above is a third-party
+explainer, verified live.
 
 ## Connections to the other courses
 

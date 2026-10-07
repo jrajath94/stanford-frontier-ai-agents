@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>U03 · Enterprise token markets — Stanford Frontier AI — MSE435</title>
+<meta name="description" content="Unit U03: Enterprise token markets.">
+<link rel="stylesheet" href="assets/vendor/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="mse435-u03">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="index.html">Stanford Frontier AI — MSE435</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>MSE435: AI Economics and Infrastructure</h3><ul>
+<li><a href="index.html" data-page="mse435-index">MSE435 · Overview</a></li>
+<li><a href="u01_ai_economics_value_chain.html" data-page="mse435-u01">U01 · AI economics and the value c</a></li>
+<li><a href="u02_silicon_power_datacenters.html" data-page="mse435-u02">U02 · Silicon, power, and datacent</a></li>
+<li><a href="u03_enterprise_token_markets.html" data-page="mse435-u03" class="active">U03 · Enterprise token markets</a></li>
+<li><a href="u04_enterprise_knowledge_inference_cloud.html" data-page="mse435-u04">U04 · Enterprise knowledge, infere</a></li>
+<li><a href="u05_coding_lifescience_economics.html" data-page="mse435-u05">U05 · Coding and life-science econ</a></li>
+<li><a href="u06_capstone_evidence_stakeholder_defense.html" data-page="mse435-u06">U06 · Capstone: evidence and stake</a></li>
+<li><a href="cheatsheet.html" data-page="mse435-cheatsheet">Cheatsheet</a></li>
+<li><a href="crash-course.html" data-page="mse435-crash">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">MSE435: AI Economics and Infrastructure</a> / U03 · Enterprise token markets</nav>
+      <h1>U03 · Enterprise token markets</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="u03-enterprise-infrastructure-and-token-markets">U03 , Enterprise infrastructure and token markets</h1>
+<p>Parent unit: mse435-U03. Bridges: P16, P23, P24. Local
+remediation in <code>prerequisites.md</code> (U03-R1 to U03-R3). Shared
+bridges linked, not rebuilt.</p>
+<p>Claim class: OFFICIAL-SCHEDULE (sessions 4-5: &ldquo;Infrastructure,
+Enterprise AI, and Service As a Software&rdquo; with Ali Ghodsi, and
+&ldquo;Infrastructure and Capstone Case&rdquo; with Sachin Katti, materials
+page SRC-00). Every leaf: PLANNED / SOURCE ATTRIBUTION PENDING.
+Toy numbers are computed locally and labeled TOY. Speaker
+forecasts carry evidence labels. The economics/engineering
+boundary is strict: token prices, contracts, and market claims
+are economics, never agent implementation.</p>
+<h2 id="not-yet-understood-dependency-list-unit-level">Not-yet-understood dependency list (unit level)</h2>
+<ol>
+<li>Token billing blocks (U03-R1) , needed for C05, C11.</li>
+<li>Contract present value (U03-R2) , needed for C08.</li>
+<li>Latency versus throughput (U03-R3) , needed for C06, C07.</li>
+<li>NPV comparison (U01-C04) , needed for C08, C09.</li>
+</ol>
+<hr />
+<h2 id="mse435-u03-c01-service-as-software-thesis">mse435-U03-C01 , service-as-software thesis</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to week 4 (Ali Ghodsi, Databricks: &ldquo;Infrastructure,
+Enterprise AI, and Service As a Software&rdquo;, SRC-00). Scope: the
+thesis that AI turns labor-like services into software-priced
+products. Objective: state the thesis precisely and compute the
+repricing on a toy. Dependencies: U01-C03, P24.</p>
+<h3 id="2-motivating-question-and-tiny-toy">2. Motivating question and tiny toy</h3>
+<p>Motivating question: what happens to a 50-dollar support ticket
+when software can resolve it for 50 cents? Tiny toy: one
+ticket costs 1 hour of human time at 50 dollars per hour, or
+one AI task at 0.50 dollars.</p>
+<h3 id="3-plain-language-mental-model">3. Plain-language mental model</h3>
+<p>Services sell hours. Software sells copies. AI lets a service
+be delivered like software: the marginal task costs compute,
+not a person&rsquo;s hour. The thesis says the price of
+labor-shaped work collapses toward the compute cost, and the
+firms that own the software capture the spread.</p>
+<h3 id="4-variables-units-shapes-assumptions">4. Variables, units, shapes, assumptions</h3>
+<p>Human cost per task: dollars (wage x hours). AI cost per task:
+dollars (tokens x price + overhead). Repricing ratio =
+human / AI, a pure number. Assumptions: the AI task meets the
+quality bar (the thesis fails otherwise), and demand exists at
+the new price.</p>
+<h3 id="5-justified-derivation">5. Justified derivation</h3>
+<p>Ratio = 50 / 0.50 = 100. The task reprices by two orders of
+magnitude. The economics: human cost is linear in tasks (each
+task needs its hour), while AI cost is sublinear (fixed model
+cost spread over tasks plus tiny marginal compute). The ratio
+grows with volume because the human side cannot spread its
+fixed cost the same way.</p>
+<h3 id="6-computed-numerical-example">6. Computed numerical example</h3>
+<p>Toy: 10,000 tickets per month. Human: 10,000 x 50 = 500,000
+dollars. AI: 10,000 x 0.50 = 5,000 dollars plus 20,000 dollars
+of fixed integration and oversight = 25,000 dollars. Saving =
+475,000 dollars per month. Break-even quality: if the AI
+resolves only 70 percent and humans handle the rest, cost =
+0.7 x 5,000 + 0.3 x 500,000 x (1/10,000 per ticket)&hellip; redo
+cleanly: AI handles 7,000 at 0.50 = 3,500, humans handle
+3,000 at 50 = 150,000, plus fixed 20,000 = 173,500. Still a
+65 percent saving, but the human tail dominates the cost.</p>
+<h3 id="7-algorithm-and-minimal-implementation">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def service_cost(tasks, human_each, ai_each, fixed, ai_share=1.0):
+    ai_n = tasks * ai_share
+    human_n = tasks - ai_n
+    return ai_n * ai_each + human_n * human_each + fixed
+
+print(service_cost(10_000, 50, 0.50, 20_000))
+print(service_cost(10_000, 50, 0.50, 20_000, 0.70))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output">8. Correctness checks and expected output</h3>
+<p>Expected: <code>25000.0</code> then <code>173500.0</code>. Check: at ai_share = 0
+the cost is all-human plus fixed. Check: at ai_share = 1 the
+human term is zero. Check units: dollars per month.</p>
+<h3 id="9-complexity-costs-stability">9. Complexity, costs, stability</h3>
+<p>O(1). The fragile input is ai_share at quality: it is
+measured, not assumed. A pilot that measures resolution rate
+is worth more than the toy.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: labor arbitrage (cheaper humans), which cuts the
+50 dollars to 15 but keeps the linear shape. Use it where AI
+quality fails. The software thesis wins where quality holds
+and volume is large. Alternative: full automation with no
+human tail, which the toy shows is rarely optimal, the
+70-percent case keeps humans for the hard tail.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample">11. Failure case, broken assumption, counterexample</h3>
+<p>Break the quality bar. The AI resolves tickets fast but
+wrong, and wrong answers cost 200 dollars each in churn.
+At a 10 percent error rate on 10,000 tickets: 1,000 x 200 =
+200,000 dollars of damage, wiping the saving. Counterexample:
+high-trust services (medical, legal). The liability cost of
+an error exceeds any labor saving, so the service stays
+human-priced.</p>
+<h3 id="12-research-reading-and-falsifiable-extension">12. Research reading and falsifiable extension</h3>
+<p>Official anchor: week 4 session and SRC-14/15 (Paik, Ghodsi),
+titles only, [SPEAKER CLAIM, EVIDENCE PENDING]. Falsifiable
+extension: pick one enterprise AI rollout with public numbers.
+Hypothesis: cost per task falls 10x+ while the human tail
+keeps 20-40 percent of tasks. It fails if the tail vanishes,
+which would mean full automation, not the thesis&rsquo;s hybrid.</p>
+<h3 id="13-assessment">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>State the service-as-software thesis in one sentence.</li>
+<li>Why does the repricing ratio grow with volume?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define the thesis without jargon.</li>
+<li>Toy: 5,000 tasks, human 40, AI 0.40, fixed 10k. Compute
+   both costs.</li>
+<li>Derive the 100x ratio and name the linearity difference.</li>
+<li>Implement service_cost and state the ai_share = 0 check.</li>
+<li>Compare with labor arbitrage: when is each right?</li>
+</ol>
+<p>Unfamiliar transfer: the AI is 90 percent cheaper but wrong
+answers cost 500 dollars each in refunds. Set up the
+inequality that decides deployment.</p>
+<h3 id="14-lab-exercises">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 1 (repricing with error costs).</p>
+<h3 id="15-visual-units-and-audit">15. Visual units and audit</h3>
+<p><code>visuals/figures/u03_service_software.png</code>: before/after per
+task cost, one rule (&ldquo;labor to software&rdquo;), computed 50.00
+versus 0.50 dollars. Source: original. Alt text: two bars,
+the after bar is a sliver next to the before bar. Audit:
+PASS.</p>
+<figure><img alt="two bars, the after bar is a sliver next to the before bar. Audit: PASS." src="assets/figures/u03_service_software.png"><figcaption>Service and software margin</figcaption></figure>
+<hr />
+<h2 id="mse435-u03-c02-enterprise-integration">mse435-U03-C02 , enterprise integration</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_1">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to week 4. Scope: what it costs to plug AI into a real
+enterprise. Objective: enumerate the integration cost layers
+and show why the model is the cheap part. Dependencies: C01,
+P24.</p>
+<h3 id="2-motivating-question-and-tiny-toy_1">2. Motivating question and tiny toy</h3>
+<p>Motivating question: the model API costs 5,000 dollars a
+month, but the project costs 500,000. Where did the money go?
+Tiny toy: API 5k, data plumbing 150k, security review 100k,
+workflow change 200k, training 45k.</p>
+<h3 id="3-plain-language-mental-model_1">3. Plain-language mental model</h3>
+<p>The model is the engine, integration is the car around it.
+Enterprises buy outcomes, and the outcome needs data
+connections, access controls, audits, retrained staff, and
+changed processes. Each layer is a fixed cost that must be
+paid before the first token creates value.</p>
+<h3 id="4-variables-units-shapes-assumptions_1">4. Variables, units, shapes, assumptions</h3>
+<p>Layers: model (dollars per month, variable), data plumbing
+(one-time), security/compliance (one-time plus annual),
+workflow redesign (one-time), training (one-time). Total
+first-year cost = sum. Assumptions: the layers are
+separable and the estimates are honest (no optimism bias).</p>
+<h3 id="5-justified-derivation_1">5. Justified derivation</h3>
+<p>First-year total = 5,000 x 12 + 150,000 + 100,000 + 200,000 +
+45,000 = 60,000 + 495,000 = 555,000 dollars. The model is
+10.8 percent of the first-year cost. The derivation is
+addition, the lesson is the ratio. Anyone who budgets the
+model and forgets the car is off by 9x.</p>
+<h3 id="6-computed-numerical-example_1">6. Computed numerical example</h3>
+<p>Toy above: 555,000 first year. Year 2: model 60,000 +
+security annual 30,000 + maintenance 50,000 = 140,000. The
+two-year total is 695,000, of which the model is 120,000
+(17 percent). Integration dominates early, then fades, the
+decision metric is the multi-year total, not the API bill.</p>
+<h3 id="7-algorithm-and-minimal-implementation_1">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def integration_cost(api_mo, plumbing, security_yr1, workflow,
+                     training, security_annual=30_000,
+                     maint_annual=50_000, years=2):
+    yr1 = api_mo * 12 + plumbing + security_yr1 + workflow \
+        + training
+    later = (years - 1) * (api_mo * 12 + security_annual
+                           + maint_annual)
+    return yr1, yr1 + later
+
+print(integration_cost(5_000, 150_000, 100_000, 200_000,
+                       45_000))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_1">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(555000, 695000)</code>. Check: at years = 1 the total
+equals yr1. Check: the model share rises with years. Check
+units: dollars.</p>
+<h3 id="9-complexity-costs-stability_1">9. Complexity, costs, stability</h3>
+<p>O(1). The estimates are the risk: integration overruns are
+the norm. Pad each layer and track actuals against the
+budget monthly.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_1">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: buy a vertical app (integration included in the
+price), which converts the fixed layers into a subscription.
+Use it when the workflow is standard. The build-up wins when
+the workflow is custom and the data is proprietary.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_1">11. Failure case, broken assumption, counterexample</h3>
+<p>Break separable layers. A security review that fails in
+month 8 restarts the data plumbing, the layers are coupled
+and the sum understates the cost. Counterexample: the
+&ldquo;pilot that never scales&rdquo;. Integration is paid for 5 users,
+value needs 5,000, the per-user math never closes.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_1">12. Research reading and falsifiable extension</h3>
+<p>Official anchor: week 4 session, [SPEAKER CLAIM, EVIDENCE
+PENDING]. Falsifiable extension: collect three public
+enterprise AI case studies with cost breakdowns.
+Hypothesis: the model is under 25 percent of first-year
+cost in all three. It fails if any case is model-dominated,
+which would mark a genuinely light integration.</p>
+<h3 id="13-assessment_1">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Name the five integration cost layers.</li>
+<li>Why is the API bill a bad budget proxy?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define integration cost without jargon.</li>
+<li>Toy: compute the two-year total above by hand.</li>
+<li>Explain the 9x lesson from the ratio.</li>
+<li>Implement integration_cost and state the years = 1 check.</li>
+<li>Compare build-up with a vertical app: when is each right?</li>
+</ol>
+<p>Unfamiliar transfer: security review fails in month 8 and
+restarts data plumbing. Rework the budget: which lines move
+and what contingency covers it?</p>
+<h3 id="14-lab-exercises_1">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 2 (integration budget with
+overrun).</p>
+<h3 id="15-visual-units-and-audit_1">15. Visual units and audit</h3>
+<p>Table in the lesson (layer, year-1, year-2+). Logged as an
+honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c03-openclosed-stacks">mse435-U03-C03 , open/closed stacks</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_2">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to weeks 4-5 (open/closed is the week 5 &ldquo;openness&rdquo; theme,
+SRC-18 title). Scope: the choice between open weights and
+closed APIs. Objective: compare the stacks on cost, control,
+and lock-in. Dependencies: C02, P24.</p>
+<h3 id="2-motivating-question-and-tiny-toy_2">2. Motivating question and tiny toy</h3>
+<p>Motivating question: open weights are free, so why does
+anyone pay for an API? Tiny toy: open stack costs 30k per
+month to host (C01 math at volume) plus 200k integration,
+closed API costs 40k per month with 50k integration.</p>
+<h3 id="3-plain-language-mental-model_2">3. Plain-language mental model</h3>
+<p>Open means you hold the weights: no per-token bill, but you
+pay to host, and you own the operations. Closed means you
+rent intelligence: per-token bill, no hosting, but the vendor
+sets the price and the rules. The choice is buy-vs-rent
+applied to the model layer (U02-C08), plus a control
+premium.</p>
+<h3 id="4-variables-units-shapes-assumptions_2">4. Variables, units, shapes, assumptions</h3>
+<p>Open: hosting dollars per month + integration one-time +
+ops staff. Closed: tokens x price + integration one-time.
+Control premium: the extra dollars the firm pays for data
+control and no vendor dependence. Assumptions: the open
+model meets the quality bar, and hosting cost is estimated
+at real utilization.</p>
+<h3 id="5-justified-derivation_2">5. Justified derivation</h3>
+<p>Two-year open: 30,000 x 24 + 200,000 = 920,000. Two-year
+closed: 40,000 x 24 + 50,000 = 1,010,000. Open wins by
+90,000 dollars before the control premium. If the firm
+values control at more than -90,000 (i.e., even slightly),
+open wins, the premium only needs to be non-negative here.
+The derivation prices the premium as the residual: premium
+= closed cost - open cost at indifference.</p>
+<h3 id="6-computed-numerical-example_2">6. Computed numerical example</h3>
+<p>Toy above: open 920k, closed 1,010k over two years. Now cut
+volume in half: open hosting falls only to 20k per month
+(fixed-heavy), closed API falls to 20k per month (pure
+variable). Open: 20,000 x 24 + 200,000 = 680,000. Closed:
+20,000 x 24 + 50,000 = 530,000. Closed wins by 150,000.
+The stack choice flips with volume, exactly like build vs
+lease.</p>
+<h3 id="7-algorithm-and-minimal-implementation_2">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def open_cost(host_mo, integ, months=24):
+    return host_mo * months + integ
+
+def closed_cost(api_mo, integ, months=24):
+    return api_mo * months + integ
+
+print(open_cost(30_000, 200_000), closed_cost(40_000, 50_000))
+print(open_cost(20_000, 200_000), closed_cost(20_000, 50_000))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_2">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(920000, 1010000)</code> then <code>(680000, 530000)</code>.
+Check: at zero months both equal their integration. Check:
+the winner flips with volume. Check units: dollars.</p>
+<h3 id="9-complexity-costs-stability_2">9. Complexity, costs, stability</h3>
+<p>O(1). The hidden term is ops talent: hosting needs ML
+engineers the firm may not have, and their cost hides in
+&ldquo;hosting&rdquo; or appears nowhere.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_2">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: hybrid (open for sensitive data, closed for
+bursty overflow). Use it when data classes differ. Pure
+open wins at high steady volume with control needs, pure
+closed wins at low or spiky volume.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_2">11. Failure case, broken assumption, counterexample</h3>
+<p>Break the quality bar. The open model is 5 points worse on
+the firm&rsquo;s eval, and each point costs 100k in lost
+conversion. The 90k hosting win is noise against a 500k
+quality loss. Counterexample: the vendor raises API prices
+40 percent in year 2. The closed two-year math used a flat
+price, the real closed cost is higher and the decision
+flips back.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_2">12. Research reading and falsifiable extension</h3>
+<p>Official anchor: SRC-18 (&ldquo;Scaling AI at the Speed of
+Openness&rdquo;), title only. Falsifiable extension: track one
+firm&rsquo;s public stack choice and its volume growth.
+Hypothesis: firms switch closed-to-open as volume crosses
+their crossover. It fails if they stay closed at high
+volume, which would price the control or talent premium
+above the hosting saving.</p>
+<h3 id="13-assessment_2">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>State the open/closed trade in one sentence each.</li>
+<li>Why does the choice flip with volume?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define the control premium without symbols.</li>
+<li>Toy: compute both two-year totals above by hand.</li>
+<li>Derive the premium as the indifference residual.</li>
+<li>Implement both cost functions and state the flip check.</li>
+<li>Compare pure with hybrid: when is hybrid right?</li>
+</ol>
+<p>Unfamiliar transfer: the vendor announces a 40 percent API
+price rise next year. Rework the two-year closed math and
+name the contract clause that prevents the
+surprise.</p>
+<h3 id="14-lab-exercises_2">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 3 (crossover volume for the
+stack choice).</p>
+<h3 id="15-visual-units-and-audit_2">15. Visual units and audit</h3>
+<p>Table in the lesson (open vs closed at two volumes). Logged
+as an honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c04-compute-supply">mse435-U03-C04 , compute supply</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_3">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to week 5 (Katti/OpenAI infrastructure, SRC-00, &ldquo;The
+Supply and Demand of AI Tokens&rdquo;, SRC-19, title only). Scope:
+where token supply comes from. Objective: derive serving
+capacity from a GPU fleet. Dependencies: U02-C01, P16.</p>
+<h3 id="2-motivating-question-and-tiny-toy_3">2. Motivating question and tiny toy</h3>
+<p>Motivating question: how many tokens per day can 1,000 GPUs
+serve? Tiny toy: 1,000 GPUs, 50 tokens per second per GPU,
+85 percent utilization.</p>
+<h3 id="3-plain-language-mental-model_3">3. Plain-language mental model</h3>
+<p>Token supply is manufactured: GPUs x speed x utilization.
+Unlike training (one big job), serving is a factory line:
+many small jobs sharing the line. Supply grows by adding
+GPUs or by serving faster (batching, C06 of U04 preview).</p>
+<h3 id="4-variables-units-shapes-assumptions_3">4. Variables, units, shapes, assumptions</h3>
+<p>N: GPU count. s: tokens per second per GPU. U: utilization.
+Supply per day = N x s x U x 86,400 seconds. Assumptions:
+speed is sustained (not peak), and the mix of prompt sizes
+is stable.</p>
+<h3 id="5-justified-derivation_3">5. Justified derivation</h3>
+<p>1,000 x 50 x 0.85 x 86,400 = 3.672 x 10^12 tokens per day,
+or 3,672 B tokens per day. In 1M-token blocks: 3,672,000
+blocks per day. Each term earns its place: N x s is the
+line&rsquo;s rate, U is the share of the rate that is sold, and
+86,400 converts seconds to days.</p>
+<h3 id="6-computed-numerical-example_3">6. Computed numerical example</h3>
+<p>Toy above: 3.672T tokens per day. At 4 dollars per 1M tokens
+(C11 toy price), daily revenue capacity = 3,672,000 x 4 =
+14.688M dollars per day at full sale. The fleet cost (U02-C01
+at 1.08 $/GPU-h x 1,000 x 24) = 25,920 dollars per day.
+Gross margin per day = 14.66M dollars, which is why serving
+is attractive and why competition attacks the price.</p>
+<h3 id="7-algorithm-and-minimal-implementation_3">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def token_supply(gpus, tok_per_s, u=0.85):
+    per_day = gpus * tok_per_s * u * 86_400
+    return per_day, per_day / 1e6
+
+print(token_supply(1_000, 50))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_3">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(3.672e12, 3672000.0)</code>. Check: supply scales
+linearly in each input. Check: units are tokens per day.
+Check: at U = 0 supply is 0.</p>
+<h3 id="9-complexity-costs-stability_3">9. Complexity, costs, stability</h3>
+<p>O(1). The fragile input is s: tokens per second varies 10x
+with model size and batching. Quote supply as a range over
+s, not a point.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_3">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: buy tokens on the market (API), which converts
+the supply question into a price question. Build supply when
+volume is high and steady (C03 logic), buy when it is low or
+spiky.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_3">11. Failure case, broken assumption, counterexample</h3>
+<p>Break stable mix. A flood of long-context requests cuts s
+from 50 to 15, supply falls 70 percent while the GPU count
+did not move. Counterexample: the factory line jams. One
+slow batching policy can idle GPUs between batches, and
+measured supply undershoots the formula.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_3">12. Research reading and falsifiable extension</h3>
+<p>Official anchor: SRC-19 (&ldquo;The Supply and Demand of AI
+Tokens&rdquo;), title only, [SPEAKER CLAIM, EVIDENCE PENDING].
+Falsifiable extension: benchmark one serving stack&rsquo;s tokens
+per second across prompt sizes. Hypothesis: s falls with
+context length. It fails if s is flat, which would point to
+a well-batched system.</p>
+<h3 id="13-assessment_3">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Write the token supply formula.</li>
+<li>Why quote supply as a range over s?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define token supply without symbols.</li>
+<li>Toy: 500 GPUs, 40 tok/s, U = 0.9. Compute per day.</li>
+<li>Derive the formula and name the 86,400.</li>
+<li>Implement token_supply and state the linearity check.</li>
+<li>Compare building supply with buying tokens: when is each
+   right?</li>
+</ol>
+<p>Unfamiliar transfer: long-context demand triples and s falls
+60 percent. Your contracts promise fixed throughput. Name
+the two levers and which breaks the contract first.</p>
+<h3 id="14-lab-exercises_3">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 4 (supply under mix shifts).</p>
+<h3 id="15-visual-units-and-audit_3">15. Visual units and audit</h3>
+<p>Table in the lesson (inputs to tokens per day). Logged as an
+honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c05-token-demand">mse435-U03-C05 , token demand</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_4">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to week 5 (SRC-19, &ldquo;The Supply and Demand of AI Tokens&rdquo;,
+title only). Scope: what buyers want at a token price.
+Objective: solve the token market equilibrium and a demand
+shock. Dependencies: U01-C01, C04, U03-R1.</p>
+<h3 id="2-motivating-question-and-tiny-toy_4">2. Motivating question and tiny toy</h3>
+<p>Motivating question: a viral app doubles token demand
+overnight. What happens to the token price? Tiny toy: demand
+Qd = 100 - 2P, supply Qs = 20 + 3P (B tokens per day, dollars
+per 1M tokens), then demand jumps to Qd = 160 - 2P.</p>
+<h3 id="3-plain-language-mental-model_4">3. Plain-language mental model</h3>
+<p>Token demand is appetite for intelligence at a price. Token
+supply is the factory line from C04. The market clears where
+they meet. A demand shock walks the price up the supply
+curve, how far depends on how steep the supply curve is.</p>
+<h3 id="4-variables-units-shapes-assumptions_4">4. Variables, units, shapes, assumptions</h3>
+<p>P: dollars per 1M tokens. Q: B tokens per day. Same linear
+machinery as U01-C01 with new units. Assumptions: one token
+price (no tiers), fast clearing, and the shock is demand-only
+(supply fixed overnight).</p>
+<h3 id="5-justified-derivation_4">5. Justified derivation</h3>
+<p>P<em> = (a - c)/(b + d), Q</em> = a - bP<em>, from U01-C01.
+Before: P</em> = (100-20)/5 = 16, Q<em> = 68. After: P</em> =
+(160-20)/5 = 28, Q* = 104. The shock raises price 75 percent
+and quantity 53 percent. The steeper the supply (larger d),
+the more the shock lands on quantity and the less on price.</p>
+<h3 id="6-computed-numerical-example_4">6. Computed numerical example</h3>
+<p>Toy above. Revenue before: 16 x 68 = 1,088 (in B-token x
+$/1M units, i.e. 1.088M dollars per day per the block
+math: 68B tokens = 68,000 blocks x 16 = 1,088,000 dollars).
+Revenue after: 28 x 104 = 2,912, i.e. 2.912M dollars per day.
+The shock nearly triples daily revenue, which is why
+suppliers race to add the line from C04.</p>
+<h3 id="7-algorithm-and-minimal-implementation_4">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def token_equilibrium(a, b, c, d):
+    p = (a - c) / (b + d)
+    return p, a - b * p
+
+print(token_equilibrium(100, 2, 20, 3))
+print(token_equilibrium(160, 2, 20, 3))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_4">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(16.0, 68.0)</code> then <code>(28.0, 104.0)</code>. Check: plug
+back into both curves. Check: the shock raises both P<em> and
+Q</em>. Check: revenue math uses the block conversion.</p>
+<h3 id="9-complexity-costs-stability_4">9. Complexity, costs, stability</h3>
+<p>O(1). Real token markets are tiered (input vs output prices,
+priority lanes), so the single price is a simplification.
+Use it for direction, not for quoting.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_4">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: administered pricing (the vendor sets the price
+and lets quantity adjust), which is how most API markets
+actually work. The clearing model wins when spot or auction
+pricing exists. Never read a posted API price as a market
+clearing price without checking for queues or quotas.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_4">11. Failure case, broken assumption, counterexample</h3>
+<p>Break fast supply. Overnight, supply cannot move, so the
+short-run supply curve is vertical: the whole shock lands on
+price (P* jumps to 70 at Q = 20+&hellip; solve 160 - 2P = 68
+fixed supply: P = 46). The toy&rsquo;s 28 assumes supply
+adjustment that takes weeks. Counterexample: the vendor
+holds price flat and rations by rate limits. Quantity, not
+price, absorbs the shock.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_4">12. Research reading and falsifiable extension</h3>
+<p>Official anchor: SRC-19, title only, [SPEAKER CLAIM,
+EVIDENCE PENDING]. Falsifiable extension: track one
+provider&rsquo;s price and status page through a demand spike.
+Hypothesis: rate limits bind before prices move. It fails if
+prices move first, which would mark a real spot market.</p>
+<h3 id="13-assessment_4">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Write the token equilibrium with its units.</li>
+<li>Why does a steeper supply curve mute the price jump?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define token demand without symbols.</li>
+<li>Toy: solve Qd = 100 - 2P, Qs = 20 + 3P by hand.</li>
+<li>Derive the after-shock P* and explain the 75 percent.</li>
+<li>Implement token_equilibrium and state the plug-back
+   check.</li>
+<li>Compare clearing with administered pricing: which fits
+   API markets?</li>
+</ol>
+<p>Unfamiliar transfer: the vendor freezes price and rations by
+rate limit. Who gets the tokens, and what is the implicit
+price the rationed-out buyer pays?</p>
+<h3 id="14-lab-exercises_4">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 5 (shock with vertical
+short-run supply).</p>
+<h3 id="15-visual-units-and-audit_4">15. Visual units and audit</h3>
+<p><code>visuals/figures/u03_token_market.png</code>: before/after demand
+shock, one rule (&ldquo;demand jumps&rdquo;), computed P<em> 16 to 28 and
+Q</em> 68 to 104. Source: original. Alt text: two panels with
+demand, supply, and marked equilibria, the after panel is
+higher on both axes. Audit: PASS.</p>
+<figure><img alt="two panels with demand, supply, and marked equilibria, the after panel is higher on both axes. Audit: PASS." src="assets/figures/u03_token_market.png"><figcaption>Token market</figcaption></figure>
+<hr />
+<h2 id="mse435-u03-c06-capacity-bottlenecks">mse435-U03-C06 , capacity bottlenecks</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_5">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to weeks 4-5. Scope: finding the binding stage in token
+serving. Objective: identify the bottleneck from stage
+capacities and compute the system rate. Dependencies: P16,
+C04, U03-R3.</p>
+<h3 id="2-motivating-question-and-tiny-toy_5">2. Motivating question and tiny toy</h3>
+<p>Motivating question: GPUs sit idle while requests queue.
+Which stage is the bottleneck? Tiny toy: three stages with
+capacities 100, 40, 80 requests per second.</p>
+<h3 id="3-plain-language-mental-model_5">3. Plain-language mental model</h3>
+<p>A serving stack is a line of stations: network in, batching,
+GPU compute, network out. The line moves at the slowest
+station&rsquo;s pace. Adding GPUs when the batcher is the bottleneck
+buys idle silicon.</p>
+<h3 id="4-variables-units-shapes-assumptions_5">4. Variables, units, shapes, assumptions</h3>
+<p>Stage capacities k_i: requests per second. System rate =
+min(k_i). Utilization of stage i = rate / k_i. Assumptions:
+steady flow, no batching gains counted twice, and one
+request class.</p>
+<h3 id="5-justified-derivation_5">5. Justified derivation</h3>
+<p>Rate = min(100, 40, 80) = 40 rps. The batcher binds.
+Utilizations: 40/100 = 40 percent, 40/40 = 100 percent,
+40/80 = 50 percent. Money spent raising stage 1 or 3 is
+wasted until the batcher moves. Each term earns its place:
+the minimum is the definition of a serial line&rsquo;s rate.</p>
+<h3 id="6-computed-numerical-example_5">6. Computed numerical example</h3>
+<p>Toy: batcher upgraded from 40 to 90 rps at a cost of 200k.
+New rate = min(100, 90, 80) = 80 rps. The GPU stage now
+binds at 80 percent&hellip; recompute: utilizations 80/100 = 80
+percent, 80/90 = 89 percent, 80/80 = 100 percent. The 200k
+doubled throughput (40 to 80). A further 200k on the batcher
+(to 130) gives min(100, 130, 80) = 80: zero gain. The second
+200k should go to stage 3.</p>
+<h3 id="7-algorithm-and-minimal-implementation_5">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def bottleneck(caps):
+    rate = min(caps)
+    return rate, [rate / c for c in caps]
+
+print(bottleneck([100, 40, 80]))
+print(bottleneck([100, 90, 80]))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_5">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(40, [0.4, 1.0, 0.5])</code> then <code>(80, [0.8,
+0.888..., 1.0])</code>. Check: the bottleneck stage shows 1.0.
+Check: raising a non-binding stage does not move the rate.
+Check units: requests per second.</p>
+<h3 id="9-complexity-costs-stability_5">9. Complexity, costs, stability</h3>
+<p>O(stages). The trap is the moving bottleneck: fix one and
+the next binds, so budget the sequence, not one fix.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_5">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: parallelize the bottleneck (more batcher
+instances). Use it when the stage scales out. The upgrade
+wins when the stage is a single better box. Never buy more
+of the non-binding stage &ldquo;for headroom&rdquo; before measuring.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_5">11. Failure case, broken assumption, counterexample</h3>
+<p>Break one request class. Long-context requests consume the
+GPU 10x longer, the bottleneck moves with the mix, and the
+static min() mislabels it. Counterexample: the queue itself.
+At 95 percent utilization of the bottleneck, queueing delay
+explodes (U03-R3), the &ldquo;rate&rdquo; is fine but latency is not,
+and users feel a bottleneck the throughput math misses.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_5">12. Research reading and falsifiable extension</h3>
+<p>Read P16 on bottlenecks and stragglers. Falsifiable
+extension: load-test one serving stack and record per-stage
+utilization. Hypothesis: one stage sits at ~100 percent
+while others sit low. It fails if all stages saturate
+together, which would point to a balanced system or a
+misconfigured test.</p>
+<h3 id="13-assessment_5">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>State the bottleneck rule.</li>
+<li>Why does fixing one bottleneck reveal the next?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define a bottleneck without symbols.</li>
+<li>Toy: caps [60, 60, 30]. Find the rate and utils.</li>
+<li>Explain why money on a non-binding stage is wasted.</li>
+<li>Implement bottleneck and state the 1.0 check.</li>
+<li>Compare upgrading with parallelizing: when is each
+   right?</li>
+</ol>
+<p>Unfamiliar transfer: the mix shifts to long context and the
+GPU stage binds instead of the batcher. Your budget assumed
+the batcher. Rework the plan in two sentences.</p>
+<h3 id="14-lab-exercises_5">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 6 (bottleneck sequence).</p>
+<h3 id="15-visual-units-and-audit_5">15. Visual units and audit</h3>
+<p>Table in the lesson (stage, capacity, utilization, binds?).
+Logged as an honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c07-inference-versus-training-economics">mse435-U03-C07 , inference versus training economics</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_6">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to week 5. Scope: the two cost shapes of a model
+business. Objective: show why training amortizes and
+inference dominates at scale. Dependencies: C04, U01-C03,
+U03-R3.</p>
+<h3 id="2-motivating-question-and-tiny-toy_6">2. Motivating question and tiny toy</h3>
+<p>Motivating question: training cost 5M dollars once. Does it
+matter? Tiny toy: 5M training, 500B lifetime tokens, 4
+dollars per 1M inference cost.</p>
+<h3 id="3-plain-language-mental-model_6">3. Plain-language mental model</h3>
+<p>Training is tuition: paid once, sunk, then spread over every
+token the model ever serves. Inference is rent: paid per
+token, forever. At small volume tuition dominates the unit
+cost, at large volume rent dominates and tuition vanishes
+into the rounding.</p>
+<h3 id="4-variables-units-shapes-assumptions_6">4. Variables, units, shapes, assumptions</h3>
+<p>T: training dollars (one-time). V: lifetime tokens. Train
+amortized per 1M = T / V x 10^6. Inference i: dollars per
+1M (unit cost). Unit cost = T/V x 10^6 + i. Assumptions: V
+is known (it is a forecast), and i is constant in volume.</p>
+<h3 id="5-justified-derivation_6">5. Justified derivation</h3>
+<p>At V = 50B: 5M/50B x 10^6 = 100 dollars per 1M. Unit = 104.
+At V = 500B: 5M/500B x 10^6 = 10 dollars per 1M. Unit = 14.
+Volume grew 10x, unit cost fell 7.4x, and the training share
+fell from 96 percent to 71 percent of the unit&hellip; recompute:
+100/104 = 96 percent, 10/14 = 71 percent. Each term earns its
+place: T/V is the fixed-cost spread, i is the marginal
+floor.</p>
+<h3 id="6-computed-numerical-example_6">6. Computed numerical example</h3>
+<p>Toy above. The crossover where training equals inference:
+T/V x 10^6 = i gives V = 5M/4 x 10^6 = 1.25T tokens. Below
+1.25T lifetime tokens, tuition dominates, above, rent
+dominates. Most successful models cross it, most failed
+ones never get near.</p>
+<h3 id="7-algorithm-and-minimal-implementation_6">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def unit_cost(train, lifetime_tokens, infer_per_1m):
+    amort = train / lifetime_tokens * 1e6
+    return amort, amort + infer_per_1m
+
+print(unit_cost(5e6, 50e9, 4.0))
+print(unit_cost(5e6, 500e9, 4.0))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_6">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(100.0, 104.0)</code> then <code>(10.0, 14.0)</code>. Check: the
+amortized part falls with V. Check: the total never falls
+below i. Check units: dollars per 1M tokens.</p>
+<h3 id="9-complexity-costs-stability_6">9. Complexity, costs, stability</h3>
+<p>O(1). The forecast V is the whole argument, a model that
+serves 10x fewer tokens than planned has 10x the unit cost.
+Never quote unit cost without the V assumption.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_6">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: fine-tune per customer (many small T&rsquo;s), which
+keeps tuition relevant at the customer level. Use it when
+tasks differ deeply. One big T wins when one model serves
+all tasks.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_6">11. Failure case, broken assumption, counterexample</h3>
+<p>Break constant i. At high batching i falls with volume too,
+and the unit cost falls faster than the toy. Counterexample:
+the model is retrained monthly. T is then recurring, not
+one-time, and the tuition never amortizes away.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_6">12. Research reading and falsifiable extension</h3>
+<p>Read U01-C03 on fixed-cost spread. Falsifiable extension:
+take one provider&rsquo;s price history and a public training-cost
+estimate. Hypothesis: price tracks i, not T/V, after the
+first year. It fails if prices step down exactly when new
+cheaper training runs land, which would mark T as the price
+driver.</p>
+<h3 id="13-assessment_6">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>State the two cost shapes in one sentence each.</li>
+<li>Why does training vanish from unit cost at scale?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define amortization without symbols.</li>
+<li>Toy: T = 2M, V = 100B, i = 3. Compute the unit cost.</li>
+<li>Derive the crossover V and explain it.</li>
+<li>Implement unit_cost and state the floor check.</li>
+<li>Compare one big T with per-customer fine-tunes: when is
+   each right?</li>
+</ol>
+<p>Unfamiliar transfer: the lab retrains monthly at 500k per
+run. Rework the unit-cost formula and say when the business
+still works.</p>
+<h3 id="14-lab-exercises_6">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 7 (unit cost vs volume curve).</p>
+<h3 id="15-visual-units-and-audit_6">15. Visual units and audit</h3>
+<p><code>visuals/figures/u03_infer_train.png</code>: before/after volume,
+one rule (&ldquo;volume grows&rdquo;), computed totals 104.0 and 14.0
+dollars per 1M tokens with the training slice shrinking.
+Source: original. Alt text: two stacked bars (training
+amortized, inference), the after bar is far shorter. Audit:
+PASS.</p>
+<figure><img alt="two stacked bars (training amortized, inference), the after bar is far shorter. Audit: PASS." src="assets/figures/u03_infer_train.png"><figcaption>Inference vs training cost</figcaption></figure>
+<hr />
+<h2 id="mse435-u03-c08-long-contracts">mse435-U03-C08 , long contracts</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_7">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to weeks 4-5 (enterprise buying). Scope: multi-year
+commits for compute or tokens. Objective: price a contract
+against falling market prices and name the risks. Dependencies:
+U01-C04, U03-R2.</p>
+<h3 id="2-motivating-question-and-tiny-toy_7">2. Motivating question and tiny toy</h3>
+<p>Motivating question: a vendor offers 3 years of tokens at 3
+dollars per 1M, prepaid 30 percent. The market is 4 dollars
+today but falling. Sign? Tiny toy: commit 10M tokens per
+month, 36 months, market path 4.00, 3.00, 2.00 per year.</p>
+<h3 id="3-plain-language-mental-model_7">3. Plain-language mental model</h3>
+<p>A long contract is insurance: you lock a price and the vendor
+locks your demand. Insurance has a premium: if the market
+falls, you overpay, if it spikes, you win. The fair question
+is never &ldquo;is 3 dollars good?&rdquo; but &ldquo;is 3 dollars good against
+the price path and the exit terms?&rdquo;</p>
+<h3 id="4-variables-units-shapes-assumptions_7">4. Variables, units, shapes, assumptions</h3>
+<p>Commit Q per period, contract price p_c, market path p_t,
+discount r. Contract PV = sum p_c x Q / (1+r)^t. Market PV =
+sum p_t x Q / (1+r)^t. Assumptions: Q is fixed (take-or-pay),
+and the market path is the honest forecast.</p>
+<h3 id="5-justified-derivation_7">5. Justified derivation</h3>
+<p>Q = 10M blocks&hellip; careful with units: 10M tokens per month =
+10 blocks of 1M. Per year: 120 blocks. Year prices: 4, 3, 2.
+Market PV at 10 percent: 120 x (4/1.1 + 3/1.1^2 + 2/1.1^3) =
+120 x (3.636 + 2.479 + 1.503) = 120 x 7.618 = 914.2
+dollars. Contract PV: 120 x 3 x (1/1.1 + 1/1.1^2 + 1/1.1^3) =
+360 x 2.4869 = 895.3 dollars. The contract wins by 18.9
+dollars in this toy, entirely because year-1 market is high.
+Each term earns its place: discounting weights near years
+more, where the contract&rsquo;s lock helps most.</p>
+<h3 id="6-computed-numerical-example_7">6. Computed numerical example</h3>
+<p>Toy above: contract 895.3 vs market 914.2. Now make the
+market fall faster (4, 2, 1): market PV = 120 x (3.636 +
+1.653 + 0.751) = 120 x 6.040 = 724.8. The contract loses by
+170.5 dollars. The sign of the deal flips on the price path,
+not on the headline 3 dollars.</p>
+<h3 id="7-algorithm-and-minimal-implementation_7">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def contract_pv(q_yr, p_c, market_path, r=0.10):
+    a = sum(1 / (1 + r) ** (t + 1)
+            for t in range(len(market_path)))
+    c_pv = q_yr * p_c * a
+    m_pv = q_yr * sum(p / (1 + r) ** (t + 1)
+                      for t, p in enumerate(market_path))
+    return c_pv, m_pv
+
+print(contract_pv(120, 3.0, [4.0, 3.0, 2.0]))
+print(contract_pv(120, 3.0, [4.0, 2.0, 1.0]))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_7">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(895.28..., 914.19...)</code> then <code>(895.28...,
+724.84...)</code>. Check: at a flat market path of 3.0 both are
+equal. Check: the contract PV does not move with the path.
+Check units: dollars.</p>
+<h3 id="9-complexity-costs-stability_7">9. Complexity, costs, stability</h3>
+<p>O(T). The take-or-pay assumption is the risk: if usage falls
+short, you pay for ghosts. Model the commit at the P10 usage
+case, not the plan case.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_7">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: short commits with renewal options, which keep
+flexibility at a price premium. Use them when the price path
+is uncertain. The long lock wins when usage is certain and
+the path is flat or rising.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_7">11. Failure case, broken assumption, counterexample</h3>
+<p>Break fixed Q. Usage halves in year 2, the contract still
+bills 120 blocks and the effective price per used token
+doubles. Counterexample: the vendor&rsquo;s escape hatch. A
+&ldquo;price match&rdquo; clause that the vendor controls is not
+insurance, read who triggers it.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_7">12. Research reading and falsifiable extension</h3>
+<p>Read U01-C04 on NPV. Falsifiable extension: survey three
+enterprises on commit versus actual usage. Hypothesis: most
+over-commit by 20 percent+. It fails if most hit 95 percent
++, which would validate take-or-pay discipline.</p>
+<h3 id="13-assessment_7">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Write the contract-vs-market PV comparison.</li>
+<li>Why is the headline price not the decision?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define a long contract as insurance without jargon.</li>
+<li>Toy: compute the year-1 market PV term by hand.</li>
+<li>Explain why discounting favors the contract early.</li>
+<li>Implement contract_pv and state the flat-path check.</li>
+<li>Compare long lock with short commits: when is each
+   right?</li>
+</ol>
+<p>Unfamiliar transfer: usage may fall 50 percent in year 2.
+Rework the decision: what commit level do you sign, and
+what clause do you demand?</p>
+<h3 id="14-lab-exercises_7">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 8 (contract vs market paths).</p>
+<h3 id="15-visual-units-and-audit_7">15. Visual units and audit</h3>
+<p>Table in the lesson (path, contract PV, market PV,
+winner). Logged as an honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c09-ownership">mse435-U03-C09 , ownership</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_8">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to weeks 4-5. Scope: who owns the model, the data, and
+the outputs. Objective: price the ownership choice between
+building, buying, and renting intelligence. Dependencies: C03,
+U01-C04.</p>
+<h3 id="2-motivating-question-and-tiny-toy_8">2. Motivating question and tiny toy</h3>
+<p>Motivating question: should the firm own its model or rent
+one? Tiny toy: own = 2M to build + 300k per year to run,
+rent = 500k per year in API bills, horizon 3 years, r = 10
+percent.</p>
+<h3 id="3-plain-language-mental-model_8">3. Plain-language mental model</h3>
+<p>Ownership is a bundle: the weights, the training data rights,
+the evals, and the team that can change them. Renting buys
+the outputs only. Owning pays off when the asset is core,
+long-lived, and differentiating, renting pays when it is a
+commodity input.</p>
+<h3 id="4-variables-units-shapes-assumptions_8">4. Variables, units, shapes, assumptions</h3>
+<p>Build cost B (one-time), run cost R per year, rent cost A per
+year, horizon T, discount r. Own PV = B + R x annuity. Rent
+PV = A x annuity. Assumptions: the built model matches the
+rented quality, and the team stays.</p>
+<h3 id="5-justified-derivation_8">5. Justified derivation</h3>
+<p>Annuity 3 years at 10 percent = 2.4869. Own PV = 2M +
+300k x 2.4869 = 2,746,055. Rent PV = 500k x 2.4869 =
+1,243,426. Rent wins by 1.5M in this toy. The build must
+beat rent by more than the quality and option gap: owning
+also buys the right to modify, which the PV omits.</p>
+<h3 id="6-computed-numerical-example_8">6. Computed numerical example</h3>
+<p>Toy above. Now add differentiation: the owned model lifts
+conversion 2 percent on 50M revenue = 1M per year. PV of
+lift = 1M x 2.4869 = 2.4869M. Own total value = -2.746M +
+2.487M = -0.259M net cost vs rent -1.243M. Own wins once
+the differentiation is counted. The lesson: cost-only
+ownership math systematically favors renting.</p>
+<h3 id="7-algorithm-and-minimal-implementation_8">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def annuity(r, t):
+    return (1 - (1 + r) ** (-t)) / r
+
+def own_vs_rent(build, run, rent, lift, r=0.10, t=3):
+    a = annuity(r, t)
+    own = build + run * a - lift * a
+    return own, rent * a
+
+print(own_vs_rent(2e6, 300e3, 500e3, 0.0))
+print(own_vs_rent(2e6, 300e3, 500e3, 1e6))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_8">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(2746055.0..., 1243426.0...)</code> then
+<code>(259186.0..., 1243426.0...)</code>. Check: at lift = 0 the first
+case returns. Check: own falls as lift rises. Check units:
+dollars.</p>
+<h3 id="9-complexity-costs-stability_8">9. Complexity, costs, stability</h3>
+<p>O(1). The lift is the argument, it is also the most
+inventable number in the building. Source it from an A/B
+test or bound it, never assert it.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_8">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: own the data and evals, rent the weights
+(fine-tune on rented base). This splits the bundle: the
+differentiating asset (data) is owned, the commodity
+(weights) is rented. Use it as the default, full ownership
+only when the base itself differentiates.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_8">11. Failure case, broken assumption, counterexample</h3>
+<p>Break &ldquo;the team stays&rdquo;. The 2M build walks out the door
+with two resignations, and the owned model becomes an
+unmaintainable artifact. Counterexample: the vendor
+deprecates the rented model. The renter&rsquo;s product breaks on
+someone else&rsquo;s schedule, the owner controls the clock.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_8">12. Research reading and falsifiable extension</h3>
+<p>Read P24 on versioning and contracts. Falsifiable extension:
+track three firms that built vs rented. Hypothesis: builders
+keep their models 3+ years, renters switch yearly. It fails
+if builders also churn, which would mark models as
+fashion goods, not assets.</p>
+<h3 id="13-assessment_8">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Name the four parts of the ownership bundle.</li>
+<li>Why does cost-only math favor renting?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define ownership without jargon.</li>
+<li>Toy: compute both PVs above by hand.</li>
+<li>Explain the annuity&rsquo;s role in the comparison.</li>
+<li>Implement own_vs_rent and state the lift-direction
+   check.</li>
+<li>Compare full ownership with own-data-rent-weights:
+   when is each right?</li>
+</ol>
+<p>Unfamiliar transfer: your two ML leads resign mid-build.
+Rework the decision: what changes in the own column, and
+what is the cheapest hedge you should have bought?</p>
+<h3 id="14-lab-exercises_8">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 9 (ownership with lift).</p>
+<h3 id="15-visual-units-and-audit_8">15. Visual units and audit</h3>
+<p>Table in the lesson (own vs rent, with and without lift).
+Logged as an honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c10-data-governance">mse435-U03-C10 , data governance</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_9">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to week 4 (enterprise AI). Scope: the rules that decide
+what data the model may touch. Objective: turn governance
+into a cost and risk budget. Dependencies: C02, P24.</p>
+<h3 id="2-motivating-question-and-tiny-toy_9">2. Motivating question and tiny toy</h3>
+<p>Motivating question: the model needs customer emails to
+answer well, but policy forbids it. What does the
+prohibition cost? Tiny toy: with emails, resolution 80
+percent, without, 60 percent, 10,000 tickets at 50 dollars
+human cost per miss.</p>
+<h3 id="3-plain-language-mental-model_9">3. Plain-language mental model</h3>
+<p>Governance is the fence around the data: who may access it,
+where it lives, how long it stays, and what the model may
+learn from it. Every fence has a price (the value left
+outside) and a purpose (the risk kept out). Good governance
+prices both.</p>
+<h3 id="4-variables-units-shapes-assumptions_9">4. Variables, units, shapes, assumptions</h3>
+<p>Access tiers: public, internal, restricted. Cost of a
+restriction: lost model quality in dollars (misses x cost
+per miss). Benefit: expected risk avoided (probability x
+fine or breach cost). Assumptions: the quality loss is
+measured, and the risk is bounded honestly.</p>
+<h3 id="5-justified-derivation_9">5. Justified derivation</h3>
+<p>Toy: restriction loses 20 points of resolution on 10,000
+tickets = 2,000 extra misses x 50 dollars = 100,000 dollars
+per month. The breach it prevents: 1 percent annual chance
+x 5M fine = 50,000 per year expected, or 4,167 per month.
+On expected value the fence costs 24x its benefit. The
+derivation forces the question: is the 1 percent honest,
+or is the real risk (reputation, criminal) off the books?</p>
+<h3 id="6-computed-numerical-example_9">6. Computed numerical example</h3>
+<p>Toy above. Now add reputation: one breach costs 50M in lost
+trust (not the fine). Expected: 0.01 x 50M = 500,000 per
+year = 41,667 per month. Still below 100,000 per month, but
+now the same order. The decision turns on the tail number,
+which is why governance is argued in scenarios, not means.</p>
+<h3 id="7-algorithm-and-minimal-implementation_9">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def fence_cost(tickets, res_with, res_without, miss_cost):
+    return tickets * (res_with - res_without) * miss_cost
+
+def fence_benefit(prob_yr, loss):
+    return prob_yr * loss / 12
+
+print(fence_cost(10_000, 0.80, 0.60, 50))
+print(fence_benefit(0.01, 5_000_000))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_9">8. Correctness checks and expected output</h3>
+<p>Expected: <code>100000.0</code> then <code>4166.66...</code>. Check: the cost
+rises with the resolution gap. Check: the benefit is
+monthly. Check units: dollars per month.</p>
+<h3 id="9-complexity-costs-stability_9">9. Complexity, costs, stability</h3>
+<p>O(1). The probability is the invented number, the loss is
+the argued one. Present both as ranges and decide on the
+worst honest case.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_9">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: technical controls (PII redaction, on-prem
+models) that keep the data inside the fence. Use them when
+the quality loss is large and the risk is real. The blunt
+ban wins when controls cannot be trusted or audited.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_9">11. Failure case, broken assumption, counterexample</h3>
+<p>Break &ldquo;the fence holds&rdquo;. A contractor pastes restricted
+data into a public chatbot, the governance cost was paid
+(the quality loss) and the risk materialized anyway.
+Counterexample: over-fencing. Three approval layers delay
+the project 9 months, the delay costs more than any breach
+would have.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_9">12. Research reading and falsifiable extension</h3>
+<p>Read P24 on access and retention. Falsifiable extension:
+audit one project&rsquo;s approval delays versus its risk events.
+Hypothesis: delay costs exceed realized risk costs. It
+fails if a delayed project avoided a real incident, which
+would price the fence correctly.</p>
+<h3 id="13-assessment_9">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Name the two sides of a data fence.</li>
+<li>Why argue governance in scenarios, not means?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define data governance without jargon.</li>
+<li>Toy: compute the fence cost above by hand.</li>
+<li>Explain the 24x ratio and what could overturn it.</li>
+<li>Implement fence_cost and state the gap-direction check.</li>
+<li>Compare a ban with technical controls: when is each
+   right?</li>
+</ol>
+<p>Unfamiliar transfer: a contractor leaks restricted data
+despite the fence. Name what failed (people, not the rule)
+and the two controls that address it.</p>
+<h3 id="14-lab-exercises_9">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 10 (fence pricing).</p>
+<h3 id="15-visual-units-and-audit_9">15. Visual units and audit</h3>
+<p>Table in the lesson (fence, monthly cost, monthly benefit).
+Logged as an honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c11-unit-prices">mse435-U03-C11 , unit prices</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_10">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to weeks 4-5. Scope: the price per billing block and
+what it must cover. Objective: decompose a unit price into
+cost, margin, and risk. Dependencies: C07, U03-R1.</p>
+<h3 id="2-motivating-question-and-tiny-toy_10">2. Motivating question and tiny toy</h3>
+<p>Motivating question: the vendor charges 4 dollars per 1M
+tokens. What sits inside the 4 dollars? Tiny toy: unit cost
+2.50 (1.08 GPU + 0.42 overhead + 1.00 amortized training),
+margin 1.00, risk buffer 0.50.</p>
+<h3 id="3-plain-language-mental-model_10">3. Plain-language mental model</h3>
+<p>A unit price is a sandwich: the bottom slice is true unit
+cost, the middle is margin, the top is the buffer for
+things that go wrong (abuse, spikes, bad debt). If the
+price does not cover all three, the vendor buys market
+share with losses.</p>
+<h3 id="4-variables-units-shapes-assumptions_10">4. Variables, units, shapes, assumptions</h3>
+<p>p: dollars per 1M tokens. c: true unit cost. m: margin.
+b: buffer. p = c + m + b. Assumptions: c is measured at
+real utilization, and the block is 1M tokens exactly.</p>
+<h3 id="5-justified-derivation_10">5. Justified derivation</h3>
+<p>4.00 = 2.50 + 1.00 + 0.50. Margin rate = 1.00/4.00 = 25
+percent. The decomposition earns its place as a diagnostic:
+when a competitor prices at 2.00, either their c is lower
+(scale, efficiency) or their m + b is negative (loss
+leader). The arithmetic cannot tell which, the business
+context must.</p>
+<h3 id="6-computed-numerical-example_10">6. Computed numerical example</h3>
+<p>Toy: at 2.50 unit cost, break-even volume for a 1M monthly
+fixed cost: contribution 1.50 per block&hellip; wait, the buffer
+is not contribution. Contribution = p - c = 1.50 per 1M
+block. Fixed 1,000,000 per month needs 666,667 blocks per
+month. Below that, the 4-dollar price loses money despite
+the &ldquo;margin&rdquo;.</p>
+<h3 id="7-algorithm-and-minimal-implementation_10">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def price_stack(cost, margin, buffer):
+    p = cost + margin + buffer
+    return p, margin / p
+
+def breakeven_blocks(fixed_mo, price, cost):
+    return fixed_mo / (price - cost)
+
+print(price_stack(2.50, 1.00, 0.50))
+print(breakeven_blocks(1_000_000, 4.00, 2.50))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_10">8. Correctness checks and expected output</h3>
+<p>Expected: <code>(4.0, 0.25)</code> then <code>666666.66...</code>. Check: the
+parts sum to the price. Check: break-even rises when the
+fixed cost rises. Check units: dollars and blocks.</p>
+<h3 id="9-complexity-costs-stability_10">9. Complexity, costs, stability</h3>
+<p>O(1). The c is the moving part: it falls with utilization
+and batching, so today&rsquo;s stack is stale next quarter.
+Recompute c quarterly.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_10">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: value pricing (price on the customer&rsquo;s saving,
+not your cost), which can set p far above c + m + b. Use
+it where the ROI is demonstrable and competition is weak.
+Cost-plus wins where competition is strong and buyers can
+compute your c.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_10">11. Failure case, broken assumption, counterexample</h3>
+<p>Break measured c. The vendor&rsquo;s true c is 3.50 (low
+utilization), so the 4.00 price carries 0.50 of real margin
+and the buffer is imaginary, one abuse wave makes it a
+loss. Counterexample: the 2.00 competitor is not
+efficient, just funded. The stack reads as efficiency but
+is really subsidy, it ends when the funding does.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_10">12. Research reading and falsifiable extension</h3>
+<p>Read U01-C03 on contribution. Falsifiable extension: track
+one vendor&rsquo;s price against an estimated c series.
+Hypothesis: price follows c with a lag. It fails if price
+leads c down, which would mark predatory or subsidy
+pricing.</p>
+<h3 id="13-assessment_10">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>Name the three slices of a unit price.</li>
+<li>Why recompute c quarterly?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define unit price without symbols.</li>
+<li>Toy: cost 3.00, margin 0.75, buffer 0.25. Give p and
+   the margin rate.</li>
+<li>Derive the break-even blocks and name the contribution.</li>
+<li>Implement price_stack and state the sum check.</li>
+<li>Compare cost-plus with value pricing: when is each
+   right?</li>
+</ol>
+<p>Unfamiliar transfer: a competitor prices at half your c.
+Name the two stories and the one test that separates them.</p>
+<h3 id="14-lab-exercises_10">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 11 (price stack under c
+shocks).</p>
+<h3 id="15-visual-units-and-audit_10">15. Visual units and audit</h3>
+<p>Table in the lesson (slice, dollars, share). Logged as an
+honest table medium.</p>
+<hr />
+<h2 id="mse435-u03-c12-sensitivity">mse435-U03-C12 , sensitivity</h2>
+<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE. <strong>Status.</strong> PLANNED / SOURCE
+ATTRIBUTION PENDING.</p>
+<h3 id="1-source-mapping-scope-objectives-dependencies_11">1. Source mapping, scope, objectives, dependencies</h3>
+<p>Maps to weeks 4-5 and forward to U06. Scope: which input
+moves the answer most. Objective: build a tornado ranking
+for the token unit price. Dependencies: U01-C11, C11.</p>
+<h3 id="2-motivating-question-and-tiny-toy_11">2. Motivating question and tiny toy</h3>
+<p>Motivating question: four drivers can move the token price.
+Which one deserves your attention? Tiny toy: base 4.00
+dollars per 1M, utilization moves it to [2.80, 5.20], power
+price to [3.20, 4.80], batch size to [3.40, 4.60], chip cost
+to [3.50, 4.50].</p>
+<h3 id="3-plain-language-mental-model_11">3. Plain-language mental model</h3>
+<p>A tornado chart lines up the drivers by their swing: the
+longest bar is the input that moves the outcome most. It
+turns &ldquo;everything matters&rdquo; into &ldquo;this matters most&rdquo;. The
+chart does not say what will happen, it says where to look
+first.</p>
+<h3 id="4-variables-units-shapes-assumptions_11">4. Variables, units, shapes, assumptions</h3>
+<p>Base outcome B. For driver i: low L_i, high H_i, swing =
+H_i - L_i. Rank by swing. Assumptions: drivers move one at
+a time (no interactions), and the low/high are honest
+ranges.</p>
+<h3 id="5-justified-derivation_11">5. Justified derivation</h3>
+<p>Swings: utilization 2.40, power 1.60, batch 1.20, chip 1.00.
+Rank: utilization, power price, batch size, chip cost. The
+sort earns its place: attention is scarce, and the ranking
+allocates it. The one-at-a-time assumption is the price of
+the simple chart, interactions need a model, not a ranking.</p>
+<h3 id="6-computed-numerical-example_11">6. Computed numerical example</h3>
+<p>Toy above. Reading: if you can only negotiate one input,
+negotiate utilization (scheduling, batching policy), it
+moves the price 2.40 dollars across its range, more than
+power and chip cost combined (2.60&hellip; recompute: 1.60 +
+1.00 = 2.60, which exceeds 2.40). Correction: utilization
+is the top single driver but not bigger than power + chip
+together. The honest read: fix utilization first, then
+power.</p>
+<h3 id="7-algorithm-and-minimal-implementation_11">7. Algorithm and minimal implementation</h3>
+<pre><code class="language-python">def tornado(base, drivers):
+    rows = [(name, lo, hi, hi - lo)
+            for name, lo, hi in drivers]
+    rows.sort(key=lambda r: r[3], reverse=True)
+    return rows
+
+ds = [(&quot;utilization&quot;, 2.80, 5.20), (&quot;power price&quot;, 3.20, 4.80),
+      (&quot;batch size&quot;, 3.40, 4.60), (&quot;chip cost&quot;, 3.50, 4.50)]
+print(tornado(4.00, ds))
+</code></pre>
+<h3 id="8-correctness-checks-and-expected-output_11">8. Correctness checks and expected output</h3>
+<p>Expected: utilization first (swing 2.40), then power
+(1.60), batch (1.20), chip (1.00). Check: the swings are
+hi - lo. Check: the order runs high to low. Check units:
+dollars per 1M.</p>
+<h3 id="9-complexity-costs-stability_11">9. Complexity, costs, stability</h3>
+<p>O(n log n). The ranges are the argument: a wider honest
+range beats a narrow guessed one. Elicit ranges from the
+owners of each input.</p>
+<h3 id="10-nearest-alternatives-and-selection-boundaries_11">10. Nearest alternatives and selection boundaries</h3>
+<p>Alternative: Monte Carlo over joint distributions, which
+captures interactions. Use it for the final investment
+call. The tornado wins for the first meeting: it is
+readable and fast. Never present the tornado as a forecast,
+it is a sensitivity map.</p>
+<h3 id="11-failure-case-broken-assumption-counterexample_11">11. Failure case, broken assumption, counterexample</h3>
+<p>Break one-at-a-time. Utilization and batch size interact:
+bigger batches raise both utilization and latency, and the
+chart&rsquo;s separate bars double-count the lever. Counterexample:
+the top driver is not actionable (chip cost set by the
+market). The chart says &ldquo;look here&rdquo; but there is nothing to
+do, rank by actionable swing instead.</p>
+<h3 id="12-research-reading-and-falsifiable-extension_11">12. Research reading and falsifiable extension</h3>
+<p>Read U01-C11 on uncertainty. Falsifiable extension: revisit
+the tornado after one quarter with realized ranges.
+Hypothesis: the top driver stays top. It fails if the
+ranking flips, which would mean the ranges were misjudged.</p>
+<h3 id="13-assessment_11">13. Assessment</h3>
+<p>Breadth recall:</p>
+<ol>
+<li>What does a tornado chart rank, and what does it not
+   say?</li>
+<li>Why elicit ranges from input owners?</li>
+</ol>
+<p>Deep oral ladder:</p>
+<ol>
+<li>Define sensitivity without symbols.</li>
+<li>Toy: base 10, drivers A [8, 14], B [9, 11]. Rank them.</li>
+<li>Explain why the sort allocates attention.</li>
+<li>Implement tornado and state the descending check.</li>
+<li>Compare tornado with Monte Carlo: when is each right?</li>
+</ol>
+<p>Unfamiliar transfer: the top driver is not actionable.
+Rework the chart: what do you rank instead, and what
+decision does it serve?</p>
+<h3 id="14-lab-exercises_11">14. Lab / exercises</h3>
+<p>See <code>labs/u03_lab.md</code>, task 12 (tornado from the lab&rsquo;s own
+numbers).</p>
+<h3 id="15-visual-units-and-audit_11">15. Visual units and audit</h3>
+<p><code>visuals/figures/u03_tornado.png</code>: low/high tornado,
+drivers sorted by swing, computed values, base 4.00 marked.
+Source: original. Alt text: two panels (low case, high
+case) of horizontal bars from a dashed base line, longest
+bar utilization. Audit: PASS.</p>
+<figure><img alt="two panels (low case, high case) of horizontal bars from a dashed base line, longest bar utilization. Audit: PASS." src="assets/figures/u03_tornado.png"><figcaption>Token cost sensitivity</figcaption></figure>
+      
+      <nav class="pager"><a href="u02_silicon_power_datacenters.html"><span class="lbl">← Previous</span>U02 · Silicon, power, and datacenters</a><a href="u04_enterprise_knowledge_inference_cloud.html"><span class="lbl">Next →</span>U04 · Enterprise knowledge, inference, and cloud</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/vendor/katex.min.js"></script>
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

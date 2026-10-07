@@ -1,0 +1,77 @@
+# Glossary: cs329z
+
+One meaning per term. First use in lessons repeats the short definition.
+
+- Acceptance gate: a bar with a measurement that a system must clear before the next rollout step.
+- Agent: a system in which an LLM dynamically directs its own process and tool use, maintaining control over how it completes a task (Anthropic 2024 usage).
+- Agentic system: the umbrella term covering workflows and agents.
+- Attack success rate (ASR): fraction of red-team attacks that achieve the attacker's goal.
+- Augmented LLM: an LLM with retrieval, tools, and memory attached (SRC-04).
+- Baseline: the simplest system worth comparing against, usually a single LLM call or a from-scratch pipeline with no tuning.
+- Bradley-Terry: a model turning pairwise win counts into one strength number per system.
+- Calibration gap: mean validator score minus mean human label on a calibration set.
+- Capability: a named permission (read, write, send) enforced at the action layer.
+- Checkpoint: saved run state that a long run resumes from after a crash.
+- Chunk: a contiguous slice of a document fed to an embedder or to the model.
+- ColBERT: late-interaction retrieval. Token-level embeddings compared with a max-sim operator at query time.
+- Compound AI system: a system of multiple interacting components (LLMs, retrievers, tools, optimizers) built to serve people (course framing, S01).
+- Consent gradient: consent levels (implicit, explicit-once, explicit-each-time) matched to action stakes.
+- Constrained decoding: sampling restricted to token sequences that satisfy a grammar or schema.
+- Context engineering: choosing what goes into the context window (retrieved text, history, instructions) and in what form.
+- Cross-encoder: a model that reads query and document together and outputs one relevance score.
+- Data flywheel: the deploy-collect-annotate-train-redeploy loop that compounds deployment data.
+- Decomposition: splitting a task into subtasks with defined inputs, outputs, and checks.
+- Distillation: training a small student on a large teacher's labels (hard or soft targets).
+- DPO: direct preference optimization. Trains the policy on (x, y_w, y_l) pairs with -log sigma(beta m), no RL stage.
+- DSPy: a programming model for LM pipelines with declarative signatures, parameterized modules, and a compiler (optimizer) that maximizes a metric.
+- Embedding: a vector in R^d that represents text for similarity search.
+- Eval tuple: the four parts that make a benchmark reproducible (request, environment, stopping, scorer).
+- Evaluator-optimizer: a workflow in which one LLM call generates and another critiques in a loop.
+- Grounding: tying a generated claim to retrieved evidence. Not the same as truth.
+- Hallucination: a fluent, confident statement not supported by evidence or fact.
+- Holdout: an eval set kept from training. The sealed tier opens once.
+- Human alignment: the correlation between a benchmark metric and human-judged quality.
+- Hybrid search: a retrieval score that mixes lexical (BM25) and dense (embedding) signals.
+- Idempotency key: a token deduping retried requests so repeats have one effect.
+- Idempotency: the property that repeating a request has the same effect as doing it once.
+- Injection (prompt): an instruction smuggled in user text (direct) or tool/file/web content (indirect).
+- Instruction hierarchy: system outranks developer outranks user outranks tool output.
+- Late interaction: scoring that keeps per-token vectors and combines them at query time instead of compressing to one vector.
+- Least privilege: granting the agent the smallest capability set that completes the task.
+- LoRA: low-rank adaptation. Trains B A (rank r) while the base matrix stays frozen. QLoRA adds 4-bit base storage.
+- MCP: Model Context Protocol. Host/client/server roles, JSON-RPC 2.0 data layer, stdio and Streamable HTTP transports.
+- Milestone: a verifiable subgoal in a long-horizon plan.
+- Mixed initiative: control passing between agent and user by confidence and stakes.
+- Modality ablation: toggling input modalities to price what each buys.
+- Orchestrator-workers: a workflow in which a central LLM splits the task, delegates to workers, and synthesizes results.
+- p99: the cost or latency that only 1 percent of tasks exceed.
+- Parallelization: a workflow that runs subtasks or repeated attempts at once, then aggregates.
+- Pass@k: probability that at least one of k independent samples passes.
+- Pass^k: probability that all k samples pass (reliability).
+- Permission boundary: the enforced list of what the agent may do.
+- Prompt chaining: a workflow that decomposes a task into a fixed sequence of LLM calls.
+- QLoRA: LoRA with the frozen base in 4-bit, fitting large models on small GPUs.
+- ReAct: an agent pattern that interleaves reasoning traces with actions and observations.
+- Recall: fraction of relevant items retrieved. Precision: fraction of retrieved items relevant.
+- Recovery ladder: retry, rollback, escalate, compensate, cheapest first.
+- Red-team: adversarial testing that invents attacks and measures the attack success rate.
+- REPL: read-eval-print loop. An interactive execution environment, here the model for code-execution tools.
+- Reranker: a second-stage scorer applied to a small candidate set from first-stage retrieval.
+- RLHF: reinforcement learning from human feedback. Reward model plus policy optimization. DPO replaces both stages.
+- Routing: a workflow that classifies an input and sends it to a specialized downstream path.
+- Runbook: the written incident response, rehearsed by drill.
+- Sandbox: an isolated execution environment with limited permissions and no unmediated side effects.
+- Scaffold: the code around the model (loops, prompts, tools, checks) that turns calls into a system.
+- Scaffolding fidelity: how closely benchmark tools match production tools.
+- Span: one logged unit of work with tokens and cost. A trace is a tree of spans.
+- Stopping rule: a condition that ends an agent loop (answer found, budget spent, approval denied).
+- Structured I/O: model input and output constrained to a machine-readable schema such as JSON.
+- Synthetic data: model-generated training examples filtered by a verifier.
+- Temperature: the scalar T that divides logits before softmax, T -> 0 approaches greedy, large T flattens the distribution.
+- Test-time scaling: spending more compute at inference (more samples, longer chains, more search) to raise quality.
+- Tool: a named function with a declared schema that the model can call. Execution happens outside the model.
+- Trace (agent): the thought/action/observation sequence. Trace (production): the span tree of a run.
+- User model: the agent's stored picture of the user's goals, preferences, and constraints.
+- Validator: a scoring function an optimizer trusts. It must be calibrated first.
+- Vector store: an index that returns approximate nearest neighbors for embedding queries.
+- Workflow: a system in which LLMs and tools run through predefined code paths (Anthropic 2024 usage).

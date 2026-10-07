@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Cheatsheet — Stanford Frontier AI — CS329Z</title>
+<meta name="description" content="Every key fact on one dense page.">
+<link rel="stylesheet" href="assets/vendor/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="cs329z-cheatsheet" class="page-cheatsheet">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="index.html">Stanford Frontier AI — CS329Z</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS329Z: Compound AI Systems and Agents</h3><ul>
+<li><a href="index.html" data-page="cs329z-index">CS329Z · Overview</a></li>
+<li><a href="lessons/u01_lesson.html" data-page="cs329z-u01">U01 · Compound systems and LLM fou</a></li>
+<li><a href="lessons/u02_lesson.html" data-page="cs329z-u02">U02 · Retrieval and evidence engin</a></li>
+<li><a href="lessons/u03_lesson.html" data-page="cs329z-u03">U03 · Tools, protocols, and runtim</a></li>
+<li><a href="lessons/u04_lesson.html" data-page="cs329z-u04">U04 · Frameworks, workflows, memor</a></li>
+<li><a href="lessons/u05_lesson.html" data-page="cs329z-u05">U05 · Optimization and agent data</a></li>
+<li><a href="lessons/u06_lesson.html" data-page="cs329z-u06">U06 · Benchmark and evaluation inf</a></li>
+<li><a href="lessons/u07_lesson.html" data-page="cs329z-u07">U07 · Safety, coding, and proactiv</a></li>
+<li><a href="lessons/u08_lesson.html" data-page="cs329z-u08">U08 · Frontiers, production, and p</a></li>
+<li><a href="cheatsheet.html" data-page="cs329z-cheatsheet" class="active">Cheatsheet</a></li>
+<li><a href="crash-course.html" data-page="cs329z-crash">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">CS329Z: Compound AI Systems and Agents</a> / Cheatsheet</nav>
+      <h1>Cheatsheet</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="cs329z-cheatsheet">CS329Z cheatsheet</h1>
+<p>One page per theme. Formulas, counts, decision rules. All numbers from the course toys unless noted.</p>
+<h2 id="core-formulas">Core formulas</h2>
+<table>
+<thead>
+<tr>
+<th>formula</th>
+<th>meaning</th>
+<th>where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pass@k = 1-(1-p)^k</td>
+<td>coverage: at least one of k passes</td>
+<td>U01, U06</td>
+</tr>
+<tr>
+<td>pass^k = p^k</td>
+<td>reliability: all k pass</td>
+<td>U06</td>
+</tr>
+<tr>
+<td>gain per extra cost = delta/(cost multiple - 1)</td>
+<td>ship rule vs the bar</td>
+<td>U01, U04</td>
+</tr>
+<tr>
+<td>SE(diff) = sqrt(p1(1-p1)/n + p2(1-p2)/n)</td>
+<td>noise on a comparison</td>
+<td>U06</td>
+</tr>
+<tr>
+<td>z = delta/SE.</td>
+<td>z</td>
+<td>&gt; 2 is actionable</td>
+</tr>
+<tr>
+<td>LoRA params = r(d + k)</td>
+<td>adapter count</td>
+<td>U05</td>
+</tr>
+<tr>
+<td>DPO loss = -log sigma(beta m)</td>
+<td>preference training</td>
+<td>U05</td>
+</tr>
+<tr>
+<td>P(i beats j) = sigma(s_i - s_j)</td>
+<td>Bradley-Terry</td>
+<td>U06</td>
+</tr>
+<tr>
+<td>flat H steps = p^H</td>
+<td>compounding without checks</td>
+<td>U08</td>
+</tr>
+<tr>
+<td>messages all-to-all = n(n-1), hub = 2n</td>
+<td>coordination topology</td>
+<td>U08</td>
+</tr>
+<tr>
+<td>cost = auto share x auto cost + esc share x esc cost</td>
+<td>FDE cost model</td>
+<td>capstone B</td>
+</tr>
+</tbody>
+</table>
+<h2 id="counts-to-memorize">Counts to memorize</h2>
+<ul>
+<li>LoRA 1024x1024, r = 8: 16,384 trainable (64x fewer).</li>
+<li>7B params: 14 GB fp16, 3.5 GB 4-bit.</li>
+<li>Grading per 1000: program $1, model $50, human $2000.</li>
+<li>Timeout 0.1, r = 3: all-fail 0.001.</li>
+<li>p = 0.3, k = 5: pass@k 0.83, pass^k 0.0024.</li>
+<li>1000 agents: 999,000 vs 2,000 messages per round.</li>
+<li>0.99^500 = 0.0066.</li>
+</ul>
+<h2 id="decision-rules">Decision rules</h2>
+<table>
+<thead>
+<tr>
+<th>decision</th>
+<th>rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>workflow vs agent</td>
+<td>path known: workflow. Steps unpredictable: agent</td>
+</tr>
+<tr>
+<td>knob order</td>
+<td>prompts, then weights, then compute</td>
+</tr>
+<tr>
+<td>optimizer trust</td>
+<td>gaps above 2 SE only</td>
+</tr>
+<tr>
+<td>grader order</td>
+<td>program, then model, then human sample</td>
+</tr>
+<tr>
+<td>regression</td>
+<td>block below -2 SE, celebrate above 2 SE, rerun otherwise</td>
+</tr>
+<tr>
+<td>approval tier</td>
+<td>auto (reversible), approve (costly), block (irreversible)</td>
+</tr>
+<tr>
+<td>consent</td>
+<td>implicit &lt; explicit-once &lt; explicit-each-time, by stakes</td>
+</tr>
+<tr>
+<td>recovery</td>
+<td>retry, rollback, escalate, compensate, cheapest first</td>
+</tr>
+<tr>
+<td>eval tiers</td>
+<td>dev (touch), test (schedule), sealed (once)</td>
+</tr>
+<tr>
+<td>rollout</td>
+<td>shadow, 10%, 50%, 100%, gates green 5 days each</td>
+</tr>
+</tbody>
+</table>
+<h2 id="failure-pairs-confused-concepts">Failure pairs (confused concepts)</h2>
+<ul>
+<li>Grounding vs truth (U02).</li>
+<li>pass@k vs pass^k (U06).</li>
+<li>Retry vs idempotency (U03).</li>
+<li>Workflow vs agent (U04).</li>
+<li>Temperature vs top-k vs top-p (U01).</li>
+<li>Point vs pairwise judging (U06).</li>
+<li>Validator score vs human quality (U05).</li>
+<li>Demo vs production (U08).</li>
+</ul>
+<h2 id="provenance-shorthand">Provenance shorthand</h2>
+<ul>
+<li>S01-S04: released, schedule-title level.</li>
+<li>S05-S20, finals: PLANNED / SOURCE ATTRIBUTION PENDING.</li>
+<li>S10, S16 guests: TBA, logged in GAP-08.</li>
+<li>Everything else: independent theory, labeled.</li>
+</ul>
+      
+      <nav class="pager"><a href="lessons/u08_lesson.html"><span class="lbl">← Previous</span>U08 · Frontiers, production, and project artifacts</a><a href="crash-course.html"><span class="lbl">Next →</span>Crash course</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/vendor/katex.min.js"></script>
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

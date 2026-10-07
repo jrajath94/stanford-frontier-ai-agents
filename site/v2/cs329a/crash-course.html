@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Crash course — CS329A — Stanford Frontier AI</title>
+<meta name="description" content="Interview-speed review of all 8 units.">
+<link rel="stylesheet" href="assets/vendor/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="cs329a-crash" class="page-crash">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="index.html">CS329A — Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS329A: Agentic AI and Frontier Research</h3><ul>
+<li><a href="index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="lessons/u01_test_time_compute.html" data-page="cs329a-u01">U01 · Test-time compute and verifi</a></li>
+<li><a href="lessons/u02_feedback_tools.html" data-page="cs329a-u02">U02 · Feedback, tools, and constit</a></li>
+<li><a href="lessons/u03_planning_search.html" data-page="cs329a-u03">U03 · Planning, search, and train-</a></li>
+<li><a href="lessons/u04_open_evolution.html" data-page="cs329a-u04">U04 · Open-ended evolution and dee</a></li>
+<li><a href="lessons/u05_swe_kernel_agents.html" data-page="cs329a-u05">U05 · Software-engineering and ker</a></li>
+<li><a href="lessons/u06_memory_caches.html" data-page="cs329a-u06">U06 · Memory, caches, and long-con</a></li>
+<li><a href="lessons/u07_reasoning_formal.html" data-page="cs329a-u07">U07 · Reasoning, formal systems, a</a></li>
+<li><a href="lessons/u08_long_horizon_eval.html" data-page="cs329a-u08">U08 · Long-horizon evaluation and </a></li>
+<li><a href="cheatsheet.html" data-page="cs329a-cheatsheet">Cheatsheet</a></li>
+<li><a href="crash-course.html" data-page="cs329a-crash" class="active">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">CS329A: Agentic AI and Frontier Research</a> / Crash course</nav>
+      <h1>Crash course</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="crash-course-cs329a-agentic-ai-and-frontier-research">Crash course , cs329a Agentic AI and Frontier Research</h1>
+<p>The whole course in one pass: 8 units, 96 concepts, the mechanisms
+that matter and the numbers that anchor them. Detail lives in
+<code>lessons/u01</code>-<code>u08</code>. Practice in <code>labs/</code>, <code>interview/</code>,
+<code>capstones/</code>.</p>
+<h2 id="the-arc">The arc</h2>
+<p>U01 spends compute at test time. U02 grounds the agent with tools
+and feedback. U03 plans and searches. U04 evolves agents. U05
+builds software-engineering and kernel agents. U06 gives them
+memory. U07 reasons formally and bounds autonomy. U08 evaluates
+long-horizon work and turns the course into research projects.</p>
+<h2 id="u01-test-time-compute-and-verification">U01 , Test-time compute and verification</h2>
+<p>More tries help when tries differ. pass@N = 1-(1-p)^N: with
+p=0.25 and N=5, the set wins 0.76 of the time while one ticket
+wins 0.25. Best-of-N samples N and keeps the verifier&rsquo;s top
+pick. Self-consistency samples N and takes the majority. The
+generator/verifier gap: verification is cheaper than generation,
+which is why selection works. Weak verifiers help only above
+0.60 pairwise accuracy (below 0.55 the method is untestable).
+Selection bias is the failure: a verifier that rewards length
+selects for length. The cost-success curve is concave: each new
+sample adds less. Read it to allocate a fixed budget.</p>
+<h2 id="u02-feedback-and-tools">U02 , Feedback and tools</h2>
+<p>ReAct: thought, action, observation, repeat. Execution feedback is
+ground truth from the world. Self-critique is the model&rsquo;s
+opinion and shares its blind spots. Code and tests are the
+tightest loop: the test suite is a semi-trusted judge. Critique
+is not a learning update: a comment changes the next try, a
+gradient changes the weights. Constitutional feedback is critique
+with principles. Reward signals shape behavior. Constraints bound
+it. Tool errors are data: read the traceback, do not repeat the
+call. Shortcut exploitation is the agent doing the wrong thing
+correctly (editing the test). Independent validation is the
+separate judge that execution feedback cannot be.</p>
+<h2 id="u03-planning-and-search">U03 , Planning and search</h2>
+<p>Tree search: state (reasoning so far), action (next step),
+reward (right answer). A perfect verifier makes search tractable:
+every node is labeled free, so only the policy is learned.
+Adaptive branching spends compute where it matters. Decomposition
+splits the problem. Parallel planning runs branches together.
+Multi-step credit is the hard part: which step caused the win.
+Synthetic traces, STaR, and reasoning RL all manufacture training
+signal from search. DAPO/GRPO are the reading pointers. Stay
+on-policy: train on what you deploy. The budget binds everything.
+Reward validity is the last word: a high reward that does not mean
+a right answer is a hack, not a reward.</p>
+<h2 id="u04-open-ended-evolution">U04 , Open-ended evolution</h2>
+<p>Vary a population of agent architectures, select the fittest,
+inherit with mutation. Novelty search escapes deceptive
+landscapes by rewarding difference. Selection is Goodhart in a
+population: it selects on the proxy, so the proxy is what grows.
+Holdout separation is the law: the champion is scored on data the
+search never saw, with the true metric. Evidence provenance
+tracks where every number came from. Resource budgets bound the
+search. Novelty claims need the holdout gap. Safe iteration means
+the kill rule is real: a project that cannot pass a gate dies at
+the gate.</p>
+<h2 id="u05-software-engineering-and-kernel-agents">U05 , Software-engineering and kernel agents</h2>
+<p>CodeMonkeys: serial iterations S raise coverage (0.832 at S=1 to
+0.997 at S=5 with K=8), parallel width K amortizes the shared
+context (context share 25.0 percent at K=8, 7.7 percent at K=32).
+Selection has three stages: generate, vote with model-generated
+tests, and a final selection trajectory. KernelBench: the model
+rewrites a PyTorch reference as a GPU kernel. fast_p counts
+kernels that are both correct AND at least p times faster
+(correctness 0.60 but fast_1 0.40 on the toy: speed without
+correctness scores zero). Amdahl: 2x on 60 percent gives 1.43x,
+never more than 2.5x. Profile first: the biggest share sets the
+ceiling.</p>
+<h2 id="u06-memory-caches-and-long-context">U06 , Memory, caches, and long-context</h2>
+<p>The KV cache is the working memory of inference. CacheBlend
+reuses non-prefix chunk caches and recomputes only high-
+deviation tokens: 2,048 prefill units become 307 recomputed
+plus 64 of deviation check, a 5.52x saving. MemGPT pages its
+own memory: hot facts stay in main context (8 slots), cold
+facts are evicted to archival storage (12 in the toy) and return
+via search. 20 turns, 27 memory actions, nothing lost. A
+Cartridge trains a small KV cache per corpus by self-study:
+20,480 tokens distill into 512 trained slots, 40x fewer per
+query. Training amortizes over queries.</p>
+<h2 id="u07-reasoning-formal-systems-and-autonomy">U07 , Reasoning, formal systems, and autonomy</h2>
+<p>Formal proof search: goal (what remains), tactic (a step), kernel
+(the checker). The kernel is the free verifier: every node is
+labeled right/wrong for free. AlphaGeometry&rsquo;s split: the neural
+net proposes constructions (ideas are cheap), the symbolic
+engine closes by deduction (deduction decides). Report search and
+proof separately: 13 nodes searched, 4-step proof. Sim-to-real:
+domain randomization narrows the reality gap (0.25 to 0.12 on
+the toy). The autonomy envelope: authority must not exceed
+verified capability, with margin. 3 of 4 configs admitted. The
+low-capability high-authority cell rejected. Traces: a trace is
+faithful iff flipping the cited fact changes the behavior.
+30 percent of plausible traces are stories.</p>
+<h2 id="u08-long-horizon-evaluation-and-research-projects">U08 , Long-horizon evaluation and research projects</h2>
+<p>Duration is difficulty in disguise: 0.90 at 15 minutes, 0.35 at
+8 hours on the toy. Short-task scores do not extrapolate.
+Value = hours times hourly rate: weight tasks by value, not
+count. GDPVal: experts from 44 occupations write real
+deliverables. Blinded pairwise comparison gives the win rate.
+220 gold tasks anchor it. DeepScholar-Bench grades research
+synthesis in three dimensions: synthesis, retrieval quality,
+verifiability. The split diagnoses the system (fluent 0.80 but
+thin 0.35). Ship on the minimum, not the mean: A means 0.767
+but mins 0.55, B means 0.72 and mins 0.70. Stop when the next
+hour&rsquo;s value falls below its cost. The contamination gap:
+same-model judge 0.85 minus independent judge 0.60 = 0.25 of
+similarity, not quality. Budget three fuels: agent, judge,
+audit. The audit binds. Ablate: the delta is causal. Gates with
+kill rules. Negative results with power. Five open questions.</p>
+<h2 id="how-the-units-connect">How the units connect</h2>
+<p>U01&rsquo;s verifier is U07&rsquo;s kernel pushed to the limit (infallible)
+and U08&rsquo;s judge pushed to the real world (fallible). U02&rsquo;s
+execution feedback is U03&rsquo;s reward signal grounded. U04&rsquo;s
+holdout separation is U08&rsquo;s eval hygiene at population scale.
+U05&rsquo;s selection stage is U01&rsquo;s best-of-N with tests as the
+verifier. U06&rsquo;s paging is U03&rsquo;s search over memory. The course
+is one idea restated eight ways: generate candidates, verify
+cheaply, select honestly, and report what the verifier cannot
+see.</p>
+      
+      <nav class="pager"><a href="cheatsheet.html"><span class="lbl">← Previous</span>Cheatsheet</a><span></span></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/vendor/katex.min.js"></script>
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>Cheatsheet — CS329A — Stanford Frontier AI</title>
+<meta name="description" content="Every key fact on one dense page.">
+<link rel="stylesheet" href="assets/vendor/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="cs329a-cheatsheet" class="page-cheatsheet">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="index.html">CS329A — Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS329A: Agentic AI and Frontier Research</h3><ul>
+<li><a href="index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="lessons/u01_test_time_compute.html" data-page="cs329a-u01">U01 · Test-time compute and verifi</a></li>
+<li><a href="lessons/u02_feedback_tools.html" data-page="cs329a-u02">U02 · Feedback, tools, and constit</a></li>
+<li><a href="lessons/u03_planning_search.html" data-page="cs329a-u03">U03 · Planning, search, and train-</a></li>
+<li><a href="lessons/u04_open_evolution.html" data-page="cs329a-u04">U04 · Open-ended evolution and dee</a></li>
+<li><a href="lessons/u05_swe_kernel_agents.html" data-page="cs329a-u05">U05 · Software-engineering and ker</a></li>
+<li><a href="lessons/u06_memory_caches.html" data-page="cs329a-u06">U06 · Memory, caches, and long-con</a></li>
+<li><a href="lessons/u07_reasoning_formal.html" data-page="cs329a-u07">U07 · Reasoning, formal systems, a</a></li>
+<li><a href="lessons/u08_long_horizon_eval.html" data-page="cs329a-u08">U08 · Long-horizon evaluation and </a></li>
+<li><a href="cheatsheet.html" data-page="cs329a-cheatsheet" class="active">Cheatsheet</a></li>
+<li><a href="crash-course.html" data-page="cs329a-crash">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">CS329A: Agentic AI and Frontier Research</a> / Cheatsheet</nav>
+      <h1>Cheatsheet</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="cheatsheet-cs329a">Cheatsheet , cs329a</h1>
+<p>One page per unit is the goal. This is the dense reference.
+Formulas, decision rules, toy numbers, failure modes. Detail in
+<code>lessons/</code>. The fast pass in <code>crash-course.md</code>.</p>
+<h2 id="u01-test-time-compute">U01 test-time compute</h2>
+<ul>
+<li>pass@N = 1-(1-p)^N. p=0.25, N=5: 0.76.</li>
+<li>Best-of-N: sample N, keep verifier&rsquo;s top. Needs verifier
+pairwise accuracy &gt; 0.60. Below 0.55 it is untestable.</li>
+<li>Self-consistency: sample N, majority vote. Needs per-sample
+accuracy above chance.</li>
+<li>Matched budget: N_sc * gen = N_bon * (gen + score).</li>
+<li>Selection bias: check score-vs-length correlation.</li>
+<li>Cost-success curve is concave: read it before allocating.</li>
+</ul>
+<h2 id="u02-feedback-and-tools">U02 feedback and tools</h2>
+<ul>
+<li>ReAct: thought -&gt; action -&gt; observation -&gt; answer.</li>
+<li>Execution feedback = ground truth. Self-critique = opinion.</li>
+<li>Tool error: read it, fix, retry once. Then replan.</li>
+<li>Shortcut: the agent edits the test. Catch with independent
+validation (separate judge, locked tests).</li>
+<li>Critique changes the try. A gradient changes the weights.</li>
+</ul>
+<h2 id="u03-planning-and-search">U03 planning and search</h2>
+<ul>
+<li>Tree search: state, action, reward. Random hit rate:
+correct-leaves / branching^depth.</li>
+<li>Perfect verifier: free node labels. Learn only the policy.</li>
+<li>Reward validity: correlate reward with truth on held-out
+traces before trusting search.</li>
+<li>Budget binds: fix budget, then tune. Never the reverse.</li>
+</ul>
+<h2 id="u04-open-evolution">U04 open evolution</h2>
+<ul>
+<li>Loop: vary, select, inherit. Selection pressure = fraction
+that reproduces.</li>
+<li>Deceptive proxy: selection grows what it measures.</li>
+<li>Holdout rule: champion scored on unseen data with the true
+metric. Gap = deception meter.</li>
+<li>Kill rule: a gate without teeth is theater.</li>
+</ul>
+<h2 id="u05-swe-and-kernel-agents">U05 SWE and kernel agents</h2>
+<ul>
+<li>Coverage: 0.832 (S=1) to 0.997 (S=5) at K=8. Depth buys
+coverage. Width amortizes context (25.0% -&gt; 7.7%).</li>
+<li>Selection: generate, vote with generated tests, final
+trajectory.</li>
+<li>fast_p: correct AND &gt;= p x faster. Toy: correctness 0.60,
+fast_1 0.40.</li>
+<li>Amdahl: speedup = 1/((1-f) + f/s). 2x on 60%: 1.43x.
+Ceiling 1/(1-f) = 2.5x.</li>
+</ul>
+<h2 id="u06-memory-and-caches">U06 memory and caches</h2>
+<ul>
+<li>CacheBlend: recompute high-deviation tokens only. Toy:
+2048 -&gt; 307 + 64 check = 5.52x.</li>
+<li>MemGPT: 8 hot slots, 12 paged to archival, 5-search recall
+index. Evict the coldest. Search returns them.</li>
+<li>Cartridge: trained KV per corpus. 20,480 -&gt; 512 slots
+(40x). Training amortizes over queries.</li>
+</ul>
+<h2 id="u07-reasoning-formal-autonomy">U07 reasoning, formal, autonomy</h2>
+<ul>
+<li>Proof search: goal, tactic, kernel. Random (1/12)^4.
+guided (1/3)^4.</li>
+<li>AlphaGeometry: net proposes, engine deduces.</li>
+<li>Report search nodes and proof steps separately.</li>
+<li>Reality gap: sim - real. Randomize to narrow it.</li>
+<li>Envelope: authority &lt;= verified capability + margin.</li>
+<li>Faithful trace: flip the cited fact. Behavior must change.</li>
+</ul>
+<h2 id="u08-long-horizon-eval">U08 long-horizon eval</h2>
+<ul>
+<li>Duration curve: success vs hours. Toy: 0.90 -&gt; 0.35.</li>
+<li>Value = hours x rate. Score where the money is.</li>
+<li>GDPVal: blinded pairwise win rate. SE = sqrt(p(1-p)/n).</li>
+<li>DeepScholar: synthesis / retrieval / verifiability.</li>
+<li>Ship on the min, not the mean.</li>
+<li>Stop: continue while marginal value &gt; marginal cost.</li>
+<li>Contamination gap = same-model agreement - independent
+agreement.</li>
+<li>Budget fuels: agent + judge + audit. The audit binds.</li>
+<li>Ablation delta = full - removed. Causal, not correlational.</li>
+</ul>
+<h2 id="cross-unit-rules">Cross-unit rules</h2>
+<ul>
+<li>Generate candidates, verify cheaply, select honestly.</li>
+<li>The verifier/judge is part of the apparatus: calibrate it,
+measure its bias, keep it at a distance.</li>
+<li>Report the tail (min), the cost (budget), and the negative
+(null with power).</li>
+<li>A gate without a kill rule is theater. A metric without a
+falsification is a wish.</li>
+</ul>
+      
+      <nav class="pager"><a href="lessons/u08_long_horizon_eval.html"><span class="lbl">← Previous</span>U08 · Long-horizon evaluation and research projects</a><a href="crash-course.html"><span class="lbl">Next →</span>Crash course</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/vendor/katex.min.js"></script>
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

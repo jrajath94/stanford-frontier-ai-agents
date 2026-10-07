@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crash course — Stanford Frontier AI — MSE435</title>
+<meta name="description" content="Interview-speed review of all 6 units.">
+<link rel="stylesheet" href="assets/vendor/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="mse435-crash">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="index.html">Stanford Frontier AI — MSE435</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>MSE435: AI Economics and Infrastructure</h3><ul>
+<li><a href="index.html" data-page="mse435-index">MSE435 · Overview</a></li>
+<li><a href="u01_ai_economics_value_chain.html" data-page="mse435-u01">U01 · AI economics and the value c</a></li>
+<li><a href="u02_silicon_power_datacenters.html" data-page="mse435-u02">U02 · Silicon, power, and datacent</a></li>
+<li><a href="u03_enterprise_token_markets.html" data-page="mse435-u03">U03 · Enterprise token markets</a></li>
+<li><a href="u04_enterprise_knowledge_inference_cloud.html" data-page="mse435-u04">U04 · Enterprise knowledge, infere</a></li>
+<li><a href="u05_coding_lifescience_economics.html" data-page="mse435-u05">U05 · Coding and life-science econ</a></li>
+<li><a href="u06_capstone_evidence_stakeholder_defense.html" data-page="mse435-u06">U06 · Capstone: evidence and stake</a></li>
+<li><a href="cheatsheet.html" data-page="mse435-cheatsheet">Cheatsheet</a></li>
+<li><a href="crash-course.html" data-page="mse435-crash" class="active">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">MSE435: AI Economics and Infrastructure</a> / Crash course</nav>
+      <h1>Crash course</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="mse435-crash-course-ai-economics-and-infrastructure">mse435 crash course , AI economics and infrastructure</h1>
+<p>All six units, every concept, condensed to the one-line
+definition, the key formula, and the toy number that
+proves it. Numbers are TOY unless marked observed.
+Details live in <code>lessons/u0N_*.md</code>.</p>
+<h2 id="u01-ai-economics-and-the-full-value-chain">U01 , AI economics and the full value chain</h2>
+<ul>
+<li>C01 supply/demand. Price clears where quantity supplied
+  equals quantity demanded. Toy: Qd = 100 - 2P, Qs = 20 +
+  3P gives P<em> = 16, Q</em> = 68.</li>
+<li>C02 complements/substitutes. Cheaper complements raise
+  demand. Cheaper substitutes steal it. Model: Qd shifts
+  with the substitute price.</li>
+<li>C03 fixed/variable costs. Fixed costs are paid once.
+  Variable costs scale with output. Average cost =
+  F/Q + v.</li>
+<li>C04 capex/opex. Capex buys the asset, opex rents the
+  flow. Depreciation turns capex into a yearly cost.</li>
+<li>C05 value capture. Value created is not value kept.
+  Capture goes to the scarcest layer: margin =
+  price minus cost at the bottleneck.</li>
+<li>C06 layers from chips to applications. Chips,
+  infrastructure, models, applications. Each layer taxes
+  the next.</li>
+<li>C07 consumer versus enterprise. Consumers buy delight,
+  enterprises buy ROI. Enterprise sales cycles are long
+  but contracts are sticky.</li>
+<li>C08 productivity versus adoption. Productivity gains
+  need adoption first. Output = productivity x adoption.</li>
+<li>C09 forecasts versus observations. Forecasts are
+  guesses with error bars. Trust observations, derate
+  forecasts.</li>
+<li>C10 two-year comparison. Compare the same metric at
+  t and t + 2 years. Growth compounds, costs decay.</li>
+<li>C11 uncertainty. Every input has a range. The case
+  must hold at the bad end of the range, not the
+  middle.</li>
+<li>C12 source claims. Speaker forecasts carry the label
+  [SPEAKER CLAIM, EVIDENCE PENDING]. Never build a
+  business case on an unlabeled claim.</li>
+</ul>
+<h2 id="u02-silicon-power-and-data-centers">U02 , silicon, power, and data centers</h2>
+<ul>
+<li>C01 GPU economy. GPUs are the scarcest input. Rent =
+  purchase price divided by lifetime tokens plus margin.</li>
+<li>C02 custom accelerators. Custom silicon beats general
+  GPUs only at sustained high utilization: the crossover
+  is utilization x volume.</li>
+<li>C03 memory/interconnect bottlenecks. FLOPs are cheap,
+  moving data is expensive. Roofline: throughput =
+  min(compute, bandwidth x intensity).</li>
+<li>C04 infrastructure lifecycle. Hardware lives 3-5
+  years. TCO = buy + power + cooling + refresh.</li>
+<li>C05 power constraints. Power, not silicon, caps the
+  data center. Tokens per day = GPUs x tok/s x U x
+  86,400.</li>
+<li>C06 cooling. Every watt of compute needs ~0.3 watts
+  of cooling. PUE = total power / IT power.</li>
+<li>C07 gigawatt scale. A gigawatt campus serves ~20M
+  concurrent users at 50 W each. Power is the new
+  moat.</li>
+<li>C08 build/lease tradeoffs. Build for steady base
+  load, lease for peaks. The crossover is utilization
+  x duration.</li>
+<li>C09 utilization. An idle GPU earns nothing. Effective
+  cost = sticker cost / utilization.</li>
+<li>C10 depreciation. Hardware loses ~40 percent of
+  value per year. Book value = purchase x 0.6^t.</li>
+<li>C11 supply concentration. One foundry, one GPU
+  vendor, few grids. Concentration = pricing power
+  upstream.</li>
+<li>C12 scenario analysis. Run base, good, bad. The
+  decision must survive the bad case.</li>
+</ul>
+<h2 id="u03-enterprise-infrastructure-and-token-markets">U03 , enterprise infrastructure and token markets</h2>
+<ul>
+<li>C01 service-as-software thesis. Software margins with
+  service costs. The thesis holds only if delivery cost
+  per token keeps falling.</li>
+<li>C02 enterprise integration. Integration cost is
+  3-10x the license. Budget the integration, not the
+  subscription.</li>
+<li>C03 open/closed stacks. Open stacks trade control
+  for cost. Closed stacks trade cost for speed.</li>
+<li>C04 compute supply. Supply = GPUs x utilization x
+  time. Shocks shift supply left and price up.</li>
+<li>C05 token demand. Demand = users x tokens per user.
+  Demand is elastic: price cuts raise volume.</li>
+<li>C06 capacity bottlenecks. The scarcest input sets
+  output. Find the bottleneck before buying anything.</li>
+<li>C07 inference versus training economics. Training is
+  capex-like, inference is opex-like. Unit cost =
+  C_train/V + c_inf.</li>
+<li>C08 long contracts. A contract is insurance against
+  price spikes. Regret = contract PV minus market PV.</li>
+<li>C09 ownership. Owning the stack keeps the margin.
+  Renting keeps the optionality. Own the bottleneck.</li>
+<li>C10 data governance. Data has owners, lineage, and
+  retention rules. Governance cost is real and rising.</li>
+<li>C11 unit prices. Quote everything per 1M tokens.
+  The unit price is the only comparable number.</li>
+<li>C12 sensitivity. Vary each input 20 percent. The
+  inputs that move the verdict get measured first.</li>
+</ul>
+<h2 id="u04-enterprise-knowledge-and-inference-cloud">U04 , enterprise knowledge and inference cloud</h2>
+<ul>
+<li>C01 knowledge access value. Value = q x (a1 - a0) x
+  v. Toy: 1,000 x 0.37 x 20 = 7,400 per month.</li>
+<li>C02 integration costs. Connectors cost 40k to build,
+  5k per year to maintain, plus a 30k one-time permission
+  filter. Toy: three sources (20k, 35k, 80k docs),
+  two-year bill = 180k, payback in month 25.</li>
+<li>C03 experience/data feedback. Usage corrects the index,
+  corrections raise quality, quality raises usage. Toy
+  6-month decayed gain = 9.371 (naive 12.0).</li>
+<li>C04 quality value. Each quality point is worth
+  w dollars. Value = w x points x volume.</li>
+<li>C05 hosting/API break-even. Q* = F / (p_a - p_h).
+  Toy: 30,000 / 2.50 = 12,000 = 12B tokens per month.</li>
+<li>C06 cache economics. Effective = h x c_c + (1 - h) x
+  c_m. Toy: 0.6 x 0.25 + 0.4 x 4.00 = 1.75 per 1M.
+  Replication (capstone 1) measured H1 FAIL at small
+  caches: analytic models overstate h by ~12 percent.</li>
+<li>C07 latency/quality tradeoff. Net = V x s x dL -
+  saving. Toy: 2M x 0.01 x 0.8 - 30k = 130k loss, do
+  not batch.</li>
+<li>C08 review labor. Labor = tasks x e x minutes/60 x
+  wage. Toy: 10k x 0.10 x 10/60 x 40 = 6,666.67 per
+  month.</li>
+<li>C09 cost per success. (r+1) x c / success. Toy: 2 x
+  0.50 / 0.84 = 1.19 with one retry at s = 0.6.</li>
+<li>C10 enterprise pricing. Price the seat for access,
+  the token for usage. Blended margin must stay
+  positive.</li>
+<li>C11 switching costs. Migration cost amortized over
+  the contract. Payback = switching / monthly saving.</li>
+<li>C12 inference ROI. Net = savings PV - TCO. Toy:
+  767.9k - 680k = 87.9k, pilot the lean design.</li>
+</ul>
+<h2 id="u05-codingapplication-and-life-science-economics">U05 , coding/application and life-science economics</h2>
+<ul>
+<li>C01 verify gap. Verification is cheaper than
+  generation. The gap is the business: v - c &gt; 0.</li>
+<li>C02 software 2.0 economics. Code is written by
+  models, reviewed by humans. Cost = generation +
+  review.</li>
+<li>C03 distribution cost. Serving cost per user falls
+  with scale. Margin = price - c_serve(user).</li>
+<li>C04 build/buy/license. License wins when the vendor
+  amortizes build over many buyers. Compare 3-year
+  TCOs, not year 1.</li>
+<li>C05 Amdahl for AI. Speedup is capped by the
+  non-automatable share: 1 / ((1-p) + p/s).</li>
+<li>C06 discovery funnel. Total = sum n_i x c_i. Toy:
+  111.002M from discovery to clinical.</li>
+<li>C07 clinical trials. Trials dominate cost: the
+  funnel&rsquo;s tail wags the dog. Price the tail first.</li>
+<li>C08 assay economics. Cost per hit = assays x cost /
+  (assays x survival). Halving survival doubles cost
+  per hit.</li>
+<li>C09 expert review. Experts are the bottleneck: 320
+  hours per month at 2 experts. Triage multiplies
+  expert hours.</li>
+<li>C10 adoption PV. Gate savings by the ramp:
+  [0.20, 0.50, 0.80] at r = 10 percent gives 767.9k,
+  not 1.93M naive.</li>
+<li>C11 life-science quality bar. Accuracy &gt;= 0.90 and
+  full audit trails. The bar is regulatory, not
+  technical.</li>
+<li>C12 OOD limits. Out-of-distribution inputs break
+  silently. Monitor the input distribution, not just
+  the output.</li>
+</ul>
+<h2 id="u06-capstone-evidence-and-stakeholder-defense">U06 , capstone evidence and stakeholder defense</h2>
+<ul>
+<li>C01 baseline. Measure the current cost before
+  proposing anything. No baseline, no business case.</li>
+<li>C02 objectives. One primary metric, guardrails for
+  the rest. Pre-register all of them.</li>
+<li>C03 constraints. Budget, latency, compliance: the
+  box the design must fit in.</li>
+<li>C04 quality gates. a1 &gt;= 0.75 or the system does not
+  ship. Gates are binary.</li>
+<li>C05 trust boundaries. Data crosses boundaries only
+  under contract. Mask PII before egress.</li>
+<li>C06 alternatives. Always price the status quo and
+  the hire-more-humans option. The AI design must
+  beat both.</li>
+<li>C07 TCO reckoning. TCO = B + 3(R + L) + K. Toy:
+  1,850k, build share 21.6 percent. Build-only cases
+  understate 3-4x.</li>
+<li>C08 acceptance gates. Cost &lt;= 30, accuracy &gt;= 0.90,
+  escalation &lt;= 0.10, 90 percent confidence. Kill on
+  two consecutive breaches.</li>
+<li>C09 monitoring. Dashboard the five vitals: cost,
+  accuracy, escalation, latency, hit rate. Alert on
+  drift.</li>
+<li>C10 cost/latency assumptions. 1.75 per 1M cached,
+  0.67 review labor, p99 1.8 s. Mark each for pilot
+  measurement.</li>
+<li>C11 rollout. Shadow, 1 percent, 10 percent, 100
+  percent. 15-minute rollback, game-day tested.</li>
+<li>C12 falsifiable investment. L &gt; Y on the pilot
+  interval or reject. Toy: [13, 23] vs Y = 15:
+  reject. Never move Y or D after seeing data.</li>
+</ul>
+<h2 id="the-ten-numbers-to-memorize">The ten numbers to memorize</h2>
+<ol>
+<li>Q* = F / (p_a - p_h): 12B tokens per month.</li>
+<li>Effective cached price: h x c_c + (1 - h) x c_m.</li>
+<li>Cost per success: (r + 1) x c / (1 - (1 - s)^(r+1)).</li>
+<li>Adoption-gated PV: ramp each year, then discount.</li>
+<li>TCO = B + 3(R + L) + K: build is ~22 percent.</li>
+<li>Break-even volume: 30k / (p_a - p_h).</li>
+<li>Review labor: tasks x e x min/60 x wage.</li>
+<li>Flywheel: decay each month&rsquo;s corrections by
+   0.9^(remaining).</li>
+<li>Falsifiable rule: invest iff L &gt; Y, pre-registered.</li>
+<li>Stakeholder line: measured X, costs Y, saves Z,
+    risk W, pilot 4 weeks, kill criteria named.</li>
+</ol>
+      
+      <nav class="pager"><a href="cheatsheet.html"><span class="lbl">← Previous</span>Cheatsheet</a><span></span></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/vendor/katex.min.js"></script>
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

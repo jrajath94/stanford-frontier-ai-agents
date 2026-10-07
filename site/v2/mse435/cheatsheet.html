@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet — Stanford Frontier AI — MSE435</title>
+<meta name="description" content="Every key fact on one dense page.">
+<link rel="stylesheet" href="assets/vendor/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="mse435-cheatsheet">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="index.html">Stanford Frontier AI — MSE435</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>MSE435: AI Economics and Infrastructure</h3><ul>
+<li><a href="index.html" data-page="mse435-index">MSE435 · Overview</a></li>
+<li><a href="u01_ai_economics_value_chain.html" data-page="mse435-u01">U01 · AI economics and the value c</a></li>
+<li><a href="u02_silicon_power_datacenters.html" data-page="mse435-u02">U02 · Silicon, power, and datacent</a></li>
+<li><a href="u03_enterprise_token_markets.html" data-page="mse435-u03">U03 · Enterprise token markets</a></li>
+<li><a href="u04_enterprise_knowledge_inference_cloud.html" data-page="mse435-u04">U04 · Enterprise knowledge, infere</a></li>
+<li><a href="u05_coding_lifescience_economics.html" data-page="mse435-u05">U05 · Coding and life-science econ</a></li>
+<li><a href="u06_capstone_evidence_stakeholder_defense.html" data-page="mse435-u06">U06 · Capstone: evidence and stake</a></li>
+<li><a href="cheatsheet.html" data-page="mse435-cheatsheet" class="active">Cheatsheet</a></li>
+<li><a href="crash-course.html" data-page="mse435-crash">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">MSE435: AI Economics and Infrastructure</a> / Cheatsheet</nav>
+      <h1>Cheatsheet</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="mse435-cheatsheet-formulas-rules-numbers">mse435 cheatsheet , formulas, rules, numbers</h1>
+<p>One page per section. Every formula, every decision
+rule, every toy constant. Numbers are TOY unless marked.</p>
+<h2 id="master-formulas">Master formulas</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Market clearing</td>
+<td>100 - 2P = 20 + 3P, P<em> = 16, Q</em> = 68</td>
+</tr>
+<tr>
+<td>Average cost</td>
+<td>F/Q + v</td>
+</tr>
+<tr>
+<td>Unit inference cost</td>
+<td>C_train/V + c_inf</td>
+</tr>
+<tr>
+<td>Servable tokens/day</td>
+<td>GPUs x tok/s x U x 86,400</td>
+</tr>
+<tr>
+<td>PUE</td>
+<td>total power / IT power</td>
+</tr>
+<tr>
+<td>Depreciation</td>
+<td>purchase x 0.6^t</td>
+</tr>
+<tr>
+<td>Access value</td>
+<td>q x (a1 - a0) x v</td>
+</tr>
+<tr>
+<td>Flywheel month t</td>
+<td>q x corr x gain x decay^(D-t)</td>
+</tr>
+<tr>
+<td>Hosting break-even</td>
+<td>Q* = F / (p_a - p_h)</td>
+</tr>
+<tr>
+<td>Cached effective price</td>
+<td>h x c_c + (1 - h) x c_m</td>
+</tr>
+<tr>
+<td>Latency tradeoff net</td>
+<td>V x s x dL - saving</td>
+</tr>
+<tr>
+<td>Review labor</td>
+<td>tasks x e x min/60 x wage</td>
+</tr>
+<tr>
+<td>Cost per success</td>
+<td>(r+1) x c / (1 - (1-s)^(r+1))</td>
+</tr>
+<tr>
+<td>Blended margin</td>
+<td>sum share_i x (price_i - cost_i)</td>
+</tr>
+<tr>
+<td>Amdahl</td>
+<td>1 / ((1-p) + p/s)</td>
+</tr>
+<tr>
+<td>Funnel total</td>
+<td>sum n_i x c_i</td>
+</tr>
+<tr>
+<td>Savings PV (ramped)</td>
+<td>sum a_t x S / (1+r)^t</td>
+</tr>
+<tr>
+<td>TCO 3-year</td>
+<td>B + 3(R + L) + K</td>
+</tr>
+<tr>
+<td>Pilot rule</td>
+<td>invest iff L &gt; Y</td>
+</tr>
+<tr>
+<td>Pilot sample size</td>
+<td>n = (1.96/half-width)^2 x p(1-p)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="decision-rules">Decision rules</h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Falling token prices</td>
+<td>Never sign take-or-pay beyond the visible horizon</td>
+</tr>
+<tr>
+<td>Host vs API</td>
+<td>Host iff volume &gt; F / (p_a - p_h)</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td>Build iff h x saving x volume &gt; infra</td>
+</tr>
+<tr>
+<td>Batching</td>
+<td>Batch iff V x s x dL &lt; saving</td>
+</tr>
+<tr>
+<td>License vs build</td>
+<td>License iff vendor TCO &lt; build TCO over 3 years</td>
+</tr>
+<tr>
+<td>Pilot</td>
+<td>Pre-register Y, D, instrument. Invest iff L &gt; Y</td>
+</tr>
+<tr>
+<td>Pilot breach</td>
+<td>Kill on two consecutive guardrail breaches</td>
+</tr>
+<tr>
+<td>Rollback</td>
+<td>15-minute button, game-day tested</td>
+</tr>
+<tr>
+<td>Quality gate</td>
+<td>a1 &gt;= 0.75 binary</td>
+</tr>
+<tr>
+<td>Contract</td>
+<td>Price-cap or 90-day termination for convenience</td>
+</tr>
+<tr>
+<td>Build vs lease</td>
+<td>Build base load, lease peaks</td>
+</tr>
+<tr>
+<td>Retraining</td>
+<td>Add n_runs x C_train/V when cadence is quarterly</td>
+</tr>
+</tbody>
+</table>
+<h2 id="toy-constants-do-not-quote">Toy constants (do not quote)</h2>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Token market</td>
+<td>P<em> = 16, Q</em> = 68</td>
+</tr>
+<tr>
+<td>API price</td>
+<td>4.00 per 1M</td>
+</tr>
+<tr>
+<td>Hosted price</td>
+<td>1.50 per 1M</td>
+</tr>
+<tr>
+<td>Cache serve</td>
+<td>0.25 per 1M</td>
+</tr>
+<tr>
+<td>Fixed hosting cost</td>
+<td>30k per month</td>
+</tr>
+<tr>
+<td>Break-even</td>
+<td>12B tokens per month</td>
+</tr>
+<tr>
+<td>Training cost</td>
+<td>5M</td>
+</tr>
+<tr>
+<td>Lifetime volume</td>
+<td>500B tokens</td>
+</tr>
+<tr>
+<td>GPU throughput</td>
+<td>50 tok/s, U = 0.85</td>
+</tr>
+<tr>
+<td>Power per GPU</td>
+<td>0.7 kW</td>
+</tr>
+<tr>
+<td>Cooling overhead</td>
+<td>0.3 W per W</td>
+</tr>
+<tr>
+<td>PUE target</td>
+<td>&lt;= 1.3</td>
+</tr>
+<tr>
+<td>Depreciation</td>
+<td>40 pct per year</td>
+</tr>
+<tr>
+<td>Access quality lift</td>
+<td>a1 - a0 = 0.37</td>
+</tr>
+<tr>
+<td>Flywheel decay</td>
+<td>0.9 per month</td>
+</tr>
+<tr>
+<td>Review wage</td>
+<td>40 per hour, 10 min per task</td>
+</tr>
+<tr>
+<td>Retry success</td>
+<td>s = 0.6, r = 1, cost 1.19</td>
+</tr>
+<tr>
+<td>Savings ramp (HYPOTHETICAL)</td>
+<td>[0.20, 0.50, 0.80], r = 10 pct</td>
+</tr>
+<tr>
+<td>Savings PV (HYPOTHETICAL)</td>
+<td>767.9k</td>
+</tr>
+<tr>
+<td>Lean TCO (HYPOTHETICAL)</td>
+<td>680k, net +87.9k</td>
+</tr>
+<tr>
+<td>Hosted TCO (HYPOTHETICAL)</td>
+<td>1,850k, build share 21.6 pct</td>
+</tr>
+<tr>
+<td>Pilot</td>
+<td>5,000 cases, 4 weeks, Y = 0.15</td>
+</tr>
+</tbody>
+</table>
+<h2 id="watch-outs">Watch-outs</h2>
+<ul>
+<li>The pilot average (61.50) is not the steady-state
+  rate. Never quote pilot cost as the unit price.</li>
+<li>Analytic hit-rate models overstate small caches by
+  ~12 percent (capstone 1, H1 FAIL). Measure h.</li>
+<li>Doubling cache 500 to 1,000 gains ~5 points:
+  diminishing, not linear.</li>
+<li>Moving Y or D after the pilot voids the decision.</li>
+<li>Build-only business cases understate cost 3-4x.</li>
+<li>The softest inputs: adoption ramp, success rate,
+  review labor. Instrument all three before investing.</li>
+<li>Speaker forecasts are [SPEAKER CLAIM, EVIDENCE
+  PENDING]. Never build on an unlabeled claim.</li>
+</ul>
+      
+      <nav class="pager"><a href="u06_capstone_evidence_stakeholder_defense.html"><span class="lbl">← Previous</span>U06 · Capstone: evidence and stakeholder defense</a><a href="crash-course.html"><span class="lbl">Next →</span>Crash course</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/vendor/katex.min.js"></script>
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/app.js"></script>
+</body>
+</html>

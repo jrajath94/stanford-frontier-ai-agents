@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.remove('no-js');</script>
+<title>U02 · Feedback, tools, and constitutional learning — CS329A — Stanford Frontier AI</title>
+<meta name="description" content="Unit 02: Feedback, tools, and constitutional learning.">
+<link rel="stylesheet" href="../assets/vendor/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="cs329a-u02" class="page-lesson">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  <a class="brand" href="../index.html">CS329A — Stanford Frontier AI</a>
+  <div class="topbar-search">
+    <input id="searchBox" type="search" placeholder="Search lessons, concepts, papers…" autocomplete="off" aria-label="Search">
+    <div id="searchResults" class="search-results" hidden></div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Course navigation">
+    <h3>CS329A: Agentic AI and Frontier Research</h3><ul>
+<li><a href="../index.html" data-page="cs329a-index">CS329A · Overview</a></li>
+<li><a href="../lessons/u01_test_time_compute.html" data-page="cs329a-u01">U01 · Test-time compute and verifi</a></li>
+<li><a href="../lessons/u02_feedback_tools.html" data-page="cs329a-u02" class="active">U02 · Feedback, tools, and constit</a></li>
+<li><a href="../lessons/u03_planning_search.html" data-page="cs329a-u03">U03 · Planning, search, and train-</a></li>
+<li><a href="../lessons/u04_open_evolution.html" data-page="cs329a-u04">U04 · Open-ended evolution and dee</a></li>
+<li><a href="../lessons/u05_swe_kernel_agents.html" data-page="cs329a-u05">U05 · Software-engineering and ker</a></li>
+<li><a href="../lessons/u06_memory_caches.html" data-page="cs329a-u06">U06 · Memory, caches, and long-con</a></li>
+<li><a href="../lessons/u07_reasoning_formal.html" data-page="cs329a-u07">U07 · Reasoning, formal systems, a</a></li>
+<li><a href="../lessons/u08_long_horizon_eval.html" data-page="cs329a-u08">U08 · Long-horizon evaluation and </a></li>
+<li><a href="../cheatsheet.html" data-page="cs329a-cheatsheet">Cheatsheet</a></li>
+<li><a href="../crash-course.html" data-page="cs329a-crash">Crash course</a></li>
+</ul>
+  </nav>
+  <main class="content" id="main">
+    <article>
+      <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Agentic AI and Frontier Research</a> / U02 · Feedback, tools, and constitutional learning</nav>
+      <h1>U02 · Feedback, tools, and constitutional learning</h1>
+      
+      <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="u02-feedback-tools-and-constitutional-learning">U02 , Feedback, tools, and constitutional learning</h1>
+<p>Course: Stanford CS329A, Autumn 2025. Official session 4 (Oct 3).
+Baseline: 2026-10-07.</p>
+<p>Claim class: mechanisms are taught from the requested inventory with SOURCE
+ATTRIBUTION PENDING. Paper titles come from the verified official schedule
+(see <code>../source_manifest.md</code>). No paper contents were individually inspected
+by this builder. Toy numbers are computed and traceable.</p>
+<h2 id="unit-objectives">Unit objectives</h2>
+<p>After this unit the learner can: run a ReAct loop on a toy task, separate
+execution feedback from model feedback, write a tool-error taxonomy with
+recovery actions, distinguish a critique from a learning update, describe
+constitutional feedback and RLEF at mechanism level, name reward-signal
+failure modes including shortcut exploitation, and design an independent
+validation gate.</p>
+<h2 id="dependencies">Dependencies</h2>
+<p>P17 (reinforcement learning), P20 (tools, APIs, agent state), P21
+(security, privacy, safety). Local remediation is inside C01, C07, and C12.
+The shared bridges live at <code>../shared/prerequisites/</code>.</p>
+<h2 id="four-way-link-used-in-this-unit">Four-way link used in this unit</h2>
+<p>Intuition: an agent that acts gets told what happened. Equation: the
+policy update follows the reward gradient on tool-grounded trajectories.
+Code: a loop that emits thought, action, observation triples until a stop
+rule fires. Observation: traces with execution feedback fix their own
+errors, traces without it repeat them.</p>
+<hr />
+<h2 id="c01-react">C01 ReAct</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4, Learning from feedback with tools/code. Reading pointer: Yao et
+al. 2022, ReAct (SOURCE ATTRIBUTION PENDING). Scope: the thought, action,
+observation loop for tool use. No weight change in the basic loop.
+Objective: write and run a three-step toy trace. Dependencies: P20.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the model must answer &ldquo;what is 23 * 47?&rdquo; without trusting its
+own arithmetic. How does it structure the work? Toy trace:
+thought: &ldquo;I need a product. I will call the calculator.&rdquo;
+action: calc.multiply(23, 47).
+observation: 1081.
+thought: &ldquo;The product is 1081. I can answer now.&rdquo;
+Check: 23 * 47 = 1081. Correct.</p>
+<p><strong>3. Plain-language mental model.</strong>
+Think out loud, act with a tool, read what came back, repeat. The thought
+is the plan. The action is the tool call. The observation is reality
+answering back. The loop keeps the model honest because the observation
+is not generated by the model.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Step k: (thought_k, action_k, observation_k). action_k: tool name plus
+typed arguments. observation_k: typed tool return. Stop rule: a max step
+count or a finish action. Assumptions: tools are named and typed, the
+observation is trustworthy, the trace fits in context.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+There is no theorem, the mechanism is structural. Interleaving reasoning
+with acting grounds each next thought in an external result instead of a
+self-generated guess. Errors surface as observations (a tool error, a
+wrong number) where the next thought can see and repair them. The loop
+works when observations carry new information.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy task: &ldquo;sum the even numbers in [3, 8, 11, 6]&rdquo;. Trace:
+thought: &ldquo;Filter evens, then sum.&rdquo; action: filter_even([3, 8, 11, 6]).
+observation: [8, 6]. thought: &ldquo;Sum them.&rdquo; action: add(8, 6).
+observation: 14. Answer 14. Check: evens are 8 and 6, sum 14. Correct.
+Two tool calls, two observations, zero model arithmetic.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def react_loop(task, tools, max_steps=6):
+    trace = []
+    thought = &quot;Start: &quot; + task
+    for _ in range(max_steps):
+        action = propose_action(thought, tools)
+        if action[&quot;name&quot;] == &quot;finish&quot;:
+            return trace, action[&quot;args&quot;][&quot;answer&quot;]
+        observation = tools[action[&quot;name&quot;]](**action[&quot;args&quot;])
+        trace.append((thought, action, observation))
+        thought = &quot;Observed %r. Next step?&quot; % (observation,)
+    return trace, None
+
+def propose_action(thought, tools):
+    raise NotImplementedError(&quot;policy goes here&quot;)
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: with a scripted propose_action that emits the two toy calls then
+finish, the loop returns answer 14 and a two-step trace. Check: the loop
+stops at max_steps and returns None instead of looping forever.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Time: one model call per step plus tool latency. Memory: the trace grows
+with steps, long traces overflow context. Cost: each step is a full model
+call. Stability: a bad tool result can trap the loop in retries, the stop
+rule is load-bearing.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Act-only (no thought): pick when the action space is tiny and thoughts
+add cost. Plan-then-execute: pick when the full plan is known upfront and
+tools are reliable. ReAct: pick when the next action depends on the last
+observation.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break observation trust: the tool returns a plausible wrong number and
+the model cannot check it. The trace then confidently reports the wrong
+answer. Counterexample: a calculator tool with a rounding bug, every
+trace inherits the bug and no thought step can detect it.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: Yao et al. 2022 (SOURCE ATTRIBUTION PENDING). Extension:
+hypothesis: ReAct beats act-only on tasks where observations change the
+plan. Falsification: equal scores on a task family with informative
+observations, which would mean the thoughts add no value there.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: name the three fields and their order. Ladder: define the step,
+run the toy, justify grounding in observations, code the loop, state the
+per-step cost, compare with plan-then-execute, debug the untrusted-tool
+failure, critique the observation-trust assumption, design the ReAct
+versus act-only test. Transfer: a lab robot that senses, moves, and
+re-senses uses the same loop.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E1.1: write a three-step trace for &ldquo;concatenate &lsquo;ab&rsquo; and &lsquo;cd&rsquo;, then
+upper-case&rdquo;. E1.2: state the stop rule in one sentence and explain why
+it is load-bearing. E1.3: give a task where act-only beats ReAct.
+Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Figure <code>../visuals/u02_fig01.png</code>: the item-6 trace as a vertical
+thought/action/observation ladder with arrows, two tool calls, final
+answer chip. Provenance: original, values from item 6. Alt text: three
+columns of chips (thought, action, observation) in two rows, arrow to
+the answer 14. Audit: numbers match item 6.</p>
+<figure><img alt="the item-6 trace as a vertical thought/action/observation ladder with arrows, two tool calls, final answer chip. Provenance: original, values from item 6. Alt text: three columns of chips (thought, action, observation) in two rows, arrow to the answer 14...." src="../assets/u02_fig01.png"><figcaption>the item-6 trace as a vertical thought/action/observation ladder with arrows, two tool calls, final answer chip. Provenance: original, values from item 6. Alt text: three columns of chips (thought, action, observation) in two rows, arrow to the answer 14....</figcaption></figure>
+<hr />
+<h2 id="c02-execution-feedback">C02 execution feedback</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: feedback that comes from running something in the
+world: a test result, an error trace, a tool return code. Objective:
+classify feedback as execution versus model-generated and show why the
+difference matters. Dependencies: C01, P20.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the agent writes a function and it fails a test. Who tells the
+agent, and can the teller be wrong? Toy: function f(x) = x + 1 claimed to
+double. Test: f(3) == 6. Execution feedback: AssertionError, got 4,
+expected 6. This feedback cannot hallucinate: the test ran.</p>
+<p><strong>3. Plain-language mental model.</strong>
+Execution feedback is the world pushing back. Model feedback is the model
+talking to itself. The world can be harsh but it does not flatter. The
+model can be kind but it can also lie.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Feedback item: (source, content, trustworthy_flag). Sources: test runner,
+compiler, tool API, human, model self-critique. Assumptions: the test
+itself is correct, the sandbox runs the code the agent wrote.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+The mechanism is causal: the feedback is computed from the artifact, not
+sampled from a distribution over words. That causal link is what makes
+repair possible: change the code, rerun, watch the feedback change. The
+learning signal is the delta between runs.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: three repair rounds. Round 1: f(x) = x + 1, test f(3) == 6, got 4,
+fail. Round 2: f(x) = x * 2 - 1, got 5, fail. Round 3: f(x) = x * 2,
+got 6, pass. Feedback sequence: [fail by 2, fail by 1, pass]. The error
+magnitude shrinks: 2, 1, 0. The agent can hill-climb on the magnitude.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def repair_loop(code, tests, max_rounds=3):
+    history = []
+    for _ in range(max_rounds):
+        result = run_tests(code, tests)
+        history.append(result)
+        if result[&quot;passed&quot;]:
+            return code, history
+        code = propose_fix(code, result)
+    return code, history
+
+def run_tests(code, tests):
+    raise NotImplementedError(&quot;sandbox goes here&quot;)
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: with a scripted run_tests that fails twice then passes, the loop
+returns after 3 rounds with history length 3. Check: immediate pass
+returns after 1 round.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Cost: one sandbox run per round. The sandbox is the expensive part to
+build, not to run. Stability: flaky tests (U05 C08) inject noise into
+the signal, the loop then chases ghosts.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Model self-critique: pick when no executable check exists. Human
+feedback: pick when correctness needs judgment, not just execution.
+Execution feedback: pick when the artifact runs and the check is exact.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break test correctness: the test itself has the bug (expects 7 for
+f(3)). The loop &ldquo;repairs&rdquo; good code into bad code and the feedback
+confirms it. Counterexample: a test that passes for the wrong reason,
+such as an empty test body.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: execution-feedback sections of the session-4 papers (SOURCE
+ATTRIBUTION PENDING). Extension: hypothesis: repair with execution
+feedback beats repair with self-critique on code tasks. Falsification:
+equal fix rates, which would mean the tests add no information beyond
+the critique.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: define execution feedback and its causal property. Ladder:
+define the feedback item, run the toy, justify the causal link, code
+the loop, state sandbox cost, compare with self-critique, debug the
+buggy-test failure, critique test trust, design the fix-rate test.
+Transfer: a compiler error is execution feedback for a programmer.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E2.1: list the feedback sequence for a repair that fails, fails, then
+passes. E2.2: explain the causal link in two sentences. E2.3: name one
+way a test can lie. Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: round, code, feedback, error
+magnitude). No separate PNG: comparison of values. Logged in
+<code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c03-codetests">C03 code/tests</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: code as the artifact and tests as the verifier in the
+agent loop. Objective: write a minimal test that pins one behavior and
+show the agent loop using it. Dependencies: C02, P02.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: what is the smallest test that still teaches the agent
+something? Toy: behavior &ldquo;double the input&rdquo;. Test: assert double(3)
+== 6 and double(0) == 0. Two cases pin the behavior on positive and
+zero input.</p>
+<p><strong>3. Plain-language mental model.</strong>
+A test is a contract in code. The agent proposes. The contract
+disposes. A good contract is small, exact, and fast.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Test: (input, expected, comparator). Suite: list of tests. Signal:
+pass/fail per test plus an error message. Assumptions: the expected
+values are right, the comparator matches the value type.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+Tests turn an open-ended generation task into a search task with a
+binary objective: find code that passes. The mechanism is the same
+generate-and-test loop as C02, specialized to code. Test quality sets
+the ceiling: the agent can only be as right as the suite.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: candidate codes for &ldquo;double&rdquo;. A: x + x. B: x * 2. C: x + 1.
+Suite: [(3, 6), (0, 0), (-4, -8)]. A passes 3/3. B passes 3/3. C passes
+1/3 (only (0, 0)). Score vector: [1.0, 1.0, 0.333]. Selection picks A
+or B by the tie rule.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def score_candidate(fn, suite):
+    passed = 0
+    for inp, expected in suite:
+        try:
+            if fn(inp) == expected:
+                passed += 1
+        except Exception:
+            pass
+    return passed / len(suite)
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: score_candidate(lambda x: x + x, [(3, 6), (0, 0), (-4, -8)])
+returns 1.0. Check: a raising function scores 0.0 without crashing the
+scorer.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+O(tests) per candidate. Suites stay small and fast, slow suites kill
+the loop&rsquo;s iteration speed. Note: exception swallowing is a toy
+simplification, production logs the traceback.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Property-based tests: pick when input space is large and examples are
+sparse. Human review: pick when the spec is ambiguous. Example tests:
+pick when the behavior is concrete and small.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break suite quality: the suite only tests (0, 0). Candidate C (x + 1)
+passes and is selected. The agent is exactly as right as the suite, and
+the suite was wrong-shaped. Counterexample: a test with a typo in the
+expected value.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: session-4 code papers (SOURCE ATTRIBUTION PENDING).
+Extension: hypothesis: adding one edge-case test per round raises the
+selected candidate&rsquo;s true correctness. Falsification: flat true
+correctness as the suite grows, which means the added tests carry no
+new information.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: define the test triple and the ceiling claim. Ladder: define
+the suite, run the toy, justify generate-and-test, code the scorer,
+state per-candidate cost, compare with property tests, debug the
+single-test failure, critique suite trust, design the suite-growth
+test. Transfer: exam questions are tests for student code.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E3.1: score candidates A, B, C from item 6 by hand. E3.2: construct a
+suite that C passes fully. E3.3: state the ceiling claim in one
+sentence. Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: candidate, per-test results,
+score). No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c04-rlef-reading">C04 RLEF reading</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Reading pointer: RLEF: Grounding Code LLMs in Execution
+Feedback with Reinforcement Learning (SOURCE ATTRIBUTION PENDING).
+Scope: reinforcement learning where the reward comes from execution
+feedback. This is a reading concept: the mechanism is taught, the paper
+contents are not claimed. Objective: write the RLEF loop in pseudocode
+and name its reward. Dependencies: C02, C03, P17.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the agent gets a test failure. How does that failure become a
+weight change? Toy: policy writes code, tests run, reward = fraction of
+tests passed. Trajectory reward 0.333 (candidate C from C03). A policy
+gradient step raises the probability of trajectories like the passing
+ones.</p>
+<p><strong>3. Plain-language mental model.</strong>
+RLHF learns from human thumbs. RLEF learns from the test runner&rsquo;s
+verdict. The test runner is a tireless, honest, narrow judge. The
+policy climbs toward code that passes.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Reward r = passed / total, in [0, 1]. Policy pi_theta over code tokens.
+Update: policy gradient on (trajectory, reward) pairs. Assumptions: the
+tests measure the true goal, the reward is not gamed (see C11).</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+The policy gradient estimator: gradient ≈ E[r * grad log pi_theta].
+Trajectories with high test-pass rates get reinforced. Execution
+feedback grounds the reward: it is computed from runs, not from a
+learned preference model, so it cannot drift with the policy&rsquo;s
+flattery. The mechanism needs the tests to stay fixed while the policy
+moves, moving tests break the comparison.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: two trajectories. T1 reward 1.0, T2 reward 0.333. Baseline b =
+mean = 0.6667. Advantages: A1 = 0.3333, A2 = -0.3333. The update
+raises log-probability of T1 and lowers T2, weighted by 0.3333. One
+gradient-free illustration of the direction, not a real step.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def rlef_update(trajectories, rewards, baseline):
+    updates = []
+    for traj, r in zip(trajectories, rewards):
+        advantage = r - baseline
+        updates.append((traj, advantage))
+    return updates
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: rlef_update([&ldquo;t1&rdquo;, &ldquo;t2&rdquo;], [1.0, 0.333], 0.6667) returns
+[(&ldquo;t1&rdquo;, 0.3333), (&ldquo;t2&rdquo;, -0.3337)] after rounding. Check: zero
+advantage when all rewards equal the baseline.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Cost: one sandbox run per trajectory plus one gradient step. Variance:
+binary-ish rewards on hard tasks give sparse signal, many trajectories
+score 0 and teach nothing. Stability: the usual RL variance controls
+apply (baselines, clipping), taught in U03.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+RLHF: pick when the goal needs human judgment. Supervised fine-tuning
+on passing code: pick when passing trajectories already exist and
+exploration adds little. RLEF: pick when tests define the goal and the
+policy must discover passing code.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break test-goal alignment: the tests check formatting, not behavior.
+The policy learns beautiful formatting and broken logic, and the reward
+confirms it. This is shortcut exploitation (C11) at training time.
+Counterexample: reward 1.0 for code that prints the expected outputs
+without computing them.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: the RLEF paper (SOURCE ATTRIBUTION PENDING). Extension:
+hypothesis: RLEF beats supervised fine-tuning on held-out tasks when
+tests are hidden during training. Falsification: equal scores, which
+would mean the RL exploration added nothing over imitation.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: define the RLEF reward and the update direction. Ladder:
+define the pair, run the toy, justify the grounded reward, code the
+update, state variance cost, compare with RLHF, debug the
+formatting-tests failure, critique test-goal alignment, design the
+held-out comparison. Transfer: a robot rewarded by task completion
+sensors is RLEF without code.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E4.1: compute advantages for rewards [1.0, 0.0, 0.5] with mean
+baseline. E4.2: explain the grounded-reward claim in two sentences.
+E4.3: name the failure when tests move during training. Answers:
+<code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: trajectory, reward, advantage).
+No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c05-critique-versus-learning-update">C05 critique versus learning update</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: the sharp line between judging output and changing
+the model. Objective: classify five feedback events as critique or
+update and explain the operational difference. Dependencies: C02, P17.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the model says &ldquo;this code is wrong because it ignores empty
+input&rdquo;. Did the model learn? Toy: two events. Event A: the model
+writes a critique of its own code, weights unchanged. Event B: a
+gradient step on the corrected code, weights changed. Only B is
+learning.</p>
+<p><strong>3. Plain-language mental model.</strong>
+A critique is a note in the margin. A learning update rewrites the
+chapter. Notes help the next draft. Rewrites change every future draft.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Critique: text, no parameter change. Update: delta_theta applied to
+weights. Assumptions: the critique is read by something that can act.
+the update uses a valid gradient or equivalent.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+The distinction is operational, not philosophical. A critique changes
+the current trace (it becomes context for the next step). An update
+changes the policy for all future traces. Confusing them causes two
+errors: expecting a critique to fix the next task, and expecting one
+gradient step to fix the current trace.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: policy assigns P(buggy) = 0.7, P(fixed) = 0.3. Critique event:
+trace gets the note, this-trace P(fixed) rises to 0.9 via context, but
+the stored policy still says 0.7/0.3 for the next task. Update event:
+one gradient step moves stored P(fixed) from 0.3 to 0.45. Next task
+starts at 0.45, not 0.3. The numbers show where each effect lives.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def apply_critique(trace, critique_text):
+    return trace + [&quot;critique: &quot; + critique_text]
+
+def apply_update(policy_probs, step_size, advantage):
+    p = policy_probs[&quot;fixed&quot;]
+    new_p = p + step_size * advantage
+    return {&quot;fixed&quot;: new_p, &quot;buggy&quot;: 1.0 - new_p}
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: apply_critique([], &ldquo;ignores empty input&rdquo;) returns a one-item
+list. Check: apply_update({&ldquo;fixed&rdquo;: 0.3, &ldquo;buggy&rdquo;: 0.7}, 0.5, 0.3)
+returns fixed 0.45.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Critiques cost context tokens. Updates cost gradient compute and risk
+instability. The practical rule: critique inside the trace for
+this-task repair, update weights for across-task improvement.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Prompt update (change the system prompt): a middle path, it persists
+across traces without gradient steps. Fine-tuning: the heavy update
+path. In-context critique: the light path.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break the reading assumption: the critique is written but never read.
+the next step ignores it. Then the critique changed nothing at all.
+Counterexample: an update on a mislabeled example moves P(fixed) the
+wrong way, updates are not automatically improvements.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: constitutional feedback (C06) uses critiques as data for
+updates, the distinction is load-bearing there. Extension: hypothesis:
+critique-in-trace fixes more current-task errors per token than an
+equal-cost gradient step. Falsification: the reverse, measured on
+repair benchmarks.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: state the operational difference in one sentence. Ladder:
+define both, run the toy numbers, justify the trace/policy split, code
+both functions, state the cost of each, compare with prompt updates,
+debug the unread-critique failure, critique the &ldquo;updates improve&rdquo;
+assumption, design the per-token comparison. Transfer: a code review
+comment versus a merged fix.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E5.1: classify: (a) model rewrites its answer after reading a test
+failure, (b) trainer runs DPO on the pair. E5.2: explain why a critique
+cannot fix the next task. E5.3: give the middle path and when to use
+it. Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: event, where the effect lives,
+numbers). No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c06-constitutional-feedback">C06 constitutional feedback</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Reading pointer: Constitutional AI: Harmlessness from AI
+Feedback (SOURCE ATTRIBUTION PENDING). Scope: AI feedback guided by a
+written constitution of principles, used to critique and revise
+responses, then train on the revisions. This is a reading concept: the
+mechanism is taught, the paper contents are not claimed. Objective:
+run a toy constitutional critique-revise loop. Dependencies: C05, P21.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: how do you get harmlessness feedback without a human in the
+loop for every example? Toy constitution, two principles: P1 &ldquo;do not
+help with wrongdoing&rdquo;, P2 &ldquo;explain the refusal briefly&rdquo;. Draft
+response: instructions for wrongdoing. Critique under P1: &ldquo;violates P1&rdquo;.
+Revised response: brief refusal per P2. The pair (draft, revised)
+becomes training data.</p>
+<p><strong>3. Plain-language mental model.</strong>
+Write the rules down. Let the model grade its own draft against the
+rules. Keep the revised version. Train on the revisions. The
+constitution is the spec, the model is both student and teaching
+assistant.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Constitution: list of principles. Critique: text citing principles.
+Revision: new response. Training pair: (prompt, revised response).
+Assumptions: the model can apply the principles, the principles cover
+the case, the revision is actually better.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+The loop converts principles into data: critique identifies the
+violation, revision demonstrates compliance. Supervised training on
+revisions then distills the constitution into weights (a learning
+update, C05). The mechanism scales because critique and revision are
+model-generated, humans write the constitution once, and the loop does the rest.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: 100 drafts. Critique flags 30 as violating P1. Of the 30, 25
+revisions pass a second critique, 5 still violate and are dropped.
+Training set: 70 clean drafts + 25 revisions = 95 pairs. Yield: 95
+percent of drafts become training data, the 5 dropped ones are the
+hard cases for human review.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def constitutional_pass(draft, principles):
+    critique = critique_against(draft, principles)
+    if critique[&quot;violates&quot;]:
+        revised = revise(draft, critique)
+        recheck = critique_against(revised, principles)
+        if recheck[&quot;violates&quot;]:
+            return None
+        return revised
+    return draft
+
+def critique_against(draft, principles):
+    raise NotImplementedError(&quot;critic model goes here&quot;)
+
+def revise(draft, critique):
+    raise NotImplementedError(&quot;revision model goes here&quot;)
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: with scripted critics, a violating draft returns a revised
+draft, a twice-violating draft returns None, a clean draft returns
+itself.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Cost: two model calls per draft (critique + revise), sometimes three
+with recheck. The constitution is the point of greatest effect: one good
+principle beats a thousand examples, and one bad principle poisons all
+of them.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Human feedback (RLHF): pick when principles cannot cover the cases.
+Hard rules/filters: pick when the violation is exactly checkable.
+Constitutional feedback: pick when principles are statable and scale
+matters.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break principle coverage: the constitution says nothing about a new
+harm category, so the critic waves it through. The loop then trains
+the model to produce that harm fluently. Counterexample: a revision
+that satisfies the letter of P2 (brief refusal) while leaking the
+instructions in the explanation.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: the Constitutional AI paper (SOURCE ATTRIBUTION PENDING).
+Extension: hypothesis: constitutional training cuts violation rate on
+held-out harm categories, not just trained ones. Falsification: cuts
+only on trained categories, which would show memorization of cases,
+not principle following.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: name the four steps (principles, critique, revise, train).
+Ladder: define the loop, run the toy numbers, justify data-from-
+principles, code the pass, state the per-draft cost, compare with
+RLHF, debug the uncovered-category failure, critique the
+model-can-apply-principles assumption, design the held-out-category
+test. Transfer: a style guide plus an editor plus a writer is the same
+loop with humans.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E6.1: compute the training-set yield for 200 drafts with 50 flagged
+and 40 successfully revised. E6.2: explain why one principle beats a thousand examples in two
+sentences. E6.3: construct the letter-of-the-law counterexample.
+Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Figure <code>../visuals/u02_fig02.png</code>: the item-6 funnel: 100 drafts in,
+30 flagged, 25 revised, 5 dropped, 95 training pairs out, with the
+constitution chip feeding the critique step. Provenance: original,
+values from item 6. Alt text: funnel diagram with counts at each
+stage. Audit: counts match item 6.</p>
+<figure><img alt="the item-6 funnel: 100 drafts in, 30 flagged, 25 revised, 5 dropped, 95 training pairs out, with the constitution chip feeding the critique step. Provenance: original, values from item 6. Alt text: funnel diagram with counts at each stage. Audit: counts..." src="../assets/u02_fig02.png"><figcaption>the item-6 funnel: 100 drafts in, 30 flagged, 25 revised, 5 dropped, 95 training pairs out, with the constitution chip feeding the critique step. Provenance: original, values from item 6. Alt text: funnel diagram with counts at each stage. Audit: counts...</figcaption></figure>
+<hr />
+<h2 id="c07-reward-signals">C07 reward signals</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: what the scalar reward says and what it leaves out.
+Objective: write three reward functions for one code task and compare
+their failure modes. Dependencies: C02, C03, P17. Local remediation:
+reward as scalar feedback is defined here from scratch.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: three rewards for &ldquo;write a sort function&rdquo;: R1 = tests passed
+/ total, R2 = 1 if the code contains the word &ldquo;sorted&rdquo; else 0, R3 =
+human thumbs up/down. Which teaches sorting? Toy: candidate uses the
+built-in sorted() on the test inputs only via a lookup table. R1 = 1.0,
+R2 = 1.0, R3 = 0. Only R3 sees the trick.</p>
+<p><strong>3. Plain-language mental model.</strong>
+A reward is a compass. R1 points at the test suite. R2 points at a
+word. R3 points at a human. The policy walks where the compass points,
+not where you meant.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+r in R, attached to a step or a trajectory. Assumptions: the reward
+correlates with the true goal, the policy cannot change the reward
+function itself.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+Policy gradients climb the reward. Any feature that raises the reward
+without serving the goal gets amplified: this is Goodhart&rsquo;s mechanism
+in one line. The defense is reward design plus independent validation
+(C12): measure the goal with a different instrument than the one that
+trains.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: 50 candidates. 30 real sorts, 20 lookup-table tricks. R1 scores:
+real sorts average 0.97, tricks 1.0. Selection by R1 picks tricks over
+nearly-correct sorts. Expected true quality of the R1 pick: below the
+average real sort. The numbers show the reward ranking the wrong
+candidates first.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def reward_tests(passed, total):
+    return passed / total
+
+def reward_keyword(code, word=&quot;sorted&quot;):
+    return 1.0 if word in code else 0.0
+
+def reward_human(vote):
+    return 1.0 if vote == &quot;up&quot; else 0.0
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: reward_tests(3, 4) = 0.75. Check: reward_keyword(&ldquo;x =
+sorted(y)&rdquo;) = 1.0. Check: the three functions disagree on the lookup-
+table candidate.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Test rewards cost sandbox runs. Human rewards cost human time and do
+not scale. Keyword rewards are free and almost always wrong-shaped.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Learned reward model: pick when human labels exist at scale. Test
+reward: pick when tests define the goal. Human reward: pick when
+judgment is the goal.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+The item-2 toy is the counterexample: R1 and R2 both max out on the
+trick. Break the correlation assumption and the policy optimizes the
+proxy, not the goal. This is C11 (shortcut exploitation) at the signal
+level.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: reward-design discussions in the session-4 papers (SOURCE
+ATTRIBUTION PENDING). Extension: hypothesis: adding one hidden test
+per round (C12) cuts trick selection. Falsification: tricks persist,
+which means the policy finds new proxies.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: name the three rewards and their failure modes. Ladder: define
+the signal, run the toy, justify the Goodhart step, code the three
+functions, state the cost of each, compare with learned rewards, debug
+the trick-selection failure, critique the correlation assumption,
+design the hidden-test defense test. Transfer: teaching to the test in
+schools is the same mechanism.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E7.1: compute the expected R1 pick quality from item 6 in words.
+E7.2: explain Goodhart&rsquo;s mechanism in two sentences. E7.3: name the
+defense and why it must use a different instrument. Answers:
+<code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: candidate class, R1, R2, R3, true
+quality). No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c08-constraints">C08 constraints</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: hard limits the agent must respect regardless of
+reward: budgets, permissions, safety rules. Objective: write a
+constraint checker and show it vetoing a high-reward action.
+Dependencies: C07, P21.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the action with the highest reward deletes the database. What
+stops it? Toy: actions with (reward, allowed): [(&ldquo;read&rdquo;, 0.5, True),
+(&ldquo;write_tmp&rdquo;, 0.8, True), (&ldquo;drop_db&rdquo;, 1.0, False)]. The constraint
+checker vetoes drop_db, the agent picks write_tmp at 0.8.</p>
+<p><strong>3. Plain-language mental model.</strong>
+Rewards say &ldquo;want&rdquo;. Constraints say &ldquo;may&rdquo;. &ldquo;May&rdquo; outranks &ldquo;want&rdquo;. A
+constraint is a wall, not a suggestion.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Constraint: predicate over (state, action) returning allow/deny, plus a
+reason string. Assumptions: the checker sees the true action, the
+policy cannot bypass the checker, deny reasons are logged.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+Constrained optimization: maximize reward subject to the predicates.
+The mechanism is a gate before execution: every proposed action passes
+the checker, and denied actions never reach the tool. This is separate
+from reward shaping: a large negative reward still lets the action
+through on exploration, a gate does not.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Item-2 toy: unconstrained argmax picks drop_db at 1.0. Constrained
+argmax picks write_tmp at 0.8. Cost of the constraint: 0.2 reward.
+Value of the constraint: the database still exists. The tradeoff is
+explicit in the numbers.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def constrained_pick(actions, constraints):
+    feasible = []
+    for name, reward, _ in actions:
+        if all(c(name) for c in constraints):
+            feasible.append((name, reward))
+    if not feasible:
+        return None
+    return max(feasible, key=lambda t: t[1])
+
+def no_drop_db(action_name):
+    return action_name != &quot;drop_db&quot;
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: constrained_pick with the item-2 actions and [no_drop_db]
+returns (&ldquo;write_tmp&rdquo;, 0.8). Check: all-denied returns None, and the
+caller must handle it.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+O(constraints) per action. The cost is engineer time: the predicate set
+must cover the real action space, and every new tool needs its
+predicates reviewed.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Reward shaping (penalize bad actions): pick when violations are mild
+and exploration must continue. Hard gate: pick when the action is
+irreversible or the stakes are high. Human approval: pick when the
+predicate cannot be written exactly.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break checker coverage: the tool renames the action to &ldquo;remove_db&rdquo; and
+no predicate matches. The gate waves it through. Counterexample: a
+constraint checked on the action name but not on its arguments, so
+&ldquo;write&rdquo; to the wrong path passes.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: safety-constraint material via P21 (SOURCE ATTRIBUTION PENDING
+for course-specific treatment). Extension: hypothesis: a deny-log
+review each week catches one bypass attempt per month. Falsification:
+zero catches with known bypasses present, which means the log review
+is theater.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: state the gate rule and why it beats reward shaping for
+irreversible actions. Ladder: define the predicate, run the toy,
+justify the gate-before-execution, code the checker, state the
+engineering cost, compare with shaping, debug the rename bypass,
+critique coverage, design the deny-log test. Transfer: a firewall rule
+is a constraint, a traffic fine is reward shaping.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E8.1: compute the constrained pick for rewards [0.9 denied, 0.7, 0.6].
+E8.2: explain the shaping-versus-gate difference in two sentences.
+E8.3: construct the rename bypass. Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 2/6: action, reward, gate verdict).
+No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c09-tool-errors">C09 tool errors</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: a taxonomy of tool failures and the matching recovery
+for each class. Objective: classify six toy errors and write the
+recovery rule for each. Dependencies: C01, C02, P20.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the tool says &ldquo;error&rdquo;. Is that one thing or six things? Toy
+errors: E1 timeout after 30s, E2 400 bad argument &ldquo;limit must be &gt;= 1&rdquo;.
+E3 401 unauthorized, E4 500 internal, E5 malformed JSON in a 200
+response, E6 empty result set.</p>
+<p><strong>3. Plain-language mental model.</strong>
+A tool error is a symptom. The disease is one of: the request was bad,
+the tool is sick, the world changed, or the answer is empty. Treat the
+disease, not the symptom.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Error record: (code, message, retryable_flag, class). Classes:
+transient, request bug, auth, tool bug, schema drift, empty result.
+Assumptions: the error message is informative, retry budgets are finite.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+The classification mechanism is a decision tree on (code, message,
+history). Transient + no prior retry -&gt; retry with backoff. Request
+bug -&gt; repair the arguments from the message and resend once. Auth -&gt;
+stop and escalate, retrying is useless. Tool bug or schema drift -&gt;
+log, quarantine the tool, escalate. Empty result -&gt; treat as data, not
+an error. The tree works because each class has a different optimal
+action.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy run of 20 tool calls with errors: E1 x3, E2 x2, E3 x1, E4 x2, E5
+x1, E6 x2, clean x9. Recovery outcomes: E1 retried, 2 of 3 succeed on
+retry. E2 repaired, both succeed. E3 escalated. E4 retried once, 1 of 2
+succeeds, 1 quarantined. E5 quarantined. E6 accepted as data. Final:
+15 of 20 calls yield usable results, 2 escalations, 1 quarantine, 2
+empty-but-valid. The taxonomy turns 11 errors into a plan.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def classify_error(code, message, retries_so_far):
+    if code in (429, 503) or &quot;timeout&quot; in message.lower():
+        action = &quot;retry&quot; if retries_so_far &lt; 2 else &quot;escalate&quot;
+        return (&quot;transient&quot;, action)
+    if code in (400, 422):
+        return (&quot;request_bug&quot;, &quot;repair_once&quot;)
+    if code in (401, 403):
+        return (&quot;auth&quot;, &quot;escalate&quot;)
+    if code &gt;= 500:
+        return (&quot;tool_bug&quot;, &quot;quarantine&quot;)
+    return (&quot;unknown&quot;, &quot;escalate&quot;)
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: classify_error(503, &ldquo;timeout&rdquo;, 0) = (&ldquo;transient&rdquo;, &ldquo;retry&rdquo;).
+Check: classify_error(400, &ldquo;limit must be &gt;= 1&rdquo;, 0) =
+(&ldquo;request_bug&rdquo;, &ldquo;repair_once&rdquo;). Check: classify_error(401, &ldquo;x&rdquo;, 5) =
+(&ldquo;auth&rdquo;, &ldquo;escalate&rdquo;).</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+O(1) per error. The real cost is retry storms: unbounded retries on a
+sick tool multiply load. The retry budget (2 here) is the stability
+control.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Single catch-all retry: pick when error classes are truly unknown and
+the tool is idempotent. Full taxonomy: pick when tools are many and
+failures are frequent. Human triage: pick when errors are rare but
+expensive.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break message informativeness: the tool returns &ldquo;error&rdquo; with code 200
+for every failure class. The tree collapses to one branch and every
+recovery is a guess. Counterexample: a non-idempotent tool (send
+email) retried on timeout sends the email twice.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: tool-use robustness via P20 (SOURCE ATTRIBUTION PENDING for
+course-specific treatment). Extension: hypothesis: classified recovery
+beats blind retry on task success per tool call. Falsification: equal
+success, which would mean the classes carry no actionable information.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: name the six classes and their recoveries. Ladder: define the
+record, run the toy counts, justify the decision tree, code the
+classifier, state the retry-budget role, compare with blind retry,
+debug the uninformative-message failure, critique message trust,
+design the recovery comparison. Transfer: hospital triage uses the
+same shape: classify, then act per class.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E9.1: classify: 429 &ldquo;slow down&rdquo;, 400 &ldquo;missing field q&rdquo;, 500 &ldquo;nil
+pointer&rdquo;, 200 with HTML body. E9.2: explain the retry storm in two
+sentences. E9.3: state the non-idempotent retry rule. Answers:
+<code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Figure <code>../visuals/u02_fig03.png</code>: the item-6 error counts as a bar
+plate: six error classes with counts, plus the recovery outcome chips
+(retry/repair/escalate/quarantine/accept). Provenance: original,
+computed from the toy log. Alt text: bar chart of error class counts
+with recovery labels. Audit: counts match item 6.</p>
+<figure><img alt="the item-6 error counts as a bar plate: six error classes with counts, plus the recovery outcome chips (retry/repair/escalate/quarantine/accept). Provenance: original, computed from the toy log. Alt text: bar chart of error class counts with recovery..." src="../assets/u02_fig03.png"><figcaption>the item-6 error counts as a bar plate: six error classes with counts, plus the recovery outcome chips (retry/repair/escalate/quarantine/accept). Provenance: original, computed from the toy log. Alt text: bar chart of error class counts with recovery...</figcaption></figure>
+<hr />
+<h2 id="c10-policy-updates">C10 policy updates</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: how tool-grounded trajectories become weight changes:
+the update step after the loop. Objective: write one update step on a
+toy and state what data it needs. Dependencies: C04, C05, P17.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the agent fixed the bug after two tool errors. What exactly
+gets saved into the weights? Toy: trajectory with steps [write, test-
+fail, fix, test-pass], reward 1. The update raises the probability of
+the fix step given the test-fail observation.</p>
+<p><strong>3. Plain-language mental model.</strong>
+The trace is the lesson plan. The update is the studying. Only the
+parts of the trace that earned the reward get reinforced, the failed
+attempts are the contrast.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Update data: (trajectory, reward) pairs from the current or recent
+policy. Update: one gradient step with a baseline. Assumptions: the
+reward is trustworthy (C07), the data is on-policy enough (U03 C10).</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+Same estimator as C04: gradient ≈ E[(r - b) * grad log pi]. The new
+point is data selection: not every step of a passing trajectory
+deserves credit. Step-level masking (only reinforce steps after the
+informative observation) cuts noise. The mechanism is credit assignment
+with a scalpel instead of a paint roller.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: trajectory log-probs before update: write -0.7, test-fail is an
+observation (no log-prob), fix -1.2, test-pass is an observation.
+Reward 1, baseline 0.4, advantage 0.6. Step size 0.1. New log-prob of
+fix: -1.2 + 0.1 * 0.6 = -1.14. P(fix | observation) rises from
+exp(-1.2) = 0.301 to exp(-1.14) = 0.320. Small, directional, honest.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">import math
+
+def masked_policy_step(log_probs, advantage, step_size, mask):
+    return [lp + step_size * advantage * m
+            for lp, m in zip(log_probs, mask)]
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: masked_policy_step([-0.7, -1.2], 0.6, 0.1, [0, 1]) = [-0.7,
+-1.14]. Check: all-zero mask changes nothing.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+One backward pass per batch. The cost driver is trajectory collection:
+each trajectory needs sandbox runs. Stability: large advantages on
+rare trajectories cause spikes, normalize advantages per batch.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Full-trajectory update: pick when step credit is unknowable. Masked
+step update: pick when informative observations mark the credit point.
+Supervised fine-tuning on the fixed code: pick when exploration adds
+nothing.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break reward trust: the tests were gamed (C11). The update then
+reinforces the trick with a clean gradient. Counterexample: updating
+on stale trajectories after the tool changed behavior, the credit
+attaches to actions that no longer work.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: RLEF and reasoning-RL papers (SOURCE ATTRIBUTION PENDING).
+Extension: hypothesis: masked step updates beat full-trajectory updates
+on sample efficiency. Falsification: equal efficiency, which would
+mean the mask carries no extra credit information.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: define the masked update and its data needs. Ladder: define
+the pair, run the toy numbers, justify masking, code the step, state
+collection cost, compare with full-trajectory, debug the gamed-reward
+failure, critique on-policyness, design the mask ablation. Transfer:
+a coach replays only the decisive rally, not the whole match.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E10.1: recompute the toy with advantage 1.2. E10.2: explain the
+scalpel-versus-roller claim in two sentences. E10.3: name the stale-
+trajectory failure. Answers: <code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: step, log-prob before/after, mask).
+No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c11-shortcut-exploitation">C11 shortcut exploitation</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: the policy beats the reward without doing the task:
+reward hacking. Objective: construct three shortcuts for one task and
+show the reward ranking them first. Dependencies: C07, C10.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: the reward is &ldquo;tests passed&rdquo;. What is the laziest code with
+reward 1.0? Toy task: &ldquo;return the input doubled&rdquo;. Shortcuts: S1: print
+the expected outputs for the known test inputs (lookup table). S2:
+read the test file and branch on its inputs. S3: <code>return 2 * x</code> but
+with a hidden <code>if x == 3: return 6</code> patch that only covers tests. All
+three score 1.0 on the visible suite.</p>
+<p><strong>3. Plain-language mental model.</strong>
+The reward is a fence. The task is the field. Shortcut exploitation is
+the tunnel under the fence. The policy is not evil, it is lazy, and
+laziness is what optimization means.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Proxy reward r_proxy, true goal g. Shortcut: a policy with high
+r_proxy and low g. Assumptions for safety: the proxy equals the goal
+on the training distribution, the deployment distribution matches.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+Optimization pressure finds the easiest path to high reward. If a
+shortcut exists in the policy&rsquo;s reach, gradient ascent finds it
+because the reward gradient points there. The mechanism is not a bug
+in optimization, it is optimization working on the wrong objective.
+Detection needs a second instrument (C12) because the proxy cannot
+report its own failure.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: 100 trained policies. 60 learn the real double, 40 learn
+shortcuts. Visible-suite reward: both groups average 1.0. Hidden-suite
+reward: real group 0.98, shortcut group 0.12. Selection on the visible
+suite picks a shortcut policy with probability 0.4. Expected hidden
+quality of the pick: 0.6 * 0.98 + 0.4 * 0.12 = 0.588 + 0.048 = 0.636.
+The reward says 1.0, the truth is 0.636.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def detect_shortcut(visible_score, hidden_score, threshold=0.3):
+    gap = visible_score - hidden_score
+    return gap &gt; threshold
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: detect_shortcut(1.0, 0.12) = True. Check:
+detect_shortcut(0.98, 0.95) = False.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Detection costs one hidden suite per candidate. The expensive part is
+building hidden suites that the policy cannot guess. This is an arms
+race: each hidden suite eventually leaks into training.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Better proxy: pick when the flaw is known and fixable. Hidden tests:
+pick when the flaw is unknown but guessable. Human audit: pick when
+the stakes justify the cost.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+The meta-failure: the policy learns to detect the hidden suite and
+behave only there. Then the second instrument is also gamed.
+Counterexample: a shortcut that passes both visible and hidden suites
+by memorizing both, the gap detector says False and is wrong.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: reward-hacking literature via P17 (SOURCE ATTRIBUTION PENDING
+for course-specific treatment). Extension: hypothesis: hidden-suite
+rotation (new hidden tests each round) keeps the gap detector honest
+longer than a fixed hidden suite. Falsification: equal gaming speed,
+which would mean rotation adds no protection.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: define the shortcut and the gap detector. Ladder: define the
+proxy, run the toy numbers, justify the gradient argument, code the
+detector, state hidden-suite cost, compare with proxy repair, debug
+the meta-gaming failure, critique the second-instrument assumption,
+design the rotation test. Transfer: students who memorize past exams
+instead of learning the subject.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E11.1: compute the expected hidden quality if 70 of 100 policies take
+shortcuts. E11.2: explain the tunnel-under-the-fence image in two
+sentences. E11.3: name the meta-failure and one defense. Answers:
+<code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: group, visible reward, hidden
+reward, pick probability). No separate PNG. Logged in
+<code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="c12-independent-validation">C12 independent validation</h2>
+<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+Session 4. Scope: a separate check with its own data and rules that the
+system being judged cannot influence. Objective: design a validation
+gate for a code agent with three checks. Dependencies: C07, C11, P21.
+Local remediation: trust boundaries are defined here from scratch.</p>
+<p><strong>2. Motivating question and tiny toy.</strong>
+Question: who watches the watchman? Toy gate for a code agent: check 1:
+hidden test suite, locked before training. Check 2: static analysis
+for banned patterns (network calls, eval). Check 3: human spot-check of
+1 in 20 accepted patches. The agent never sees the hidden suite, the
+analyzer runs in a separate process, the human sample is random.</p>
+<p><strong>3. Plain-language mental model.</strong>
+Independent validation is the second set of eyes with its own glasses.
+It does not borrow the system&rsquo;s data, its rules, or its assumptions.
+If the system can influence the validator, the validator is decor.</p>
+<p><strong>4. Variables, units, shapes, assumptions.</strong>
+Validator: (data, rules, operator) all separate from the system.
+Independence: no shared tuning, no shared data, no shared failure
+mode. Assumptions: the validator&rsquo;s data is truly locked, its operator
+has no stake in the system&rsquo;s success.</p>
+<p><strong>5. Justified derivation or mechanism.</strong>
+The mechanism is separation of concerns at the organizational level.
+The system&rsquo;s optimizer cannot climb the validator&rsquo;s metric because it
+cannot see it. This breaks the Goodhart loop of C07/C11: the proxy the
+system games is not the instrument that judges. The gate works when
+the separation is real, not ceremonial.</p>
+<p><strong>6. Computed numerical example using the same objects.</strong>
+Toy: 100 accepted patches. Hidden suite catches 12 bad ones the
+visible suite missed. Static analysis catches 3 more. Human spot-check
+(5 patches) catches 1 more. Total caught: 16. Escape rate without the
+gate: 16 percent. With the gate: the 16 are rejected before deploy.
+Cost: 100 hidden-suite runs + 100 static analyses + 5 human reviews.</p>
+<p><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre><code class="language-python">def validation_gate(patch, hidden_suite, banned_patterns, spot_check):
+    if not run_hidden(patch, hidden_suite):
+        return (False, &quot;hidden suite failed&quot;)
+    if any(p in patch for p in banned_patterns):
+        return (False, &quot;banned pattern&quot;)
+    if spot_check(patch):
+        return (False, &quot;human rejected&quot;)
+    return (True, &quot;accepted&quot;)
+
+def run_hidden(patch, suite):
+    raise NotImplementedError(&quot;locked runner goes here&quot;)
+
+def spot_check(patch):
+    raise NotImplementedError(&quot;human queue goes here&quot;)
+</code></pre>
+<p><strong>8. Correctness checks and expected output.</strong>
+Check: a patch failing the hidden suite returns (False, &ldquo;hidden suite
+failed&rdquo;) without running later checks. Check: the order is fixed:
+cheapest check first.</p>
+<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+Cost per patch: hidden run + static scan + 5 percent human review.
+The human review is the bottleneck, sample it, do not review all.</p>
+<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+Bigger visible suite: pick when hidden data cannot be kept secret.
+Red team: pick when adversarial creativity is the threat. Full human
+review: pick when the patch count is tiny and stakes are extreme.</p>
+<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+Break the lock: a hidden test leaks into training data. The gate then
+certifies gaming as quality. Counterexample: the human spot-checker
+rubber-stamps, the sample rate is 5 percent but the attention rate is
+zero.</p>
+<p><strong>12. Research reading and falsifiable extension.</strong>
+Reading: evaluation-integrity material via P22 (SOURCE ATTRIBUTION
+PENDING for course-specific treatment). Extension: hypothesis: gates
+with locked data catch more escaped defects than gates with shared
+data. Falsification: equal catch rates, which would mean the lock adds
+nothing.</p>
+<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+Recall: name the three checks and the independence rule. Ladder:
+define the validator, run the toy counts, justify the separation,
+code the gate, state the human-review cost, compare with a bigger
+suite, debug the leak failure, critique the operator assumption,
+design the locked-versus-shared test. Transfer: financial audits use
+the same separation: the auditor is not the bookkeeper.</p>
+<p><strong>14. Lab/exercises with answers separated.</strong>
+E12.1: compute the escape rate if the hidden suite catches 8 of 100.
+E12.2: explain the ceremonial-validator failure in two sentences.
+E12.3: state the check order rule and why. Answers:
+<code>../keys/u02_answers.md</code>.</p>
+<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+Table plate in the lesson (item 6: check, caught count, cost). No
+separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+<hr />
+<h2 id="u02-not-yet-understood-dependency-list">U02 not-yet-understood dependency list</h2>
+<ol>
+<li>Policy gradients and baselines -&gt; <code>../shared/prerequisites/p17_rl.md</code>,
+   remediated in C04 items 4-6 and C10 items 4-6.</li>
+<li>Tool-call loop, state, budgets -&gt; <code>../shared/prerequisites/p20_tools.md</code>,
+   remediated in C01 items 4-9.</li>
+<li>Trust boundaries, least privilege -&gt; <code>../shared/prerequisites/p21_security.md</code>,
+   remediated in C08 items 4-5 and C12 items 4-5.</li>
+<li>Binary classification loss (verifier-flavored critics) -&gt;
+   <code>../shared/prerequisites/p10_ml_foundations.md</code>, local derivation in
+   U01 C09 item 5, reused here.</li>
+<li>Advantage normalization and clipping (preview for U03) -&gt; deferred to
+   U03 C09, not needed for U02.</li>
+</ol>
+<h2 id="u02-russian-doll-ladder-index-major-mechanisms">U02 Russian-doll ladder index (major mechanisms)</h2>
+<ul>
+<li>ReAct loop: shells 0-5 in C01, shell 6 in C09 item 6 (change error
+  class), shell 7 in C01 item 11 (break observation trust), shell 8 in
+  C01 item 10 (compare with plan-then-execute), shell 9 in C01 item 12,
+  shell 10 in C08 item 9 (engineering cost of predicates).</li>
+<li>RLEF: shells 0-5 in C04, shell 6 in C10 item 6 (mask one factor),
+  shell 7 in C04 item 11 (break test-goal alignment), shell 8 in C04
+  item 10 (compare with RLHF and SFT), shell 9 in C04 item 12, shell 10
+  in C12 (validation gate as the production consequence).</li>
+<li>Constitutional feedback: shells 0-5 in C06, shell 6 in C06 item 6
+  (change the drop rule), shell 7 in C06 item 11 (uncovered category),
+  shell 8 in C06 item 10 (compare with RLHF), shell 9 in C06 item 12,
+  shell 10 in C08 (constraints as the deployed form of principles).</li>
+</ul>
+      
+      <nav class="pager"><a href="../lessons/u01_test_time_compute.html"><span class="lbl">← Previous</span>U01 · Test-time compute and verification</a><a href="../lessons/u03_planning_search.html"><span class="lbl">Next →</span>U03 · Planning, search, and train-time RL</a></nav>
+    </article>
+    <footer class="pagefoot">
+      <p>Reconstructed from official Stanford course material. Sources are listed above. Content is study material, not affiliated with Stanford University.</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/vendor/katex.min.js"></script>
+<script src="../assets/vendor/mermaid.min.js"></script>
+<script>window.SITE_ROOT = "../";</script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <!DOCTYPE html>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -437,8 +439,8 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Companion voice: the idea above the tag is from the lesson. The generalization below it is the companion’s.</p>
 <p class="small muted">Provenance: no full lecture transcript exists for sessions 5 and 6. This page narrates the lesson document <code>content/v2/cs329a/lessons/u03_planning_search.md</code>, not a video. Paper titles come from the official schedule through the lesson. The builder did not inspect paper contents. Toy numbers are the lesson’s own computed values, re-plotted here with section citations. Claim class: SOURCE ATTRIBUTION PENDING on paper pointers. Toys are computed and traceable.</p>
 </div>
-</header><figure class="paint wide" data-entrance="bloom" data-hero="1">
-<div class="frame"><div class="stage"><img alt="Watercolor of a vast branching tree with one golden path from root to leaf" class="base" fetchpriority="high" loading="lazy" src="assets/u03-hero-tree.jpg"/></div></div>
+</header><figure class="paint wide" data-entrance="bloom" data-hero="" data-scene="p2-a-u03-hero">
+<div class="frame"><div class="stage"><img alt="Watercolor of a vast branching tree with one golden path from root to leaf" class="base" fetchpriority="high" height="1280" loading="lazy" src="assets/u03-hero-tree.jpg" width="1920"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The C01 idea in one image: many futures branch, search remembers the best leaf. Watercolor, original to this companion.</figcaption></figure>
 <section class="block col" data-chapter="1" data-title="A plan is a path down a tree" id="s1"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">1</span></div><div><p class="ch-meta"><span class="ts">Unit 1</span> · C01</p><h2>A plan is a path down a tree</h2></div></div>
 <div class="prose-narrow">
@@ -458,7 +460,7 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C01 §6, §9</span></p>
 <p>BFS explores level by level and finds the shallowest solution first. DFS dives deep and uses less memory. BFS holds the frontier, up to b^d nodes. DFS holds one path, d + 1 nodes. The exponential is the whole story: d = 10, b = 5 gives 9,765,625 leaves.</p>
 </div>
-<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-exponential"><div class="tag-price"><span class="tag-big">1</span><span class="tag-unit">Nugget 1 · From the lesson C01 §9</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §9</div><div class="tag-eye">The lesson</div><p class="">Full expansion visits every leaf once, and the leaf count is b^d. The exponential is the whole story.</p><p><b>Why it matters. </b>Real search never expands fully. It prunes and scores. The smarts are in the scoring and the pruning, not in the walk.</p><p><b>Transfer. </b>Game trees in chess use the same counting.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
+<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-exponential"><div class="tag-price"><span class="tag-big">b^d</span><span class="tag-unit">the leaf count is the whole story</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §9</div><div class="tag-eye">The lesson</div><p class="">Full expansion visits every leaf once, and the leaf count is b^d. The exponential is the whole story.</p><p><b>Why it matters. </b>Real search never expands fully. It prunes and scores. The smarts are in the scoring and the pruning, not in the walk.</p><p><b>Transfer. </b>Game trees in chess use the same counting.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Spend branches where the doubt is" id="s2"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">2</span></div><div><p class="ch-meta"><span class="ts">Unit 2</span> · C02</p><h2>Spend branches where the doubt is</h2></div></div>
 <div class="prose-narrow">
@@ -476,7 +478,7 @@ span.ptag, .ptag {
 <tr><td>Fixed b = 4</td><td class="num">-</td><td class="num"><strong>16</strong></td></tr>
 </table>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C02 §6</span> If each leaf costs 1 unit, adaptive saves 8 units at the same depth. Reinvested: the saved 8 units fund depth 3 on the 2 promising paths, 2 paths × 2 children = 4 new leaves at depth 3. The adaptive tree reaches deeper on the paths that matter.</figcaption>
-<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-doubt"><div class="tag-price"><span class="tag-big">2</span><span class="tag-unit">Nugget 2 · From the lesson C02 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §5</div><div class="tag-eye">The lesson</div><p class="">Adaptive branching moves expansions from settled nodes to uncertain ones. Same depth, half the leaves.</p><p><b>Why it matters. </b>The marginal value of one more child is higher at uncertain nodes. A bad signal starves the good paths, so the signal quality is the bet.</p><p><b>Transfer. </b>Adaptive mesh refinement in simulation uses the same idea.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
+<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-doubt"><div class="tag-price"><span class="tag-big">1/2</span><span class="tag-unit">same depth, half the leaves</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §5</div><div class="tag-eye">The lesson</div><p class="">Adaptive branching moves expansions from settled nodes to uncertain ones. Same depth, half the leaves.</p><p><b>Why it matters. </b>The marginal value of one more child is higher at uncertain nodes. A bad signal starves the good paths, so the signal quality is the bet.</p><p><b>Transfer. </b>Adaptive mesh refinement in simulation uses the same idea.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Cut the elephant into steaks" id="s3"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">3</span></div><div><p class="ch-meta"><span class="ts">Unit 3</span> · C03</p><h2>Cut the elephant into steaks</h2></div></div>
 <div class="prose-narrow">
@@ -495,7 +497,7 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C03 §5</span></p>
 <p>ADaPT’s as-needed point: decompose only when the direct attempt fails, so easy tasks pay no decomposition cost. The mechanism is conditional complexity: pay for structure only where needed.</p>
 </div>
-<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-steaks"><div class="tag-price"><span class="tag-big">3</span><span class="tag-unit">Nugget 3 · From the lesson C03 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §5</div><div class="tag-eye">The lesson</div><p class="">The product of small trees beats one big tree, when subtasks decouple. Thirty leaves against 625.</p><p><b>Why it matters. </b>The interface is the risk: wrong shared variables make subtasks solve the wrong problem well. Lodging chosen without transport in the interface breaks the trip.</p><p><b>Transfer. </b>Divide and conquer in algorithms is the same shape.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
+<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-steaks"><div class="tag-price"><span class="tag-big">30/625</span><span class="tag-unit">small trees beat one big tree</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §5</div><div class="tag-eye">The lesson</div><p class="">The product of small trees beats one big tree, when subtasks decouple. Thirty leaves against 625.</p><p><b>Why it matters. </b>The interface is the risk: wrong shared variables make subtasks solve the wrong problem well. Lodging chosen without transport in the interface breaks the trip.</p><p><b>Transfer. </b>Divide and conquer in algorithms is the same shape.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The critical path sets the floor" id="s4"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">4</span></div><div><p class="ch-meta"><span class="ts">Unit 4</span> · C04</p><h2>The critical path sets the floor</h2></div></div>
 <div class="prose-narrow">
@@ -508,11 +510,11 @@ span.ptag, .ptag {
 <div id="chart-sched"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C04 §6</span> The 11-second schedule: A and B in the first wave, C after A. The 9-second critical path is the floor no schedule beats.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-floor"><div class="tag-price"><span class="tag-big">4</span><span class="tag-unit">Nugget 4 · From the lesson C04 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §5</div><div class="tag-eye">The lesson</div><p class="">No schedule beats the longest dependency chain. Parallelism removes waiting. It never shortens the chain.</p><p><b>Why it matters. </b>Interleaved planning hides planning latency behind execution: while A runs, plan C. A wrong dependency edge causes a race.</p><p><b>Transfer. </b>Project management PERT charts use the same math.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
+<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-floor"><div class="tag-price"><span class="tag-big">1 chain</span><span class="tag-unit">no schedule beats the longest chain</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §5</div><div class="tag-eye">The lesson</div><p class="">No schedule beats the longest dependency chain. Parallelism removes waiting. It never shortens the chain.</p><p><b>Why it matters. </b>Interleaved planning hides planning latency behind execution: while A runs, plan C. A wrong dependency edge causes a race.</p><p><b>Transfer. </b>Project management PERT charts use the same math.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Credit is blame in reverse" id="s5"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">5</span></div><div><p class="ch-meta"><span class="ts">Unit 5</span> · C05</p><h2>Credit is blame in reverse</h2></div></div>
-<figure class="paint inset" data-entrance="sketch">
-<div class="frame"><div class="stage"><img alt="Watercolor of a winding road with milestones, golden coins placed only on the forward-pointing stones" class="base" loading="lazy" src="assets/u03-credit.jpg"/></div></div>
+<figure class="paint inset" data-entrance="sketch" data-scene="p2-a-u03-credit">
+<div class="frame"><div class="stage"><img alt="Watercolor of a winding road with milestones, golden coins placed only on the forward-pointing stones" class="base" height="1280" loading="lazy" src="assets/u03-credit.jpg" width="1920"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The C05 idea in one image: credit lands on the steps whose removal would break success. Watercolor, original to this companion.</figcaption></figure>
 <div class="prose-narrow">
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C05 §3</span></p>
@@ -527,7 +529,7 @@ span.ptag, .ptag {
 <tr><td>s3</td><td class="num">0.85</td><td class="num">0.45</td><td class="num">0.45</td></tr>
 </table>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C05 §6</span> Marginal credit = forced-good rate − baseline 0.4. Normalized shares: 0.5, 0.05, 0.45 over total 1.0.</figcaption>
-<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-blame"><div class="tag-price"><span class="tag-big">5</span><span class="tag-unit">Nugget 5 · From the lesson C05 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §6</div><div class="tag-eye">The lesson</div><p class="">The update should weight s1 and s3, and nearly ignore s2.</p><p><b>Why it matters. </b>Ablation is the gold standard for credit: it measures the causal effect of the step. Value estimates are the cheap approximation used at scale, and the approximation is the source of most credit bugs.</p><p><b>Transfer. </b>A relay team: remove each runner and time the team.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
+<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-blame"><div class="tag-price"><span class="tag-big">s1+s3</span><span class="tag-unit">weight s1 and s3, ignore s2</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §6</div><div class="tag-eye">The lesson</div><p class="">The update should weight s1 and s3, and nearly ignore s2.</p><p><b>Why it matters. </b>Ablation is the gold standard for credit: it measures the causal effect of the step. Value estimates are the cheap approximation used at scale, and the approximation is the source of most credit bugs.</p><p><b>Transfer. </b>A relay team: remove each runner and time the team.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The model dreams up attempts" id="s6"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">6</span></div><div><p class="ch-meta"><span class="ts">Unit 6</span> · C06</p><h2>The model dreams up attempts</h2></div></div>
 <div class="prose-narrow">
@@ -545,7 +547,7 @@ span.ptag, .ptag {
 <div id="chart-ratchet"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C06 §6</span> The ratchet: 0.20 → 0.35 → 0.45. Each round’s filter output is the next round’s training input.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-dreams"><div class="tag-price"><span class="tag-big">6</span><span class="tag-unit">Nugget 6 · From the lesson C06 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C06 §5</div><div class="tag-eye">The lesson</div><p class="">The filter is the teacher. Rejection sampling as data curation: the kept set is better than average, so imitation raises the average.</p><p><b>Why it matters. </b>It works when the filter is stricter than the generator is good. Break filter trust and the ratchet amplifies broken reasoning. Train too long on the kept set and the policy collapses to its quirks.</p><p><b>Transfer. </b>Selective breeding is the same loop.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
+<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-dreams"><div class="tag-price"><span class="tag-big">1 filter</span><span class="tag-unit">the filter is the teacher</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C06 §5</div><div class="tag-eye">The lesson</div><p class="">The filter is the teacher. Rejection sampling as data curation: the kept set is better than average, so imitation raises the average.</p><p><b>Why it matters. </b>It works when the filter is stricter than the generator is good. Break filter trust and the ratchet amplifies broken reasoning. Train too long on the kept set and the policy collapses to its quirks.</p><p><b>Transfer. </b>Selective breeding is the same loop.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Keep the scratch work that worked" id="s7"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">7</span></div><div><p class="ch-meta"><span class="ts">Unit 7</span> · C07</p><h2>Keep the scratch work that worked</h2></div></div>
 <figure class="paint inset" data-entrance="bloom">
@@ -561,7 +563,7 @@ span.ptag, .ptag {
 <div id="chart-star"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C07 §6</span> Keeper counts 30, 45, 55. Accuracy 0.30 → 0.45 → 0.55 → 0.60. Gains shrink: 0.15, 0.10, 0.05.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-scratch"><div class="tag-price"><span class="tag-big">7</span><span class="tag-unit">Nugget 7 · From the lesson C07 §5, §9</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C07 §5, §9</div><div class="tag-eye">The lesson</div><p class="">The bootstrap converges as the keeper pool saturates. Gains shrink: 0.15, 0.10, 0.05.</p><p><b>Why it matters. </b>Bootstrapping works when the initial policy is good enough to produce some keepers. Near zero keepers means no bootstrap. Rationalization, hinting the answer then generating the rationale, is the standard fix.</p><p><b>Transfer. </b>A student who only studies solved problems they got right.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
+<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-scratch"><div class="tag-price"><span class="tag-big tight">0.15/0.10/0.05</span><span class="tag-unit">gains shrink as keepers saturate</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C07 §5, §9</div><div class="tag-eye">The lesson</div><p class="">The bootstrap converges as the keeper pool saturates. Gains shrink: 0.15, 0.10, 0.05.</p><p><b>Why it matters. </b>Bootstrapping works when the initial policy is good enough to produce some keepers. Near zero keepers means no bootstrap. Rationalization, hinting the answer then generating the rationale, is the standard fix.</p><p><b>Transfer. </b>A student who only studies solved problems they got right.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Pay for results" id="s8"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">8</span></div><div><p class="ch-meta"><span class="ts">Unit 8</span> · C08</p><h2>Pay for results</h2></div></div>
 <div class="prose-narrow">
@@ -583,7 +585,7 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C08 §6</span></p>
 <p>Contrast with STaR: STaR trains on the two winners only. RL also pushes away from the losers.</p>
 </div>
-<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-vending"><div class="tag-price"><span class="tag-big">8</span><span class="tag-unit">Nugget 8 · From the lesson C08 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C08 §5</div><div class="tag-eye">The lesson</div><p class="">With verifiable rewards, the loop needs no human labels and no learned reward model. The world grades.</p><p><b>Why it matters. </b>The group baseline cuts variance without a value network. Binary rewards on hard prompts give all-zero groups that teach nothing. Prompt selection is the standard fix.</p><p><b>Transfer. </b>Evolution with a fitness function is the same loop without gradients.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
+<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-vending"><div class="tag-price"><span class="tag-big">0 labels</span><span class="tag-unit">the world grades, no human labels</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C08 §5</div><div class="tag-eye">The lesson</div><p class="">With verifiable rewards, the loop needs no human labels and no learned reward model. The world grades.</p><p><b>Why it matters. </b>The group baseline cuts variance without a value network. Binary rewards on hard prompts give all-zero groups that teach nothing. Prompt selection is the standard fix.</p><p><b>Transfer. </b>Evolution with a fitness function is the same loop without gradients.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Grade on a curve within each group" id="s9"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">9</span></div><div><p class="ch-meta"><span class="ts">Unit 9</span> · C09</p><h2>Grade on a curve within each group</h2></div></div>
 <div class="prose-narrow">
@@ -605,7 +607,7 @@ span.ptag, .ptag {
 <div id="chart-grpo"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C09 §2, §6</span> The item-2 group: rewards [2, 0, 1, 1], mean line at 1.0, advantage arrows +1.41 up, −1.41 down, two flat.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-curve"><div class="tag-price"><span class="tag-big">9</span><span class="tag-unit">Nugget 9 · From the lesson C09 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C09 §5</div><div class="tag-eye">The lesson</div><p class="">The group baseline removes the prompt’s difficulty level. Dividing by std normalizes the update scale across prompts.</p><p><b>Why it matters. </b>Small G makes std noisy. G = 4 is the toy, not a recommendation. The std guard prevents division by zero when all rewards tie.</p><p><b>Transfer. </b>Grading on a curve in a classroom.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
+<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-curve"><div class="tag-price"><span class="tag-big">G=4</span><span class="tag-unit">the toy, not a recommendation</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C09 §5</div><div class="tag-eye">The lesson</div><p class="">The group baseline removes the prompt’s difficulty level. Dividing by std normalizes the update scale across prompts.</p><p><b>Why it matters. </b>Small G makes std noisy. G = 4 is the toy, not a recommendation. The std guard prevents division by zero when all rewards tie.</p><p><b>Transfer. </b>Grading on a curve in a classroom.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Train on your own recent games" id="s10"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">10</span></div><div><p class="ch-meta"><span class="ts">Unit 10</span> · C10</p><h2>Train on your own recent games</h2></div></div>
 <div class="prose-narrow">
@@ -621,7 +623,7 @@ span.ptag, .ptag {
 <div class="chips" id="wout"></div>
 <p class="small muted" id="wnote"></p>
 </div>
-<aside class="tag" data-chapter="s10" data-sign-label="Unit" data-sign-num="10" id="nugget-tapes"><div class="tag-price"><span class="tag-big">10</span><span class="tag-unit">Nugget 10 · From the lesson C10 §5, §9</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C10 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Data from an old policy estimates the wrong expectation. Fresh data keeps the gradient true.</p><p><b>Why it matters. </b>Importance weighting is unbiased but high-variance when policies differ. The practical fix is procedural: regenerate data every few updates instead of correcting large staleness with noisy weights.</p><p><b>Transfer. </b>Coaching from your own recent matches versus last year’s videos.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 10</span></div></div></aside>
+<aside class="tag" data-chapter="s10" data-sign-label="Unit" data-sign-num="10" id="nugget-tapes"><div class="tag-price"><span class="tag-big">fresh</span><span class="tag-unit">old-policy data estimates wrong</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C10 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Data from an old policy estimates the wrong expectation. Fresh data keeps the gradient true.</p><p><b>Why it matters. </b>Importance weighting is unbiased but high-variance when policies differ. The practical fix is procedural: regenerate data every few updates instead of correcting large staleness with noisy weights.</p><p><b>Transfer. </b>Coaching from your own recent matches versus last year’s videos.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 10</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A budget is a fuel gauge" id="s11"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">11</span></div><div><p class="ch-meta"><span class="ts">Unit 11</span> · C11</p><h2>A budget is a fuel gauge</h2></div></div>
 <div class="prose-narrow">
@@ -644,7 +646,7 @@ span.ptag, .ptag {
 <tr><td class="num">3</td><td class="num">27</td><td class="num">40</td></tr>
 <tr><td>depth 3 full</td><td class="num">81</td><td class="num">121 &gt; 100</td></tr>
 </table>
-<aside class="tag" data-chapter="s11" data-sign-label="Unit" data-sign-num="11" id="nugget-fuel"><div class="tag-price"><span class="tag-big">11</span><span class="tag-unit">Nugget 11 · From the lesson C11 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C11 §6</div><div class="tag-eye">The lesson</div><p class="">The 21 unexpanded nodes are the opportunity cost, stated, not hidden.</p><p><b>Why it matters. </b>The best of 60 leaves is a noisier estimate than the best of 81. Report the budget with the result. The budget turns “search more” from a wish into a tradeoff.</p><p><b>Transfer. </b>A taxi meter is the same ledger.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 11</span></div></div></aside>
+<aside class="tag" data-chapter="s11" data-sign-label="Unit" data-sign-num="11" id="nugget-fuel"><div class="tag-price"><span class="tag-big">21</span><span class="tag-unit">unexpanded nodes, the cost stated</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C11 §6</div><div class="tag-eye">The lesson</div><p class="">The 21 unexpanded nodes are the opportunity cost, stated, not hidden.</p><p><b>Why it matters. </b>The best of 60 leaves is a noisier estimate than the best of 81. Report the budget with the result. The budget turns “search more” from a wish into a tradeoff.</p><p><b>Transfer. </b>A taxi meter is the same ledger.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 11</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Check the tape against a ruler, against eyes, and over time" id="s12"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">12</span></div><div><p class="ch-meta"><span class="ts">Unit 12</span> · C12</p><h2>Check the tape against a ruler, against eyes, and over time</h2></div></div>
 <div class="prose-narrow">
@@ -667,7 +669,7 @@ span.ptag, .ptag {
 <tr><td>Held-out reward</td><td class="num">0.58</td><td class="num">0.72</td></tr>
 <tr><td>Human spot-check</td><td class="num">0.90</td><td class="num">0.70</td></tr>
 </table>
-<aside class="tag" data-chapter="s12" data-sign-label="Unit" data-sign-num="12" id="nugget-tape"><div class="tag-price"><span class="tag-big">12</span><span class="tag-unit">Nugget 12 · From the lesson C12 §5</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C12 §5</div><div class="tag-eye">The lesson</div><p class="">Agreement across instruments is the evidence. Disagreement locates the failure.</p><p><b>Why it matters. </b>Run the audit on a schedule, not once at the end. A leaked held-out set makes all three instruments agree and all three wrong.</p><p><b>Transfer. </b>Drug trials use the same shape: primary endpoint, secondary endpoints, safety monitoring.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 12</span></div></div></aside>
+<aside class="tag" data-chapter="s12" data-sign-label="Unit" data-sign-num="12" id="nugget-tape"><div class="tag-price"><span class="tag-big">3</span><span class="tag-unit">instruments that agree are the evidence</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C12 §5</div><div class="tag-eye">The lesson</div><p class="">Agreement across instruments is the evidence. Disagreement locates the failure.</p><p><b>Why it matters. </b>Run the audit on a schedule, not once at the end. A leaked held-out set makes all three instruments agree and all three wrong.</p><p><b>Transfer. </b>Drug trials use the same shape: primary endpoint, secondary endpoints, safety monitoring.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 12</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="What this buys you" id="s13"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">13</span></div><div><p class="ch-meta"><span class="ts">Unit 13</span> · The arc</p><h2>What this buys you</h2></div></div>
 <div class="prose-narrow">
@@ -675,7 +677,6 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Where the unit points next: the group-relative machinery here is the engine room for the agent searches of U04. The validity audit returns as holdout separation in U04 and as judge discipline in U08.</p>
 </div>
 </section>
-
 <section class="col" id="playbook-sec">
 <h3 class="sub">The playbook</h3>
 <p>Every lesson on this page, in order. Tap one to return to its chapter.</p>
@@ -1601,5 +1602,46 @@ showValidity()
   });
 })();
 
+</script><script>
+<script>
+/* Phase 2 scenes (Builder 2): CompanionFX overlay life. Pure code, zero image cost. */
+(function(){
+var FX = window.CompanionFX; if(!FX) return;
+FX.registerScene("p2-a-u03-hero", {
+  init: function(F, FX) {
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[400, 1100, 20], [700, 1000, 22], [1100, 1050, 20], [1400, 1100, 22]]);
+    F._fx_motes = FX.motes(F.stage, F.W, F.H, 8, 43);
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    F._fx_motes.tick(t);
+    return {};
+  }
+});
+FX.registerScene("p2-a-u03-credit", {
+  init: function(F, FX) {
+    F._fx_glows = FX.glows(F.stage, F.W, F.H, [[960, 640, 150]], 'screen', '#FFE9B0');
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[800, 500, 20]]);
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    F._fx_glows.forEach(function(c,i){
+      c.style.opacity = (0.3+0.22*FX.flicker(t, i*2.3)).toFixed(3);
+    });
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    return {};
+  }
+});
+})();
+</script>
 </script></body>
 </html>

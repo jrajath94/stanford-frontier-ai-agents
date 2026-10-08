@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <!DOCTYPE html>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -437,8 +439,8 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Companion voice: the idea above the tag is from the lesson. The generalization below it is the companion’s.</p>
 <p class="small muted">Provenance: no full lecture transcript exists for session 13. This page narrates the lesson document <code>content/v2/cs329a/lessons/u05_swe_kernel_agents.md</code>, not a video. Paper titles come from the official schedule through the lesson. The builder did not inspect paper contents. Toy numbers are the lesson’s own computed values, re-plotted here with section citations. Claim class: SOURCE ATTRIBUTION PENDING on paper pointers. Toys are computed and traceable. No benchmark numbers are claimed.</p>
 </div>
-</header><figure class="paint wide" data-entrance="bloom" data-hero="1">
-<div class="frame"><div class="stage"><img alt="Watercolor of a robot agent at a workbench splitting its work into code scrolls, test tubes, and a weighing scale" class="base" fetchpriority="high" loading="lazy" src="assets/u05-hero-agents.jpg"/></div></div>
+</header><figure class="paint wide" data-entrance="bloom" data-hero="" data-scene="p2-a-u05-hero">
+<div class="frame"><div class="stage"><img alt="Watercolor of a robot agent at a workbench splitting its work into code scrolls, test tubes, and a weighing scale" class="base" fetchpriority="high" height="1280" loading="lazy" src="assets/u05-hero-agents.jpg" width="1920"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The unit idea in one image: split the job into context, generation, selection. Watercolor, original to this companion.</figcaption></figure>
 <section class="block col" data-chapter="1" data-title="Think longer or try more?" id="s1"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">1</span></div><div><p class="ch-meta"><span class="ts">Unit 1</span> · C01</p><h2>Think longer or try more?</h2></div></div>
 <div class="prose-narrow">
@@ -463,7 +465,7 @@ span.ptag, .ptag {
 <div id="chart-costsplit"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C01 §6</span> Cost split at K = 8 and K = 32. Parallel width amortizes context: 25 percent → 7.7 percent.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-mix"><div class="tag-price"><span class="tag-big">1</span><span class="tag-unit">Nugget 1 · From the lesson C01 §5, §9</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Parallel samples amortize context cost: one context pass spreads over K trajectories.</p><p><b>Why it matters. </b>Coverage saturates as K grows, so the marginal trajectory buys less. Serial iterations raise p itself, because the model repairs its own failures against executed tests.</p><p><b>Transfer. </b>A kitchen cooking 32 portions from one prep session.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
+<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-mix"><div class="tag-price"><span class="tag-big">K</span><span class="tag-unit">one context pass over K trajectories</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Parallel samples amortize context cost: one context pass spreads over K trajectories.</p><p><b>Why it matters. </b>Coverage saturates as K grows, so the marginal trajectory buys less. Serial iterations raise p itself, because the model repairs its own failures against executed tests.</p><p><b>Transfer. </b>A kitchen cooking 32 portions from one prep session.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Sample, filter, choose" id="s2"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">2</span></div><div><p class="ch-meta"><span class="ts">Unit 2</span> · C02</p><h2>Sample, filter, choose</h2></div></div>
 <div class="prose-narrow">
@@ -479,7 +481,7 @@ span.ptag, .ptag {
 <div class="chips" id="frout"></div>
 <p class="small muted" id="frnote"></p>
 </div>
-<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-twostage"><div class="tag-price"><span class="tag-big">2</span><span class="tag-unit">Nugget 2 · From the lesson C02 §5, §9</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Two-stage selection: cheap voting first, the expensive judge only on the shortlist.</p><p><b>Why it matters. </b>Voting is cheap and the model judge is expensive. Below 0.5 precision the filter inverts and keeps the wrong candidates.</p><p><b>Transfer. </b>Hiring: resume screen, then the on-site.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
+<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-twostage"><div class="tag-price"><span class="tag-big">2 stages</span><span class="tag-unit">cheap vote, dear judge on shortlist</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Two-stage selection: cheap voting first, the expensive judge only on the shortlist.</p><p><b>Why it matters. </b>Voting is cheap and the model judge is expensive. Below 0.5 precision the filter inverts and keeps the wrong candidates.</p><p><b>Transfer. </b>Hiring: resume screen, then the on-site.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The test script is a second author" id="s3"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">3</span></div><div><p class="ch-meta"><span class="ts">Unit 3</span> · C03</p><h2>The test script is a second author</h2></div></div>
 <div class="prose-narrow">
@@ -496,11 +498,11 @@ span.ptag, .ptag {
 <tr><th>Iteration</th><th>Result</th><th>Action</th></tr>
 </table>
 </div>
-<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-outside"><div class="tag-price"><span class="tag-big">3</span><span class="tag-unit">Nugget 3 · From the lesson C03 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Without execution, the model judges its own draft with the same prior that wrote it: no new information enters.</p><p><b>Why it matters. </b>Execution injects outside information (the trace), so each iteration can move. A bare trace with no line info makes repair guess and iterations wander.</p><p><b>Transfer. </b>A scientist running the experiment instead of debating the hypothesis.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
+<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-outside"><div class="tag-price"><span class="tag-big">0 info</span><span class="tag-unit">no new info enters without execution</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Without execution, the model judges its own draft with the same prior that wrote it: no new information enters.</p><p><b>Why it matters. </b>Execution injects outside information (the trace), so each iteration can move. A bare trace with no line info makes repair guess and iterations wander.</p><p><b>Transfer. </b>A scientist running the experiment instead of debating the hypothesis.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Two gates, not one" id="s4"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">4</span></div><div><p class="ch-meta"><span class="ts">Unit 4</span> · C04</p><h2>Two gates, not one</h2></div></div>
-<figure class="paint inset" data-entrance="sketch">
-<div class="frame"><div class="stage"><img alt="Watercolor of small mechanical chips passing two garden gates, a checkmark gate then a clock gate" class="base" loading="lazy" src="assets/u05-two-gates.jpg"/></div></div>
+<figure class="paint inset" data-entrance="sketch" data-scene="p2-a-u05-gates">
+<div class="frame"><div class="stage"><img alt="Watercolor of small mechanical chips passing two garden gates, a checkmark gate then a clock gate" class="base" height="1280" loading="lazy" src="assets/u05-two-gates.jpg" width="1920"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The C04 idea in one image: correctness first, speed second. Watercolor, original to this companion.</figcaption></figure>
 <div class="prose-narrow">
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C04 §3</span></p>
@@ -518,7 +520,7 @@ span.ptag, .ptag {
 <div id="chart-kernels"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C04 §6</span> The 10 toy kernels. Boxed: the fast_1 winners. The conjunction decides.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-conjunction"><div class="tag-price"><span class="tag-big">4</span><span class="tag-unit">Nugget 4 · From the lesson C04 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §5, §11</div><div class="tag-eye">The lesson</div><p class="">fast_p is the conjunction, not the average.</p><p><b>Why it matters. </b>The gates stay separate because optimizing one is easy and both is hard: a kernel that returns zeros is fast, a kernel that calls the reference is correct.</p><p><b>Transfer. </b>A driving test: rules first, time second.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
+<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-conjunction"><div class="tag-price"><span class="tag-big">fast_p</span><span class="tag-unit">the conjunction, not the average</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §5, §11</div><div class="tag-eye">The lesson</div><p class="">fast_p is the conjunction, not the average.</p><p><b>Why it matters. </b>The gates stay separate because optimizing one is easy and both is hard: a kernel that returns zeros is fast, a kernel that calls the reference is correct.</p><p><b>Transfer. </b>A driving test: rules first, time second.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Speed without correctness is worth zero" id="s5"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">5</span></div><div><p class="ch-meta"><span class="ts">Unit 5</span> · C05</p><h2>Speed without correctness is worth zero</h2></div></div>
 <div class="prose-narrow">
@@ -533,7 +535,7 @@ span.ptag, .ptag {
 <div class="chips" id="dpout"></div>
 <p class="small muted" id="dpnote"></p>
 </div>
-<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-gate"><div class="tag-price"><span class="tag-big">5</span><span class="tag-unit">Nugget 5 · From the lesson C05 §5, §9</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Speed without correctness is worth zero.</p><p><b>Why it matters. </b>A wrong kernel in production corrupts results silently, while a slow correct kernel only costs time. The cost of wrongness dominates the cost of slowness.</p><p><b>Transfer. </b>A medical model: safe first, accurate second.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
+<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-gate"><div class="tag-price"><span class="tag-big">0</span><span class="tag-unit">speed without correctness is worth zero</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §5, §9</div><div class="tag-eye">The lesson</div><p class="">Speed without correctness is worth zero.</p><p><b>Why it matters. </b>A wrong kernel in production corrupts results silently, while a slow correct kernel only costs time. The cost of wrongness dominates the cost of slowness.</p><p><b>Transfer. </b>A medical model: safe first, accurate second.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The interface is the law" id="s6"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">6</span></div><div><p class="ch-meta"><span class="ts">Unit 6</span> · C06</p><h2>The interface is the law</h2></div></div>
 <div class="prose-narrow">
@@ -548,7 +550,7 @@ span.ptag, .ptag {
 <div class="chips" id="icout"></div>
 <p class="small muted" id="icnote"></p>
 </div>
-<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-law"><div class="tag-price"><span class="tag-big">6</span><span class="tag-unit">Nugget 6 · From the lesson C06 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C06 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Contract-first design: every agent action goes through the interface, so safety, cost, and observability are decided in one place.</p><p><b>Why it matters. </b>Deriving limits from the task: the timeout must exceed the slowest honest test but bound a runaway loop. The observation is truncated because full logs would flood the context.</p><p><b>Transfer. </b>A building permit bounds a construction crew.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
+<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-law"><div class="tag-price"><span class="tag-big">1 place</span><span class="tag-unit">safety, cost, observability in one place</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C06 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Contract-first design: every agent action goes through the interface, so safety, cost, and observability are decided in one place.</p><p><b>Why it matters. </b>Deriving limits from the task: the timeout must exceed the slowest honest test but bound a runaway loop. The observation is truncated because full logs would flood the context.</p><p><b>Transfer. </b>A building permit bounds a construction crew.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Measure first, cut second" id="s7"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">7</span></div><div><p class="ch-meta"><span class="ts">Unit 7</span> · C07</p><h2>Measure first, cut second</h2></div></div>
 <figure class="paint inset" data-entrance="bloom">
@@ -571,7 +573,7 @@ span.ptag, .ptag {
 <div id="chart-profile"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C07 §6</span> Before and after the 2x matmul, with the 2.5x ceiling. The unoptimized rest caps everything.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-ceiling"><div class="tag-price"><span class="tag-big">7</span><span class="tag-unit">Nugget 7 · From the lesson C07 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C07 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The profile comes first: work on a 5 percent part and the ceiling is 1.05x no matter what.</p><p><b>Why it matters. </b>As s grows, the bound approaches 1 / (1 − f): the unoptimized rest caps everything. Profiles go stale when input sizes move: re-measure before trusting a small win.</p><p><b>Transfer. </b>Widening the narrowest bridge segment first.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
+<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-ceiling"><div class="tag-price"><span class="tag-big">1.05x</span><span class="tag-unit">a 5% part caps the whole win</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C07 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The profile comes first: work on a 5 percent part and the ceiling is 1.05x no matter what.</p><p><b>Why it matters. </b>As s grows, the bound approaches 1 / (1 − f): the unoptimized rest caps everything. Profiles go stale when input sizes move: re-measure before trusting a small win.</p><p><b>Transfer. </b>Widening the narrowest bridge segment first.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A flaky test lies at random" id="s8"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">8</span></div><div><p class="ch-meta"><span class="ts">Unit 8</span> · C08</p><h2>A flaky test lies at random</h2></div></div>
 <div class="prose-narrow">
@@ -587,7 +589,7 @@ span.ptag, .ptag {
 <div class="chips" id="flout"></div>
 <p class="small muted" id="flnote"></p>
 </div>
-<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-lies"><div class="tag-price"><span class="tag-big">8</span><span class="tag-unit">Nugget 8 · From the lesson C08 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C08 §5, §11</div><div class="tag-eye">The lesson</div><p class="">One failure means little, three mean a lot.</p><p><b>Why it matters. </b>The false-alarm rate falls as f^r, exponentially in r, while the cost rises linearly. Quarantine marks a test unreliable after repeated unexplained failures.</p><p><b>Transfer. </b>A doctor re-running a borderline blood test.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
+<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-lies"><div class="tag-price"><span class="tag-big">f^r</span><span class="tag-unit">false alarms fall exponentially in r</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C08 §5, §11</div><div class="tag-eye">The lesson</div><p class="">One failure means little, three mean a lot.</p><p><b>Why it matters. </b>The false-alarm rate falls as f^r, exponentially in r, while the cost rises linearly. Quarantine marks a test unreliable after repeated unexplained failures.</p><p><b>Transfer. </b>A doctor re-running a borderline blood test.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The practice field and the match" id="s9"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">9</span></div><div><p class="ch-meta"><span class="ts">Unit 9</span> · C09</p><h2>The practice field and the match</h2></div></div>
 <div class="prose-narrow">
@@ -601,7 +603,7 @@ span.ptag, .ptag {
 <tr><td>A</td><td class="num">1.00</td><td class="num">0.85</td><td>picked</td></tr>
 <tr><td>B</td><td class="num">0.95</td><td class="num">0.90</td><td>honest pick</td></tr>
 </table>
-<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-wall"><div class="tag-price"><span class="tag-big">9</span><span class="tag-unit">Nugget 9 · From the lesson C09 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C09 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The hidden suite is touched once, after selection: never during.</p><p><b>Why it matters. </b>With leakage, the loop optimizes the hidden score directly, and the reported number is the max over tuned candidates: optimistic by the selection effect (U04 C09).</p><p><b>Transfer. </b>A final exam kept sealed until test day.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
+<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-wall"><div class="tag-price"><span class="tag-big">1 touch</span><span class="tag-unit">the hidden suite is touched once</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C09 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The hidden suite is touched once, after selection: never during.</p><p><b>Why it matters. </b>With leakage, the loop optimizes the hidden score directly, and the reported number is the max over tuned candidates: optimistic by the selection effect (U04 C09).</p><p><b>Transfer. </b>A final exam kept sealed until test day.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A cage with measured bars" id="s10"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">10</span></div><div><p class="ch-meta"><span class="ts">Unit 10</span> · C10</p><h2>A cage with measured bars</h2></div></div>
 <div class="prose-narrow">
@@ -618,7 +620,7 @@ span.ptag, .ptag {
 <tr><td>edit the log</td><td>blocked</td></tr>
 <tr><td>write to /task/x</td><td>allowed, logged</td></tr>
 </table>
-<aside class="tag" data-chapter="s10" data-sign-label="Unit" data-sign-num="10" id="nugget-bars"><div class="tag-price"><span class="tag-big">10</span><span class="tag-unit">Nugget 10 · From the lesson C10 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C10 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The prompt is not a layer: the model can be talked out of a rule, the kernel cannot.</p><p><b>Why it matters. </b>Defense in depth: the filesystem layer blocks data destruction, the network layer blocks exfiltration, the time layer blocks resource exhaustion, the log layer makes every action reviewable. One layer can fail and the others still hold.</p><p><b>Transfer. </b>A bank vault: walls, a time lock, and cameras.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 10</span></div></div></aside>
+<aside class="tag" data-chapter="s10" data-sign-label="Unit" data-sign-num="10" id="nugget-bars"><div class="tag-price"><span class="tag-big">4 layers</span><span class="tag-unit">one layer fails, the others hold</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C10 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The prompt is not a layer: the model can be talked out of a rule, the kernel cannot.</p><p><b>Why it matters. </b>Defense in depth: the filesystem layer blocks data destruction, the network layer blocks exfiltration, the time layer blocks resource exhaustion, the log layer makes every action reviewable. One layer can fail and the others still hold.</p><p><b>Transfer. </b>A bank vault: walls, a time lock, and cameras.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 10</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A receipt for the run" id="s11"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">11</span></div><div><p class="ch-meta"><span class="ts">Unit 11</span> · C11</p><h2>A receipt for the run</h2></div></div>
 <div class="prose-narrow">
@@ -633,7 +635,7 @@ span.ptag, .ptag {
 <tr><td>B</td><td class="num">7</td><td>empty</td><td class="num">0.0</td><td>reproducible</td></tr>
 <tr><td>C</td><td class="num">8</td><td>2 lines</td><td class="num">-</td><td>different experiment</td></tr>
 </table>
-<aside class="tag" data-chapter="s11" data-sign-label="Unit" data-sign-num="11" id="nugget-receipt"><div class="tag-price"><span class="tag-big">11</span><span class="tag-unit">Nugget 11 · From the lesson C11 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C11 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The seed is load-bearing: change it and the run is a different experiment, which is fine as long as it is logged as one.</p><p><b>Why it matters. </b>Fixing the seed fixes the random stream, pinning versions fixes the code paths, capturing the environment fixes the hardware behavior. Each unfixed source is one degree of freedom the rerun can wander in.</p><p><b>Transfer. </b>A lab notebook with the exact reagent lot.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 11</span></div></div></aside>
+<aside class="tag" data-chapter="s11" data-sign-label="Unit" data-sign-num="11" id="nugget-receipt"><div class="tag-price"><span class="tag-big">1 seed</span><span class="tag-unit">the seed is load-bearing</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C11 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The seed is load-bearing: change it and the run is a different experiment, which is fine as long as it is logged as one.</p><p><b>Why it matters. </b>Fixing the seed fixes the random stream, pinning versions fixes the code paths, capturing the environment fixes the hardware behavior. Each unfixed source is one degree of freedom the rerun can wander in.</p><p><b>Transfer. </b>A lab notebook with the exact reagent lot.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 11</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A saved game" id="s12"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">12</span></div><div><p class="ch-meta"><span class="ts">Unit 12</span> · C12</p><h2>A saved game</h2></div></div>
 <div class="prose-narrow">
@@ -649,7 +651,7 @@ span.ptag, .ptag {
 <div class="chips" id="rbout"></div>
 <p class="small muted" id="rbnote"></p>
 </div>
-<aside class="tag" data-chapter="s12" data-sign-label="Unit" data-sign-num="12" id="nugget-saved"><div class="tag-price"><span class="tag-big">12</span><span class="tag-unit">Nugget 12 · From the lesson C12 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C12 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Restore over repair: rollback bounds the recovery cost at the checkpoint interval.</p><p><b>Why it matters. </b>Repairing corruption in place carries unbounded cost and uncertain success. Checkpoints are verified when written: an unverified checkpoint restores corruption.</p><p><b>Transfer. </b>Database point-in-time recovery.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 12</span></div></div></aside>
+<aside class="tag" data-chapter="s12" data-sign-label="Unit" data-sign-num="12" id="nugget-saved"><div class="tag-price"><span class="tag-big">rollback</span><span class="tag-unit">bounds recovery at the checkpoint</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C12 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Restore over repair: rollback bounds the recovery cost at the checkpoint interval.</p><p><b>Why it matters. </b>Repairing corruption in place carries unbounded cost and uncertain success. Checkpoints are verified when written: an unverified checkpoint restores corruption.</p><p><b>Transfer. </b>Database point-in-time recovery.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 12</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="What this buys you" id="s13"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">13</span></div><div><p class="ch-meta"><span class="ts">Unit 13</span> · The arc</p><h2>What this buys you</h2></div></div>
 <div class="prose-narrow">
@@ -657,7 +659,6 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Where the unit points next: the evolutionary loop of U04 becomes the training loop here, and the hidden-test discipline of C09 is the holdout discipline of U04 C09 applied to code. U06 takes the interface idea further, into memory and caches.</p>
 </div>
 </section>
-
 <section class="col" id="playbook-sec">
 <h3 class="sub">The playbook</h3>
 <p>Every lesson on this page, in order. Tap one to return to its chapter.</p>
@@ -1676,5 +1677,46 @@ updRB()
   });
 })();
 
+</script><script>
+<script>
+/* Phase 2 scenes (Builder 2): CompanionFX overlay life. Pure code, zero image cost. */
+(function(){
+var FX = window.CompanionFX; if(!FX) return;
+FX.registerScene("p2-a-u05-hero", {
+  init: function(F, FX) {
+    F._fx_motes = FX.motes(F.stage, F.W, F.H, 12, 45);
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[700, 450, 20], [1100, 550, 22]]);
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    F._fx_motes.tick(t);
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    return {};
+  }
+});
+FX.registerScene("p2-a-u05-gates", {
+  init: function(F, FX) {
+    F._fx_glows = FX.glows(F.stage, F.W, F.H, [[960, 640, 150]], 'screen', '#FFE9B0');
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[700, 500, 20]]);
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    F._fx_glows.forEach(function(c,i){
+      c.style.opacity = (0.3+0.22*FX.flicker(t, i*2.3)).toFixed(3);
+    });
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    return {};
+  }
+});
+})();
+</script>
 </script></body>
 </html>

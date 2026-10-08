@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <!DOCTYPE html>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -437,8 +439,8 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Companion voice: the idea above the tag is from the lesson. The generalization below it is the companion’s.</p>
 <p class="small muted">Provenance: no full lecture transcript exists for session 14. This page narrates the lesson document <code>content/v2/cs329a/lessons/u06_memory_caches.md</code>, not a video. Paper titles come from the official schedule through the lesson. The builder did not inspect paper contents. The guest session (Junchen Jiang, LMCache) is taught at schedule-line level only, per the lesson’s own honesty note. Toy numbers are the lesson’s own computed values, re-plotted here with section citations. Claim class: SOURCE ATTRIBUTION PENDING on paper pointers. Toys are computed and traceable. No benchmark numbers are claimed.</p>
 </div>
-</header><figure class="paint wide" data-entrance="bloom" data-hero="1">
-<div class="frame"><div class="stage"><img alt="Watercolor of a librarian robot paging glowing fact cards between a desk, a filing cabinet, and a card index" class="base" fetchpriority="high" loading="lazy" src="assets/u06-hero-memory.jpg"/></div></div>
+</header><figure class="paint wide" data-entrance="bloom" data-hero="" data-scene="p2-a-u06-hero">
+<div class="frame"><div class="stage"><img alt="Watercolor of a librarian robot paging glowing fact cards between a desk, a filing cabinet, and a card index" class="base" fetchpriority="high" height="1280" loading="lazy" src="assets/u06-hero-memory.jpg" width="1920"/><img alt="" aria-hidden="true" class="ly mul" data-depth="14" data-obj="robot" src="assets/u06-memory-caches-hero-layer.png" style="left:13%;top:22%;width:23%;"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The unit idea in one image: hot facts on the desk, warm facts in the index, cold facts in the cabinet. Watercolor, original to this companion.</figcaption></figure>
 <section class="block col" data-chapter="1" data-title="The context window is RAM" id="s1"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">1</span></div><div><p class="ch-meta"><span class="ts">Unit 1</span> · C01</p><h2>The context window is RAM</h2></div></div>
 <div class="prose-narrow">
@@ -457,7 +459,7 @@ span.ptag, .ptag {
 <div id="chart-tiers"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C01 §6, C02 §6</span> The three tiers at 20 turns: 8 in main context, 12 in archival, 5 searches on the recall index. One rule: the model pages itself.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-ram"><div class="tag-price"><span class="tag-big">1</span><span class="tag-unit">Nugget 1 · From the lesson C01 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The model manages its own pages because only it knows what is hot.</p><p><b>Why it matters. </b>Memory pressure warnings trigger consolidation: summarize, archive, free. Bad eviction loses hot facts. The recall index is the safety net.</p><p><b>Transfer. </b>An operating system paging to disk.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
+<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-ram"><div class="tag-price"><span class="tag-big">hot</span><span class="tag-unit">only the model knows what is hot</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The model manages its own pages because only it knows what is hot.</p><p><b>Why it matters. </b>Memory pressure warnings trigger consolidation: summarize, archive, free. Bad eviction loses hot facts. The recall index is the safety net.</p><p><b>Transfer. </b>An operating system paging to disk.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Hands for its memory" id="s2"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">2</span></div><div><p class="ch-meta"><span class="ts">Unit 2</span> · C02</p><h2>Hands for its memory</h2></div></div>
 <div class="prose-narrow">
@@ -474,7 +476,7 @@ span.ptag, .ptag {
 <tr><th>Action</th><th class="num">Count</th></tr>
 </table>
 </div>
-<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-hands"><div class="tag-price"><span class="tag-big">2</span><span class="tag-unit">Nugget 2 · From the lesson C02 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Memory work is function calls, not magic.</p><p><b>Why it matters. </b>The alternative (the scaffold managing memory silently) hides the decisions from the trace. An agent that inserts every turn without ever searching has write-only memory: pure cost.</p><p><b>Transfer. </b>A lab notebook with every entry dated.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
+<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-hands"><div class="tag-price"><span class="tag-big">calls</span><span class="tag-unit">memory work is function calls</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Memory work is function calls, not magic.</p><p><b>Why it matters. </b>The alternative (the scaffold managing memory silently) hides the decisions from the trace. An agent that inserts every turn without ever searching has write-only memory: pure cost.</p><p><b>Transfer. </b>A lab notebook with every entry dated.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The desk and the filing cabinet" id="s3"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">3</span></div><div><p class="ch-meta"><span class="ts">Unit 3</span> · C03</p><h2>The desk and the filing cabinet</h2></div></div>
 <div class="prose-narrow">
@@ -490,11 +492,11 @@ span.ptag, .ptag {
 <div class="chips" id="pnout"></div>
 <p class="small muted" id="pnnote"></p>
 </div>
-<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-desk"><div class="tag-price"><span class="tag-big">3</span><span class="tag-unit">Nugget 3 · From the lesson C03 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §5, §11</div><div class="tag-eye">The lesson</div><p class="">A fact earns desk space only when its expected reuse beats the retrieval cost.</p><p><b>Why it matters. </b>A token in context costs attention over every future token and money. A byte in the store costs almost nothing until retrieved. Hotness drifts: decay the scores, or yesterday’s hot fact squats on the desk.</p><p><b>Transfer. </b>CPU cache lines.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
+<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-desk"><div class="tag-price"><span class="tag-big">earn it</span><span class="tag-unit">reuse must beat retrieval cost</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §5, §11</div><div class="tag-eye">The lesson</div><p class="">A fact earns desk space only when its expected reuse beats the retrieval cost.</p><p><b>Why it matters. </b>A token in context costs attention over every future token and money. A byte in the store costs almost nothing until retrieved. Hotness drifts: decay the scores, or yesterday’s hot fact squats on the desk.</p><p><b>Transfer. </b>CPU cache lines.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A compressed memory of one corpus" id="s4"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">4</span></div><div><p class="ch-meta"><span class="ts">Unit 4</span> · C04</p><h2>A compressed memory of one corpus</h2></div></div>
-<figure class="paint inset" data-entrance="sketch">
-<div class="frame"><div class="stage"><img alt="Watercolor of a huge manual being distilled through a funnel into a tiny brass cartridge" class="base" loading="lazy" src="assets/u06-cartridge.jpg"/></div></div>
+<figure class="paint inset" data-entrance="sketch" data-scene="p2-a-u06-cartridge">
+<div class="frame"><div class="stage"><img alt="Watercolor of a huge manual being distilled through a funnel into a tiny brass cartridge" class="base" height="1280" loading="lazy" src="assets/u06-cartridge.jpg" width="1920"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The C04 idea in one image: distill the manual into a cartridge. Watercolor, original to this companion.</figcaption></figure>
 <div class="prose-narrow">
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C04 §3</span></p>
@@ -513,7 +515,7 @@ span.ptag, .ptag {
 <div id="chart-cartridge"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C04 §6</span> Full KV versus cartridge on a log scale: 20,480 tokens against 512 slots, ratio 40x.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-selfstudy"><div class="tag-price"><span class="tag-big">4</span><span class="tag-unit">Nugget 4 · From the lesson C04 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Naive next-token training teaches recitation, not question answering.</p><p><b>Why it matters. </b>Self-study fixes this in two steps: synthetic Q/A conversations about the corpus, then context distillation against the model with the full corpus in context. A changed corpus needs retraining: the cartridge is a snapshot.</p><p><b>Transfer. </b>A student writing their own practice exam.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
+<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-selfstudy"><div class="tag-price"><span class="tag-big">2 steps</span><span class="tag-unit">Q/A then distillation</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Naive next-token training teaches recitation, not question answering.</p><p><b>Why it matters. </b>Self-study fixes this in two steps: synthetic Q/A conversations about the corpus, then context distillation against the model with the full corpus in context. A changed corpus needs retraining: the cartridge is a snapshot.</p><p><b>Transfer. </b>A student writing their own practice exam.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The first request pays, the rest ride free" id="s5"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">5</span></div><div><p class="ch-meta"><span class="ts">Unit 5</span> · C05</p><h2>The first request pays, the rest ride free</h2></div></div>
 <figure class="paint inset" data-entrance="bloom">
@@ -532,7 +534,7 @@ span.ptag, .ptag {
 <div class="chips" id="rqout"></div>
 <p class="small muted" id="rqnote"></p>
 </div>
-<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-notes"><div class="tag-price"><span class="tag-big">5</span><span class="tag-unit">Nugget 5 · From the lesson C05 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §5, §11</div><div class="tag-eye">The lesson</div><p class="">No approximation is involved: it is the same computation, skipped.</p><p><b>Why it matters. </b>In a causal transformer, token i’s keys and values depend only on tokens 1..i, so a shared prefix gives identical KV entries. Any tokenization drift breaks the match silently: pin the tokenizer.</p><p><b>Transfer. </b>Compiled regexes cached across requests.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
+<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-notes"><div class="tag-price"><span class="tag-big">0 approx</span><span class="tag-unit">the same computation, skipped</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §5, §11</div><div class="tag-eye">The lesson</div><p class="">No approximation is involved: it is the same computation, skipped.</p><p><b>Why it matters. </b>In a causal transformer, token i’s keys and values depend only on tokens 1..i, so a shared prefix gives identical KV entries. Any tokenization drift breaks the match silently: pin the tokenizer.</p><p><b>Transfer. </b>Compiled regexes cached across requests.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C05 §1</span> Honesty note: the guest session (Junchen Jiang, LMCache) is taught at schedule-line level only. The lesson names the system, not its internals.</p>
 </section>
 <section class="block col" data-chapter="1" data-title="Fix the few, keep the many" id="s6"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">6</span></div><div><p class="ch-meta"><span class="ts">Unit 6</span> · C06</p><h2>Fix the few, keep the many</h2></div></div>
@@ -552,7 +554,7 @@ span.ptag, .ptag {
 <div id="chart-blend"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C06 §6</span> Full prefill versus blend on a log scale: 2,048 units against 371. One rule: fix the few, keep the many.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-surgical"><div class="tag-price"><span class="tag-big">6</span><span class="tag-unit">Nugget 6 · From the lesson C06 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C06 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Repositioning corrupts few tokens badly and most tokens barely, so fixing the few restores quality at a fraction of the cost.</p><p><b>Why it matters. </b>A shallow recompute pass ranks the deviation, then only the top-r tokens’ KV is recomputed in place. If deviation is not concentrated, r must rise and the saving shrinks.</p><p><b>Transfer. </b>Patching a tire instead of replacing the wheel.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
+<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-surgical"><div class="tag-price"><span class="tag-big">top-r</span><span class="tag-unit">fix the few, restore at a fraction</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C06 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Repositioning corrupts few tokens badly and most tokens barely, so fixing the few restores quality at a fraction of the cost.</p><p><b>Why it matters. </b>A shallow recompute pass ranks the deviation, then only the top-r tokens’ KV is recomputed in place. If deviation is not concentrated, r must rise and the saving shrinks.</p><p><b>Transfer. </b>Patching a tire instead of replacing the wheel.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The agent’s eyes on its own past" id="s7"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">7</span></div><div><p class="ch-meta"><span class="ts">Unit 7</span> · C07</p><h2>The agent’s eyes on its own past</h2></div></div>
 <div class="prose-narrow">
@@ -568,7 +570,7 @@ span.ptag, .ptag {
 <div class="chips" id="rtout"></div>
 <p class="small muted" id="rtnote"></p>
 </div>
-<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-eyes"><div class="tag-price"><span class="tag-big">7</span><span class="tag-unit">Nugget 7 · From the lesson C07 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C07 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Precision binds harder than recall: noise enters the reasoning, silence does not.</p><p><b>Why it matters. </b>The agent can re-query: a bad first query is not fatal, the trace shows the refinement. A judged filter on the hits beats raw top_k downstream.</p><p><b>Transfer. </b>A witness who says little but true.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
+<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-eyes"><div class="tag-price"><span class="tag-big">precision</span><span class="tag-unit">binds harder than recall</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C07 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Precision binds harder than recall: noise enters the reasoning, silence does not.</p><p><b>Why it matters. </b>The agent can re-query: a bad first query is not fatal, the trace shows the refinement. A judged filter on the hits beats raw top_k downstream.</p><p><b>Transfer. </b>A witness who says little but true.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Amnesia on purpose" id="s8"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">8</span></div><div><p class="ch-meta"><span class="ts">Unit 8</span> · C08</p><h2>Amnesia on purpose</h2></div></div>
 <div class="prose-narrow">
@@ -585,7 +587,7 @@ span.ptag, .ptag {
 <div class="chips" id="clout"></div>
 <p class="small muted" id="clnote"></p>
 </div>
-<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-amnesia"><div class="tag-price"><span class="tag-big">8</span><span class="tag-unit">Nugget 8 · From the lesson C08 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C08 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Without the drop log, compression loss and never-stored are indistinguishable, and the fix is a guess.</p><p><b>Why it matters. </b>Loss compounds over repeated compressions: measure per level. Kept plus dropped must equal the input: the log lists all 7 dropped facts.</p><p><b>Transfer. </b>An accountant’s audit trail.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
+<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-amnesia"><div class="tag-price"><span class="tag-big">7</span><span class="tag-unit">dropped facts the log lists</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C08 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Without the drop log, compression loss and never-stored are indistinguishable, and the fix is a guess.</p><p><b>Why it matters. </b>Loss compounds over repeated compressions: measure per level. Kept plus dropped must equal the input: the log lists all 7 dropped facts.</p><p><b>Transfer. </b>An accountant’s audit trail.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Memory rots" id="s9"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">9</span></div><div><p class="ch-meta"><span class="ts">Unit 9</span> · C09</p><h2>Memory rots</h2></div></div>
 <div class="prose-narrow">
@@ -600,7 +602,7 @@ span.ptag, .ptag {
 <div class="chips" id="ivout"></div>
 <p class="small muted" id="ivnote"></p>
 </div>
-<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-rots"><div class="tag-price"><span class="tag-big">9</span><span class="tag-unit">Nugget 9 · From the lesson C09 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C09 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The right TTL is where the stale-answer cost and the re-fetch cost cross.</p><p><b>Why it matters. </b>A cached fact is a bet that the world has not changed. Different fact classes need different TTLs: one TTL for all is a compromise.</p><p><b>Transfer. </b>Milk cartons, not diamonds.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
+<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-rots"><div class="tag-price"><span class="tag-big">cross</span><span class="tag-unit">where stale cost meets re-fetch cost</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C09 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The right TTL is where the stale-answer cost and the re-fetch cost cross.</p><p><b>Why it matters. </b>A cached fact is a bet that the world has not changed. Different fact classes need different TTLs: one TTL for all is a compromise.</p><p><b>Transfer. </b>Milk cartons, not diamonds.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A shared room needs walls" id="s10"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">10</span></div><div><p class="ch-meta"><span class="ts">Unit 10</span> · C10</p><h2>A shared room needs walls</h2></div></div>
 <div class="prose-narrow">
@@ -614,7 +616,7 @@ span.ptag, .ptag {
 <tr><td>namespaced (deny by default)</td><td class="num">2</td><td>none</td></tr>
 <tr><td>shared public entry</td><td class="num">1</td><td>breach if mislabeled</td></tr>
 </table>
-<aside class="tag" data-chapter="s10" data-sign-label="Unit" data-sign-num="10" id="nugget-walls"><div class="tag-price"><span class="tag-big">10</span><span class="tag-unit">Nugget 10 · From the lesson C10 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C10 §5, §11</div><div class="tag-eye">The lesson</div><p class="">KV caches are invertible enough to leak prompt text: reusing them across tenants is a data breach, not an optimization.</p><p><b>Why it matters. </b>The cache key includes the tenant, so a hit requires the same owner. Public entries only for scrubbed, owner-free content. A mislabeled public entry is a breach, so audit the labeling.</p><p><b>Transfer. </b>Bank safe-deposit boxes.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 10</span></div></div></aside>
+<aside class="tag" data-chapter="s10" data-sign-label="Unit" data-sign-num="10" id="nugget-walls"><div class="tag-price"><span class="tag-big">1 breach</span><span class="tag-unit">caches across tenants is a breach</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C10 §5, §11</div><div class="tag-eye">The lesson</div><p class="">KV caches are invertible enough to leak prompt text: reusing them across tenants is a data breach, not an optimization.</p><p><b>Why it matters. </b>The cache key includes the tenant, so a hit requires the same owner. Public entries only for scrubbed, owner-free content. A mislabeled public entry is a breach, so audit the labeling.</p><p><b>Transfer. </b>Bank safe-deposit boxes.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 10</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Yesterday’s notes, today’s task" id="s11"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">11</span></div><div><p class="ch-meta"><span class="ts">Unit 11</span> · C11</p><h2>Yesterday’s notes, today’s task</h2></div></div>
 <div class="prose-narrow">
@@ -630,7 +632,7 @@ span.ptag, .ptag {
 <div class="chips" id="trout"></div>
 <p class="small muted" id="trnote"></p>
 </div>
-<aside class="tag" data-chapter="s11" data-sign-label="Unit" data-sign-num="11" id="nugget-compounds"><div class="tag-price"><span class="tag-big">11</span><span class="tag-unit">Nugget 11 · From the lesson C11 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C11 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Transfer needs the staleness check to stay positive.</p><p><b>Why it matters. </b>Each cross-task hit carries its origin label. Unverified hits are discounted. A fact true for A can be false for B.</p><p><b>Transfer. </b>Code reuse across projects.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 11</span></div></div></aside>
+<aside class="tag" data-chapter="s11" data-sign-label="Unit" data-sign-num="11" id="nugget-compounds"><div class="tag-price"><span class="tag-big">1 label</span><span class="tag-unit">each hit carries its origin</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C11 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Transfer needs the staleness check to stay positive.</p><p><b>Why it matters. </b>Each cross-task hit carries its origin label. Unverified hits are discounted. A fact true for A can be false for B.</p><p><b>Transfer. </b>Code reuse across projects.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 11</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Promising, not proven" id="s12"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">12</span></div><div><p class="ch-meta"><span class="ts">Unit 12</span> · C12</p><h2>Promising, not proven</h2></div></div>
 <div class="prose-narrow">
@@ -645,7 +647,7 @@ span.ptag, .ptag {
 <div class="chips" id="about"></div>
 <p class="small muted" id="abnote"></p>
 </div>
-<aside class="tag" data-chapter="s12" data-sign-label="Unit" data-sign-num="12" id="nugget-proof"><div class="tag-price"><span class="tag-big">12</span><span class="tag-unit">Nugget 12 · From the lesson C12 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C12 §5, §11</div><div class="tag-eye">The lesson</div><p class="">One arm without the other is a demo, not evidence.</p><p><b>Why it matters. </b>The claim that memory helps needs d &gt; 0 beyond the error bars. The SE shrinks as 1/sqrt(n): quadrupling tasks halves the error. Task difficulty drift between arms kills the comparison: lock the task set.</p><p><b>Transfer. </b>A drug trial’s control arm.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 12</span></div></div></aside>
+<aside class="tag" data-chapter="s12" data-sign-label="Unit" data-sign-num="12" id="nugget-proof"><div class="tag-price"><span class="tag-big">1/√n</span><span class="tag-unit">quadruple tasks, halve the error</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C12 §5, §11</div><div class="tag-eye">The lesson</div><p class="">One arm without the other is a demo, not evidence.</p><p><b>Why it matters. </b>The claim that memory helps needs d &gt; 0 beyond the error bars. The SE shrinks as 1/sqrt(n): quadrupling tasks halves the error. Task difficulty drift between arms kills the comparison: lock the task set.</p><p><b>Transfer. </b>A drug trial’s control arm.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 12</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="What this buys you" id="s13"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">13</span></div><div><p class="ch-meta"><span class="ts">Unit 13</span> · The arc</p><h2>What this buys you</h2></div></div>
 <div class="prose-narrow">
@@ -653,7 +655,6 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Where the unit points next: the paging discipline of C01 is U05 C06’s interface idea applied to memory, and the ablation proof of C12 is the experimental method that U08’s long-horizon evaluation depends on.</p>
 </div>
 </section>
-
 <section class="col" id="playbook-sec">
 <h3 class="sub">The playbook</h3>
 <p>Every lesson on this page, in order. Tap one to return to its chapter.</p>
@@ -1666,5 +1667,46 @@ document.getElementById("abnote").textContent="At n = 50 the lesson reports SE 0
   });
 })();
 
+</script><script>
+<script>
+/* Phase 2 scenes (Builder 2): CompanionFX overlay life. Pure code, zero image cost. */
+(function(){
+var FX = window.CompanionFX; if(!FX) return;
+FX.registerScene("p2-a-u06-hero", {
+  init: function(F, FX) {
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[600, 700, 22], [1100, 550, 20]]);
+    F._fx_glows = FX.glows(F.stage, F.W, F.H, [[960, 600, 160]], 'screen', '#FFE9B0');
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    F._fx_glows.forEach(function(c,i){
+      c.style.opacity = (0.3+0.22*FX.flicker(t, i*2.3)).toFixed(3);
+    });
+    return {"robot": {y: -5*Math.abs(Math.sin(t*0.45))}};
+  }
+});
+FX.registerScene("p2-a-u06-cartridge", {
+  init: function(F, FX) {
+    F._fx_motes = FX.motes(F.stage, F.W, F.H, 10, 46);
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[700, 600, 20]]);
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    F._fx_motes.tick(t);
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    return {};
+  }
+});
+})();
+</script>
 </script></body>
 </html>

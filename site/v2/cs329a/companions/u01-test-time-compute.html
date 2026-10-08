@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <!DOCTYPE html>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -437,8 +439,8 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Companion voice: the idea above the tag is from the lesson. The generalization below it is the companion’s.</p>
 <p class="small muted">Provenance: no full lecture transcript exists for sessions 2 and 3. This page narrates the lesson document <code>content/v2/cs329a/lessons/u01_test_time_compute.md</code>, not a video. Paper titles come from the official schedule through the lesson. The builder did not inspect paper contents. Toy numbers are the lesson’s own computed values, re-plotted here with section citations. Claim class: SOURCE ATTRIBUTION PENDING on paper pointers. Toys are computed and traceable.</p>
 </div>
-</header><figure class="paint wide" data-entrance="bloom" data-hero="1">
-<div class="frame"><div class="stage"><img alt="Watercolor of a hand fanning out lottery tickets, one ticket glowing with a golden star" class="base" fetchpriority="high" loading="lazy" src="assets/u01-hero-lottery.jpg"/></div></div>
+</header><figure class="paint wide" data-entrance="bloom" data-hero="" data-scene="p2-a-u01-hero">
+<div class="frame"><div class="stage"><img alt="Watercolor of a hand fanning out lottery tickets, one ticket glowing with a golden star" class="base" fetchpriority="high" height="1280" loading="lazy" src="assets/u01-hero-lottery.jpg" width="1920"/><img alt="" aria-hidden="true" class="ly mul" data-depth="14" data-obj="tickets" src="assets/u01-test-time-compute-hero-layer.png" style="left:19%;top:32%;width:62%;"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The C01 idea in one image: each sample is a lottery ticket, and the prize goes to the set. Watercolor, original to this companion.</figcaption></figure>
 <section class="block col" data-chapter="1" data-title="More tickets, better odds" id="s1"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">1</span></div><div><p class="ch-meta"><span class="ts">Unit 1</span> · C01</p><h2>More tickets, better odds</h2></div></div>
 <div class="prose-narrow">
@@ -475,7 +477,7 @@ span.ptag, .ptag {
 <div id="chart-passn"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C01 §6</span> The table as a curve. Dots carry pass@N and the marginal gain of that ticket.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-returns"><div class="tag-price"><span class="tag-big">1</span><span class="tag-unit">Nugget 1 · From the lesson C01 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §6</div><div class="tag-eye">The lesson</div><p class="">Diminishing returns are visible in the numbers. The step from ticket 1 to ticket 2 adds 0.1875. The step from ticket 7 to ticket 8 adds 0.0334.</p><p><b>Why it matters. </b>Every ticket costs the same. The curve tells you when the next ticket stops earning its price.</p><p><b>Transfer. </b>Any repeated-trial budget follows the same curve. Tests, interviews, and retries all flatten.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
+<aside class="tag" data-chapter="s1" data-sign-label="Unit" data-sign-num="1" id="nugget-returns"><div class="tag-price"><span class="tag-big tight">0.1875/0.0334</span><span class="tag-unit">ticket 1→2 gain vs ticket 7→8</span></div><div class="tag-body"><div class="tag-title">Nugget 1 · From the lesson C01 §6</div><div class="tag-eye">The lesson</div><p class="">Diminishing returns are visible in the numbers. The step from ticket 1 to ticket 2 adds 0.1875. The step from ticket 7 to ticket 8 adds 0.0334.</p><p><b>Why it matters. </b>Every ticket costs the same. The curve tells you when the next ticket stops earning its price.</p><p><b>Transfer. </b>Any repeated-trial budget follows the same curve. Tests, interviews, and retries all flatten.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 01</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The generator proposes, the verifier disposes" id="s2"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">2</span></div><div><p class="ch-meta"><span class="ts">Unit 2</span> · C02</p><h2>The generator proposes, the verifier disposes</h2></div></div>
 <div class="prose-narrow">
@@ -483,8 +485,8 @@ span.ptag, .ptag {
 <p>Best-of-N samples N completions, scores each with a verifier, and returns the argmax. It is an election with one voter and N candidates. A wise voter picks the best candidate. A biased voter picks the loudest one.</p>
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C02 §5</span></p>
 <p>With a perfect verifier, best-of-N equals pass@N. With a noisy verifier it falls short. The gap is the verifier error folded through the argmax. The mechanism works when score order matches correctness order often enough.</p>
-<figure class="paint inset" data-entrance="sketch">
-<div class="frame"><div class="stage"><img alt="Watercolor of a small judge pointing to one winning scroll among five candidate scrolls" class="base" loading="lazy" src="assets/u01-election.jpg"/></div></div>
+<figure class="paint inset" data-entrance="sketch" data-scene="p2-a-u01-election">
+<div class="frame"><div class="stage"><img alt="Watercolor of a small judge pointing to one winning scroll among five candidate scrolls" class="base" height="1280" loading="lazy" src="assets/u01-election.jpg" width="1920"/></div></div>
 <figcaption><span class="ptag ptag-illustration">Illustration</span> The C02 mental model: one voter, N candidates. Watercolor, original to this companion.</figcaption></figure>
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C02 §6</span> Four samples, fixed correctness [1, 0, 0, 1]. Flip the verifier and watch the winner change.</p>
 </div>
@@ -493,7 +495,7 @@ span.ptag, .ptag {
 <div class="chips" id="bonout"></div>
 <p class="small" id="bonnote"></p>
 </div>
-<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-verifier-decides"><div class="tag-price"><span class="tag-big">2</span><span class="tag-unit">Nugget 2 · From the lesson C02 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §6</div><div class="tag-eye">The lesson</div><p class="">The same samples, two verifiers, two outcomes. Fix the scores and the winner flips from wrong to right.</p><p><b>Why it matters. </b>Coverage means nothing without a judge that can read it. Verifier quality decides the result.</p><p><b>Transfer. </b>Selection is only as good as the judge. Hiring, admissions, and grants share the shape.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
+<aside class="tag" data-chapter="s2" data-sign-label="Unit" data-sign-num="2" id="nugget-verifier-decides"><div class="tag-price"><span class="tag-big">1 flip</span><span class="tag-unit">same samples, two verifiers, two outcomes</span></div><div class="tag-body"><div class="tag-title">Nugget 2 · From the lesson C02 §6</div><div class="tag-eye">The lesson</div><p class="">The same samples, two verifiers, two outcomes. Fix the scores and the winner flips from wrong to right.</p><p><b>Why it matters. </b>Coverage means nothing without a judge that can read it. Verifier quality decides the result.</p><p><b>Transfer. </b>Selection is only as good as the judge. Hiring, admissions, and grants share the shape.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 02</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Ask five people to show their work" id="s3"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">3</span></div><div><p class="ch-meta"><span class="ts">Unit 3</span> · C03</p><h2>Ask five people to show their work</h2></div></div>
 <div class="prose-narrow">
@@ -508,7 +510,7 @@ span.ptag, .ptag {
 <div class="chips" id="voteout"></div>
 <p class="small" id="votenote"></p>
 </div>
-<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-agreement"><div class="tag-price"><span class="tag-big">3</span><span class="tag-unit">Nugget 3 · From the lesson C03 §12</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §12</div><div class="tag-eye">The lesson</div><p class="">Agreement measures path similarity, not truth. Five paths can agree and all be wrong.</p><p><b>Why it matters. </b>A shared flawed lemma makes every path vote the same wrong answer with full confidence. High vote share then means shared reasoning, not correctness.</p><p><b>Transfer. </b>Committees need independent minds, not loud majorities.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
+<aside class="tag" data-chapter="s3" data-sign-label="Unit" data-sign-num="3" id="nugget-agreement"><div class="tag-price"><span class="tag-big">5 paths</span><span class="tag-unit">can agree and all be wrong</span></div><div class="tag-body"><div class="tag-title">Nugget 3 · From the lesson C03 §12</div><div class="tag-eye">The lesson</div><p class="">Agreement measures path similarity, not truth. Five paths can agree and all be wrong.</p><p><b>Why it matters. </b>A shared flawed lemma makes every path vote the same wrong answer with full confidence. High vote share then means shared reasoning, not correctness.</p><p><b>Transfer. </b>Committees need independent minds, not loud majorities.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 03</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="No single recipe wins every task" id="s4"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">4</span></div><div><p class="ch-meta"><span class="ts">Unit 4</span> · C04</p><h2>No single recipe wins every task</h2></div></div>
 <div class="prose-narrow">
@@ -525,7 +527,7 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C04 §11</span></p>
 <p>Read the margin with care. R2 beats R1 on math validation 0.78 to 0.70, on 40 questions. The standard error is about 0.07. The gap is noise, and locking R2 on this evidence is a gamble.</p>
 </div>
-<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-margin"><div class="tag-price"><span class="tag-big">4</span><span class="tag-unit">Nugget 4 · From the lesson C04 §9, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §9, §11</div><div class="tag-eye">The lesson</div><p class="">Turn the dials per task, but report the margin, not just the winner.</p><p><b>Why it matters. </b>Small validation sets make the argmax noisy. A search that overfits 40 questions loses on test.</p><p><b>Transfer. </b>Model selection anywhere needs the same humility. The winner and its error bar travel together.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
+<aside class="tag" data-chapter="s4" data-sign-label="Unit" data-sign-num="4" id="nugget-margin"><div class="tag-price"><span class="tag-big">40</span><span class="tag-unit">questions an argmax can overfit</span></div><div class="tag-body"><div class="tag-title">Nugget 4 · From the lesson C04 §9, §11</div><div class="tag-eye">The lesson</div><p class="">Turn the dials per task, but report the margin, not just the winner.</p><p><b>Why it matters. </b>Small validation sets make the argmax noisy. A search that overfits 40 questions loses on test.</p><p><b>Transfer. </b>Model selection anywhere needs the same humility. The winner and its error bar travel together.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 04</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="A budget is a pie" id="s5"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">5</span></div><div><p class="ch-meta"><span class="ts">Unit 5</span> · C05 and C12</p><h2>A budget is a pie</h2></div></div>
 <div class="prose-narrow">
@@ -548,8 +550,8 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C12 §11</span></p>
 <p>The smooth curve between integer budgets is a drawing aid, not a claim. Real verifier accuracy can fall as N rises, which would bend the high-budget end down.</p>
 </div>
-<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-knife"><div class="tag-price"><span class="tag-big">5</span><span class="tag-unit">Nugget 5 · From the lesson C05 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §6</div><div class="tag-eye">The lesson</div><p class="">A sharper knife beats more slices, on this toy. Twenty cheap samples lose to eight well-judged ones.</p><p><b>Why it matters. </b>The allocation rule is mechanical: compute success per plan, pick the max under the budget. The inputs are noisy, so the plan deserves its own validation run.</p><p><b>Transfer. </b>Any fixed budget split between quantity and quality reads the same way.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
-<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-crossing"><div class="tag-price"><span class="tag-big">6</span><span class="tag-unit">Nugget 6 · From the lesson C12 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C12 §6</div><div class="tag-eye">The lesson</div><p class="">Read the crossing, not the peak. The winner at budget 50 loses at budget 100.</p><p><b>Why it matters. </b>A single-budget comparison answers one question. The curve answers the budget as a decision variable.</p><p><b>Transfer. </b>Learning curves in training show the same read-off logic.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
+<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-knife"><div class="tag-price"><span class="tag-big">20/8</span><span class="tag-unit">cheap samples lose to eight well-judged</span></div><div class="tag-body"><div class="tag-title">Nugget 5 · From the lesson C05 §6</div><div class="tag-eye">The lesson</div><p class="">A sharper knife beats more slices, on this toy. Twenty cheap samples lose to eight well-judged ones.</p><p><b>Why it matters. </b>The allocation rule is mechanical: compute success per plan, pick the max under the budget. The inputs are noisy, so the plan deserves its own validation run.</p><p><b>Transfer. </b>Any fixed budget split between quantity and quality reads the same way.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
+<aside class="tag" data-chapter="s5" data-sign-label="Unit" data-sign-num="5" id="nugget-crossing"><div class="tag-price"><span class="tag-big">50/100</span><span class="tag-unit">the winner at 50 loses at 100</span></div><div class="tag-body"><div class="tag-title">Nugget 6 · From the lesson C12 §6</div><div class="tag-eye">The lesson</div><p class="">Read the crossing, not the peak. The winner at budget 50 loses at budget 100.</p><p><b>Why it matters. </b>A single-budget comparison answers one question. The curve answers the budget as a decision variable.</p><p><b>Transfer. </b>Learning curves in training show the same read-off logic.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 05</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Writing is hard. Checking is easier." id="s6"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">6</span></div><div><p class="ch-meta"><span class="ts">Unit 6</span> · C06 and C07</p><h2>Writing is hard. Checking is easier.</h2></div></div>
 <figure class="paint inset" data-entrance="bloom">
@@ -565,8 +567,8 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C07 §6</span></p>
 <p>A cost toy in the same section: budget 100, generation cost 4. Strong verifier at cost 8 and accuracy 0.90: N = 8, success 0.87133. Weak verifier at cost 1 and accuracy 0.62: N = 20, success 0.61989. The strong judge wins on the toy, but the weak judge stays deployable under a latency cap.</p>
 </div>
-<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-weak-checker"><div class="tag-price"><span class="tag-big">7</span><span class="tag-unit">Nugget 7 · From the lesson C06 §6</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C06 §6</div><div class="tag-eye">The lesson</div><p class="">A weak checker still beats no checker. Coverage from the generator plus discrimination from the judge beats either alone.</p><p><b>Why it matters. </b>The weak verifier is cheap by design, so the optimal allocation shifts toward larger N with the weak judge. Verification is often the easier task class.</p><p><b>Transfer. </b>Cheap heuristic filters before an expensive exact check, as in search algorithms.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
-<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-two-conditions"><div class="tag-price"><span class="tag-big">8</span><span class="tag-unit">Nugget 8 · From the lesson C07 §4, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C07 §4, §11</div><div class="tag-eye">The lesson</div><p class="">Weakness is acceptable under two conditions: the judge beats chance on the pile, and its errors stay uncorrelated with the generator’s.</p><p><b>Why it matters. </b>Break the second condition and the product formula overstates success. A verifier that learned the generator’s style upvotes the generator’s characteristic wrong answers.</p><p><b>Transfer. </b>Any two-stage filter needs independent failure modes, or the stages share one blind spot.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
+<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-weak-checker"><div class="tag-price"><span class="tag-big">weak</span><span class="tag-unit">still beats no checker</span></div><div class="tag-body"><div class="tag-title">Nugget 7 · From the lesson C06 §6</div><div class="tag-eye">The lesson</div><p class="">A weak checker still beats no checker. Coverage from the generator plus discrimination from the judge beats either alone.</p><p><b>Why it matters. </b>The weak verifier is cheap by design, so the optimal allocation shifts toward larger N with the weak judge. Verification is often the easier task class.</p><p><b>Transfer. </b>Cheap heuristic filters before an expensive exact check, as in search algorithms.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
+<aside class="tag" data-chapter="s6" data-sign-label="Unit" data-sign-num="6" id="nugget-two-conditions"><div class="tag-price"><span class="tag-big">2 rules</span><span class="tag-unit">beats chance, errors uncorrelated</span></div><div class="tag-body"><div class="tag-title">Nugget 8 · From the lesson C07 §4, §11</div><div class="tag-eye">The lesson</div><p class="">Weakness is acceptable under two conditions: the judge beats chance on the pile, and its errors stay uncorrelated with the generator’s.</p><p><b>Why it matters. </b>Break the second condition and the product formula overstates success. A verifier that learned the generator’s style upvotes the generator’s characteristic wrong answers.</p><p><b>Transfer. </b>Any two-stage filter needs independent failure modes, or the stages share one blind spot.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 06</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Grade the homework, not only the exam" id="s7"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">7</span></div><div><p class="ch-meta"><span class="ts">Unit 7</span> · C08</p><h2>Grade the homework, not only the exam</h2></div></div>
 <div class="prose-narrow">
@@ -585,7 +587,7 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C08 §6</span></p>
 <p>The tradeoff in numbers: 100 traces, 40 end correct. Suppose 10 of the 40 have a flawed middle step. With human step labels at 0.95 accuracy, about 2 of the 40 correct traces get a wrong step mark. The dense signal is richer per trace and noisier per label.</p>
 </div>
-<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-dense"><div class="tag-price"><span class="tag-big">9</span><span class="tag-unit">Nugget 9 · From the lesson C08 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C08 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Dense signal teaches faster and lies more often. Each step label is a new chance to inject bias.</p><p><b>Why it matters. </b>An automatic labeler that marks unusual phrasing wrong teaches the policy to write usual phrasing, not correct steps. The tradeoff is bias versus variance of the teaching signal.</p><p><b>Transfer. </b>Grading a student on shown work versus the final answer.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
+<aside class="tag" data-chapter="s7" data-sign-label="Unit" data-sign-num="7" id="nugget-dense"><div class="tag-price"><span class="tag-big">1 step</span><span class="tag-unit">each step label is a new bias chance</span></div><div class="tag-body"><div class="tag-title">Nugget 9 · From the lesson C08 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Dense signal teaches faster and lies more often. Each step label is a new chance to inject bias.</p><p><b>Why it matters. </b>An automatic labeler that marks unusual phrasing wrong teaches the policy to write usual phrasing, not correct steps. The tradeoff is bias versus variance of the teaching signal.</p><p><b>Transfer. </b>Grading a student on shown work versus the final answer.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 07</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="Train the judge, then check its honesty" id="s8"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">8</span></div><div><p class="ch-meta"><span class="ts">Unit 8</span> · C09 and C10</p><h2>Train the judge, then check its honesty</h2></div></div>
 <div class="prose-narrow">
@@ -611,8 +613,8 @@ span.ptag, .ptag {
 <div id="chart-ece"></div>
 <figcaption><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C10 §6</span> Reliability diagram for the 10-sample toy. High bin: confidence 0.868, accuracy 0.80, gap 0.068. Low bin: confidence 0.40, accuracy 0.20, gap 0.20. ECE = 0.5 × 0.068 + 0.5 × 0.20 = 0.134. The verifier is overconfident, worse in the low bin.</figcaption>
 </figure>
-<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-match"><div class="tag-price"><span class="tag-big">10</span><span class="tag-unit">Nugget 10 · From the lesson C09 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C09 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The judge’s exam must match its deployment. A verifier trained on human solutions and deployed on model samples faces shift.</p><p><b>Why it matters. </b>The mechanism works when the training samples look like the samples the verifier will score later. Label noise caps learned accuracy no matter the model size.</p><p><b>Transfer. </b>Training a spam filter has the same shape: labeled items, same loss, same shift risk.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
-<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-calibration"><div class="tag-price"><span class="tag-big">11</span><span class="tag-unit">Nugget 11 · From the lesson C10 §3, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C10 §3, §11</div><div class="tag-eye">The lesson</div><p class="">A score of 0.9 must mean 0.9. Ranking well is not the same as telling the truth.</p><p><b>Why it matters. </b>A verifier with perfect AUC but all scores in [0.49, 0.51] ranks well and calibrates terribly. Calibration drives thresholds, abstention, and expected-value math.</p><p><b>Transfer. </b>Calibrated medical risk scores use the same math.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
+<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-match"><div class="tag-price"><span class="tag-big">1 shift</span><span class="tag-unit">trained on humans, scored on models</span></div><div class="tag-body"><div class="tag-title">Nugget 10 · From the lesson C09 §5, §11</div><div class="tag-eye">The lesson</div><p class="">The judge’s exam must match its deployment. A verifier trained on human solutions and deployed on model samples faces shift.</p><p><b>Why it matters. </b>The mechanism works when the training samples look like the samples the verifier will score later. Label noise caps learned accuracy no matter the model size.</p><p><b>Transfer. </b>Training a spam filter has the same shape: labeled items, same loss, same shift risk.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
+<aside class="tag" data-chapter="s8" data-sign-label="Unit" data-sign-num="8" id="nugget-calibration"><div class="tag-price"><span class="tag-big">0.9=0.9</span><span class="tag-unit">a score of 0.9 must mean 0.9</span></div><div class="tag-body"><div class="tag-title">Nugget 11 · From the lesson C10 §3, §11</div><div class="tag-eye">The lesson</div><p class="">A score of 0.9 must mean 0.9. Ranking well is not the same as telling the truth.</p><p><b>Why it matters. </b>A verifier with perfect AUC but all scores in [0.49, 0.51] ranks well and calibrates terribly. Calibration drives thresholds, abstention, and expected-value math.</p><p><b>Transfer. </b>Calibrated medical risk scores use the same math.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 08</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="The judge’s taste leaks into the verdict" id="s9"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">9</span></div><div><p class="ch-meta"><span class="ts">Unit 9</span> · C11</p><h2>The judge’s taste leaks into the verdict</h2></div></div>
 <div class="prose-narrow">
@@ -631,7 +633,7 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-src">From the lesson</span><span class="tag-ref">C11 §5</span></p>
 <p>Write score s = q + w × z, with q the quality signal and z the bias feature. As N grows, the max of z over the set grows too, while max q caps at 1. Selection bias gets worse with N: larger candidate sets give the bias more room to dominate.</p>
 </div>
-<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-bias"><div class="tag-price"><span class="tag-big">12</span><span class="tag-unit">Nugget 12 · From the lesson C11 §5, §11</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C11 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Bigger candidate sets give bias more room to dominate. The bias term wins more often as N grows.</p><p><b>Why it matters. </b>The subtle case: z correlates with quality in training but not at deployment. The verifier looks fine on training metrics and fails in production.</p><p><b>Transfer. </b>Hiring filters that reward keyword count show the same failure.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
+<aside class="tag" data-chapter="s9" data-sign-label="Unit" data-sign-num="9" id="nugget-bias"><div class="tag-price"><span class="tag-big">N↑</span><span class="tag-unit">bias wins more often as N grows</span></div><div class="tag-body"><div class="tag-title">Nugget 12 · From the lesson C11 §5, §11</div><div class="tag-eye">The lesson</div><p class="">Bigger candidate sets give bias more room to dominate. The bias term wins more often as N grows.</p><p><b>Why it matters. </b>The subtle case: z correlates with quality in training but not at deployment. The verifier looks fine on training metrics and fails in production.</p><p><b>Transfer. </b>Hiring filters that reward keyword count show the same failure.</p><div class="tag-sku"><svg aria-hidden="true" class="bars"></svg><span>UNIT 09</span></div></div></aside>
 </section>
 <section class="block col" data-chapter="1" data-title="What this buys you" id="s10"><div class="ch-head"><div class="aisle"><span class="l">Unit</span><span class="n">10</span></div><div><p class="ch-meta"><span class="ts">Unit 10</span> · The arc</p><h2>What this buys you</h2></div></div>
 <div class="prose-narrow">
@@ -639,7 +641,6 @@ span.ptag, .ptag {
 <p><span class="ptag ptag-companion">companion</span> Where the unit points next: the lesson defers policy gradients and advantage to U03. The verifier machinery built here returns as execution feedback in U02 and as reward design in U03.</p>
 </div>
 </section>
-
 <section class="col" id="playbook-sec">
 <h3 class="sub">The playbook</h3>
 <p>Every lesson on this page, in order. Tap one to return to its chapter.</p>
@@ -1584,5 +1585,46 @@ drawEce()
   });
 })();
 
+</script><script>
+<script>
+/* Phase 2 scenes (Builder 2): CompanionFX overlay life. Pure code, zero image cost. */
+(function(){
+var FX = window.CompanionFX; if(!FX) return;
+FX.registerScene("p2-a-u01-hero", {
+  init: function(F, FX) {
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[700, 450, 20], [1100, 450, 22], [1300, 700, 20]]);
+    F._fx_glows = FX.glows(F.stage, F.W, F.H, [[960, 700, 170]], 'screen', '#FFE9B0');
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    F._fx_glows.forEach(function(c,i){
+      c.style.opacity = (0.3+0.22*FX.flicker(t, i*2.3)).toFixed(3);
+    });
+    return {"tickets": {y: -4*Math.abs(Math.sin(t*0.5))}};
+  }
+});
+FX.registerScene("p2-a-u01-election", {
+  init: function(F, FX) {
+    F._fx_motes = FX.motes(F.stage, F.W, F.H, 10, 41);
+    F._fx_spark = FX.sparkles(F.stage, F.W, F.H, [[700, 600, 20]]);
+  },
+  pose: function(S, FX) {
+    var t = S.t, F = S.F, et = S.et;
+    F._fx_motes.tick(t);
+    var k = FX.smoothstep(0, 1, Math.min(1, et/1.4));
+    F._fx_spark.forEach(function(st,i){
+      var tw = 0.55 + 0.45*FX.flicker(t, i*1.7);
+      st.style.transform = 'scale(' + (k*tw).toFixed(3) + ')';
+    });
+    return {};
+  }
+});
+})();
+</script>
 </script></body>
 </html>

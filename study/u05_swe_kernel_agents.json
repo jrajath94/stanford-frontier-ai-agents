@@ -1,0 +1,755 @@
+{
+  "itemId": "u05_swe_kernel_agents",
+  "itemKind": "lesson",
+  "revision": "7e63ea3ae8748c7039adc45634a3571b18e67d3502d6af8c2d12db618e703fd7",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u05_swe_kernel_agents-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u05_swe_kernel_agents-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u05_swe_kernel_agents-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official session 13.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u05_swe_kernel_agents-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u05_swe_kernel_agents-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official session 13 (Nov 3), Agentic Frameworks for Software Engineering.",
+          "id": "cs329a_u05_swe_kernel_agents-intro-r1",
+          "question": "Which course and session does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Find the relevant files, write candidate fixes, pick the winner.",
+          "term": "context, generation, and selection"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Hand the model a PyTorch reference and grade correctness and speed separately.",
+          "term": "KernelBench"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Tests that lie at random; defend with repetition and quarantine.",
+          "term": "flaky tests"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "A cage with measured bars: no network, no host writes, no endless runs.",
+          "term": "sandbox"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Split a software task into context, generation, and selection; scale serial and parallel test-time compute for code; ground edits in executed tests; read KernelBench; trade performance against correctness; write an agent-system interface; profile before optimizing; handle flaky tests; keep hidden tests hidden; sandbox untrusted code; reproduce a run; and roll back a bad change.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "PyTorch, tensors, and numerics prerequisite.",
+          "term": "P12"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Hardware prerequisite.",
+          "term": "P15"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Tools and agent state prerequisite.",
+          "term": "P20"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Experimental method prerequisite.",
+          "term": "P22"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P12 (PyTorch, tensors, numerics), P15 (hardware), P20 (tools, agent state), and P22 (experimental method). Local remediation sits inside C07 and C11.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "1 - (1 - p)^K; parallel samples raise it even when p is fixed.",
+          "term": "coverage"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "T_old / T_new; the ranking among kernels that pass the correctness gate.",
+          "term": "speedup"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: code is checkable, so the agent should write tests next to edits and let execution decide. Equation: coverage = 1 - (1 - p)^K, speedup = T_old / T_new. Code: a loop of edit, run tests, repair. Observation: parallel samples amortize context cost, and speed without correctness is worth zero.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-codemonkeys",
+      "blocks": [
+        {
+          "anchor": "c01-codemonkeys-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c01-codemonkeys-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c01-codemonkeys-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-codemonkeys-p03",
+          "definition": "More repair iterations per attempt; raises p, the per-trajectory solve rate.",
+          "term": "serial scaling"
+        },
+        {
+          "anchor": "c01-codemonkeys-p01",
+          "definition": "More trajectories; raises coverage through the 1 - (1 - p)^K law.",
+          "term": "parallel scaling"
+        },
+        {
+          "anchor": "c01-codemonkeys-p02",
+          "definition": "Fraction of issues with at least one good candidate.",
+          "term": "coverage"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c01-codemonkeys-p03",
+          "answer": "Split the job into context (find relevant files), generation (write candidate fixes), and selection (pick the winner). Scale each part on its own axis: serial scaling is more repair iterations per attempt, parallel scaling is more attempts.",
+          "id": "c01-codemonkeys-r1",
+          "question": "How does CodeMonkeys split and scale the job?"
+        },
+        {
+          "anchor": "c01-codemonkeys-p12",
+          "answer": "Break test honesty: the trajectory's own tests are written by the same model that writes the edit, so a weak suite passes a wrong edit and serial iterations polish a bad fix. K trajectories copying one wrong plan make parallel scaling theater.",
+          "id": "c01-codemonkeys-r2",
+          "question": "What breaks the scaling axes?"
+        }
+      ],
+      "title": "C01 CodeMonkeys"
+    },
+    {
+      "anchor": "c02-test-time-code-search",
+      "blocks": [
+        {
+          "anchor": "c02-test-time-code-search-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-test-time-code-search-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-test-time-code-search-p05",
+          "definition": "Test voting filters cheaply, then a dedicated trajectory compares survivors with fresh tests.",
+          "term": "two-stage selection"
+        },
+        {
+          "anchor": "c02-test-time-code-search-p01",
+          "definition": "Of the candidates the filter keeps, how many are actually right.",
+          "term": "precision"
+        },
+        {
+          "anchor": "c02-test-time-code-search-p04",
+          "definition": "Of the right candidates, how many the filter keeps.",
+          "term": "recall"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-test-time-code-search-p03",
+          "answer": "Sampling makes options, tests rank options, a final chooser picks the winner. The three stages fail differently: sampling can miss, tests can misrank, the chooser can tie-break badly. Fix the stage that loses the most.",
+          "id": "c02-test-time-code-search-r1",
+          "question": "What are the three stages and how do they fail?"
+        },
+        {
+          "anchor": "c02-test-time-code-search-p12",
+          "answer": "Break filter honesty: generated tests encode the same wrong assumption as the candidates, so the filter keeps the wrong ones confidently. A filter with recall 0 drops every candidate and the search returns nothing.",
+          "id": "c02-test-time-code-search-r2",
+          "question": "What breaks test-time code search?"
+        }
+      ],
+      "title": "C02 test-time code search"
+    },
+    {
+      "anchor": "c03-execution-grounded-feedback",
+      "blocks": [
+        {
+          "anchor": "c03-execution-grounded-feedback-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c03-execution-grounded-feedback-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-execution-grounded-feedback-p05",
+          "definition": "Execution injects outside information (the trace) so each iteration can improve.",
+          "term": "closed-loop repair"
+        },
+        {
+          "anchor": "c03-execution-grounded-feedback-p04",
+          "definition": "e' = fix(e, r); maps an edit and its trace to the next edit.",
+          "term": "repair operator"
+        },
+        {
+          "anchor": "c03-execution-grounded-feedback-p01",
+          "definition": "r = run(e, t); the fact (pass, fail, trace) the next draft must respect.",
+          "term": "trace"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c03-execution-grounded-feedback-p05",
+          "answer": "Without execution the model judges its own draft with the prior that wrote it: no new information enters. Execution injects the trace from outside, so each iteration can correct the last.",
+          "id": "c03-execution-grounded-feedback-r1",
+          "question": "Why does execution ground the repair loop?"
+        },
+        {
+          "anchor": "c03-execution-grounded-feedback-p12",
+          "answer": "Break trace informativeness: a bare AssertionError with no line info makes repair guess and iterations wander. A suite passing everything gives grounding with no signal: single-shot with extra steps.",
+          "id": "c03-execution-grounded-feedback-r2",
+          "question": "What breaks execution grounding?"
+        }
+      ],
+      "title": "C03 execution-grounded feedback"
+    },
+    {
+      "anchor": "c04-kernelbench",
+      "blocks": [
+        {
+          "anchor": "c04-kernelbench-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c04-kernelbench-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c04-kernelbench-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-kernelbench-p01",
+          "definition": "Hand the model a PyTorch reference; grade the CUDA/Triton kernel on correctness and speed.",
+          "term": "KernelBench"
+        },
+        {
+          "anchor": "c04-kernelbench-p04",
+          "definition": "s = T_ref / T_kernel; how many times faster than the reference.",
+          "term": "speedup"
+        },
+        {
+          "anchor": "c04-kernelbench-p04",
+          "definition": "Share of problems both correct and with speedup s >= p.",
+          "term": "fast_p"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c04-kernelbench-p05",
+          "answer": "Two-gate grading: gate one runs the kernel on random inputs against the reference, gate two times both on the same hardware. The split exists because optimizing one gate is easy and optimizing both is hard.",
+          "id": "c04-kernelbench-r1",
+          "question": "How does KernelBench grade a kernel?"
+        },
+        {
+          "anchor": "c04-kernelbench-p12",
+          "answer": "Break tolerance honesty: a zero-returning kernel passes when tolerance is absolute and true outputs are near zero. A kernel dispatching to the PyTorch reference inside is correct at speedup 1.0 with zero new work.",
+          "id": "c04-kernelbench-r2",
+          "question": "How can a kernel game KernelBench?"
+        }
+      ],
+      "title": "C04 KernelBench"
+    },
+    {
+      "anchor": "c05-performance-versus-correctness",
+      "blocks": [
+        {
+          "anchor": "c05-performance-versus-correctness-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c05-performance-versus-correctness-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-performance-versus-correctness-p03",
+          "definition": "No weight on speed compensates for a wrong answer; gate first, then rank.",
+          "term": "lexicographic"
+        },
+        {
+          "anchor": "c05-performance-versus-correctness-p03",
+          "definition": "Correctness is one; nothing passes it by being fast.",
+          "term": "gate"
+        },
+        {
+          "anchor": "c05-performance-versus-correctness-p04",
+          "definition": "The correct kernels; the choice is argmax speedup over this set.",
+          "term": "deployable set"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-performance-versus-correctness-p05",
+          "answer": "Gate-then-rank: a wrong kernel in production corrupts results silently, while a slow correct kernel only costs time. The cost of wrongness dominates the cost of slowness. In the toy, kernel C (1.4x, correct) ships over B (1.8x, wrong).",
+          "id": "c05-performance-versus-correctness-r1",
+          "question": "Why is the tradeoff lexicographic?"
+        },
+        {
+          "anchor": "c05-performance-versus-correctness-p12",
+          "answer": "Break input coverage: the tests miss the input class where the winner is wrong, so the gate passes a bad kernel. A kernel correct on tests but wrong on deployment inputs is still wrong; the gate was blind.",
+          "id": "c05-performance-versus-correctness-r2",
+          "question": "What breaks the correctness gate?"
+        }
+      ],
+      "title": "C05 performance versus correctness"
+    },
+    {
+      "anchor": "c06-agent-system-interface",
+      "blocks": [
+        {
+          "anchor": "c06-agent-system-interface-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c06-agent-system-interface-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-agent-system-interface-p01",
+          "definition": "The law the agent lives under: tools, limits, and the shape of every observation.",
+          "term": "interface"
+        },
+        {
+          "anchor": "c06-agent-system-interface-p05",
+          "definition": "Every action goes through the interface, the single place for safety, cost, and observability.",
+          "term": "contract-first"
+        },
+        {
+          "anchor": "c06-agent-system-interface-p04",
+          "definition": "Fixed per tool: (exit code, last 20 lines of stdout, last 20 lines of stderr).",
+          "term": "observation schema"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c06-agent-system-interface-p03",
+          "answer": "A clear interface makes agent behavior predictable and failures diagnosable. A vague interface makes both impossible. In the toy: tools {run_tests, read_file, write_file, shell}, 30s timeout, 1 GB memory cap.",
+          "id": "c06-agent-system-interface-r1",
+          "question": "Why does the interface matter?"
+        },
+        {
+          "anchor": "c06-agent-system-interface-p12",
+          "answer": "Break enforcement: a documented-but-unenforced interface lets the agent discover the shell ignores the /task limit and write to the host. A 40-tool interface cannot be learned; every call is a guess.",
+          "id": "c06-agent-system-interface-r2",
+          "question": "What breaks the agent-system interface?"
+        }
+      ],
+      "title": "C06 agent-system interface"
+    },
+    {
+      "anchor": "c07-profiling",
+      "blocks": [
+        {
+          "anchor": "c07-profiling-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c07-profiling-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c07-profiling-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-profiling-p01",
+          "definition": "S = 1 / ((1 - f) + f / s); the unoptimized rest caps everything as s grows.",
+          "term": "Amdahl"
+        },
+        {
+          "anchor": "c07-profiling-p01",
+          "definition": "FLOPs per byte moved; tells whether a part is compute-bound or memory-bound.",
+          "term": "arithmetic intensity"
+        },
+        {
+          "anchor": "c07-profiling-p01",
+          "definition": "A receipt for time: says who spent what; measure first, cut second.",
+          "term": "profile"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c07-profiling-p03",
+          "answer": "Measure first, cut second. Amdahl's law turns the receipt into a bound: doubling one part cannot beat 1 / (rest + part/2). In the toy the matmul at 60 percent is optimized first.",
+          "id": "c07-profiling-r1",
+          "question": "What is the profiling workflow?"
+        },
+        {
+          "anchor": "c07-profiling-p12",
+          "answer": "Break measurement: a profile on size-32 inputs misleads when deployment uses 4096 and the hotspot moves. A profile with every part at 20 percent has no dominant part; the bound for any single part is weak.",
+          "id": "c07-profiling-r2",
+          "question": "What breaks profile-guided optimization?"
+        }
+      ],
+      "title": "C07 profiling"
+    },
+    {
+      "anchor": "c08-flaky-tests",
+      "blocks": [
+        {
+          "anchor": "c08-flaky-tests-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-flaky-tests-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-flaky-tests-p02",
+          "definition": "Lies at random; one lie sends the repair loop to fix fine code.",
+          "term": "flaky"
+        },
+        {
+          "anchor": "c08-flaky-tests-p02",
+          "definition": "f: P(fail | code good) per run; false alarm falls as f^r.",
+          "term": "flake rate"
+        },
+        {
+          "anchor": "c08-flaky-tests-p05",
+          "definition": "Mark a test unreliable after repeated unexplained failures; pay 3x runs for honesty.",
+          "term": "quarantine"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-flaky-tests-p03",
+          "answer": "Repetition: ask the same question three times and take the majority. The defense costs runs, so apply it only to tests with a flake history. In the toy, 3 reruns cut the false-alarm rate to 0.001.",
+          "id": "c08-flaky-tests-r1",
+          "question": "How do you defend against flaky tests?"
+        },
+        {
+          "anchor": "c08-flaky-tests-p12",
+          "answer": "Break independence: a race failing under load fails all 3 reruns on the loaded machine, condemning good code. A test failing 100 percent on good code is not flaky but wrong; quarantine then hides a bug.",
+          "id": "c08-flaky-tests-r2",
+          "question": "What breaks the rerun defense?"
+        }
+      ],
+      "title": "C08 flaky tests"
+    },
+    {
+      "anchor": "c09-hidden-test-leakage",
+      "blocks": [
+        {
+          "anchor": "c09-hidden-test-leakage-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c09-hidden-test-leakage-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-hidden-test-leakage-p02",
+          "definition": "The match; the agent may never see its questions.",
+          "term": "hidden suite"
+        },
+        {
+          "anchor": "c09-hidden-test-leakage-p01",
+          "definition": "Any information from H reaching the edit: direct read, test name, cached failure.",
+          "term": "leakage"
+        },
+        {
+          "anchor": "c09-hidden-test-leakage-p05",
+          "definition": "With no leakage the visible score is a noisy but unbiased estimate of the hidden score.",
+          "term": "information hygiene"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c09-hidden-test-leakage-p03",
+          "answer": "Visible tests are the practice field, hidden tests are the match. The agent may train on the field freely, but seeing match questions voids the score. In the toy the visible 1.00 versus hidden 0.85 gap is the leakage-free truth.",
+          "id": "c09-hidden-test-leakage-r1",
+          "question": "What is the visible/hidden split?"
+        },
+        {
+          "anchor": "c09-hidden-test-leakage-p12",
+          "answer": "Break the lock: an engineer pasting a hidden failure into context lets the edit target H and the wall falls. Hidden tests identical to visible ones make the split theater.",
+          "id": "c09-hidden-test-leakage-r2",
+          "question": "What breaks hidden-test separation?"
+        }
+      ],
+      "title": "C09 hidden test leakage"
+    },
+    {
+      "anchor": "c10-sandboxing",
+      "blocks": [
+        {
+          "anchor": "c10-sandboxing-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-sandboxing-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-sandboxing-p01",
+          "definition": "A cage with measured bars: the agent is strong inside, harmless outside.",
+          "term": "sandbox"
+        },
+        {
+          "anchor": "c10-sandboxing-p05",
+          "definition": "Each layer blocks one failure class: filesystem, network, time, log.",
+          "term": "defense in depth"
+        },
+        {
+          "anchor": "c10-sandboxing-p04",
+          "definition": "Append-only; makes every action reviewable.",
+          "term": "audit log"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-sandboxing-p02",
+          "answer": "No network, writes only under /task, read-only mount for the repo, wall-clock kill at 60 seconds, every action logged. The delete hits the read-only mount.",
+          "id": "c10-sandboxing-r1",
+          "question": "What are the toy sandbox rules?"
+        },
+        {
+          "anchor": "c10-sandboxing-p12",
+          "answer": "Break the kernel: a same-user-namespace privileged helper lets the agent escape. A sandbox with no log holds its bars but nobody can prove what happened inside.",
+          "id": "c10-sandboxing-r2",
+          "question": "What breaks sandboxing?"
+        }
+      ],
+      "title": "C10 sandboxing"
+    },
+    {
+      "anchor": "c11-reproducibility",
+      "blocks": [
+        {
+          "anchor": "c11-reproducibility-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-reproducibility-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-reproducibility-p01",
+          "definition": "A receipt for the run: seed, versions, inputs, environment.",
+          "term": "reproducibility"
+        },
+        {
+          "anchor": "c11-reproducibility-p01",
+          "definition": "Every random draw comes from a seeded generator.",
+          "term": "seed contract"
+        },
+        {
+          "anchor": "c11-reproducibility-p04",
+          "definition": "Model, library, and compiler versions pinned; fixes the code paths.",
+          "term": "version pins"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-reproducibility-p03",
+          "answer": "With the receipt (seed 7, torch 2.3.1, CUDA 12.1, same snapshot), a rerun is a replay: byte-identical edits, test outputs matching to 1e-6. Without it, a rerun is a new experiment that looks similar.",
+          "id": "c11-reproducibility-r1",
+          "question": "What makes a rerun a replay?"
+        },
+        {
+          "anchor": "c11-reproducibility-p12",
+          "answer": "Break the seed: a library drawing from an unseeded OS source makes the rerun differ mysteriously. A receipt with versions but no seed captures half the randomness; the run still wanders.",
+          "id": "c11-reproducibility-r2",
+          "question": "What breaks reproducibility?"
+        }
+      ],
+      "title": "C11 reproducibility"
+    },
+    {
+      "anchor": "c12-rollback",
+      "blocks": [
+        {
+          "anchor": "c12-rollback-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-rollback-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-rollback-p02",
+          "definition": "A saved game; load the last good save instead of debugging the corruption.",
+          "term": "checkpoint"
+        },
+        {
+          "anchor": "c12-rollback-p01",
+          "definition": "(m - g) * c; 2 step-runs in the toy when the checkpoint after step 2 is used.",
+          "term": "recovery cost"
+        },
+        {
+          "anchor": "c12-rollback-p05",
+          "definition": "The checkpoint is known-good; everything after it is suspect.",
+          "term": "restore-from-snapshot"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c12-rollback-p03",
+          "answer": "A checkpoint is a saved game. Save after every step that passes its checks. When step 4 of 5 corrupts state, roll back to the checkpoint after step 2 and re-run steps 3 and 4.",
+          "id": "c12-rollback-r1",
+          "question": "How does rollback recover from corruption?"
+        },
+        {
+          "anchor": "c12-rollback-p12",
+          "answer": "Break detection: silent corruption lets 3 more steps build on it, so rollback loses good work too. Checkpoints of memory but not the repo restore half a state, and the halves disagree.",
+          "id": "c12-rollback-r2",
+          "question": "What breaks rollback?"
+        }
+      ],
+      "title": "C12 rollback"
+    },
+    {
+      "anchor": "u05-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u05-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u05-not-yet-understood-dependency-list-list01",
+          "definition": "PyTorch tensors and numerics; remediated in C04 items 4-6.",
+          "term": "PyTorch tensors"
+        },
+        {
+          "anchor": "u05-not-yet-understood-dependency-list-list01",
+          "definition": "GPU hardware and arithmetic intensity; local remediation in C07 item 4.",
+          "term": "GPU hardware"
+        },
+        {
+          "anchor": "u05-not-yet-understood-dependency-list-list01",
+          "definition": "Experimental method, seeds, controls; local remediation in C11.",
+          "term": "experimental method"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u05-not-yet-understood-dependency-list-list01",
+          "answer": "Tool-call loops and agent state are remediated in C06 items 4-9. PyTorch tensors and numerics are remediated in C04 items 4-6.",
+          "id": "u05-not-yet-understood-dependency-list-r1",
+          "question": "Where are tool-call loops and PyTorch tensors remediated?"
+        }
+      ],
+      "title": "U05 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u05-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u05-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u05-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C01, deeper shells through C01 items 6, 11, 12, C02 item 10, and C05.",
+          "term": "test-time scaling"
+        },
+        {
+          "anchor": "u05-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C03, deeper shells through C03 items 6, 10, 11, 12, and C12.",
+          "term": "execution-grounded repair"
+        },
+        {
+          "anchor": "u05-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Correctness and speed graded separately; shells 0-5 in C04.",
+          "term": "two-axis scoring"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "u05-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "Serial and parallel test-time scaling for code, execution-grounded repair, and KernelBench two-axis scoring. Each runs shells 0-10, ending at production forms like C05, C12 rollback, and the hidden-test judge.",
+          "id": "u05-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U05 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

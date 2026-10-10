@@ -1,0 +1,543 @@
+{
+  "itemId": "u02_silicon_power_datacenters",
+  "itemKind": "lesson",
+  "revision": "6a4e597a5e32d57115246a2e7c6750e87a4615ba6ec5ddbf2b88f98afa9239cc",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "mse435_u02_silicon_power_datacenters-intro",
+      "blocks": [],
+      "endAnchor": "mse435_u02_silicon_power_datacenters-intro-end",
+      "keyTerms": [
+        {
+          "term": "mse435-U02",
+          "definition": "Parent unit; silicon, power, and datacenters.",
+          "anchor": "mse435_u02_silicon_power_datacenters-intro-p01"
+        },
+        {
+          "term": "P15",
+          "definition": "Bridge prerequisite with P23.",
+          "anchor": "mse435_u02_silicon_power_datacenters-intro-p01"
+        },
+        {
+          "term": "OFFICIAL-SCHEDULE",
+          "definition": "Sessions 2-3: Silicon, The GPU Economy and Building AI Factories.",
+          "anchor": "mse435_u02_silicon_power_datacenters-intro-p02"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "id": "mse435_u02_silicon_power_datacenters-intro-r1",
+          "question": "What are the unit's ground rules?",
+          "answer": "Parent unit mse435-U02. Bridges P15, P23. Claim class OFFICIAL-SCHEDULE for sessions 2-3.",
+          "anchor": "mse435_u02_silicon_power_datacenters-intro-p01"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list-unit-level",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-unit-level-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U02-R1; needed for C05-C07.",
+          "term": "power versus energy"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U01-C04; needed for C08.",
+          "term": "NPV comparison"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "answer": "Unit checking for cost arithmetic and discounting for present value across the lifecycle cards.",
+          "id": "not-yet-understood-dependency-list-unit-level-r1",
+          "question": "What dependencies does U02 need?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list (unit level)"
+    },
+    {
+      "anchor": "mse435-u02-c01-gpu-economy",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c01-gpu-economy-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u02-c01-gpu-economy-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u02-c01-gpu-economy-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c01-gpu-economy-p06",
+          "definition": "capex/(life x 8760 x U) + kW x elec + staff; falls with utilization.",
+          "term": "c_h(U)"
+        },
+        {
+          "anchor": "mse435-u02-c01-gpu-economy-p05",
+          "definition": "Dollars per GPU-hour.",
+          "term": "c_h"
+        },
+        {
+          "anchor": "mse435-u02-c01-gpu-economy-p05",
+          "definition": "Utilization, 0 to 1; the fixed-cost spread divisor.",
+          "term": "U"
+        }
+      ],
+      "minutes": 5,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c01-gpu-economy-p06",
+          "answer": "Capex 25,000, 4 years, 1.4 kW at $0.10/kWh, staff $0.10. At U=0.40: $2.02/hour. At U=0.85: $1.08/hour. The chip cost per hour falls as the fleet fills; power and staff do not.",
+          "id": "mse435-u02-c01-gpu-economy-r1",
+          "question": "What does one GPU-hour cost?"
+        }
+      ],
+      "title": "mse435-U02-C01 , GPU economy"
+    },
+    {
+      "anchor": "mse435-u02-c02-custom-accelerators",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c02-custom-accelerators-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c02-custom-accelerators-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c02-custom-accelerators-p02",
+          "definition": "One-time dollars; the fixed cost to beat.",
+          "term": "NRE"
+        },
+        {
+          "anchor": "mse435-u02-c02-custom-accelerators-p05",
+          "definition": "N* = NRE / (H x s); ~8,189 chips in the toy.",
+          "term": "break-even"
+        },
+        {
+          "anchor": "mse435-u02-c02-custom-accelerators-p03",
+          "definition": "Dollars saved per chip per hour; $0.82 in the toy.",
+          "term": "s"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c02-custom-accelerators-p06",
+          "answer": "NRE 50M, saving $0.82/chip-hour, 7,446 hours/year. N* = 8,189 chips. Below ~8,200 buy GPUs; above, the custom chip wins. At 20,000 chips the annual saving is $122M against $50M NRE.",
+          "id": "mse435-u02-c02-custom-accelerators-r1",
+          "question": "When does a custom chip win?"
+        }
+      ],
+      "title": "mse435-U02-C02 , custom accelerators"
+    },
+    {
+      "anchor": "mse435-u02-c03-memoryinterconnect-bottlenecks",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c03-memoryinterconnect-bottlenecks-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c03-memoryinterconnect-bottlenecks-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c03-memoryinterconnect-bottlenecks-p02",
+          "definition": "min(peak, I x B); you get the slower of cooks and door.",
+          "term": "roofline"
+        },
+        {
+          "anchor": "mse435-u02-c03-memoryinterconnect-bottlenecks-p02",
+          "definition": "FLOP/byte; how much cooking each delivery supports.",
+          "term": "intensity"
+        },
+        {
+          "anchor": "mse435-u02-c03-memoryinterconnect-bottlenecks-p05",
+          "definition": "peak / B; 150 FLOP/byte in the toy.",
+          "term": "ridge point"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c03-memoryinterconnect-bottlenecks-p06",
+          "answer": "Peak 300 TFLOP/s, bandwidth 2 TB/s. Workload A (I=100): 200 TFLOP/s, memory-bound. Workload B (I=500): 300 TFLOP/s, compute-bound. Decode at I=40 gives 80 TFLOP/s: the door, not the cooks.",
+          "id": "mse435-u02-c03-memoryinterconnect-bottlenecks-r1",
+          "question": "Where did the speed go?"
+        }
+      ],
+      "title": "mse435-U02-C03 , memory/interconnect bottlenecks"
+    },
+    {
+      "anchor": "mse435-u02-c04-infrastructure-lifecycle",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c04-infrastructure-lifecycle-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c04-infrastructure-lifecycle-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c04-infrastructure-lifecycle",
+          "definition": "Plan, build, operate, refresh; each bill on its own schedule.",
+          "term": "lifecycle"
+        },
+        {
+          "anchor": "mse435-u02-c04-infrastructure-lifecycle-p06",
+          "definition": "Late costs matter less; discounted to present value.",
+          "term": "NPV"
+        },
+        {
+          "anchor": "mse435-u02-c04-infrastructure-lifecycle-p02",
+          "definition": "Capex during build, opex during operate.",
+          "term": "cash"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c04-infrastructure-lifecycle-p06",
+          "answer": "100 MW site: plan $5M, build $400M, operate $40M/year x 6, refresh $120M. Undiscounted $765M. At 10%: PV ~$572M. A dollar of build capex in year 2 costs $0.83 today; opex in year 8 costs $0.47.",
+          "id": "mse435-u02-c04-infrastructure-lifecycle-r1",
+          "question": "What does the 100 MW site cost?"
+        }
+      ],
+      "title": "mse435-U02-C04 , infrastructure lifecycle"
+    },
+    {
+      "anchor": "mse435-u02-c05-power-constraints",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c05-power-constraints-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u02-c05-power-constraints-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u02-c05-power-constraints-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c05-power-constraints",
+          "definition": "The walls of the room; you cannot exceed them.",
+          "term": "power"
+        },
+        {
+          "anchor": "mse435-u02-c05-power-constraints-p05",
+          "definition": "P_site x 1000 / p_gpu; 71,428 GPUs at 100 MW.",
+          "term": "N_max"
+        },
+        {
+          "anchor": "mse435-u02-c05-power-constraints-p05",
+          "definition": "min(D, P_site); physical rationing, not priced.",
+          "term": "served"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c05-power-constraints-p06",
+          "answer": "100 MW site, 1.4 kW per GPU: N_max = 71,428 GPUs. Demand 140 MW against 100 MW: 40 MW waits in queues, other regions, or next year's build.",
+          "id": "mse435-u02-c05-power-constraints-r1",
+          "question": "How many GPUs fit in 100 MW?"
+        }
+      ],
+      "title": "mse435-U02-C05 , power constraints"
+    },
+    {
+      "anchor": "mse435-u02-c06-cooling",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c06-cooling-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u02-c06-cooling-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u02-c06-cooling-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c06-cooling-p03",
+          "definition": "Total power over IT power; 1.5 means half a watt overhead per watt.",
+          "term": "PUE"
+        },
+        {
+          "anchor": "mse435-u02-c06-cooling-p02",
+          "definition": "Extra capex / annual saving; 2.28 years in the toy.",
+          "term": "payback"
+        },
+        {
+          "anchor": "mse435-u02-c06-cooling-p02",
+          "definition": "Every watt of compute becomes a watt of heat.",
+          "term": "heat"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c06-cooling-p06",
+          "answer": "100 kW rack: air PUE 1.5 ($150k), liquid PUE 1.15 ($220k). Saving 35 kW = $30,660/year. Payback 2.28 years. Over 6 years liquid saves $113,960 per rack; at 1,000 racks, $114M.",
+          "id": "mse435-u02-c06-cooling-r1",
+          "question": "Does liquid cooling pay?"
+        }
+      ],
+      "title": "mse435-U02-C06 , cooling"
+    },
+    {
+      "anchor": "mse435-u02-c07-gigawatt-scale",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c07-gigawatt-scale-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c07-gigawatt-scale-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c07-gigawatt-scale",
+          "definition": "A power plant wearing a data center costume.",
+          "term": "gigawatt"
+        },
+        {
+          "anchor": "mse435-u02-c07-gigawatt-scale-p06",
+          "definition": "714,285 GPUs or 800,000 homes per GW.",
+          "term": "conversions"
+        },
+        {
+          "anchor": "mse435-u02-c07-gigawatt-scale",
+          "definition": "Not a tenant of the grid; a grid planning event.",
+          "term": "scale"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c07-gigawatt-scale-p05",
+          "answer": "1 GW = 1,000 MW. At 1.4 kW per GPU: 714,285 GPUs. At 1.25 kW per home: 800,000 homes. Build cost $10/watt = $10B per GW.",
+          "id": "mse435-u02-c07-gigawatt-scale-r1",
+          "question": "How big is a gigawatt?"
+        }
+      ],
+      "title": "mse435-U02-C07 , gigawatt scale"
+    },
+    {
+      "anchor": "mse435-u02-c08-buildlease-tradeoffs",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c08-buildlease-tradeoffs-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u02-c08-buildlease-tradeoffs-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u02-c08-buildlease-tradeoffs-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c08-buildlease-tradeoffs-p03",
+          "definition": "Cheap hours in bulk; pays whether GPUs work or sleep.",
+          "term": "building"
+        },
+        {
+          "anchor": "mse435-u02-c08-buildlease-tradeoffs-p03",
+          "definition": "Pays only for hours used, at a premium.",
+          "term": "renting"
+        },
+        {
+          "anchor": "mse435-u02-c08-buildlease-tradeoffs-p02",
+          "definition": "Where waste equals premium; U* formula.",
+          "term": "crossover"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c08-buildlease-tradeoffs-p06",
+          "answer": "1,000 GPUs, build $30M + $1M/year, lease $2.50/hour, 4 years at 10%. At U=0.20 lease wins by $19.29M. At U=0.80 build wins by $22.37M. Crossover U* = 33.17/69.42 = 0.48.",
+          "id": "mse435-u02-c08-buildlease-tradeoffs-r1",
+          "question": "Build or lease at 48% utilization?"
+        }
+      ],
+      "title": "mse435-U02-C08 , build/lease tradeoffs"
+    },
+    {
+      "anchor": "mse435-u02-c09-utilization",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c09-utilization-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c09-utilization-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c09-utilization",
+          "definition": "Share of bought hours that do work.",
+          "term": "utilization"
+        },
+        {
+          "anchor": "mse435-u02-c09-utilization-p04",
+          "definition": "c / U; dollars per used hour.",
+          "term": "effective price"
+        },
+        {
+          "anchor": "mse435-u02-c09-utilization-p03",
+          "definition": "Dollars per clock hour; assumes every hour works.",
+          "term": "sticker"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c09-utilization-p06",
+          "answer": "Sticker $2.02. At U=0.40: effective $5.06 per used hour. At U=0.85: $1.27. Low utilization hurts twice: the sticker itself rises and the divisor shrinks.",
+          "id": "mse435-u02-c09-utilization-r1",
+          "question": "What does a used hour really cost?"
+        }
+      ],
+      "title": "mse435-U02-C09 , utilization"
+    },
+    {
+      "anchor": "mse435-u02-c10-depreciation",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c10-depreciation-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c10-depreciation-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c10-depreciation",
+          "definition": "The accounting clock on an asset.",
+          "term": "depreciation"
+        },
+        {
+          "anchor": "mse435-u02-c10-depreciation-p05",
+          "definition": "C / T per year; $50,000 on $200,000 over 4 years.",
+          "term": "annual charge"
+        },
+        {
+          "anchor": "mse435-u02-c10-depreciation-p04",
+          "definition": "(C/T) / (GPUs x 8760 x U); the billing unit.",
+          "term": "per-hour charge"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c10-depreciation-p06",
+          "answer": "$200,000 server, 4 years, 8 GPUs at 85%: annual charge $50,000. Book values: 200k, 150k, 100k, 50k, 0. Per-hour: $50,000 / (8 x 8760 x 0.85) = $0.84. Never confuse book charge with cash.",
+          "id": "mse435-u02-c10-depreciation-r1",
+          "question": "What is the per-hour book cost?"
+        }
+      ],
+      "title": "mse435-U02-C10 , depreciation"
+    },
+    {
+      "anchor": "mse435-u02-c11-supply-concentration",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c11-supply-concentration-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c11-supply-concentration-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c11-supply-concentration-p02",
+          "definition": "sum s_i^2; 5250 in the toy, highly concentrated.",
+          "term": "HHI"
+        },
+        {
+          "anchor": "mse435-u02-c11-supply-concentration-p05",
+          "definition": "Below 1500 unconcentrated, 1500-2500 moderate, above 2500 high.",
+          "term": "bands"
+        },
+        {
+          "anchor": "mse435-u02-c11-supply-concentration",
+          "definition": "The opposite of choice; few alternatives when the leader stumbles.",
+          "term": "concentration"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c11-supply-concentration-p06",
+          "answer": "Shares 70, 15, 10, 5: HHI = 4900 + 225 + 100 + 25 = 5250, highly concentrated. Split the leader into two 35s: HHI = 2800, still high but nearly halved.",
+          "id": "mse435-u02-c11-supply-concentration-r1",
+          "question": "How concentrated is the GPU market?"
+        }
+      ],
+      "title": "mse435-U02-C11 , supply concentration"
+    },
+    {
+      "anchor": "mse435-u02-c12-scenario-analysis",
+      "blocks": [
+        {
+          "anchor": "mse435-u02-c12-scenario-analysis-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u02-c12-scenario-analysis-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u02-c12-scenario-analysis",
+          "definition": "A story with numbers: what happens, and what it costs.",
+          "term": "scenario"
+        },
+        {
+          "anchor": "mse435-u02-c12-scenario-analysis-p06",
+          "definition": "Minimize the worst case; never fail badly.",
+          "term": "maximum regret"
+        },
+        {
+          "anchor": "mse435-u02-c12-scenario-analysis-p05",
+          "definition": "Named futures with inputs, not probabilities.",
+          "term": "scenarios"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u02-c12-scenario-analysis-p06",
+          "answer": "Build PV $33.17M fixed. Lease at U=0.60: $24.99M (fast fall), $41.65M (flat), $58.31M (shortage). Build wins two of three; the resilient choice survives all three.",
+          "id": "mse435-u02-c12-scenario-analysis-r1",
+          "question": "Which future should the decision use?"
+        }
+      ],
+      "title": "mse435-U02-C12 , scenario analysis"
+    }
+  ]
+}

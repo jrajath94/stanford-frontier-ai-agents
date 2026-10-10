@@ -1,0 +1,563 @@
+{
+  "itemId": "u04_enterprise_knowledge_inference_cloud",
+  "itemKind": "lesson",
+  "revision": "7f8672a9ba0e5fe90d578de845caa93a0fbe8bf8e27aa0341d50cdda81b2a14b",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "mse435_u04_enterprise_knowledge_inference_cloud-intro",
+      "blocks": [],
+      "endAnchor": "mse435_u04_enterprise_knowledge_inference_cloud-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435_u04_enterprise_knowledge_inference_cloud-intro-p01",
+          "definition": "Parent unit; enterprise knowledge and inference cloud.",
+          "term": "mse435-U04"
+        },
+        {
+          "anchor": "mse435_u04_enterprise_knowledge_inference_cloud-intro-p01",
+          "definition": "P19, P23, P24; shared bridges linked, not rebuilt.",
+          "term": "bridges"
+        },
+        {
+          "anchor": "mse435_u04_enterprise_knowledge_inference_cloud-intro-p02",
+          "definition": "Claim class for the sessions.",
+          "term": "OFFICIAL-SCHEDULE"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "mse435_u04_enterprise_knowledge_inference_cloud-intro-p01",
+          "answer": "Parent unit mse435-U04. Bridges P19, P23, P24. Local remediation in prerequisites.md (U04-R1 to U04-R3).",
+          "id": "mse435_u04_enterprise_knowledge_inference_cloud-intro-r1",
+          "question": "What are the unit's ground rules?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list-unit-level",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-unit-level-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U04-R1; needed for C01, C03.",
+          "term": "retrieval recall"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U04-R2; needed for C05, C11, C12.",
+          "term": "present value"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U04-R3; needed for C06, C07.",
+          "term": "latency versus throughput"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "answer": "Retrieval recall (U04-R1) for C01 and C03, present value (U04-R2) for C05, C11, C12, and latency versus throughput (U04-R3) for C06 and C07.",
+          "id": "not-yet-understood-dependency-list-unit-level-r1",
+          "question": "What dependencies does U04 need?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list (unit level)"
+    },
+    {
+      "anchor": "mse435-u04-c01-internal-knowledge-access",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c01-internal-knowledge-access-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c01-internal-knowledge-access-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c01-internal-knowledge-access-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c01-internal-knowledge-access",
+          "definition": "The model reads the firm's documents before it answers.",
+          "term": "internal knowledge access"
+        },
+        {
+          "anchor": "mse435-u04-c01-internal-knowledge-access-p02",
+          "definition": "q x (a1 - a0) x v, dollars per month.",
+          "term": "value"
+        },
+        {
+          "anchor": "mse435-u04-c01-internal-knowledge-access-p05",
+          "definition": "Questions per month.",
+          "term": "q"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c01-internal-knowledge-access-p04",
+          "answer": "Value = q x (a1 - a0) x v. The model knows the public internet; the firm knows its procedures, prices, and past tickets. Value appears only when the documents are actually read.",
+          "id": "mse435-u04-c01-internal-knowledge-access-r1",
+          "question": "What is internal knowledge worth?"
+        }
+      ],
+      "title": "mse435-U04-C01 , internal knowledge access"
+    },
+    {
+      "anchor": "mse435-u04-c02-integration-costs",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c02-integration-costs-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u04-c02-integration-costs-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c02-integration-costs-p04",
+          "definition": "Not free; connectors, filters, refresh jobs.",
+          "term": "access"
+        },
+        {
+          "anchor": "mse435-u04-c02-integration-costs-p02",
+          "definition": "n x b + f + 2 x n x m; two-year total.",
+          "term": "total"
+        },
+        {
+          "anchor": "mse435-u04-c02-integration-costs-p05",
+          "definition": "Number of sources.",
+          "term": "n"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c02-integration-costs-p04",
+          "answer": "Two-year total = n x b + f + 2 x n x m. Build cost is paid once; refresh and maintenance are paid every year. Each source needs a connector, a permission filter, and a refresh job.",
+          "id": "mse435-u04-c02-integration-costs-r1",
+          "question": "What does integration cost?"
+        }
+      ],
+      "title": "mse435-U04-C02 , integration costs"
+    },
+    {
+      "anchor": "mse435-u04-c03-experiencedata-feedback",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c03-experiencedata-feedback-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c03-experiencedata-feedback-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c03-experiencedata-feedback-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c03-experiencedata-feedback-p02",
+          "definition": "Every answer is a chance to learn; corrections flow back.",
+          "term": "feedback loop"
+        },
+        {
+          "anchor": "mse435-u04-c03-experiencedata-feedback-p05",
+          "definition": "q x c x g, in recall points per month.",
+          "term": "monthly gain"
+        },
+        {
+          "anchor": "mse435-u04-c03-experiencedata-feedback-p05",
+          "definition": "Correction rate, pure number.",
+          "term": "c"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c03-experiencedata-feedback-p03",
+          "answer": "Users correct the wrong answers; corrections flow into the index and prompts. Quality rises, so usage rises, so corrections rise. Each correction must target a distinct gap.",
+          "id": "mse435-u04-c03-experiencedata-feedback-r1",
+          "question": "How does the feedback loop work?"
+        }
+      ],
+      "title": "mse435-U04-C03 , experience/data feedback"
+    },
+    {
+      "anchor": "mse435-u04-c04-custom-versus-generic-models",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c04-custom-versus-generic-models-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c04-custom-versus-generic-models-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c04-custom-versus-generic-models-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c04-custom-versus-generic-models",
+          "definition": "Rented by the token; knows the world.",
+          "term": "generic"
+        },
+        {
+          "anchor": "mse435-u04-c04-custom-versus-generic-models",
+          "definition": "Tuned on the firm's data; knows the firm; fixed floor plus cheaper tokens.",
+          "term": "custom"
+        },
+        {
+          "anchor": "mse435-u04-c04-custom-versus-generic-models-p05",
+          "definition": "Tokens per month.",
+          "term": "Q"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c04-custom-versus-generic-models-p04",
+          "answer": "Generic cost = p_g x Q / 1M. Custom cost = F + p_c x Q / 1M. Custom wins above the crossover volume where the fixed floor spreads thin enough.",
+          "id": "mse435-u04-c04-custom-versus-generic-models-r1",
+          "question": "Custom or generic model?"
+        }
+      ],
+      "title": "mse435-U04-C04 , custom versus generic models"
+    },
+    {
+      "anchor": "mse435-u04-c05-api-versus-hosting",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c05-api-versus-hosting-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u04-c05-api-versus-hosting-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c05-api-versus-hosting",
+          "definition": "A taxi: pay per ride, no garage.",
+          "term": "API"
+        },
+        {
+          "anchor": "mse435-u04-c05-api-versus-hosting",
+          "definition": "A car: pay for garage and fuel whether you drive or not.",
+          "term": "hosting"
+        },
+        {
+          "anchor": "mse435-u04-c05-api-versus-hosting-p05",
+          "definition": "F / (p_a - p_h), in 1M-token units.",
+          "term": "Q*"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c05-api-versus-hosting-p04",
+          "answer": "Q* = F / (p_a - p_h). The taxi wins at low mileage; the car wins at high mileage. The break-even mileage is the fixed garage cost divided by the per-ride premium.",
+          "id": "mse435-u04-c05-api-versus-hosting-r1",
+          "question": "API or hosting?"
+        }
+      ],
+      "title": "mse435-U04-C05 , API versus hosting"
+    },
+    {
+      "anchor": "mse435-u04-c06-batchingcaching",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c06-batchingcaching-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c06-batchingcaching-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c06-batchingcaching-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c06-batchingcaching",
+          "definition": "Shares one model pass across many requests.",
+          "term": "batching"
+        },
+        {
+          "anchor": "mse435-u04-c06-batchingcaching",
+          "definition": "Answers repeats from memory instead of running the model.",
+          "term": "caching"
+        },
+        {
+          "anchor": "mse435-u04-c06-batchingcaching-p02",
+          "definition": "h x c_c + (1 - h) x c_m; effective cost per 1M.",
+          "term": "effective cost"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c06-batchingcaching-p04",
+          "answer": "Effective cost = h x c_c + (1 - h) x c_m. Batching cuts per-token compute by roughly the batch size but usually adds latency. Caching wins when questions repeat.",
+          "id": "mse435-u04-c06-batchingcaching-r1",
+          "question": "How do batching and caching cut cost?"
+        }
+      ],
+      "title": "mse435-U04-C06 , batching/caching"
+    },
+    {
+      "anchor": "mse435-u04-c07-latencyquality",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c07-latencyquality-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c07-latencyquality-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c07-latencyquality-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c07-latencyquality",
+          "definition": "Faster answers cost more compute per token.",
+          "term": "latency"
+        },
+        {
+          "anchor": "mse435-u04-c07-latencyquality-p04",
+          "definition": "V x s x L / 100; dollars per month of waiting.",
+          "term": "latency cost"
+        },
+        {
+          "anchor": "mse435-u04-c07-latencyquality-p05",
+          "definition": "Share of value lost per 100 ms.",
+          "term": "s"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c07-latencyquality-p03",
+          "answer": "The right latency is where marginal compute saving equals marginal latency cost. Slower answers save dollars but lose users; the price of waiting is revenue lost.",
+          "id": "mse435-u04-c07-latencyquality-r1",
+          "question": "What is the right latency?"
+        }
+      ],
+      "title": "mse435-U04-C07 , latency/quality"
+    },
+    {
+      "anchor": "mse435-u04-c08-operational-labor",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c08-operational-labor-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u04-c08-operational-labor-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c08-operational-labor",
+          "definition": "AI moves labor: reviewers, prompt fixers, on-call.",
+          "term": "operational labor"
+        },
+        {
+          "anchor": "mse435-u04-c08-operational-labor-p05",
+          "definition": "e x t / 60 x w, dollars per task.",
+          "term": "labor per task"
+        },
+        {
+          "anchor": "mse435-u04-c08-operational-labor-p05",
+          "definition": "Escalation rate, pure number.",
+          "term": "e"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c08-operational-labor-p03",
+          "answer": "Labor per task = e x t / 60 x w, plus fixed F_ops per month for on-call and maintenance. Semi-fixed: not per token, but scales with incidents and drift.",
+          "id": "mse435-u04-c08-operational-labor-r1",
+          "question": "What does operational labor cost?"
+        }
+      ],
+      "title": "mse435-U04-C08 , operational labor"
+    },
+    {
+      "anchor": "mse435-u04-c09-cost-per-successful-task",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c09-cost-per-successful-task-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c09-cost-per-successful-task-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c09-cost-per-successful-task-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c09-cost-per-successful-task",
+          "definition": "Total spend divided by successes; what the business buys.",
+          "term": "cost per successful task"
+        },
+        {
+          "anchor": "mse435-u04-c09-cost-per-successful-task-p05",
+          "definition": "Success rate, pure number.",
+          "term": "s"
+        },
+        {
+          "anchor": "mse435-u04-c09-cost-per-successful-task-p05",
+          "definition": "Cost per attempt, dollars.",
+          "term": "c"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c09-cost-per-successful-task-p03",
+          "answer": "A low success rate can make a cheap attempt expensive. Failures consume retries, reviews, and rework. Cost per success = c x expected attempts / success probability.",
+          "id": "mse435-u04-c09-cost-per-successful-task-r1",
+          "question": "Why measure per success?"
+        }
+      ],
+      "title": "mse435-U04-C09 , cost per successful task"
+    },
+    {
+      "anchor": "mse435-u04-c10-fixed-cost-floor",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c10-fixed-cost-floor-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u04-c10-fixed-cost-floor-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c10-fixed-cost-floor",
+          "definition": "The price of being ready; F / Q + v explodes at low Q.",
+          "term": "fixed cost floor"
+        },
+        {
+          "anchor": "mse435-u04-c10-fixed-cost-floor-p02",
+          "definition": "F / Q + v, dollars per 1M.",
+          "term": "average"
+        },
+        {
+          "anchor": "mse435-u04-c10-fixed-cost-floor-p05",
+          "definition": "Fixed dollars per month.",
+          "term": "F"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c10-fixed-cost-floor-p03",
+          "answer": "At high volume fixed costs spread thin; at low volume they dominate. Average = F / Q + v. Anyone pricing below the floor at their volume is buying share.",
+          "id": "mse435-u04-c10-fixed-cost-floor-r1",
+          "question": "What is the fixed cost floor?"
+        }
+      ],
+      "title": "mse435-U04-C10 , fixed cost floor"
+    },
+    {
+      "anchor": "mse435-u04-c11-vendor-lock-in",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c11-vendor-lock-in-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u04-c11-vendor-lock-in-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c11-vendor-lock-in",
+          "definition": "A tax on leaving; paid once when you switch.",
+          "term": "lock-in"
+        },
+        {
+          "anchor": "mse435-u04-c11-vendor-lock-in-p02",
+          "definition": "S / d, months; switching cost over monthly saving.",
+          "term": "payback"
+        },
+        {
+          "anchor": "mse435-u04-c11-vendor-lock-in-p05",
+          "definition": "Switching cost, dollars, one-time.",
+          "term": "S"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c11-vendor-lock-in-p04",
+          "answer": "Payback = S / d. Vendor pricing power is roughly bounded by S. Every vendor-specific prompt, connector, and workflow raises the tax.",
+          "id": "mse435-u04-c11-vendor-lock-in-r1",
+          "question": "How do you price lock-in?"
+        }
+      ],
+      "title": "mse435-U04-C11 , vendor lock-in"
+    },
+    {
+      "anchor": "mse435-u04-c12-workload-break-even",
+      "blocks": [
+        {
+          "anchor": "mse435-u04-c12-workload-break-even-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u04-c12-workload-break-even-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u04-c12-workload-break-even-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u04-c12-workload-break-even",
+          "definition": "The hurdle volume; below it fixed costs eat the value.",
+          "term": "break-even"
+        },
+        {
+          "anchor": "mse435-u04-c12-workload-break-even-p05",
+          "definition": "w x s - v; value per successful task minus variable cost.",
+          "term": "contribution"
+        },
+        {
+          "anchor": "mse435-u04-c12-workload-break-even-p04",
+          "definition": "F / (w x s - v); tasks per month.",
+          "term": "hurdle"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u04-c12-workload-break-even-p04",
+          "answer": "Break-even tasks = F / (w x s - v). The hurdle combines floor, tokens, labor, and the success rate. It fails if value or success misses.",
+          "id": "mse435-u04-c12-workload-break-even-r1",
+          "question": "What is the workload hurdle?"
+        }
+      ],
+      "title": "mse435-U04-C12 , workload break-even"
+    }
+  ]
+}

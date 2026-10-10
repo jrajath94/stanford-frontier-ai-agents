@@ -1,0 +1,750 @@
+{
+  "itemId": "u06_memory_caches",
+  "itemKind": "lesson",
+  "revision": "457472df6a0433fa606581b9e72d60b64e801f1d3136c9cf9980653dcb965481",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u06_memory_caches-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u06_memory_caches-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u06_memory_caches-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official session 14.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u06_memory_caches-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u06_memory_caches-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official session 14 (Nov 7), Augmenting Agents with Memory, guest Junchen Jiang.",
+          "id": "cs329a_u06_memory_caches-intro-r1",
+          "question": "Which course and session does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Main context as RAM, archival storage as disk, recall storage as index.",
+          "term": "MemGPT"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "The model's notes on the prompt; shared prefixes ride free.",
+          "term": "KV caches"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Splice cached chunks in a new order with surgical selective recompute.",
+          "term": "CacheBlend"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Same tasks, same seeds, memory on versus off; the delta is the contribution.",
+          "term": "controlled"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Describe the MemGPT memory hierarchy, issue memory actions, separate context from persistence, explain Cartridges and self-study, reuse KV caches, describe CacheBlend's selective recompute, run retrieval inside the agent loop, measure compression loss, invalidate stale memory, enforce tenant privacy, judge cross-task transfer, and run a controlled comparison.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Transformer mechanics and KV caching prerequisite.",
+          "term": "P14"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Retrieval prerequisite.",
+          "term": "P19"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Tools and agent state prerequisite.",
+          "term": "P20"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P14 (transformer mechanics, KV caching), P19 (retrieval), and P20 (tools, agent state). Local remediation sits inside C05.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "2 * layers * kv_heads * tokens * d_head * bytes; the memory price of context.",
+          "term": "KV bytes"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "A function call the model makes to itself: append, replace, insert, search.",
+          "term": "memory action"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: the model cannot hold everything, so memory is a hierarchy: hot facts in context, warm facts in an index, cold facts in a store. Equation: KV bytes = 2 * layers * kv_heads * tokens * d_head * bytes. Code: a memory action is a function call the model makes to itself. Observation: reuse and compression trade memory for correctness, and the tradeoff is measurable.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-memgpt",
+      "blocks": [
+        {
+          "anchor": "c01-memgpt-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c01-memgpt-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c01-memgpt-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-memgpt-p02",
+          "definition": "System instructions plus FIFO message queue plus writable working context.",
+          "term": "main context"
+        },
+        {
+          "anchor": "c01-memgpt-p02",
+          "definition": "Unbounded text store for everything evicted from main context.",
+          "term": "archival storage"
+        },
+        {
+          "anchor": "c01-memgpt-p04",
+          "definition": "Tokens used over tokens available; triggers explicit page movement.",
+          "term": "memory pressure"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c01-memgpt-p03",
+          "answer": "Treat the context window like RAM and the rest like disk. Main context holds what the agent needs now; archival storage holds everything else; recall storage holds searchable summaries. In the toy, 8 items stay and 12 are evicted.",
+          "id": "c01-memgpt-r1",
+          "question": "What is the MemGPT memory hierarchy?"
+        },
+        {
+          "anchor": "c01-memgpt-p12",
+          "answer": "Break explicit eviction: a FIFO queue with no pinning evicts the system instructions at turn 9. The model then manages pages it cannot see coming.",
+          "id": "c01-memgpt-r2",
+          "question": "What breaks MemGPT memory management?"
+        }
+      ],
+      "title": "C01 MemGPT"
+    },
+    {
+      "anchor": "c02-memory-actions",
+      "blocks": [
+        {
+          "anchor": "c02-memory-actions-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-memory-actions-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-memory-actions-p05",
+          "definition": "Memory work is function calls, not magic: insert a fact, search it back.",
+          "term": "memory actions"
+        },
+        {
+          "anchor": "c02-memory-actions-p02",
+          "definition": "Stores one fact: archival_memory_insert(\"user prefers morning meetings\").",
+          "term": "archival_memory_insert"
+        },
+        {
+          "anchor": "c02-memory-actions-p04",
+          "definition": "How many ranked hits a search returns.",
+          "term": "top_k"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-memory-actions-p03",
+          "answer": "Core hands rewrite the scratchpad (append, replace). Archival hands store and search the big pile (insert, search). Every hand is a typed function call, and the trace of calls is the audit log.",
+          "id": "c02-memory-actions-r1",
+          "question": "What are the agent's hands for memory?"
+        },
+        {
+          "anchor": "c02-memory-actions-p12",
+          "answer": "Break the log: unrecorded actions put a fact in the scratchpad with no provenance, so nobody can tell memory from hallucination. An agent inserting every turn without searching has write-only memory.",
+          "id": "c02-memory-actions-r2",
+          "question": "What breaks memory actions?"
+        }
+      ],
+      "title": "C02 memory actions"
+    },
+    {
+      "anchor": "c03-context-versus-persistence",
+      "blocks": [
+        {
+          "anchor": "c03-context-versus-persistence-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c03-context-versus-persistence-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-context-versus-persistence-p04",
+          "definition": "Recency times reuse count; predicts which facts earn desk space.",
+          "term": "hotness"
+        },
+        {
+          "anchor": "c03-context-versus-persistence-p02",
+          "definition": "Never evicted; pinning 8 facts at capacity 8 freezes the desk.",
+          "term": "pinned"
+        },
+        {
+          "anchor": "c03-context-versus-persistence-p03",
+          "definition": "What this turn needs: small, fast, expensive per token.",
+          "term": "desk"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c03-context-versus-persistence-p05",
+          "answer": "A token in context costs attention over every future token plus money, while a byte in the store costs almost nothing until retrieved. Put a fact in context only when its expected reuse beats the price.",
+          "id": "c03-context-versus-persistence-r1",
+          "question": "What is the economics of context versus persistence?"
+        },
+        {
+          "anchor": "c03-context-versus-persistence-p12",
+          "answer": "Break the hotness prediction: a cold fact suddenly needed every turn costs a search per turn until scores catch up. Pinning everything freezes the desk and hotness never matters.",
+          "id": "c03-context-versus-persistence-r2",
+          "question": "What breaks the paging rule?"
+        }
+      ],
+      "title": "C03 context versus persistence"
+    },
+    {
+      "anchor": "c04-cartridgesself-study",
+      "blocks": [
+        {
+          "anchor": "c04-cartridgesself-study-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c04-cartridgesself-study-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c04-cartridgesself-study-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-cartridgesself-study-p02",
+          "definition": "A compressed memory of one corpus, learned offline; 512 slots replace 20,480 tokens in the toy.",
+          "term": "cartridge"
+        },
+        {
+          "anchor": "c04-cartridgesself-study-p01",
+          "definition": "The training recipe: the model generates its own Q/A conversations about the corpus.",
+          "term": "self-study"
+        },
+        {
+          "anchor": "c04-cartridgesself-study-p04",
+          "definition": "Into KV parameters; naive next-token training teaches recitation, not question answering.",
+          "term": "distillation"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c04-cartridgesself-study-p03",
+          "answer": "Train one 512-slot cartridge for the manual instead of re-reading 20,480 tokens per query: a 40x memory cut. The model loads the cartridge (a small trained KV prefix) and answers from it.",
+          "id": "c04-cartridgesself-study-r1",
+          "question": "What is a cartridge and what does it save?"
+        },
+        {
+          "anchor": "c04-cartridgesself-study-p12",
+          "answer": "Break corpus stability: a weekly-updated manual leaves the cartridge answering from the old edition. A corpus queried twice never amortizes training; full context is cheaper.",
+          "id": "c04-cartridgesself-study-r2",
+          "question": "When do cartridges fail?"
+        }
+      ],
+      "title": "C04 Cartridges/self-study"
+    },
+    {
+      "anchor": "c05-cache-reuse",
+      "blocks": [
+        {
+          "anchor": "c05-cache-reuse-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c05-cache-reuse-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-cache-reuse-p01",
+          "definition": "The model's notes on the prompt so far; still valid when a new prompt shares the prefix.",
+          "term": "KV cache"
+        },
+        {
+          "anchor": "c05-cache-reuse-p04",
+          "definition": "The new prompt's first m tokens match a cached prompt's first m tokens.",
+          "term": "prefix hit"
+        },
+        {
+          "anchor": "c05-cache-reuse-p02",
+          "definition": "Processing the prompt's tokens once; the first request pays, the rest ride free.",
+          "term": "prefill"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-cache-reuse-p05",
+          "answer": "In a causal transformer, token i's keys and values depend only on tokens 1..i. Shared first-m tokens give identical first-m KV entries, so the second prompt starts prefill at token m+1. The toy saves 200,000 tokens across 100 requests.",
+          "id": "c05-cache-reuse-r1",
+          "question": "Why is KV reuse valid?"
+        },
+        {
+          "anchor": "c05-cache-reuse-p12",
+          "answer": "Break positional consistency: a block cached at positions 0..1999 reused at 500..2499 is wrong, because KV entries are position-dependent. Fully distinct prompts never hit; the cache is pure overhead.",
+          "id": "c05-cache-reuse-r2",
+          "question": "What breaks cache reuse?"
+        }
+      ],
+      "title": "C05 cache reuse"
+    },
+    {
+      "anchor": "c06-cacheblend",
+      "blocks": [
+        {
+          "anchor": "c06-cacheblend-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c06-cacheblend-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c06-cacheblend-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-cacheblend-p01",
+          "definition": "Splice cached chunks in a new order with surgical selective recompute.",
+          "term": "CacheBlend"
+        },
+        {
+          "anchor": "c06-cacheblend-p04",
+          "definition": "r: share of tokens recomputed; 0.15 in the toy.",
+          "term": "recompute ratio"
+        },
+        {
+          "anchor": "c06-cacheblend-p04",
+          "definition": "Tokens with the largest KV deviation after a shallow recompute pass; the surgical targets.",
+          "term": "HKVD"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c06-cacheblend-p03",
+          "answer": "Each chunk's KV was computed without its new neighbors, so cross-attention is gone. Recompute the first layers fully, compare fresh versus cached values, and recompute the top-r deviating tokens. The toy spends 371 units versus 2,048.",
+          "id": "c06-cacheblend-r1",
+          "question": "How does CacheBlend fix spliced chunks?"
+        },
+        {
+          "anchor": "c06-cacheblend-p12",
+          "answer": "Break concentration: every token's KV shifts a lot, so the HKVD set is the whole input and the method is full recompute with extra steps. Chunks that never repeat have no cache to blend.",
+          "id": "c06-cacheblend-r2",
+          "question": "What breaks CacheBlend?"
+        }
+      ],
+      "title": "C06 CacheBlend"
+    },
+    {
+      "anchor": "c07-retrieval",
+      "blocks": [
+        {
+          "anchor": "c07-retrieval-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c07-retrieval-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-retrieval-p01",
+          "definition": "|S cap R| / |S|: of what came back, how much was useful; 0.60 in the toy.",
+          "term": "precision"
+        },
+        {
+          "anchor": "c07-retrieval-p01",
+          "definition": "|S cap R| / |R|: of what exists, how much came back; 0.375 in the toy.",
+          "term": "recall"
+        },
+        {
+          "anchor": "c07-retrieval-p05",
+          "definition": "A bad first query is not fatal; the trace shows the refinement.",
+          "term": "re-query"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c07-retrieval-p03",
+          "answer": "Retrieval is the agent's eyes on its own past. Precision asks how much of what came back was useful; recall asks how much of what exists came back. Agents usually need precision over recall for the top few.",
+          "id": "c07-retrieval-r1",
+          "question": "What do precision and recall mean for agent retrieval?"
+        },
+        {
+          "anchor": "c07-retrieval-p12",
+          "answer": "Break the index: inserts never reach the search index, so the agent's own notes are unfindable and it re-derives them every time. A query with no relevant docs must return not found, not a guess.",
+          "id": "c07-retrieval-r2",
+          "question": "What breaks agent retrieval?"
+        }
+      ],
+      "title": "C07 retrieval"
+    },
+    {
+      "anchor": "c08-compression-loss",
+      "blocks": [
+        {
+          "anchor": "c08-compression-loss-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-compression-loss-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-compression-loss-p03",
+          "definition": "Amnesia on purpose: keeps the gist, drops the details, permanently.",
+          "term": "compression"
+        },
+        {
+          "anchor": "c08-compression-loss-p04",
+          "definition": "Every compression step records what it removed; names loss versus absence.",
+          "term": "drop log"
+        },
+        {
+          "anchor": "c08-compression-loss-p01",
+          "definition": "|D cap N|: dropped facts that were needed later; 2 in the toy.",
+          "term": "loss"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-compression-loss-p03",
+          "answer": "A summary keeps the gist and drops the details; the dropped details are gone and no prompt recovers them from the summary. In the toy, 10 facts become 3 lines, 7 drop, and 2 dropped facts are later needed.",
+          "id": "c08-compression-loss-r1",
+          "question": "What is compression loss?"
+        },
+        {
+          "anchor": "c08-compression-loss-p12",
+          "answer": "Break the log: summaries with no drop record make a missing fact ambiguous between loss and absence, blinding summarizer tuning. A summary keeping everything is copying, not compression.",
+          "id": "c08-compression-loss-r2",
+          "question": "What breaks compression handling?"
+        }
+      ],
+      "title": "C08 compression loss"
+    },
+    {
+      "anchor": "c09-invalidation",
+      "blocks": [
+        {
+          "anchor": "c09-invalidation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c09-invalidation-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-invalidation-p01",
+          "definition": "No fact older than t is served; a 7-day TTL caps the damage in the toy.",
+          "term": "TTL"
+        },
+        {
+          "anchor": "c09-invalidation-p01",
+          "definition": "Per-week rate s at which cached facts go wrong; 10 of 100 per week in the toy.",
+          "term": "stale"
+        },
+        {
+          "anchor": "c09-invalidation-p03",
+          "definition": "The fact carries the version of the world it came from; stronger than TTL.",
+          "term": "version stamps"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c09-invalidation-p03",
+          "answer": "Memory rots. Invalidation is the expiry date: a time-to-live after which the agent must re-fetch. Expected stale answers equal queries times the stale share; shorter TTL means fewer stale answers and more re-fetches.",
+          "id": "c09-invalidation-r1",
+          "question": "How does invalidation bound staleness?"
+        },
+        {
+          "anchor": "c09-invalidation-p12",
+          "answer": "Break re-fetch: with the source down, the TTL expires the only copy and the agent has nothing. A never-changing fact (a birth date) should be pinned, not TTL'd; any TTL is pure re-fetch cost.",
+          "id": "c09-invalidation-r2",
+          "question": "What breaks invalidation?"
+        }
+      ],
+      "title": "C09 invalidation"
+    },
+    {
+      "anchor": "c10-tenant-privacy",
+      "blocks": [
+        {
+          "anchor": "c10-tenant-privacy-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-tenant-privacy-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-tenant-privacy-p03",
+          "definition": "Every cached entry carries its owner; a lookup matches the owner first.",
+          "term": "namespace"
+        },
+        {
+          "anchor": "c10-tenant-privacy-p02",
+          "definition": "Authenticated id t on every entry; lookup key is (t, content hash).",
+          "term": "tenant"
+        },
+        {
+          "anchor": "c10-tenant-privacy-p04",
+          "definition": "Must be verified; a public entry with one tenant's name leaks it to everyone.",
+          "term": "scrub"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-tenant-privacy-p05",
+          "answer": "The cache key includes the tenant, so a hit requires the same owner. KV caches are invertible enough to leak prompt text, so cross-tenant reuse without scrubbing is a data breach, not an optimization.",
+          "id": "c10-tenant-privacy-r1",
+          "question": "How does namespacing protect tenants?"
+        },
+        {
+          "anchor": "c10-tenant-privacy-p12",
+          "answer": "Break the scrub: a public system prompt containing one tenant's name in an example leaks it to every tenant. Single-tenant deployments pay namespace overhead, but keep it for the second tenant's arrival.",
+          "id": "c10-tenant-privacy-r2",
+          "question": "What breaks tenant privacy?"
+        }
+      ],
+      "title": "C10 tenant privacy"
+    },
+    {
+      "anchor": "c11-cross-task-transfer",
+      "blocks": [
+        {
+          "anchor": "c11-cross-task-transfer-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-cross-task-transfer-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-cross-task-transfer-p02",
+          "definition": "o: facts useful in both tasks; 8 of 12 in the toy.",
+          "term": "overlap"
+        },
+        {
+          "anchor": "c11-cross-task-transfer-p04",
+          "definition": "i: transferred facts wrong for B; 3 stale facts cause 1 wrong step in the toy.",
+          "term": "interference"
+        },
+        {
+          "anchor": "c11-cross-task-transfer-p01",
+          "definition": "Task B starts with A's notes; helps when tasks share the world, hurts on stale facts.",
+          "term": "transfer"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-cross-task-transfer-p04",
+          "answer": "Net gain equals overlap saved fetches minus interference times the cost of a wrong step. In the toy: +8 fetches saved, 1 step lost. Facts are labeled by source task and staleness is checked.",
+          "id": "c11-cross-task-transfer-r1",
+          "question": "When does cross-task transfer pay off?"
+        },
+        {
+          "anchor": "c11-cross-task-transfer-p12",
+          "answer": "Break the labels: the store drops the source task, so B-queries get A's facts at full confidence and interference is silent. Two identical tasks make transfer pure gain and verification pure cost.",
+          "id": "c11-cross-task-transfer-r2",
+          "question": "What breaks cross-task transfer?"
+        }
+      ],
+      "title": "C11 cross-task transfer"
+    },
+    {
+      "anchor": "c12-controlled-comparison",
+      "blocks": [
+        {
+          "anchor": "c12-controlled-comparison-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-controlled-comparison-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-controlled-comparison-p03",
+          "definition": "Run the same tasks, same agent, same seeds, with the memory on and off.",
+          "term": "ablate"
+        },
+        {
+          "anchor": "c12-controlled-comparison-p04",
+          "definition": "Memory off; the arm the treatment is compared against.",
+          "term": "control"
+        },
+        {
+          "anchor": "c12-controlled-comparison-p01",
+          "definition": "d = p_on - p_off; 0.14 in the toy with standard error about 0.09.",
+          "term": "delta"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c12-controlled-comparison-p03",
+          "answer": "The difference between memory-on and memory-off arms is the memory's contribution. Everything else is a confound: better prompts, easier tasks, luckier seeds. The comparison is the only honest test.",
+          "id": "c12-controlled-comparison-r1",
+          "question": "How do you measure whether memory helps?"
+        },
+        {
+          "anchor": "c12-controlled-comparison-p12",
+          "answer": "Break matching: the memory-on arm gets easier tasks and the delta is fiction. An ablation with memory off but doubled context changes two things at once; the delta means nothing.",
+          "id": "c12-controlled-comparison-r2",
+          "question": "What breaks a controlled comparison?"
+        }
+      ],
+      "title": "C12 controlled comparison"
+    },
+    {
+      "anchor": "u06-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u06-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u06-not-yet-understood-dependency-list-list01",
+          "definition": "Transformer mechanics and KV caching; local remediation in C05 item 4.",
+          "term": "KV caching"
+        },
+        {
+          "anchor": "u06-not-yet-understood-dependency-list-list01",
+          "definition": "Retrieval indexes and ranking; remediated in C07 items 4-6.",
+          "term": "retrieval indexes"
+        },
+        {
+          "anchor": "u06-not-yet-understood-dependency-list-list01",
+          "definition": "Derived locally in C02 as a function call the model makes to itself.",
+          "term": "memory action"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u06-not-yet-understood-dependency-list-list01",
+          "answer": "Tool-call loops and agent state are derived locally in C02 as the memory action. Transformer mechanics and KV caching get local remediation in C05 item 4.",
+          "id": "u06-not-yet-understood-dependency-list-r1",
+          "question": "Where are tool-call loops and KV caching handled?"
+        }
+      ],
+      "title": "U06 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u06-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u06-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u06-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C01, deeper shells through C01 items 6, 11, 12, C03 item 10, and C09.",
+          "term": "memory hierarchy"
+        },
+        {
+          "anchor": "u06-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C05 and C06; the prefix-equality and selective-recompute track.",
+          "term": "cache reuse"
+        },
+        {
+          "anchor": "u06-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C07; the agent-loop search track.",
+          "term": "retrieval"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u06-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "The MemGPT memory hierarchy, cache reuse with CacheBlend, and retrieval inside the agent loop. Each runs shells 0-10, ending at production forms like C09 invalidation and C08 compression loss.",
+          "id": "u06-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U06 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

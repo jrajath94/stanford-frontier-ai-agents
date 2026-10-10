@@ -1,0 +1,755 @@
+{
+  "itemId": "u03_planning_search",
+  "itemKind": "lesson",
+  "revision": "7f7dcf4a31e1e77c14a4e3bdd529683516f1ef5d4c808559d71d055019b6a20b",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u03_planning_search-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u03_planning_search-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u03_planning_search-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official sessions 5 and 6.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u03_planning_search-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u03_planning_search-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official sessions 5 (Oct 6) and 6 (Oct 10).",
+          "id": "cs329a_u03_planning_search-intro-r1",
+          "question": "Which course and sessions does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Expand and count one: leaves b^d, nodes 1 + b + ... + b^d.",
+          "term": "search tree"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Group-relative policy optimization; compute advantages on a toy group.",
+          "term": "GRPO"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Keep rationales that led to right answers and fine-tune on them.",
+          "term": "STaR"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Judge whether the reward measures the right thing and is not stretching.",
+          "term": "reward validity"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Expand and count a search tree, compare adaptive with fixed branching, decompose a task and plan subtasks in parallel, assign multi-step credit on a toy, generate and filter synthetic traces, describe STaR and reasoning RL, compute GRPO advantages, state the on-policy requirement, budget a search, and judge reward validity.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Optimization prerequisite.",
+          "term": "P09"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Reinforcement learning prerequisite.",
+          "term": "P17"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Tools and agent state prerequisite.",
+          "term": "P20"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P09 (optimization), P17 (reinforcement learning), and P20 (tools and agent state). Local remediation sits inside C05, C09, and C11.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "Full expansion visits b^d leaves by the product rule.",
+          "term": "b^d"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "(r_i - mean)/std in GRPO; the group-relative learning signal.",
+          "term": "advantage"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The cap that turns search more from a wish into a tradeoff.",
+          "term": "budget"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: search spends compute to find better plans, RL spends experience to learn better policies. Equation: leaf count b^d, advantage (r_i - mean)/std in GRPO. Code: a tree expander plus a group-advantage update. Observation: deeper search helps to a point, then the budget or the reward model breaks first.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-tree-search",
+      "blocks": [
+        {
+          "anchor": "c01-tree-search-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c01-tree-search-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c01-tree-search-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-tree-search-p04",
+          "definition": "b: the number of actions available at each step.",
+          "term": "branching factor"
+        },
+        {
+          "anchor": "c01-tree-search-p04",
+          "definition": "Leaves of a full expansion with branching b and depth d.",
+          "term": "b^d"
+        },
+        {
+          "anchor": "c01-tree-search-p01",
+          "definition": "Explores level by level; finds the shallowest solution first.",
+          "term": "BFS"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c01-tree-search-p03",
+          "answer": "A plan is a path down a tree. The root is now, each branch is an action, the leaves are futures. Search walks the tree and remembers the best leaf it saw.",
+          "id": "c01-tree-search-r1",
+          "question": "What is the mental model of tree search?"
+        },
+        {
+          "anchor": "c01-tree-search-p12",
+          "answer": "Break discrete actions: with free-text actions b is infinite and the tree never starts. A state space with cycles makes naive expansion loop forever without visited-state tracking.",
+          "id": "c01-tree-search-r2",
+          "question": "What breaks tree search?"
+        }
+      ],
+      "title": "C01 tree search"
+    },
+    {
+      "anchor": "c02-adaptive-branching",
+      "blocks": [
+        {
+          "anchor": "c02-adaptive-branching-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-adaptive-branching-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-adaptive-branching-p01",
+          "definition": "Move expansions from settled nodes to uncertain ones, where extra samples change the decision more.",
+          "term": "adaptive branching"
+        },
+        {
+          "anchor": "c02-adaptive-branching-p03",
+          "definition": "The signal setting b(n); uncertain nodes get many children, settled ones get one.",
+          "term": "uncertainty"
+        },
+        {
+          "anchor": "c02-adaptive-branching-p04",
+          "definition": "Total node expansions allowed; the fixed cap on the search.",
+          "term": "budget"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-adaptive-branching-p03",
+          "answer": "Spend branches where the doubt is. A decided node gets one child: keep going. An uncertain node gets many children: look around. The tree grows where it is confused.",
+          "id": "c02-adaptive-branching-r1",
+          "question": "What is the mental model of adaptive branching?"
+        },
+        {
+          "anchor": "c02-adaptive-branching-p12",
+          "answer": "Break signal quality: if the uncertainty signal is noise, adaptive branching allocates randomly and underperforms fixed branching while costing more. All nodes at 0.5 makes it fixed b = 3 with wasted signal compute.",
+          "id": "c02-adaptive-branching-r2",
+          "question": "When does adaptive branching lose to fixed branching?"
+        }
+      ],
+      "title": "C02 adaptive branching"
+    },
+    {
+      "anchor": "c03-decomposition",
+      "blocks": [
+        {
+          "anchor": "c03-decomposition-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c03-decomposition-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-decomposition-p01",
+          "definition": "Task T becomes [T1..Tk] plus a combiner C; k small searches beat one big tree when subtasks decouple.",
+          "term": "decomposition"
+        },
+        {
+          "anchor": "c03-decomposition-p01",
+          "definition": "The shared variables each subtask reads and writes; the recipe for combining steaks into a meal.",
+          "term": "interface"
+        },
+        {
+          "anchor": "c03-decomposition-p01",
+          "definition": "Decompose only when the direct attempt fails, so easy tasks pay no decomposition cost.",
+          "term": "ADaPT"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c03-decomposition-p05",
+          "answer": "Decomposition turns one b^d search into k smaller searches; the product of small trees beats one big tree when subtasks decouple. The toy saves 30 versus 625, and the interface cost is the combiner.",
+          "id": "c03-decomposition-r1",
+          "question": "Why does decomposition beat one big search?"
+        },
+        {
+          "anchor": "c03-decomposition-p12",
+          "answer": "Break subtask independence: lodging choice changes transport cost, but the interface fixed transport first. Each subtask is optimal alone, yet the combination is bad. Decomposing a joke into separately written setup and punchline is not funny.",
+          "id": "c03-decomposition-r2",
+          "question": "What breaks decomposition?"
+        }
+      ],
+      "title": "C03 decomposition"
+    },
+    {
+      "anchor": "c04-parallel-planningexecution",
+      "blocks": [
+        {
+          "anchor": "c04-parallel-planningexecution-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c04-parallel-planningexecution-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-parallel-planningexecution-p04",
+          "definition": "The longest dependency chain; no schedule beats it, parallelism never shortens it.",
+          "term": "critical path"
+        },
+        {
+          "anchor": "c04-parallel-planningexecution-p04",
+          "definition": "Subtasks with durations and dependencies; serial time is the sum, parallel time the longest path.",
+          "term": "dependency DAG"
+        },
+        {
+          "anchor": "c04-parallel-planningexecution-p03",
+          "definition": "Start executing A while still planning C; hides planning latency behind execution.",
+          "term": "interleaving"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c04-parallel-planningexecution-p05",
+          "answer": "The critical path sets the floor. Parallelism removes waiting between independent tasks but never shortens the chain. Interleaved planning hides planning latency behind execution.",
+          "id": "c04-parallel-planningexecution-r1",
+          "question": "What limits parallel speedup?"
+        },
+        {
+          "anchor": "c04-parallel-planningexecution-p12",
+          "answer": "Break dependency knowledge: C secretly needs B's output, so parallel A+B then C uses a stale B result. Two subtasks writing the same file corrupt it under parallel execution.",
+          "id": "c04-parallel-planningexecution-r2",
+          "question": "What breaks parallel planning?"
+        }
+      ],
+      "title": "C04 parallel planning/execution"
+    },
+    {
+      "anchor": "c05-multi-step-credit",
+      "blocks": [
+        {
+          "anchor": "c05-multi-step-credit-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c05-multi-step-credit-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-multi-step-credit-p01",
+          "definition": "Blame in reverse: remove each suspect step and watch the outcome.",
+          "term": "credit"
+        },
+        {
+          "anchor": "c05-multi-step-credit-p01",
+          "definition": "A(s, a) = Q(s, a) - V(s); actions better than average get positive weight.",
+          "term": "advantage"
+        },
+        {
+          "anchor": "c05-multi-step-credit-p01",
+          "definition": "The gold standard for credit: measures the causal effect of the step.",
+          "term": "ablation"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-multi-step-credit-p03",
+          "answer": "Credit is blame in reverse. Remove each suspect step and watch the outcome; the step whose removal breaks success owns the credit. In the toy, removing s1 drops reward to 0, so s1 owns it.",
+          "id": "c05-multi-step-credit-r1",
+          "question": "How do you find which step deserves credit?"
+        },
+        {
+          "anchor": "c05-multi-step-credit-p12",
+          "answer": "Break the neutral-replacement assumption: removing s2 shifts the positions of s3's inputs, so the ablation measures position shift, not s2's credit. With two redundant steps, marginal credit says neither matters, yet removing both breaks everything.",
+          "id": "c05-multi-step-credit-r2",
+          "question": "What breaks ablation-based credit?"
+        }
+      ],
+      "title": "C05 multi-step credit"
+    },
+    {
+      "anchor": "c06-synthetic-traces",
+      "blocks": [
+        {
+          "anchor": "c06-synthetic-traces-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c06-synthetic-traces-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-synthetic-traces-p01",
+          "definition": "Keeps the good dreams; the teacher that curates the generator's attempts.",
+          "term": "filter"
+        },
+        {
+          "anchor": "c06-synthetic-traces-p05",
+          "definition": "Sample from pi_gen, keep by F, train by maximum likelihood on the kept set.",
+          "term": "rejection sampling"
+        },
+        {
+          "anchor": "c06-synthetic-traces-p05",
+          "definition": "All 1000 traces share one template; the kept set teaches a single trick.",
+          "term": "mode collapse"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c06-synthetic-traces-p05",
+          "answer": "It works when the filter is stricter than the generator is good: the kept set is better than average, so imitation raises the average. In the toy, 300 of 1000 traces survive the filter and become training data.",
+          "id": "c06-synthetic-traces-r1",
+          "question": "When does training on synthetic traces work?"
+        },
+        {
+          "anchor": "c06-synthetic-traces-p12",
+          "answer": "Break filter trust: the filter checks the final answer only, and the generator learns right answers with broken reasoning, which the ratchet then amplifies. Mode collapse teaches one trick.",
+          "id": "c06-synthetic-traces-r2",
+          "question": "What breaks synthetic trace training?"
+        }
+      ],
+      "title": "C06 synthetic traces"
+    },
+    {
+      "anchor": "c07-star",
+      "blocks": [
+        {
+          "anchor": "c07-star-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c07-star-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c07-star-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-star-p01",
+          "definition": "Synthetic traces specialized to rationales: filter by answer correctness, train on reasoning chains.",
+          "term": "STaR"
+        },
+        {
+          "anchor": "c07-star-p02",
+          "definition": "The scratch work kept when its answer is right; the artifact STaR trains on.",
+          "term": "rationale"
+        },
+        {
+          "anchor": "c07-star-p01",
+          "definition": "Each round's good scratch becomes the next round's textbook; needs some keepers to start.",
+          "term": "bootstrapping"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c07-star-p03",
+          "answer": "Keep the scratch work that led to right answers and study it. The model teaches itself to show work that works. In the toy, 30 of 100 questions yield keepers for fine-tuning.",
+          "id": "c07-star-r1",
+          "question": "How does STaR teach a model to explain its answers?"
+        },
+        {
+          "anchor": "c07-star-p12",
+          "answer": "Break the rationale-answer link: the model guesses right with nonsense rationales, and STaR trains confident nonsense. A hinted rationale that argues for the hint regardless of truth teaches sycophancy to hints.",
+          "id": "c07-star-r2",
+          "question": "What breaks STaR?"
+        }
+      ],
+      "title": "C07 STaR"
+    },
+    {
+      "anchor": "c08-reasoning-rl",
+      "blocks": [
+        {
+          "anchor": "c08-reasoning-rl-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-reasoning-rl-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-reasoning-rl-p01",
+          "definition": "Answer checks or test passes, not a learned model; the world grades.",
+          "term": "verifiable"
+        },
+        {
+          "anchor": "c08-reasoning-rl-p03",
+          "definition": "Right answer in, gradient out; pay for results and let the model try.",
+          "term": "vending machine"
+        },
+        {
+          "anchor": "c08-reasoning-rl-p04",
+          "definition": "Policy gradient baseline from the prompt's own sample group; no value network needed.",
+          "term": "group baseline"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-reasoning-rl-p05",
+          "answer": "With verifiable rewards the loop needs no human labels and no learned reward model. The group baseline cuts variance without a value network. The mechanism discovers traces outside the imitation set, which is where STaR's keeper pool ends.",
+          "id": "c08-reasoning-rl-r1",
+          "question": "Why can reasoning RL discover what STaR cannot?"
+        },
+        {
+          "anchor": "c08-reasoning-rl-p12",
+          "answer": "Break verifiability: the reward is a learned model that the policy games, so the loop optimizes the judge, not the task. All-zero groups on too-hard prompts give zero update and training stalls.",
+          "id": "c08-reasoning-rl-r2",
+          "question": "What breaks reasoning RL?"
+        }
+      ],
+      "title": "C08 reasoning RL"
+    },
+    {
+      "anchor": "c09-dapogrpo-reading",
+      "blocks": [
+        {
+          "anchor": "c09-dapogrpo-reading-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c09-dapogrpo-reading-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c09-dapogrpo-reading-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-dapogrpo-reading-p01",
+          "definition": "G responses to one prompt; the group is its own baseline, no value network.",
+          "term": "group"
+        },
+        {
+          "anchor": "c09-dapogrpo-reading-p04",
+          "definition": "Keeps the policy near the reference so the group stays on-distribution.",
+          "term": "KL penalty"
+        },
+        {
+          "anchor": "c09-dapogrpo-reading-p01",
+          "definition": "Decoupled clipping and dynamic sampling; the reading's named method family.",
+          "term": "DAPO"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c09-dapogrpo-reading-p03",
+          "answer": "Grade on a curve within each group: the best response gets pushed up, the worst pushed down, the middle stays. In the toy, rewards [2,0,1,1] give advantages [1.4142,-1.4142,0,0].",
+          "id": "c09-dapogrpo-reading-r1",
+          "question": "How does the group baseline replace PPO's value network?"
+        },
+        {
+          "anchor": "c09-dapogrpo-reading-p12",
+          "answer": "Break within-group comparability: two responses solve different interpretations of an ambiguous prompt, so the ranking punishes a valid alternative. All-equal rewards give zero advantages and the group teaches nothing.",
+          "id": "c09-dapogrpo-reading-r2",
+          "question": "When does group-relative ranking mislead?"
+        }
+      ],
+      "title": "C09 DAPO/GRPO reading"
+    },
+    {
+      "anchor": "c10-on-policyness",
+      "blocks": [
+        {
+          "anchor": "c10-on-policyness-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-on-policyness-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-on-policyness-p04",
+          "definition": "pi_old equals pi_new; the data source matches the updated policy.",
+          "term": "on-policy"
+        },
+        {
+          "anchor": "c10-on-policyness-p04",
+          "definition": "pi_new/pi_old reweights old-policy samples; unbiased but high-variance when policies differ.",
+          "term": "importance weights"
+        },
+        {
+          "anchor": "c10-on-policyness-p01",
+          "definition": "Teaches the current policy to be the old policy; the fresher the data, the truer the gradient.",
+          "term": "stale"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-on-policyness-p05",
+          "answer": "The policy gradient is an expectation under the current policy, so old-policy data estimates the wrong expectation. In the toy, traces from the old policy (P(A)=0.8) drag the new policy (P(A)=0.2) backward.",
+          "id": "c10-on-policyness-r1",
+          "question": "Why is stale data the wrong expectation?"
+        },
+        {
+          "anchor": "c10-on-policyness-p12",
+          "answer": "Break overlap: pi_new assigns 0 to an action pi_old took often, so those samples vanish; the reverse divides by zero. A changed tokenizer makes old token sequences impossible under the new policy.",
+          "id": "c10-on-policyness-r2",
+          "question": "What breaks importance weighting?"
+        }
+      ],
+      "title": "C10 on-policyness"
+    },
+    {
+      "anchor": "c11-budget",
+      "blocks": [
+        {
+          "anchor": "c11-budget-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-budget-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-budget-p01",
+          "definition": "A fuel gauge in node expansions; every expansion burns fuel until the gauge hits zero.",
+          "term": "budget"
+        },
+        {
+          "anchor": "c11-budget-p01",
+          "definition": "There is no derivation; the mechanism is a ledger of spent versus remaining.",
+          "term": "ledger"
+        },
+        {
+          "anchor": "c11-budget-p06",
+          "definition": "The 21 unexpanded nodes; stated, not hidden, when the budget stops at 100.",
+          "term": "opportunity cost"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c11-budget-p03",
+          "answer": "A budget is a fuel gauge. The search flies until the gauge hits zero, then lands on the best leaf it saw. Running out of fuel is normal; the plan accounts for it.",
+          "id": "c11-budget-r1",
+          "question": "What is the mental model of a search budget?"
+        },
+        {
+          "anchor": "c11-budget-p12",
+          "answer": "Break uniform cost: one node's expansion costs 1000x the others, so the node-count budget lies about real cost. If the best leaf is node 101 and the budget stopped at 100, the reported best is second-best; budgets hide tails.",
+          "id": "c11-budget-r2",
+          "question": "How do budgets hide tails?"
+        }
+      ],
+      "title": "C11 budget"
+    },
+    {
+      "anchor": "c12-reward-validity",
+      "blocks": [
+        {
+          "anchor": "c12-reward-validity-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-reward-validity-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-reward-validity-p01",
+          "definition": "Does the tape measure the right thing, and is the tape itself stretching?",
+          "term": "validity"
+        },
+        {
+          "anchor": "c12-reward-validity-p05",
+          "definition": "Three independent instruments that fail differently; agreement is the evidence.",
+          "term": "triangulation"
+        },
+        {
+          "anchor": "c12-reward-validity-p02",
+          "definition": "The slope of proxy drift over time; measured frequently enough to catch gaming.",
+          "term": "drift"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c12-reward-validity-p05",
+          "answer": "Triangulation: the training reward can be gamed, the held-out tests are unseen, the human sees what tests miss. Agreement across instruments is the evidence; disagreement locates the failure.",
+          "id": "c12-reward-validity-r1",
+          "question": "How do three instruments validate a reward?"
+        },
+        {
+          "anchor": "c12-reward-validity-p12",
+          "answer": "Break held-out secrecy: leaked tests make all three instruments agree and all three wrong. Human judges who learn to predict the reward turn the spot-check into a second proxy.",
+          "id": "c12-reward-validity-r2",
+          "question": "What breaks reward triangulation?"
+        }
+      ],
+      "title": "C12 reward validity"
+    },
+    {
+      "anchor": "u03-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u03-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u03-not-yet-understood-dependency-list-list01",
+          "definition": "Gradient descent and constrained objectives; remediated in C11 items 4-5.",
+          "term": "gradient descent"
+        },
+        {
+          "anchor": "u03-not-yet-understood-dependency-list-list01",
+          "definition": "Policy gradients, value functions, and baselines; remediated in C05 and C09 items 4-6.",
+          "term": "policy gradients"
+        },
+        {
+          "anchor": "u03-not-yet-understood-dependency-list-list01",
+          "definition": "Preview for later; not needed for U03.",
+          "term": "importance sampling"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u03-not-yet-understood-dependency-list-list01",
+          "answer": "Tree and graph algorithms (BFS/DFS) are a local bridge: P02 covers data structures and BFS/DFS are derived locally in C01 items 5-7. Importance sampling is deferred as a preview.",
+          "id": "u03-not-yet-understood-dependency-list-r1",
+          "question": "Which dependency is a local bridge, and which is deferred?"
+        }
+      ],
+      "title": "U03 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u03-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u03-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u03-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C01, deeper shells through C02 item 6, C01 items 7, 10, 12, and C11.",
+          "term": "tree search"
+        },
+        {
+          "anchor": "u03-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C09, deeper shells through C09 items 6, 7, 10, 12, and C12.",
+          "term": "GRPO"
+        },
+        {
+          "anchor": "u03-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C07 and C08; the paired imitation-discovery track.",
+          "term": "STaR"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u03-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "Tree search, GRPO, and STaR with reasoning RL. Each runs shells 0-10, ending at production forms: C11 (budget), C12 (reward validity as deployment gate), and the discovery track.",
+          "id": "u03-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U03 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

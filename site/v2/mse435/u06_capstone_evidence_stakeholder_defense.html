@@ -34,70 +34,70 @@
 </ul>
   </nav>
   <main class="content" id="main">
-    <article>
+    <span id="mse435_u06_capstone_evidence_stakeholder_defense-intro"></span><article>
       <nav class="breadcrumb"><a href="index.html">Home</a> / <a href="#">MSE435: AI Economics and Infrastructure</a> / U06 · Capstone: evidence and stakeholder defense</nav>
       <h1>U06 · Capstone: evidence and stakeholder defense</h1>
       
       <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="u06-capstone-evidence-and-stakeholder-defense">U06 , Capstone evidence and stakeholder defense</h1>
-<p>Parent unit: mse435-U06. Bridges: P07, P22, P23, P24. Local
+<p id="mse435_u06_capstone_evidence_stakeholder_defense-intro-p01" data-kind="prose" data-term="mse435-U06">Parent unit: mse435-U06. Bridges: P07, P22, P23, P24. Local
 remediation in <code>prerequisites.md</code> (U06-R1 to U06-R3). Shared
 bridges linked, not rebuilt.</p>
-<p>Claim class: OFFICIAL-SCHEDULE for the week-5 capstone case
+<p id="mse435_u06_capstone_evidence_stakeholder_defense-intro-p02" data-kind="prose">Claim class: OFFICIAL-SCHEDULE for the week-5 capstone case
 launch (Sachin Katti session, SRC-00). REQUESTED (course
 framing) for the week-9 defense structure. Every leaf:
 PLANNED / SOURCE ATTRIBUTION PENDING. Toy numbers are
 computed locally and labeled TOY. Speaker claims carry
 evidence labels. The economics/engineering boundary is
 strict: investment and governance claims are economics,
-never agent implementation.</p>
+never agent implementation.</p><span id="mse435_u06_capstone_evidence_stakeholder_defense-intro-end" data-end></span>
 <h2 id="not-yet-understood-dependency-list-unit-level">Not-yet-understood dependency list (unit level)</h2>
-<ol>
+<ol id="not-yet-understood-dependency-list-unit-level-list01" data-kind="prose" data-term="baseline measurement">
 <li>Baseline measurement (U06-R1) , needed for C01, C03.</li>
 <li>Expected value under uncertainty (U06-R2) , needed for
    C05, C06.</li>
 <li>Decision rules (U06-R3) , needed for C04, C12.</li>
-</ol>
+</ol><span id="not-yet-understood-dependency-list-unit-level-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c01-baseline-business-workflow">mse435-U06-C01 , baseline business workflow</h2>
-<p><strong>Claim class.</strong> OFFICIAL-SCHEDULE (week-5 capstone case).
+<h2 id="mse435-u06-c01-baseline-business-workflow" data-term="baseline">mse435-U06-C01 , baseline business workflow</h2>
+<p id="mse435-u06-c01-baseline-business-workflow-p01" data-kind="prose"><strong>Claim class.</strong> OFFICIAL-SCHEDULE (week-5 capstone case).
 <strong>Status.</strong> PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Maps to week 5 (&ldquo;Infrastructure and Capstone Case&rdquo; with
+<p id="mse435-u06-c01-baseline-business-workflow-p02" data-kind="prose">Maps to week 5 (&ldquo;Infrastructure and Capstone Case&rdquo; with
 Sachin Katti, SRC-00), which launches the capstone.
 Scope: measuring the current business workflow before any
 AI proposal: time, cost, and error rate per case.
 Objective: build a measured baseline table on a toy.
 Dependencies: P22, P23.</p>
 <h3 id="2-motivating-question-and-tiny-toy">2. Motivating question and tiny toy</h3>
-<p>Motivating question: a claims desk handles 200 cases per
+<p id="mse435-u06-c01-baseline-business-workflow-p03" data-kind="example">Motivating question: a claims desk handles 200 cases per
 day at 45 minutes and 38 dollars each, what is the yearly
 baseline cost? Tiny toy: 200 x 38 x 250 days = 1.9M.</p>
 <h3 id="3-plain-language-mental-model">3. Plain-language mental model</h3>
-<p>Every investment case needs a &ldquo;before&rdquo; photo. The
+<p id="mse435-u06-c01-baseline-business-workflow-p04" data-kind="keyIdea" data-reveal="rise">Every investment case needs a &ldquo;before&rdquo; photo. The
 baseline is the measured cost, time, and quality of the
 current workflow. Without it, every saving claim is
 fiction: you cannot show improvement against a number you
 never measured. Measure first, propose second.</p>
 <h3 id="4-variables-units-shapes-assumptions">4. Variables, units, shapes, assumptions</h3>
-<p>n = cases per day. t = minutes per case. c = dollars per
+<p id="mse435-u06-c01-baseline-business-workflow-p05" data-kind="definition" data-term="yearly cost">n = cases per day. t = minutes per case. c = dollars per
 case. d = working days per year. Yearly cost = n x c x d.
 Yearly hours = n x t / 60 x d. Assumptions: the sample
 period represents the year, and cost per case is fully
 loaded.</p>
 <h3 id="5-justified-derivation">5. Justified derivation</h3>
-<p>n = 200, t = 45, c = 38, d = 250. Yearly cost = 200 x 38
+<p id="mse435-u06-c01-baseline-business-workflow-p06" data-kind="prose">n = 200, t = 45, c = 38, d = 250. Yearly cost = 200 x 38
 x 250 = 1,900,000 dollars. Yearly hours = 200 x 0.75 x
 250 = 37,500 hours. Error rate measured at 0.04: 2,000
 errors per year at 120 dollars each = 240,000. True
 baseline = 2.14M per year.</p>
 <h3 id="6-computed-numerical-example">6. Computed numerical example</h3>
-<p>Toy: the AI proposal claims 30 percent cost reduction.
+<p id="mse435-u06-c01-baseline-business-workflow-p07" data-kind="example">Toy: the AI proposal claims 30 percent cost reduction.
 Against the 2.14M baseline that is 642k per year. Against
 an unmeasured &ldquo;about 1.5M&rdquo; guess it would be 450k. The
 baseline choice moves the claim by 192k. Measure, do not
 guess.</p>
 <h3 id="7-algorithm-and-minimal-implementation">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def baseline(n, t_min, c, d=250, err_rate=0.0, err_cost=0.0):
+<pre id="mse435-u06-c01-baseline-business-workflow-code01" data-kind="prose"><code class="language-python">def baseline(n, t_min, c, d=250, err_rate=0.0, err_cost=0.0):
     cost = n * c * d
     hours = n * t_min / 60 * d
     errors = n * d * err_rate * err_cost
@@ -107,38 +107,38 @@ print(baseline(200, 45, 38))
 print(baseline(200, 45, 38, err_rate=0.04, err_cost=120))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(1900000, 37500.0, 1900000)</code> then <code>(1900000,
+<p id="mse435-u06-c01-baseline-business-workflow-p08" data-kind="prose">Expected: <code>(1900000, 37500.0, 1900000)</code> then <code>(1900000,
 37500.0, 2140000)</code>. Check: errors add to the total.
 Check: hours scale with t. Check units: dollars, hours.</p>
 <h3 id="9-complexity-costs-stability">9. Complexity, costs, stability</h3>
-<p>O(1). The fragile input is c: fully-loaded cost per case
+<p id="mse435-u06-c01-baseline-business-workflow-p09" data-kind="prose">O(1). The fragile input is c: fully-loaded cost per case
 needs finance, not the team&rsquo;s guess. Get the number from
 the cost center owner.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: benchmark against peers, which is faster but
+<p id="mse435-u06-c01-baseline-business-workflow-p10" data-kind="prose">Alternative: benchmark against peers, which is faster but
 less trusted. Alternative: time-and-motion study, which
 is precise but slow. Choose direct measurement where the
 investment is large. Choose benchmarks for small pilots.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample">11. Failure case, broken assumption, counterexample</h3>
-<p>Break representativeness. The baseline was measured in a
+<p id="mse435-u06-c01-baseline-business-workflow-p11" data-kind="prose">Break representativeness. The baseline was measured in a
 quiet month. December runs 40 percent hotter, and the
 &ldquo;saving&rdquo; is really seasonality. Counterexample: a brand-new
 workflow has no baseline, so the case must use a pilot
 control group instead.</p>
 <h3 id="12-research-reading-and-falsifiable-extension">12. Research reading and falsifiable extension</h3>
-<p>Read P22 on baselines. Falsifiable extension: re-measure
+<p id="mse435-u06-c01-baseline-business-workflow-p12" data-kind="prose">Read P22 on baselines. Falsifiable extension: re-measure
 the baseline next quarter. Hypothesis: within 10 percent
 of the first measure. It fails if seasonality dominates,
 which forces seasonal baselines.</p>
 <h3 id="13-assessment">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c01-baseline-business-workflow-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c01-baseline-business-workflow-list01" data-kind="prose">
 <li>Why must the baseline be measured before the
    proposal?</li>
 <li>What three numbers make a baseline table?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c01-baseline-business-workflow-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c01-baseline-business-workflow-list02" data-kind="prose">
 <li>Define a business baseline without symbols.</li>
 <li>Toy: n = 200, c = 38, d = 250. Compute yearly cost.</li>
 <li>Add 4 percent errors at 120 dollars each. Recompute.</li>
@@ -146,57 +146,57 @@ which forces seasonal baselines.</p>
 <li>Compare direct measurement with peer benchmarks:
    when does each win?</li>
 </ol>
-<p>Unfamiliar transfer: the baseline was measured in a
+<p id="mse435-u06-c01-baseline-business-workflow-p15" data-kind="prose">Unfamiliar transfer: the baseline was measured in a
 quiet month and December runs 40 percent hotter. Rework
 the saving claim.</p>
 <h3 id="14-lab-exercises">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 1 (baseline with seasonality).</p>
+<p id="mse435-u06-c01-baseline-business-workflow-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 1 (baseline with seasonality).</p>
 <h3 id="15-visual-units-and-audit">15. Visual units and audit</h3>
-<p><code>visuals/figures/u06_baseline.png</code>: measured baseline
+<p id="mse435-u06-c01-baseline-business-workflow-p17" data-kind="prose"><code>visuals/figures/u06_baseline.png</code>: measured baseline
 cost bars (labor, errors) versus the guessed baseline,
 rule &ldquo;measure before proposing&rdquo;. Source: original. Alt
 text: two bars, measured 2.14M versus guessed 1.5M, arrow
 labeled measure before proposing. Audit: PASS.</p>
-<figure><img alt="Baseline comparison" src="assets/figures/u06_baseline.png"><figcaption>Baseline comparison</figcaption></figure>
+<figure id="mse435-u06-c01-baseline-business-workflow-fig01" data-kind="figure" data-reveal="fade"><img alt="Baseline comparison" src="assets/figures/u06_baseline.png"><figcaption>Baseline comparison</figcaption></figure><span id="mse435-u06-c01-baseline-business-workflow-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c02-adoption-assumptions">mse435-U06-C02 , adoption assumptions</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c02-adoption-assumptions" data-term="adoption assumptions">mse435-U06-C02 , adoption assumptions</h2>
+<p id="mse435-u06-c02-adoption-assumptions-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_1">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure (week 9 framing). Scope: the
+<p id="mse435-u06-c02-adoption-assumptions-p02" data-kind="prose">Capstone defense structure (week 9 framing). Scope: the
 adoption ramp assumptions inside every AI business case:
 who uses it, when, and what share of value that unlocks.
 Objective: write adoption assumptions explicitly and price
 them. Dependencies: U06-C01, U05-C10.</p>
 <h3 id="2-motivating-question-and-tiny-toy_1">2. Motivating question and tiny toy</h3>
-<p>Motivating question: the case claims 642k yearly saving at
+<p id="mse435-u06-c02-adoption-assumptions-p03" data-kind="example" data-term="realized">Motivating question: the case claims 642k yearly saving at
 full adoption, adoption ramps 20, 50, 80 percent over 3
 years, what is the realized 3-year value? Tiny toy: year
 1 = 128.4k.</p>
 <h3 id="3-plain-language-mental-model_1">3. Plain-language mental model</h3>
-<p>Adoption assumptions are the quietest lies in business
+<p id="mse435-u06-c02-adoption-assumptions-p04" data-kind="keyIdea" data-reveal="rise">Adoption assumptions are the quietest lies in business
 cases: &ldquo;100 percent by Q2&rdquo; with no plan. Every case must
 state the ramp, the driver behind each step (training,
 mandate, UX), and what happens if the ramp stalls. Value
 without an adoption plan is a wish.</p>
 <h3 id="4-variables-units-shapes-assumptions_1">4. Variables, units, shapes, assumptions</h3>
-<p>a_t = adoption share year t. S = full-adoption yearly
+<p id="mse435-u06-c02-adoption-assumptions-p05" data-kind="definition" data-term="a_t">a_t = adoption share year t. S = full-adoption yearly
 saving, dollars. Realized_t = a_t x S. Assumptions: the
 ramp carries named drivers, and S is measured against the
 baseline.</p>
 <h3 id="5-justified-derivation_1">5. Justified derivation</h3>
-<p>S = 642k, a = [0.20, 0.50, 0.80]. Realized = [128.4k,
+<p id="mse435-u06-c02-adoption-assumptions-p06" data-kind="prose">S = 642k, a = [0.20, 0.50, 0.80]. Realized = [128.4k,
 321k, 513.6k], total 963k over 3 years versus the naive
 1.926M. The naive case overstates value by 2x. At 10
 percent discount: PV = 116.7k + 265.3k + 385.9k = 767.9k.</p>
 <h3 id="6-computed-numerical-example_1">6. Computed numerical example</h3>
-<p>Toy: a training program (80k) lifts the ramp to [0.35,
+<p id="mse435-u06-c02-adoption-assumptions-p07" data-kind="example">Toy: a training program (80k) lifts the ramp to [0.35,
 0.65, 0.90]: realized = [224.7k, 417.3k, 577.8k] = 1.22M,
 PV = 204.3k + 344.9k + 434.1k = 983.3k, net 903.3k. The
 80k training buys 135.4k of PV. Name the driver, price
 the driver.</p>
 <h3 id="7-algorithm-and-minimal-implementation_1">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def case_value(S, curve, r=0.10, cost=0.0):
+<pre id="mse435-u06-c02-adoption-assumptions-code01" data-kind="prose"><code class="language-python">def case_value(S, curve, r=0.10, cost=0.0):
     pv = sum(a * S / (1 + r) ** (t + 1)
              for t, a in enumerate(curve))
     return round(pv - cost, 2)
@@ -205,38 +205,38 @@ print(case_value(642_000, [0.20, 0.50, 0.80]))
 print(case_value(642_000, [0.35, 0.65, 0.90], cost=80_000))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_1">8. Correctness checks and expected output</h3>
-<p>Expected: <code>767891.81</code> then <code>903258.45</code>. Check: the full
+<p id="mse435-u06-c02-adoption-assumptions-p08" data-kind="prose">Expected: <code>767891.81</code> then <code>903258.45</code>. Check: the full
 ramp gives the annuity PV. Check: training raises net PV
 here. Check units: dollars.</p>
 <h3 id="9-complexity-costs-stability_1">9. Complexity, costs, stability</h3>
-<p>O(years). The fragile input is the ramp: it is the most
+<p id="mse435-u06-c02-adoption-assumptions-p09" data-kind="prose">O(years). The fragile input is the ramp: it is the most
 gamed number in the case. Require a named driver per
 step.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_1">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: mandate adoption, which works for internal
+<p id="mse435-u06-c02-adoption-assumptions-p10" data-kind="prose">Alternative: mandate adoption, which works for internal
 tools with compliance. Alternative: phased rollout that
 proves the ramp before scaling spend. Choose mandates
 where compliance is real. Choose proof where it is not.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_1">11. Failure case, broken assumption, counterexample</h3>
-<p>Break the driver. Training is scheduled but nobody
+<p id="mse435-u06-c02-adoption-assumptions-p11" data-kind="prose">Break the driver. Training is scheduled but nobody
 attends: the ramp stays [0.20, 0.30, 0.35], PV = 116.7k +
 165.3k + 168.7k = 450.7k, and the case collapses.
 Counterexample: a tool that replaces a retired system
 gets 100 percent adoption on day one.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_1">12. Research reading and falsifiable extension</h3>
-<p>Read U05-C10 on adoption curves. Falsifiable extension:
+<p id="mse435-u06-c02-adoption-assumptions-p12" data-kind="prose">Read U05-C10 on adoption curves. Falsifiable extension:
 pilot with 50 users for one quarter. Hypothesis: pilot
 adoption reaches 40 percent. It fails below 20 percent,
 which forces a replan.</p>
 <h3 id="13-assessment_1">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c02-adoption-assumptions-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c02-adoption-assumptions-list01" data-kind="prose">
 <li>Why are adoption assumptions the quietest lies in
    business cases?</li>
 <li>What must each ramp step carry?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c02-adoption-assumptions-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c02-adoption-assumptions-list02" data-kind="prose">
 <li>Define adoption-gated case value without symbols.</li>
 <li>Toy: S = 642k, ramp [0.20, 0.50, 0.80]. Compute the
    3-year total.</li>
@@ -245,52 +245,52 @@ which forces a replan.</p>
 <li>Compare mandates with phased proof: when does each
    win?</li>
 </ol>
-<p>Unfamiliar transfer: training fails and the ramp stalls
+<p id="mse435-u06-c02-adoption-assumptions-p15" data-kind="prose">Unfamiliar transfer: training fails and the ramp stalls
 at [0.20, 0.30, 0.35]. Rework the PV and the verdict.</p>
 <h3 id="14-lab-exercises_1">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 2 (adoption ramp with a
+<p id="mse435-u06-c02-adoption-assumptions-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 2 (adoption ramp with a
 failed driver).</p>
 <h3 id="15-visual-units-and-audit_1">15. Visual units and audit</h3>
-<p>Shares the adoption visual language of U05. The lesson
+<p id="mse435-u06-c02-adoption-assumptions-p17" data-kind="prose">Shares the adoption visual language of U05. The lesson
 carries the ramp table. Audit: PASS (no new figure,
-logged).</p>
+logged).</p><span id="mse435-u06-c02-adoption-assumptions-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c03-measurable-outcomes">mse435-U06-C03 , measurable outcomes</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c03-measurable-outcomes" data-term="outcomes">mse435-U06-C03 , measurable outcomes</h2>
+<p id="mse435-u06-c03-measurable-outcomes-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_2">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: defining measurable
+<p id="mse435-u06-c03-measurable-outcomes-p02" data-kind="prose" data-term="success">Capstone defense structure. Scope: defining measurable
 outcomes before launch: the metric tree that decides
 success or failure. Objective: write a pre-registered
 metric set on a toy. Dependencies: U06-C01, P22.</p>
 <h3 id="2-motivating-question-and-tiny-toy_2">2. Motivating question and tiny toy</h3>
-<p>Motivating question: the desk adopts AI triage, which
+<p id="mse435-u06-c03-measurable-outcomes-p03" data-kind="example">Motivating question: the desk adopts AI triage, which
 three numbers decide in 90 days whether it worked? Tiny
 toy: cost per case, resolution rate, CSAT.</p>
 <h3 id="3-plain-language-mental-model_2">3. Plain-language mental model</h3>
-<p>Outcomes must be measurable, pre-registered, and few.
+<p id="mse435-u06-c03-measurable-outcomes-p04" data-kind="keyIdea" data-reveal="rise">Outcomes must be measurable, pre-registered, and few.
 Measurable: a number with a source. Pre-registered:
 written before launch, so nobody moves the goalposts.
 Few: three to five, so the team knows what matters. A
 case with twenty metrics has no metric.</p>
 <h3 id="4-variables-units-shapes-assumptions_2">4. Variables, units, shapes, assumptions</h3>
-<p>Primary metric m1 with target T1, guardrails m2..mk with
+<p id="mse435-u06-c03-measurable-outcomes-p05" data-kind="definition" data-term="m1">Primary metric m1 with target T1, guardrails m2..mk with
 floors F_i. Success = m1 meets T1 AND all guardrails hold.
 Assumptions: metrics are measurable weekly, and targets
 are set from the baseline.</p>
 <h3 id="5-justified-derivation_2">5. Justified derivation</h3>
-<p>Baseline: cost per case 38, resolution 0.85, CSAT 4.1.
+<p id="mse435-u06-c03-measurable-outcomes-p06" data-kind="prose">Baseline: cost per case 38, resolution 0.85, CSAT 4.1.
 Targets: cost per case &lt;= 30, resolution &gt;= 0.85
 (guardrail), CSAT &gt;= 4.0 (guardrail). The primary is cost.
 The guardrails stop the team from hitting cost by
 wrecking quality.</p>
 <h3 id="6-computed-numerical-example_2">6. Computed numerical example</h3>
-<p>Toy: after 90 days, cost per case = 28, resolution =
+<p id="mse435-u06-c03-measurable-outcomes-p07" data-kind="example">Toy: after 90 days, cost per case = 28, resolution =
 0.87, CSAT = 4.2. All targets met: success. If cost = 28
 but resolution = 0.79, the case fails despite the saving:
 the guardrail caught quality erosion.</p>
 <h3 id="7-algorithm-and-minimal-implementation_2">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def gate(metrics, targets):
+<pre id="mse435-u06-c03-measurable-outcomes-code01" data-kind="prose"><code class="language-python">def gate(metrics, targets):
     # metrics/targets: dicts, targets hold (op, value)
     ok = True
     for k, (op, v) in targets.items():
@@ -305,36 +305,36 @@ print(gate(m, t))
 print(gate({&quot;cost&quot;: 28, &quot;resolution&quot;: 0.79, &quot;csat&quot;: 4.2}, t))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_2">8. Correctness checks and expected output</h3>
-<p>Expected: <code>True</code> then <code>False</code>. Check: a guardrail breach
+<p id="mse435-u06-c03-measurable-outcomes-p08" data-kind="prose">Expected: <code>True</code> then <code>False</code>. Check: a guardrail breach
 fails the gate. Check: all-green passes. Check units:
 per metric.</p>
 <h3 id="9-complexity-costs-stability_2">9. Complexity, costs, stability</h3>
-<p>O(metrics). The fragile input is the target: set from the
+<p id="mse435-u06-c03-measurable-outcomes-p09" data-kind="prose">O(metrics). The fragile input is the target: set from the
 baseline, not from ambition. A target without a baseline
 is a wish.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_2">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: one metric only, which is simple but
+<p id="mse435-u06-c03-measurable-outcomes-p10" data-kind="prose">Alternative: one metric only, which is simple but
 gameable. Alternative: twenty metrics, which is
 undecidable. Choose three to five with guardrails.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_2">11. Failure case, broken assumption, counterexample</h3>
-<p>Break pre-registration. The team moves the CSAT floor
+<p id="mse435-u06-c03-measurable-outcomes-p11" data-kind="prose">Break pre-registration. The team moves the CSAT floor
 from 4.0 to 3.8 after missing it: the gate becomes
 theater. Counterexample: an exploratory pilot with no
 targets is fine, but then it cannot support an
 investment decision.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_2">12. Research reading and falsifiable extension</h3>
-<p>Read P22 on pre-registration. Falsifiable extension: the
+<p id="mse435-u06-c03-measurable-outcomes-p12" data-kind="prose">Read P22 on pre-registration. Falsifiable extension: the
 90-day readout itself. Hypothesis: all metrics meet
 targets. It fails on any miss, which triggers the
 rollback plan (C09).</p>
 <h3 id="13-assessment_2">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c03-measurable-outcomes-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c03-measurable-outcomes-list01" data-kind="prose">
 <li>What three properties must outcomes have?</li>
 <li>Why do guardrails matter?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c03-measurable-outcomes-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c03-measurable-outcomes-list02" data-kind="prose">
 <li>Define measurable outcomes without symbols.</li>
 <li>Toy: write the metric set for the claims desk.</li>
 <li>Cost 28, resolution 0.79, CSAT 4.2. Judge it.</li>
@@ -342,52 +342,52 @@ rollback plan (C09).</p>
 <li>Compare three metrics with twenty: when does each
    win?</li>
 </ol>
-<p>Unfamiliar transfer: the team moves the CSAT floor after
+<p id="mse435-u06-c03-measurable-outcomes-p15" data-kind="prose">Unfamiliar transfer: the team moves the CSAT floor after
 missing it. Name what broke and the fix.</p>
 <h3 id="14-lab-exercises_2">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 3 (metric gate with a moved
+<p id="mse435-u06-c03-measurable-outcomes-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 3 (metric gate with a moved
 goalpost).</p>
 <h3 id="15-visual-units-and-audit_2">15. Visual units and audit</h3>
-<p>No new plate. The lesson carries the metric table.
-Audit: PASS (no new figure, logged).</p>
+<p id="mse435-u06-c03-measurable-outcomes-p17" data-kind="prose">No new plate. The lesson carries the metric table.
+Audit: PASS (no new figure, logged).</p><span id="mse435-u06-c03-measurable-outcomes-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c04-technical-quality-gate">mse435-U06-C04 , technical quality gate</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c04-technical-quality-gate" data-term="quality gate">mse435-U06-C04 , technical quality gate</h2>
+<p id="mse435-u06-c04-technical-quality-gate-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_3">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: the technical gate that
+<p id="mse435-u06-c04-technical-quality-gate-p02" data-kind="prose" data-term="pass">Capstone defense structure. Scope: the technical gate that
 a model must pass before rollout: accuracy, latency, and
 escalation thresholds with teeth. Objective: write a gate
 with pass/fail teeth on a toy. Dependencies: U06-C03,
 U04-C07.</p>
 <h3 id="2-motivating-question-and-tiny-toy_3">2. Motivating question and tiny toy</h3>
-<p>Motivating question: the model scores 0.91 accuracy, p99
+<p id="mse435-u06-c04-technical-quality-gate-p03" data-kind="example">Motivating question: the model scores 0.91 accuracy, p99
 latency 1.8 s, escalation 0.08, the gate needs 0.90, 2.0
 s, 0.10, does it pass? Tiny toy: yes, 3 of 3.</p>
 <h3 id="3-plain-language-mental-model_3">3. Plain-language mental model</h3>
-<p>A quality gate is a contract: the model ships only if all
+<p id="mse435-u06-c04-technical-quality-gate-p04" data-kind="keyIdea" data-reveal="rise">A quality gate is a contract: the model ships only if all
 thresholds pass. Thresholds come from the business, not
 the lab: accuracy from the error budget, latency from the
 SLA, escalation from the staffing plan. A gate without
 teeth (ship anyway on miss) is a suggestion.</p>
 <h3 id="4-variables-units-shapes-assumptions_3">4. Variables, units, shapes, assumptions</h3>
-<p>Thresholds: acc &gt;= A, p99 &lt;= L, esc &lt;= E. Measured values
+<p id="mse435-u06-c04-technical-quality-gate-p05" data-kind="definition">Thresholds: acc &gt;= A, p99 &lt;= L, esc &lt;= E. Measured values
 a, l, e. Pass = (a &gt;= A) and (l &lt;= L) and (e &lt;= E).
 Assumptions: measurements come from production-like
 traffic, not the eval set.</p>
 <h3 id="5-justified-derivation_3">5. Justified derivation</h3>
-<p>A = 0.90, L = 2.0, E = 0.10. Measured: 0.91, 1.8, 0.08.
+<p id="mse435-u06-c04-technical-quality-gate-p06" data-kind="prose">A = 0.90, L = 2.0, E = 0.10. Measured: 0.91, 1.8, 0.08.
 All pass. If latency measured 2.3: fail, no ship. The
 gate&rsquo;s value is the failures it causes: each blocked
 rollout is a prevented incident.</p>
 <h3 id="6-computed-numerical-example_3">6. Computed numerical example</h3>
-<p>Toy: the team wants to ship at 0.89 accuracy (&ldquo;close
+<p id="mse435-u06-c04-technical-quality-gate-p07" data-kind="example">Toy: the team wants to ship at 0.89 accuracy (&ldquo;close
 enough&rdquo;). The gate says no. Cost of waiting one sprint:
 40k. Expected cost of shipping a miss: 0.02 extra error x
 50,000 cases x 120 = 120,000. The gate saves 80k by
 saying no.</p>
 <h3 id="7-algorithm-and-minimal-implementation_3">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def quality_gate(a, l, e, A=0.90, L=2.0, E=0.10):
+<pre id="mse435-u06-c04-technical-quality-gate-code01" data-kind="prose"><code class="language-python">def quality_gate(a, l, e, A=0.90, L=2.0, E=0.10):
     checks = {&quot;accuracy&quot;: a &gt;= A, &quot;latency&quot;: l &lt;= L,
               &quot;escalation&quot;: e &lt;= E}
     return all(checks.values()), checks
@@ -396,35 +396,35 @@ print(quality_gate(0.91, 1.8, 0.08))
 print(quality_gate(0.89, 1.8, 0.08))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_3">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(True, {...all True...})</code> then <code>(False, ...)</code>
+<p id="mse435-u06-c04-technical-quality-gate-p08" data-kind="prose">Expected: <code>(True, {...all True...})</code> then <code>(False, ...)</code>
 with accuracy False. Check: one miss fails all. Check:
 thresholds are explicit. Check units: per metric.</p>
 <h3 id="9-complexity-costs-stability_3">9. Complexity, costs, stability</h3>
-<p>O(checks). The fragile input is the measurement: eval-set
+<p id="mse435-u06-c04-technical-quality-gate-p09" data-kind="prose">O(checks). The fragile input is the measurement: eval-set
 numbers flatter the model. Gate on shadow-traffic
 numbers.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_3">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: no gate (ship on vibes), which is fast until
+<p id="mse435-u06-c04-technical-quality-gate-p10" data-kind="prose">Alternative: no gate (ship on vibes), which is fast until
 the incident. Alternative: human review of every output,
 which is safe but unscalable. Choose the gate where the
 error budget is real.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_3">11. Failure case, broken assumption, counterexample</h3>
-<p>Break measurement honesty. The team tunes on the gate set
+<p id="mse435-u06-c04-technical-quality-gate-p11" data-kind="prose">Break measurement honesty. The team tunes on the gate set
 until it passes: the gate measures the tuning, not the
 model. Counterexample: a low-stakes internal tool can
 use a lighter gate.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_3">12. Research reading and falsifiable extension</h3>
-<p>Read P22 on Goodhart&rsquo;s law. Falsifiable extension: hold
+<p id="mse435-u06-c04-technical-quality-gate-p12" data-kind="prose">Read P22 on Goodhart&rsquo;s law. Falsifiable extension: hold
 out a fresh gate set. Hypothesis: the model passes the
 fresh set too. It fails if it only passed the tuned set.</p>
 <h3 id="13-assessment_3">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c04-technical-quality-gate-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c04-technical-quality-gate-list01" data-kind="prose">
 <li>Where must gate thresholds come from?</li>
 <li>What is the value of a gate that blocks a rollout?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c04-technical-quality-gate-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c04-technical-quality-gate-list02" data-kind="prose">
 <li>Define a technical quality gate without symbols.</li>
 <li>Toy: judge the 0.91 / 1.8 / 0.08 model.</li>
 <li>The team wants to ship at 0.89. Price saying no.</li>
@@ -432,53 +432,53 @@ fresh set too. It fails if it only passed the tuned set.</p>
 <li>Compare a hard gate with human review of everything:
    when does each win?</li>
 </ol>
-<p>Unfamiliar transfer: the team tunes on the gate set.
+<p id="mse435-u06-c04-technical-quality-gate-p15" data-kind="prose">Unfamiliar transfer: the team tunes on the gate set.
 Name what broke and the fix.</p>
 <h3 id="14-lab-exercises_3">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 4 (gate with a tuned set).</p>
+<p id="mse435-u06-c04-technical-quality-gate-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 4 (gate with a tuned set).</p>
 <h3 id="15-visual-units-and-audit_3">15. Visual units and audit</h3>
-<p><code>visuals/figures/u06_gate.png</code>: three threshold bars
+<p id="mse435-u06-c04-technical-quality-gate-p17" data-kind="prose"><code>visuals/figures/u06_gate.png</code>: three threshold bars
 with pass/fail marks, rule &ldquo;the gate has teeth&rdquo;.
 Source: original. Alt text: three bars against threshold
 lines, all passing, arrow labeled the gate has teeth.
 Audit: PASS.</p>
-<figure><img alt="three bars against threshold lines, all passing, arrow labeled the gate has teeth." src="assets/figures/u06_gate.png"><figcaption>Stage gate</figcaption></figure>
+<figure id="mse435-u06-c04-technical-quality-gate-fig01" data-kind="figure" data-reveal="fade"><img alt="three bars against threshold lines, all passing, arrow labeled the gate has teeth." src="assets/figures/u06_gate.png"><figcaption>Stage gate</figcaption></figure><span id="mse435-u06-c04-technical-quality-gate-end" data-end></span>
 <hr />
 <h2 id="mse435-u06-c05-uncertain-forecasts">mse435-U06-C05 , uncertain forecasts</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<p id="mse435-u06-c05-uncertain-forecasts-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_4">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: forecasting with
+<p id="mse435-u06-c05-uncertain-forecasts-p02" data-kind="prose" data-term="forecast">Capstone defense structure. Scope: forecasting with
 ranges, not points: three-point estimates and expected
 value. Objective: build a ranged forecast on a toy.
 Dependencies: U06-C02, U01-C11.</p>
 <h3 id="2-motivating-question-and-tiny-toy_4">2. Motivating question and tiny toy</h3>
-<p>Motivating question: savings are 200k low, 450k base,
+<p id="mse435-u06-c05-uncertain-forecasts-p03" data-kind="example">Motivating question: savings are 200k low, 450k base,
 800k high, with weights 0.25, 0.50, 0.25, what is the
 expected saving? Tiny toy: 0.25 x 200 + 0.5 x 450 + 0.25
 x 800 = 475k.</p>
 <h3 id="3-plain-language-mental-model_4">3. Plain-language mental model</h3>
-<p>A forecast is a distribution, not a number. The honest
+<p id="mse435-u06-c05-uncertain-forecasts-p04" data-kind="keyIdea" data-reveal="rise" data-term="downside">A forecast is a distribution, not a number. The honest
 form is low/base/high with weights, or a range with a
 confidence. The expected value weights the cases. The
 decision uses the expected value and the downside: a
 great expected value with a fatal downside is still a no.</p>
 <h3 id="4-variables-units-shapes-assumptions_4">4. Variables, units, shapes, assumptions</h3>
-<p>Cases i with value v_i and weight w_i summing to 1.
+<p id="mse435-u06-c05-uncertain-forecasts-p05" data-kind="definition">Cases i with value v_i and weight w_i summing to 1.
 E = sum(w_i x v_i). Downside = min(v_i). Assumptions:
 weights are honest, and cases cover the real spread.</p>
 <h3 id="5-justified-derivation_4">5. Justified derivation</h3>
-<p>v = [200k, 450k, 800k], w = [0.25, 0.50, 0.25]. E = 50k +
+<p id="mse435-u06-c05-uncertain-forecasts-p06" data-kind="prose">v = [200k, 450k, 800k], w = [0.25, 0.50, 0.25]. E = 50k +
 225k + 200k = 475k. The base case (450k) understates the
 expected value because the high case is fat. Downside =
 200k: still positive, so the decision is sound.</p>
 <h3 id="6-computed-numerical-example_4">6. Computed numerical example</h3>
-<p>Toy: the low case is -100k (the project can lose money):
+<p id="mse435-u06-c05-uncertain-forecasts-p07" data-kind="example">Toy: the low case is -100k (the project can lose money):
 E = -25k + 225k + 200k = 400k, still positive, but the
 downside is a loss. The stakeholder question changes from
 &ldquo;is the EV positive&rdquo; to &ldquo;can we survive the low case&rdquo;.</p>
 <h3 id="7-algorithm-and-minimal-implementation_4">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def forecast(cases):
+<pre id="mse435-u06-c05-uncertain-forecasts-code01" data-kind="prose"><code class="language-python">def forecast(cases):
     # cases: list of (value, weight)
     E = sum(v * w for v, w in cases)
     return E, min(v for v, _ in cases)
@@ -487,37 +487,37 @@ print(forecast([(200_000, 0.25), (450_000, 0.50), (800_000, 0.25)]))
 print(forecast([(-100_000, 0.25), (450_000, 0.50), (800_000, 0.25)]))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_4">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(475000.0, 200000)</code> then <code>(400000.0,
+<p id="mse435-u06-c05-uncertain-forecasts-p08" data-kind="prose">Expected: <code>(475000.0, 200000)</code> then <code>(400000.0,
 -100000)</code>. Check: weights sum to 1. Check: the downside
 is the min. Check units: dollars.</p>
 <h3 id="9-complexity-costs-stability_4">9. Complexity, costs, stability</h3>
-<p>O(cases). The fragile inputs are the weights: they encode
+<p id="mse435-u06-c05-uncertain-forecasts-p09" data-kind="prose">O(cases). The fragile inputs are the weights: they encode
 judgment. Elicit them separately from the values.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_4">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: Monte Carlo over distributions, which is
+<p id="mse435-u06-c05-uncertain-forecasts-p10" data-kind="prose">Alternative: Monte Carlo over distributions, which is
 richer but harder to explain. Alternative: point
 forecast, which is simple and wrong. Choose three-point
 for the stakeholder meeting. Choose Monte Carlo for the
 final call.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_4">11. Failure case, broken assumption, counterexample</h3>
-<p>Break weight honesty. The team sets the high weight to
+<p id="mse435-u06-c05-uncertain-forecasts-p11" data-kind="prose">Break weight honesty. The team sets the high weight to
 0.5 because they want the project: E becomes 575k and
 the forecast is advocacy. Counterexample: a decision
 with no downside (free pilot) needs no forecast at all.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_4">12. Research reading and falsifiable extension</h3>
-<p>Read U01-C11 on uncertainty. Falsifiable extension:
+<p id="mse435-u06-c05-uncertain-forecasts-p12" data-kind="prose">Read U01-C11 on uncertainty. Falsifiable extension:
 score past forecasts against outcomes yearly.
 Hypothesis: realized values land inside the range 80
 percent of the time. It fails below 50 percent, which
 means the ranges were advocacy.</p>
 <h3 id="13-assessment_4">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c05-uncertain-forecasts-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c05-uncertain-forecasts-list01" data-kind="prose">
 <li>Why is a forecast a distribution, not a number?</li>
 <li>What two numbers does the decision need?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c05-uncertain-forecasts-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c05-uncertain-forecasts-list02" data-kind="prose">
 <li>Define an honest forecast without symbols.</li>
 <li>Toy: compute E for the three cases above.</li>
 <li>Make the low case -100k. Rework E and the decision
@@ -526,51 +526,51 @@ means the ranges were advocacy.</p>
 <li>Compare three-point with Monte Carlo: when does each
    win?</li>
 </ol>
-<p>Unfamiliar transfer: the team weights the high case 0.5
+<p id="mse435-u06-c05-uncertain-forecasts-p15" data-kind="prose">Unfamiliar transfer: the team weights the high case 0.5
 to sell the project. Name what broke and the fix.</p>
 <h3 id="14-lab-exercises_4">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 5 (forecast with an advocacy
+<p id="mse435-u06-c05-uncertain-forecasts-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 5 (forecast with an advocacy
 case).</p>
 <h3 id="15-visual-units-and-audit_4">15. Visual units and audit</h3>
-<p>No new plate. The lesson carries the case table.
-Audit: PASS (no new figure, logged).</p>
+<p id="mse435-u06-c05-uncertain-forecasts-p17" data-kind="prose">No new plate. The lesson carries the case table.
+Audit: PASS (no new figure, logged).</p><span id="mse435-u06-c05-uncertain-forecasts-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c06-sensitivitytornado-scenarios">mse435-U06-C06 , sensitivity/tornado scenarios</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c06-sensitivitytornado-scenarios" data-term="tornado">mse435-U06-C06 , sensitivity/tornado scenarios</h2>
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_5">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: tornado sensitivity on
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p02" data-kind="prose">Capstone defense structure. Scope: tornado sensitivity on
 the business case: which input moves the answer most.
 Objective: rank the case drivers on a toy. Dependencies:
 U06-C05, U03-C12.</p>
 <h3 id="2-motivating-question-and-tiny-toy_5">2. Motivating question and tiny toy</h3>
-<p>Motivating question: the case NPV is 768k, which input
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p03" data-kind="example">Motivating question: the case NPV is 768k, which input
 moves it most: adoption, quality, volume, or labor cost?
 Tiny toy: adoption swings it 400k, quality 150k.</p>
 <h3 id="3-plain-language-mental-model_5">3. Plain-language mental model</h3>
-<p>A tornado ranks inputs by their swing on the outcome.
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p04" data-kind="keyIdea" data-reveal="rise" data-term="swing">A tornado ranks inputs by their swing on the outcome.
 The top bar is where analysis effort goes: narrow that
 input&rsquo;s range first. The tornado is a map of ignorance,
 not a forecast. Never present the ranking as a
 prediction.</p>
 <h3 id="4-variables-units-shapes-assumptions_5">4. Variables, units, shapes, assumptions</h3>
-<p>Base NPV B. Driver i with low/high outcomes (lo_i,
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p05" data-kind="definition" data-term="B">Base NPV B. Driver i with low/high outcomes (lo_i,
 hi_i). Swing_i = hi_i - lo_i. Rank by swing descending.
 Assumptions: one-at-a-time (no interactions), and ranges
 are honest.</p>
 <h3 id="5-justified-derivation_5">5. Justified derivation</h3>
-<p>B = 768k. Drivers: adoption [400k, 900k] swing 500k,
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p06" data-kind="prose">B = 768k. Drivers: adoption [400k, 900k] swing 500k,
 labor cost [600k, 850k] swing 250k, volume [650k, 830k]
 swing 180k, quality [700k, 820k] swing 120k. Ranking:
 adoption, labor, volume, quality. The case lives or dies
 on adoption: that is where the pilot must de-risk.</p>
 <h3 id="6-computed-numerical-example_5">6. Computed numerical example</h3>
-<p>Toy: the pilot measures adoption precisely, narrowing its
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p07" data-kind="example">Toy: the pilot measures adoption precisely, narrowing its
 range to [700k, 850k], swing 150k. New ranking: labor
 250k first. The tornado updates as ignorance shrinks:
 re-run it after every de-risking step.</p>
 <h3 id="7-algorithm-and-minimal-implementation_5">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def tornado(drivers):
+<pre id="mse435-u06-c06-sensitivitytornado-scenarios-code01" data-kind="prose"><code class="language-python">def tornado(drivers):
     rows = [(name, lo, hi, hi - lo)
             for name, lo, hi in drivers]
     rows.sort(key=lambda r: r[3], reverse=True)
@@ -584,33 +584,33 @@ for r in tornado(ds):
     print(r)
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_5">8. Correctness checks and expected output</h3>
-<p>Expected order: adoption 500k, labor cost 250k, volume
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p08" data-kind="prose">Expected order: adoption 500k, labor cost 250k, volume
 180k, quality 120k. Check: swings are hi - lo. Check:
 order runs high to low. Check units: dollars of NPV.</p>
 <h3 id="9-complexity-costs-stability_5">9. Complexity, costs, stability</h3>
-<p>O(n log n). The fragile inputs are the ranges: honest
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p09" data-kind="prose">O(n log n). The fragile inputs are the ranges: honest
 wide ranges beat narrow guessed ones.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_5">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: Monte Carlo, which captures interactions.
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p10" data-kind="prose">Alternative: Monte Carlo, which captures interactions.
 Use it for the final call. The tornado wins for the
 first meeting: readable and fast.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_5">11. Failure case, broken assumption, counterexample</h3>
-<p>Break one-at-a-time. Adoption and quality interact:
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p11" data-kind="prose">Break one-at-a-time. Adoption and quality interact:
 higher quality raises adoption, and the chart
 double-counts. Counterexample: the top driver is not
 actionable (market volume), so rank by actionable swing.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_5">12. Research reading and falsifiable extension</h3>
-<p>Read U03-C12 on sensitivity. Falsifiable extension:
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p12" data-kind="prose">Read U03-C12 on sensitivity. Falsifiable extension:
 revisit the tornado after the pilot. Hypothesis: the
 top driver stays top. It fails if the ranking flips.</p>
 <h3 id="13-assessment_5">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c06-sensitivitytornado-scenarios-list01" data-kind="prose">
 <li>What does a tornado rank, and what does it not say?</li>
 <li>Why re-run it after de-risking?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c06-sensitivitytornado-scenarios-list02" data-kind="prose">
 <li>Define tornado sensitivity without symbols.</li>
 <li>Toy: rank the four drivers above.</li>
 <li>The pilot narrows adoption to [700k, 850k]. Re-rank.</li>
@@ -618,88 +618,88 @@ top driver stays top. It fails if the ranking flips.</p>
 <li>Compare tornado with Monte Carlo: when is each
    right?</li>
 </ol>
-<p>Unfamiliar transfer: adoption and quality interact.
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p15" data-kind="prose">Unfamiliar transfer: adoption and quality interact.
 Name the failure and the better tool.</p>
 <h3 id="14-lab-exercises_5">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 6 (tornado with an
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 6 (tornado with an
 interaction note).</p>
 <h3 id="15-visual-units-and-audit_5">15. Visual units and audit</h3>
-<p><code>visuals/figures/u06_tornado.png</code>: business-case tornado,
+<p id="mse435-u06-c06-sensitivitytornado-scenarios-p17" data-kind="prose"><code>visuals/figures/u06_tornado.png</code>: business-case tornado,
 adoption longest bar, rule &ldquo;rank by swing, act on top&rdquo;.
 Source: original. Alt text: horizontal bars from base
 768k, adoption longest, arrow labeled rank by swing, act
 on top. Audit: PASS.</p>
-<figure><img alt="horizontal bars from base 768k, adoption longest, arrow labeled rank by swing, act on top. Audit: PASS." src="assets/figures/u06_tornado.png"><figcaption>Cost sensitivity</figcaption></figure>
+<figure id="mse435-u06-c06-sensitivitytornado-scenarios-fig01" data-kind="figure" data-reveal="fade"><img alt="horizontal bars from base 768k, adoption longest, arrow labeled rank by swing, act on top. Audit: PASS." src="assets/figures/u06_tornado.png"><figcaption>Cost sensitivity</figcaption></figure><span id="mse435-u06-c06-sensitivitytornado-scenarios-end" data-end></span>
 <hr />
 <h2 id="mse435-u06-c07-total-cost">mse435-U06-C07 , total cost</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<p id="mse435-u06-c07-total-cost-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_6">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: the 3-year total cost
+<p id="mse435-u06-c07-total-cost-p02" data-kind="prose" data-term="TCO">Capstone defense structure. Scope: the 3-year total cost
 of ownership: build, run, labor, and risk in one number.
 Objective: build the TCO stack on a toy. Dependencies:
 U06-C01, U04-C10.</p>
 <h3 id="2-motivating-question-and-tiny-toy_6">2. Motivating question and tiny toy</h3>
-<p>Motivating question: build 400k, run 300k per year, labor
+<p id="mse435-u06-c07-total-cost-p03" data-kind="example">Motivating question: build 400k, run 300k per year, labor
 150k per year, risk reserve 100k, what is the 3-year TCO?
 Tiny toy: 400 + 900 + 450 + 100 = 1,850k.</p>
 <h3 id="3-plain-language-mental-model_6">3. Plain-language mental model</h3>
-<p>TCO is the whole bill: the build (one-time), the run
+<p id="mse435-u06-c07-total-cost-p04" data-kind="keyIdea" data-reveal="rise" data-term="understate">TCO is the whole bill: the build (one-time), the run
 (tokens, infra), the labor (reviewers, on-call), and the
 risk reserve (expected incident cost). Business cases
 that price only the build understate cost by 3-4x. The
 stakeholder question is always &ldquo;and then what does it
 cost to run&rdquo;.</p>
 <h3 id="4-variables-units-shapes-assumptions_6">4. Variables, units, shapes, assumptions</h3>
-<p>B = build, dollars. R = yearly run cost. L = yearly labor.
+<p id="mse435-u06-c07-total-cost-p05" data-kind="definition" data-term="TCO_3">B = build, dollars. R = yearly run cost. L = yearly labor.
 K = risk reserve. TCO_3 = B + 3 x (R + L) + K.
 Assumptions: run and labor are steady, and K covers
 expected incidents.</p>
 <h3 id="5-justified-derivation_6">5. Justified derivation</h3>
-<p>B = 400k, R = 300k, L = 150k, K = 100k. TCO = 400k +
+<p id="mse435-u06-c07-total-cost-p06" data-kind="prose">B = 400k, R = 300k, L = 150k, K = 100k. TCO = 400k +
 3 x 450k + 100k = 1,850k. The build is 22 percent of the
 total. A case that priced 400k understated cost by 4.6x.</p>
 <h3 id="6-computed-numerical-example_6">6. Computed numerical example</h3>
-<p>Toy: against the C02 PV of 768k in savings, the 1,850k
+<p id="mse435-u06-c07-total-cost-p07" data-kind="example">Toy: against the C02 PV of 768k in savings, the 1,850k
 TCO kills the case: net = -1,082k. But with the trained
 ramp (903k PV) it still fails. The honest conclusion:
 this design is too expensive for this saving. Redesign
 for lower R (caching, smaller model) or find bigger S.</p>
 <h3 id="7-algorithm-and-minimal-implementation_6">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def tco(B, R, L, K, years=3):
+<pre id="mse435-u06-c07-total-cost-code01" data-kind="prose"><code class="language-python">def tco(B, R, L, K, years=3):
     return B + years * (R + L) + K
 
 print(tco(400_000, 300_000, 150_000, 100_000))
 print(tco(400_000, 150_000, 100_000, 100_000))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_6">8. Correctness checks and expected output</h3>
-<p>Expected: <code>1850000</code> then <code>1250000</code>. Check: the build
+<p id="mse435-u06-c07-total-cost-p08" data-kind="prose">Expected: <code>1850000</code> then <code>1250000</code>. Check: the build
 share falls as years grow. Check units: dollars.</p>
 <h3 id="9-complexity-costs-stability_6">9. Complexity, costs, stability</h3>
-<p>O(1). The fragile inputs are R and L: both creep. Cap
+<p id="mse435-u06-c07-total-cost-p09" data-kind="prose">O(1). The fragile inputs are R and L: both creep. Cap
 them with budgets, not hopes.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_6">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: vendor TCO (no build, higher run), which
+<p id="mse435-u06-c07-total-cost-p10" data-kind="prose">Alternative: vendor TCO (no build, higher run), which
 wins where run cost is low. Alternative: 1-year TCO,
 which hides the run tail. Always show 3 years.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_6">11. Failure case, broken assumption, counterexample</h3>
-<p>Break steadiness. R doubles in year 2 (usage grows):
+<p id="mse435-u06-c07-total-cost-p11" data-kind="prose">Break steadiness. R doubles in year 2 (usage grows):
 run years cost 300k + 600k + 600k, TCO = 400k + 1,500k +
 450k + 100k = 2,450k. Counterexample: a pure-API pilot
 has B near zero, and TCO is all run.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_6">12. Research reading and falsifiable extension</h3>
-<p>Read U04-C10 on the fixed floor. Falsifiable extension:
+<p id="mse435-u06-c07-total-cost-p12" data-kind="prose">Read U04-C10 on the fixed floor. Falsifiable extension:
 track actual R + L quarterly against the TCO. Hypothesis:
 within 15 percent. It fails above 25 percent, which
 triggers a redesign.</p>
 <h3 id="13-assessment_6">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c07-total-cost-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c07-total-cost-list01" data-kind="prose">
 <li>Name the four TCO parts.</li>
 <li>Why do build-only cases understate cost 3-4x?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c07-total-cost-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c07-total-cost-list02" data-kind="prose">
 <li>Define TCO without symbols.</li>
 <li>Toy: compute the 3-year TCO above.</li>
 <li>Price the case against 768k PV of savings. Judge it.</li>
@@ -707,57 +707,57 @@ triggers a redesign.</p>
 <li>Compare 3-year TCO with 1-year: when is each
    honest?</li>
 </ol>
-<p>Unfamiliar transfer: R doubles in year 2. Rework the
+<p id="mse435-u06-c07-total-cost-p15" data-kind="prose">Unfamiliar transfer: R doubles in year 2. Rework the
 TCO and the verdict.</p>
 <h3 id="14-lab-exercises_6">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 7 (TCO with runaway run
+<p id="mse435-u06-c07-total-cost-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 7 (TCO with runaway run
 cost).</p>
 <h3 id="15-visual-units-and-audit_6">15. Visual units and audit</h3>
-<p><code>visuals/figures/u06_tco.png</code>: stacked TCO bars, build
+<p id="mse435-u06-c07-total-cost-p17" data-kind="prose"><code>visuals/figures/u06_tco.png</code>: stacked TCO bars, build
 versus run versus labor versus risk, rule &ldquo;price the
 run, not the build&rdquo;. Source: original. Alt text: stacked
 bar to 1.85M, build 0.4M at bottom, arrow labeled price
 the run, not the build. Audit: PASS.</p>
-<figure><img alt="stacked bar to 1.85M, build 0.4M at bottom, arrow labeled price the run, not the build. Audit: PASS." src="assets/figures/u06_tco.png"><figcaption>Total cost of ownership</figcaption></figure>
+<figure id="mse435-u06-c07-total-cost-fig01" data-kind="figure" data-reveal="fade"><img alt="stacked bar to 1.85M, build 0.4M at bottom, arrow labeled price the run, not the build. Audit: PASS." src="assets/figures/u06_tco.png"><figcaption>Total cost of ownership</figcaption></figure><span id="mse435-u06-c07-total-cost-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c08-governance">mse435-U06-C08 , governance</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c08-governance" data-term="governance">mse435-U06-C08 , governance</h2>
+<p id="mse435-u06-c08-governance-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_7">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: who approves model and
+<p id="mse435-u06-c08-governance-p02" data-kind="prose" data-term="risk">Capstone defense structure. Scope: who approves model and
 prompt changes: the change board, its cadence, and its
 cost. Objective: price governance delay against incident
 risk. Dependencies: P24, U06-C04.</p>
 <h3 id="2-motivating-question-and-tiny-toy_7">2. Motivating question and tiny toy</h3>
-<p>Motivating question: a change board meets every 2 weeks,
+<p id="mse435-u06-c08-governance-p03" data-kind="example">Motivating question: a change board meets every 2 weeks,
 each delayed improvement costs 10k per week in forgone
 saving, a bad unreviewed change costs 200k with 5 percent
 chance, which regime wins? Tiny toy: delay costs 20k per
 change, risk cost 10k per change, the board loses.</p>
 <h3 id="3-plain-language-mental-model_7">3. Plain-language mental model</h3>
-<p>Governance is friction with a purpose: it stops bad
+<p id="mse435-u06-c08-governance-p04" data-kind="keyIdea" data-reveal="rise">Governance is friction with a purpose: it stops bad
 changes. But friction has a price: delayed good changes.
 The right governance prices both: review cost and delay
 cost against expected incident cost. Too little
 governance buys incidents. Too much buys stagnation.</p>
 <h3 id="4-variables-units-shapes-assumptions_7">4. Variables, units, shapes, assumptions</h3>
-<p>d = delay weeks per change. g = forgone saving per week,
+<p id="mse435-u06-c08-governance-p05" data-kind="definition" data-term="board cost">d = delay weeks per change. g = forgone saving per week,
 dollars. p = incident probability per unreviewed change.
 I = incident cost. Board cost per change = d x g. Risk
 per change = p x I. Assumptions: changes are similar.</p>
 <h3 id="5-justified-derivation_7">5. Justified derivation</h3>
-<p>d = 2, g = 10k: board cost = 20k per change. p = 0.05, I
+<p id="mse435-u06-c08-governance-p06" data-kind="prose">d = 2, g = 10k: board cost = 20k per change. p = 0.05, I
 = 200k: risk = 10k per change. The board costs double the
 risk it prevents: lighten it (weekly cadence: 10k cost,
 break-even). For a clinical model with I = 5M: risk =
 250k, and the board is cheap.</p>
 <h3 id="6-computed-numerical-example_7">6. Computed numerical example</h3>
-<p>Toy: 50 changes per year. Heavy board: 50 x 20k = 1M per
+<p id="mse435-u06-c08-governance-p07" data-kind="example">Toy: 50 changes per year. Heavy board: 50 x 20k = 1M per
 year in delay. Light board (weekly): 500k. No board:
 50 x 10k = 500k expected incidents. Light board ties
 no-board on cost and keeps the review: choose light.</p>
 <h3 id="7-algorithm-and-minimal-implementation_7">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def governance(d, g, p, I):
+<pre id="mse435-u06-c08-governance-code01" data-kind="prose"><code class="language-python">def governance(d, g, p, I):
     board = d * g
     risk = p * I
     return board, risk, &quot;board&quot; if board &lt; risk else &quot;lighten&quot;
@@ -766,35 +766,35 @@ print(governance(2, 10_000, 0.05, 200_000))
 print(governance(2, 10_000, 0.05, 5_000_000))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_7">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(20000, 10000.0, 'lighten')</code> then <code>(20000,
+<p id="mse435-u06-c08-governance-p08" data-kind="prose">Expected: <code>(20000, 10000.0, 'lighten')</code> then <code>(20000,
 250000.0, 'board')</code>. Check: higher I favors the board.
 Check units: dollars per change.</p>
 <h3 id="9-complexity-costs-stability_7">9. Complexity, costs, stability</h3>
-<p>O(1). The fragile inputs are p and I: incident risk is
+<p id="mse435-u06-c08-governance-p09" data-kind="prose">O(1). The fragile inputs are p and I: incident risk is
 guessed. Review them after each incident.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_7">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: automated gates (tests, evals), which cut d
+<p id="mse435-u06-c08-governance-p10" data-kind="prose">Alternative: automated gates (tests, evals), which cut d
 without cutting review. Alternative: no governance for
 low-stakes changes, full board for high-stakes. Choose
 tiered governance: friction proportional to blast radius.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_7">11. Failure case, broken assumption, counterexample</h3>
-<p>Break change similarity. One change in fifty is a
+<p id="mse435-u06-c08-governance-p11" data-kind="prose">Break change similarity. One change in fifty is a
 prompt rewrite with p = 0.30: the average hides it.
 Counterexample: a static model with no changes needs no
 board.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_7">12. Research reading and falsifiable extension</h3>
-<p>Read P24 on deployment gates. Falsifiable extension: log
+<p id="mse435-u06-c08-governance-p12" data-kind="prose">Read P24 on deployment gates. Falsifiable extension: log
 incidents per change for a year. Hypothesis: board
 review catches at least one incident per 20 changes. It
 fails at zero catches, which means the board is theater.</p>
 <h3 id="13-assessment_7">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c08-governance-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c08-governance-list01" data-kind="prose">
 <li>What two costs does governance balance?</li>
 <li>Why tier governance by blast radius?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c08-governance-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c08-governance-list02" data-kind="prose">
 <li>Define governance cost without symbols.</li>
 <li>Toy: compute board cost and risk above.</li>
 <li>Make I = 5M. Rework the verdict.</li>
@@ -802,51 +802,51 @@ fails at zero catches, which means the board is theater.</p>
 <li>Compare a change board with automated gates: when
    does each win?</li>
 </ol>
-<p>Unfamiliar transfer: one change in fifty has p = 0.30.
+<p id="mse435-u06-c08-governance-p15" data-kind="prose">Unfamiliar transfer: one change in fifty has p = 0.30.
 Rework the average and the policy.</p>
 <h3 id="14-lab-exercises_7">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 8 (tiered governance).</p>
+<p id="mse435-u06-c08-governance-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 8 (tiered governance).</p>
 <h3 id="15-visual-units-and-audit_7">15. Visual units and audit</h3>
-<p>No new plate. The lesson carries the tradeoff table.
-Audit: PASS (no new figure, logged).</p>
+<p id="mse435-u06-c08-governance-p17" data-kind="prose">No new plate. The lesson carries the tradeoff table.
+Audit: PASS (no new figure, logged).</p><span id="mse435-u06-c08-governance-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c09-rolloutrollback">mse435-U06-C09 , rollout/rollback</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c09-rolloutrollback" data-term="rollout">mse435-U06-C09 , rollout/rollback</h2>
+<p id="mse435-u06-c09-rolloutrollback-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_8">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: staged rollout (1, 10,
+<p id="mse435-u06-c09-rolloutrollback-p02" data-kind="prose">Capstone defense structure. Scope: staged rollout (1, 10,
 100 percent) with rollback triggers: how to ship safely
 and reverse fast. Objective: write the rollout plan with
 numeric triggers. Dependencies: U06-C04, P24.</p>
 <h3 id="2-motivating-question-and-tiny-toy_8">2. Motivating question and tiny toy</h3>
-<p>Motivating question: error rate baseline 0.04, rollback
+<p id="mse435-u06-c09-rolloutrollback-p03" data-kind="example" data-term="trigger">Motivating question: error rate baseline 0.04, rollback
 trigger at 2x for 1 hour, the canary shows 0.09 for 90
 minutes, do we roll back? Tiny toy: yes, 0.09 &gt; 0.08.</p>
 <h3 id="3-plain-language-mental-model_8">3. Plain-language mental model</h3>
-<p>Rollout is exposure control: 1 percent of traffic can
+<p id="mse435-u06-c09-rolloutrollback-p04" data-kind="keyIdea" data-reveal="rise">Rollout is exposure control: 1 percent of traffic can
 only cause 1 percent of the damage. Each stage needs an
 entry gate (metrics green) and an exit trigger (metrics
 red). Rollback is a button, not a meeting: the trigger
 fires automatically or it does not exist.</p>
 <h3 id="4-variables-units-shapes-assumptions_8">4. Variables, units, shapes, assumptions</h3>
-<p>Stages: 1, 10, 100 percent. Baseline error b. Trigger:
+<p id="mse435-u06-c09-rolloutrollback-p05" data-kind="definition">Stages: 1, 10, 100 percent. Baseline error b. Trigger:
 error &gt; 2 x b for 1 hour. Assumptions: errors are
 measured in real time, and rollback restores the old
 version in minutes.</p>
 <h3 id="5-justified-derivation_8">5. Justified derivation</h3>
-<p>b = 0.04, trigger = 0.08. Canary at 0.09 for 90 minutes:
+<p id="mse435-u06-c09-rolloutrollback-p06" data-kind="prose">b = 0.04, trigger = 0.08. Canary at 0.09 for 90 minutes:
 0.09 &gt; 0.08 sustained, roll back. Damage at 1 percent
 traffic: 0.09 x 0.01 x 50,000 cases x 120 = 5,400. At
 100 percent without stages: 540,000. Staging cut the
 damage 100x.</p>
 <h3 id="6-computed-numerical-example_8">6. Computed numerical example</h3>
-<p>Toy: the 10 percent stage runs clean for a week (error
+<p id="mse435-u06-c09-rolloutrollback-p07" data-kind="example">Toy: the 10 percent stage runs clean for a week (error
 0.035), entry gate to 100 percent passes. Week 2 at full
 traffic shows error 0.06: below the 0.08 trigger but
 above baseline. Action: investigate, do not roll back.
 The trigger needs both a level and a duration.</p>
 <h3 id="7-algorithm-and-minimal-implementation_8">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def rollout_check(errors, b=0.04, mult=2.0, hours=1.0):
+<pre id="mse435-u06-c09-rolloutrollback-code01" data-kind="prose"><code class="language-python">def rollout_check(errors, b=0.04, mult=2.0, hours=1.0):
     # errors: list of hourly error rates at canary
     bad = [e for e in errors if e &gt; mult * b]
     return len(bad) &gt;= hours, max(errors)
@@ -855,35 +855,35 @@ print(rollout_check([0.05, 0.09, 0.10]))
 print(rollout_check([0.05, 0.06, 0.05]))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_8">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(True, 0.1)</code> then <code>(False, 0.06)</code>. Check: a
+<p id="mse435-u06-c09-rolloutrollback-p08" data-kind="prose">Expected: <code>(True, 0.1)</code> then <code>(False, 0.06)</code>. Check: a
 sustained breach triggers. Check: clean hours do not.
 Check units: error rates, hours.</p>
 <h3 id="9-complexity-costs-stability_8">9. Complexity, costs, stability</h3>
-<p>O(hours). The fragile input is b: baselines drift. Reset
+<p id="mse435-u06-c09-rolloutrollback-p09" data-kind="prose">O(hours). The fragile input is b: baselines drift. Reset
 b after every real change.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_8">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: big-bang rollout, which is fast and
+<p id="mse435-u06-c09-rolloutrollback-p10" data-kind="prose">Alternative: big-bang rollout, which is fast and
 dangerous. Alternative: shadow mode (no user impact),
 which is safe but slow to learn. Choose staged where
 errors cost. Choose big-bang where they do not.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_8">11. Failure case, broken assumption, counterexample</h3>
-<p>Break rollback speed. Rollback takes 4 hours, not
+<p id="mse435-u06-c09-rolloutrollback-p11" data-kind="prose">Break rollback speed. Rollback takes 4 hours, not
 minutes: the trigger fires but damage continues.
 Counterexample: a batch job with no users needs no
 canary.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_8">12. Research reading and falsifiable extension</h3>
-<p>Read P24 on rollback. Falsifiable extension: run a game
+<p id="mse435-u06-c09-rolloutrollback-p12" data-kind="prose">Read P24 on rollback. Falsifiable extension: run a game
 day. Hypothesis: rollback completes in under 15 minutes.
 It fails above 1 hour, which means the button is
 fiction.</p>
 <h3 id="13-assessment_8">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c09-rolloutrollback-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c09-rolloutrollback-list01" data-kind="prose">
 <li>What are the three parts of a rollout stage?</li>
 <li>Why must rollback be a button, not a meeting?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c09-rolloutrollback-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c09-rolloutrollback-list02" data-kind="prose">
 <li>Define staged rollout without symbols.</li>
 <li>Toy: judge the 0.09 canary above.</li>
 <li>Price the damage with and without staging.</li>
@@ -891,59 +891,59 @@ fiction.</p>
    check.</li>
 <li>Compare staged with big-bang: when does each win?</li>
 </ol>
-<p>Unfamiliar transfer: rollback takes 4 hours. Rework the
+<p id="mse435-u06-c09-rolloutrollback-p15" data-kind="prose">Unfamiliar transfer: rollback takes 4 hours. Rework the
 damage math and the requirement.</p>
 <h3 id="14-lab-exercises_8">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 9 (rollback timing).</p>
+<p id="mse435-u06-c09-rolloutrollback-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 9 (rollback timing).</p>
 <h3 id="15-visual-units-and-audit_8">15. Visual units and audit</h3>
-<p><code>visuals/figures/u06_rollout.png</code>: staged exposure bars
+<p id="mse435-u06-c09-rolloutrollback-p17" data-kind="prose"><code>visuals/figures/u06_rollout.png</code>: staged exposure bars
 1/10/100 percent with the trigger line, rule &ldquo;stage the
 blast radius&rdquo;. Source: original. Alt text: three bars of
 growing exposure with a trigger line, arrow labeled
 stage the blast radius. Audit: PASS.</p>
-<figure><img alt="three bars of growing exposure with a trigger line, arrow labeled stage the blast radius. Audit: PASS." src="assets/figures/u06_rollout.png"><figcaption>Rollout plan</figcaption></figure>
+<figure id="mse435-u06-c09-rolloutrollback-fig01" data-kind="figure" data-reveal="fade"><img alt="three bars of growing exposure with a trigger line, arrow labeled stage the blast radius. Audit: PASS." src="assets/figures/u06_rollout.png"><figcaption>Rollout plan</figcaption></figure><span id="mse435-u06-c09-rolloutrollback-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c10-ownerhandoff">mse435-U06-C10 , owner/handoff</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c10-ownerhandoff" data-term="owner">mse435-U06-C10 , owner/handoff</h2>
+<p id="mse435-u06-c10-ownerhandoff-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_9">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: naming the owner and
+<p id="mse435-u06-c10-ownerhandoff-p02" data-kind="prose">Capstone defense structure. Scope: naming the owner and
 the handoff: RACI, runbook, on-call, and the cost of
 unclear ownership. Objective: write the handoff checklist
 and price the on-call. Dependencies: P24, U06-C09.</p>
 <h3 id="2-motivating-question-and-tiny-toy_9">2. Motivating question and tiny toy</h3>
-<p>Motivating question: on-call costs 2k per week in
+<p id="mse435-u06-c10-ownerhandoff-p03" data-kind="example">Motivating question: on-call costs 2k per week in
 standby pay, incidents take 4 hours to resolve without an
 owner and 1 hour with one, at 500 dollars per incident
 hour, what is the owner worth per incident? Tiny toy: 3
 x 500 = 1,500.</p>
 <h3 id="3-plain-language-mental-model_9">3. Plain-language mental model</h3>
-<p>Every system needs a named human who wakes up when it
+<p id="mse435-u06-c10-ownerhandoff-p04" data-kind="keyIdea" data-reveal="rise">Every system needs a named human who wakes up when it
 breaks. Handoff is the transfer of that responsibility
 from the builders to the operators: runbook, dashboards,
 escalation paths, and a first joint incident. Unclear
 ownership is the most expensive org chart: everyone
 assumes someone else watches.</p>
 <h3 id="4-variables-units-shapes-assumptions_9">4. Variables, units, shapes, assumptions</h3>
-<p>s = standby cost per week, dollars. h0, h1 = hours to
+<p id="mse435-u06-c10-ownerhandoff-p05" data-kind="definition" data-term="value">s = standby cost per week, dollars. h0, h1 = hours to
 resolve without/with owner. c = cost per incident hour.
 Value per incident = (h0 - h1) x c. Assumptions: the
 owner is trained and reachable.</p>
 <h3 id="5-justified-derivation_9">5. Justified derivation</h3>
-<p>s = 2,000 per week = 104k per year. h0 = 4, h1 = 1, c =
+<p id="mse435-u06-c10-ownerhandoff-p06" data-kind="prose">s = 2,000 per week = 104k per year. h0 = 4, h1 = 1, c =
 500: value = 1,500 per incident. At 2 incidents per
 month: 36k per year of value against 104k cost. The
 on-call looks expensive until the unowned incident costs
 50k in SLA credits.</p>
 <h3 id="6-computed-numerical-example_9">6. Computed numerical example</h3>
-<p>Toy: the handoff checklist has 12 items (runbook,
+<p id="mse435-u06-c10-ownerhandoff-p07" data-kind="example">Toy: the handoff checklist has 12 items (runbook,
 dashboards, alerts, escalation, rollback button,
 contacts, SLOs, data retention, access, cost alerts,
 incident template, joint drill). Each missing item adds
 30 minutes to the first real incident. Six missing items:
 3 extra hours x 500 = 1,500 on the first incident alone.</p>
 <h3 id="7-algorithm-and-minimal-implementation_9">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def owner_value(s_wk, h0, h1, c, incidents_yr):
+<pre id="mse435-u06-c10-ownerhandoff-code01" data-kind="prose"><code class="language-python">def owner_value(s_wk, h0, h1, c, incidents_yr):
     cost = s_wk * 52
     value = (h0 - h1) * c * incidents_yr
     return cost, value, value - cost
@@ -951,36 +951,36 @@ incident template, joint drill). Each missing item adds
 print(owner_value(2000, 4, 1, 500, 24))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_9">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(104000, 36000, -68000)</code>. Check: the net is
+<p id="mse435-u06-c10-ownerhandoff-p08" data-kind="prose">Expected: <code>(104000, 36000, -68000)</code>. Check: the net is
 negative here, which is honest: on-call is insurance.
 Check units: dollars per year.</p>
 <h3 id="9-complexity-costs-stability_9">9. Complexity, costs, stability</h3>
-<p>O(1). The fragile input is incident count: it is low
+<p id="mse435-u06-c10-ownerhandoff-p09" data-kind="prose">O(1). The fragile input is incident count: it is low
 until it is not. Price the tail, not the average.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_9">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: no on-call (builders carry pagers forever),
+<p id="mse435-u06-c10-ownerhandoff-p10" data-kind="prose">Alternative: no on-call (builders carry pagers forever),
 which burns out the builders. Alternative: vendor
 on-call, which works where the vendor owns the stack.
 Choose named ownership where the system is business
 critical.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_9">11. Failure case, broken assumption, counterexample</h3>
-<p>Break reachability. The owner is on vacation with no
+<p id="mse435-u06-c10-ownerhandoff-p11" data-kind="prose">Break reachability. The owner is on vacation with no
 backup: h1 becomes h0, and the 104k buys nothing.
 Counterexample: a batch job with no SLA needs no
 on-call.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_9">12. Research reading and falsifiable extension</h3>
-<p>Read P24 on incident ownership. Falsifiable extension:
+<p id="mse435-u06-c10-ownerhandoff-p12" data-kind="prose">Read P24 on incident ownership. Falsifiable extension:
 the joint drill. Hypothesis: the drill incident resolves
 in under 1 hour. It fails above 2 hours, which means the
 handoff is incomplete.</p>
 <h3 id="13-assessment_9">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c10-ownerhandoff-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c10-ownerhandoff-list01" data-kind="prose">
 <li>What does a handoff transfer?</li>
 <li>Why is on-call insurance, not an investment?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c10-ownerhandoff-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c10-ownerhandoff-list02" data-kind="prose">
 <li>Define owner/handoff without symbols.</li>
 <li>Toy: compute the owner value above.</li>
 <li>Six checklist items missing. Price the first
@@ -989,54 +989,54 @@ handoff is incomplete.</p>
 <li>Compare named on-call with builders-carry-pagers:
    when does each win?</li>
 </ol>
-<p>Unfamiliar transfer: the owner is on vacation with no
+<p id="mse435-u06-c10-ownerhandoff-p15" data-kind="prose">Unfamiliar transfer: the owner is on vacation with no
 backup. Rework the value and the policy.</p>
 <h3 id="14-lab-exercises_9">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 10 (handoff checklist
+<p id="mse435-u06-c10-ownerhandoff-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 10 (handoff checklist
 pricing).</p>
 <h3 id="15-visual-units-and-audit_9">15. Visual units and audit</h3>
-<p>No new plate. The lesson carries the checklist.
-Audit: PASS (no new figure, logged).</p>
+<p id="mse435-u06-c10-ownerhandoff-p17" data-kind="prose">No new plate. The lesson carries the checklist.
+Audit: PASS (no new figure, logged).</p><span id="mse435-u06-c10-ownerhandoff-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c11-alternatives">mse435-U06-C11 , alternatives</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c11-alternatives" data-term="alternatives">mse435-U06-C11 , alternatives</h2>
+<p id="mse435-u06-c11-alternatives-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_10">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure. Scope: the alternatives every
+<p id="mse435-u06-c11-alternatives-p02" data-kind="prose" data-term="honest case">Capstone defense structure. Scope: the alternatives every
 honest case must price: status quo, a competing vendor,
 and hiring instead of building. Objective: score three
 alternatives on a toy matrix. Dependencies: U06-C07,
 U04-C11.</p>
 <h3 id="2-motivating-question-and-tiny-toy_10">2. Motivating question and tiny toy</h3>
-<p>Motivating question: build scores 7 on cost and 9 on
+<p id="mse435-u06-c11-alternatives-p03" data-kind="example" data-term="scores">Motivating question: build scores 7 on cost and 9 on
 control, vendor B scores 9 on cost and 5 on control, hire
 scores 5 and 7, weights 0.6 cost and 0.4 control, who
 wins? Tiny toy: build 7.8, vendor 7.4, hire 5.8.</p>
 <h3 id="3-plain-language-mental-model_10">3. Plain-language mental model</h3>
-<p>A case with no alternatives is a sales pitch. The honest
+<p id="mse435-u06-c11-alternatives-p04" data-kind="keyIdea" data-reveal="rise">A case with no alternatives is a sales pitch. The honest
 case prices at least three: do nothing (status quo), buy
 (vendor), and hire (people). Score each on the same
 criteria with the same weights. The winner must beat the
 status quo by a margin, not just beat the other options.</p>
 <h3 id="4-variables-units-shapes-assumptions_10">4. Variables, units, shapes, assumptions</h3>
-<p>Options o with scores s_{o,c} on criteria c, weights w_c
+<p id="mse435-u06-c11-alternatives-p05" data-kind="definition">Options o with scores s_{o,c} on criteria c, weights w_c
 summing to 1. Total_o = sum_c(w_c x s_{o,c}). Assumptions:
 scores are honest (elicited separately), and criteria
 cover cost, quality, risk, and time.</p>
 <h3 id="5-justified-derivation_10">5. Justified derivation</h3>
-<p>Weights: cost 0.6, control 0.4. Build: 0.6 x 7 + 0.4 x 9
+<p id="mse435-u06-c11-alternatives-p06" data-kind="prose">Weights: cost 0.6, control 0.4. Build: 0.6 x 7 + 0.4 x 9
 = 7.8. Vendor: 0.6 x 9 + 0.4 x 5 = 7.4. Hire: 0.6 x 5 +
 0.4 x 7 = 5.8. Build wins, but only by 0.4 over vendor:
 within scoring noise. The honest read: build and vendor
 tie, decide on risk.</p>
 <h3 id="6-computed-numerical-example_10">6. Computed numerical example</h3>
-<p>Toy: add the status quo (cost 10, control 10, since
+<p id="mse435-u06-c11-alternatives-p07" data-kind="example">Toy: add the status quo (cost 10, control 10, since
 nothing changes): 0.6 x 10 + 0.4 x 10 = 10. The status
 quo wins on this matrix. The case must then argue the
 status quo&rsquo;s hidden cost (the 2.14M baseline that keeps
 running), or admit the project is not worth doing.</p>
 <h3 id="7-algorithm-and-minimal-implementation_10">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def score(options, weights):
+<pre id="mse435-u06-c11-alternatives-code01" data-kind="prose"><code class="language-python">def score(options, weights):
     # options: {name: {criterion: score}}
     out = {}
     for name, sc in options.items():
@@ -1051,37 +1051,37 @@ opts = {&quot;build&quot;: {&quot;cost&quot;: 7, &quot;control&quot;: 9},
 print(score(opts, {&quot;cost&quot;: 0.6, &quot;control&quot;: 0.4}))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_10">8. Correctness checks and expected output</h3>
-<p>Expected: <code>{'build': 7.8, 'vendor': 7.4, 'hire': 5.8,
+<p id="mse435-u06-c11-alternatives-p08" data-kind="prose">Expected: <code>{'build': 7.8, 'vendor': 7.4, 'hire': 5.8,
 'status quo': 10.0}</code>. Check: weights sum to 1. Check:
 the status quo anchors the scale. Check units: score
 points.</p>
 <h3 id="9-complexity-costs-stability_10">9. Complexity, costs, stability</h3>
-<p>O(options x criteria). The fragile inputs are the
+<p id="mse435-u06-c11-alternatives-p09" data-kind="prose">O(options x criteria). The fragile inputs are the
 scores: they are opinions. Elicit them blind and
 separately.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_10">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: cost-only comparison, which is precise but
+<p id="mse435-u06-c11-alternatives-p10" data-kind="prose">Alternative: cost-only comparison, which is precise but
 ignores control and risk. Alternative: gut feel, which
 is fast and biased. Choose the matrix where the stakes
 are high.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_10">11. Failure case, broken assumption, counterexample</h3>
-<p>Break score honesty. The team scores build 9 on cost
+<p id="mse435-u06-c11-alternatives-p11" data-kind="prose">Break score honesty. The team scores build 9 on cost
 because they want to build: the matrix is advocacy.
 Counterexample: a two-option emergency decision can skip
 the matrix.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_10">12. Research reading and falsifiable extension</h3>
-<p>Read P22 on confirmation bias. Falsifiable extension:
+<p id="mse435-u06-c11-alternatives-p12" data-kind="prose">Read P22 on confirmation bias. Falsifiable extension:
 have an outsider score blind. Hypothesis: blind scores
 match within 1 point. It fails above 2 points, which
 means the scores were advocacy.</p>
 <h3 id="13-assessment_10">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c11-alternatives-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c11-alternatives-list01" data-kind="prose">
 <li>Which three alternatives must every case price?</li>
 <li>Why must the winner beat the status quo by a margin?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c11-alternatives-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c11-alternatives-list02" data-kind="prose">
 <li>Define the alternatives matrix without symbols.</li>
 <li>Toy: score the three options above.</li>
 <li>Add the status quo. Rework the verdict.</li>
@@ -1089,54 +1089,54 @@ means the scores were advocacy.</p>
 <li>Compare the matrix with cost-only: when does each
    win?</li>
 </ol>
-<p>Unfamiliar transfer: the team scores build 9 on cost to
+<p id="mse435-u06-c11-alternatives-p15" data-kind="prose">Unfamiliar transfer: the team scores build 9 on cost to
 favor building. Name what broke and the fix.</p>
 <h3 id="14-lab-exercises_10">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 11 (alternatives with blind
+<p id="mse435-u06-c11-alternatives-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 11 (alternatives with blind
 scoring).</p>
 <h3 id="15-visual-units-and-audit_10">15. Visual units and audit</h3>
-<p>No new plate. The lesson carries the matrix.
-Audit: PASS (no new figure, logged).</p>
+<p id="mse435-u06-c11-alternatives-p17" data-kind="prose">No new plate. The lesson carries the matrix.
+Audit: PASS (no new figure, logged).</p><span id="mse435-u06-c11-alternatives-end" data-end></span>
 <hr />
-<h2 id="mse435-u06-c12-falsifiable-investment-decision">mse435-U06-C12 , falsifiable investment decision</h2>
-<p><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
+<h2 id="mse435-u06-c12-falsifiable-investment-decision" data-term="investment decision">mse435-U06-C12 , falsifiable investment decision</h2>
+<p id="mse435-u06-c12-falsifiable-investment-decision-p01" data-kind="prose"><strong>Claim class.</strong> REQUESTED (course framing). <strong>Status.</strong>
 PLANNED / SOURCE ATTRIBUTION PENDING.</p>
 <h3 id="1-source-mapping-scope-objectives-dependencies_11">1. Source mapping, scope, objectives, dependencies</h3>
-<p>Capstone defense structure (week-9 defense). Scope: the
+<p id="mse435-u06-c12-falsifiable-investment-decision-p02" data-kind="prose" data-term="rule">Capstone defense structure (week-9 defense). Scope: the
 investment decision as a falsifiable rule: thresholds,
 pilot design, and kill criteria written before spending.
 Objective: write the decision rule on a toy. Dependencies:
 U06-C03, U06-C04, P22.</p>
 <h3 id="2-motivating-question-and-tiny-toy_11">2. Motivating question and tiny toy</h3>
-<p>Motivating question: invest 400k iff the pilot shows 15
+<p id="mse435-u06-c12-falsifiable-investment-decision-p03" data-kind="example">Motivating question: invest 400k iff the pilot shows 15
 percent cost reduction with 90 percent confidence over 4
 weeks, else kill, what is the rule? Tiny toy: the rule
 above.</p>
 <h3 id="3-plain-language-mental-model_11">3. Plain-language mental model</h3>
-<p>An investment decision is a bet with a kill switch. The
+<p id="mse435-u06-c12-falsifiable-investment-decision-p04" data-kind="keyIdea" data-reveal="rise" data-term="kill switch">An investment decision is a bet with a kill switch. The
 falsifiable form: &ldquo;we invest X if the pilot measures Y by
 date D with confidence C. Otherwise we kill it.&rdquo; Written
 before the pilot, it protects the firm from sunk-cost
 thinking. Written after, it is a press release.</p>
 <h3 id="4-variables-units-shapes-assumptions_11">4. Variables, units, shapes, assumptions</h3>
-<p>X = investment, dollars. Y = pilot metric target.
+<p id="mse435-u06-c12-falsifiable-investment-decision-p05" data-kind="definition">X = investment, dollars. Y = pilot metric target.
 D = decision date. C = confidence. Rule: invest iff
 measured y &gt;= Y with confidence &gt;= C by D. Assumptions:
 the pilot represents production, and the metric is the
 primary outcome (C03).</p>
 <h3 id="5-justified-derivation_11">5. Justified derivation</h3>
-<p>X = 400k, Y = 15 percent cost reduction, D = 4 weeks, C =
+<p id="mse435-u06-c12-falsifiable-investment-decision-p06" data-kind="prose">X = 400k, Y = 15 percent cost reduction, D = 4 weeks, C =
 90 percent. Pilot result: 18 percent +/- 5 (90 percent
 interval [13, 23]). Lower bound 13 &lt; 15: the rule says
 kill (or extend). The interval, not the point, decides.</p>
 <h3 id="6-computed-numerical-example_11">6. Computed numerical example</h3>
-<p>Toy: pilot result 22 percent +/- 4: interval [18, 26],
+<p id="mse435-u06-c12-falsifiable-investment-decision-p07" data-kind="example">Toy: pilot result 22 percent +/- 4: interval [18, 26],
 lower bound above 15: invest. The rule fired on evidence,
 not enthusiasm. If the pilot runs 6 weeks instead of 4
 to &ldquo;get a better number&rdquo;, the rule was broken: D is part
 of the rule.</p>
 <h3 id="7-algorithm-and-minimal-implementation_11">7. Algorithm and minimal implementation</h3>
-<pre><code class="language-python">def decide(measured, half_width, Y=0.15, C=0.90):
+<pre id="mse435-u06-c12-falsifiable-investment-decision-code01" data-kind="prose"><code class="language-python">def decide(measured, half_width, Y=0.15, C=0.90):
     lo = measured - half_width
     verdict = &quot;invest&quot; if lo &gt;= Y else &quot;kill&quot;
     return round(lo, 3), verdict
@@ -1145,35 +1145,35 @@ print(decide(0.18, 0.05))
 print(decide(0.22, 0.04))
 </code></pre>
 <h3 id="8-correctness-checks-and-expected-output_11">8. Correctness checks and expected output</h3>
-<p>Expected: <code>(0.13, 'kill')</code> then <code>(0.18, 'invest')</code>. Check:
+<p id="mse435-u06-c12-falsifiable-investment-decision-p08" data-kind="prose">Expected: <code>(0.13, 'kill')</code> then <code>(0.18, 'invest')</code>. Check:
 the lower bound decides, not the point. Check: moving D
 after the fact breaks the rule. Check units: fractions.</p>
 <h3 id="9-complexity-costs-stability_11">9. Complexity, costs, stability</h3>
-<p>O(1). The fragile input is the interval: wide intervals
+<p id="mse435-u06-c12-falsifiable-investment-decision-p09" data-kind="prose">O(1). The fragile input is the interval: wide intervals
 kill good projects. Size the pilot to get a tight
 interval.</p>
 <h3 id="10-nearest-alternatives-and-selection-boundaries_11">10. Nearest alternatives and selection boundaries</h3>
-<p>Alternative: invest on gut feel, which is fast and often
+<p id="mse435-u06-c12-falsifiable-investment-decision-p10" data-kind="prose">Alternative: invest on gut feel, which is fast and often
 wrong. Alternative: endless piloting, which never
 decides. Choose the falsifiable rule where the stakes
 are high.</p>
 <h3 id="11-failure-case-broken-assumption-counterexample_11">11. Failure case, broken assumption, counterexample</h3>
-<p>Break pre-registration. The team lowers Y to 10 percent
+<p id="mse435-u06-c12-falsifiable-investment-decision-p11" data-kind="prose">Break pre-registration. The team lowers Y to 10 percent
 after seeing 13: the rule is theater. Counterexample: a
 5k experiment needs no formal rule.</p>
 <h3 id="12-research-reading-and-falsifiable-extension_11">12. Research reading and falsifiable extension</h3>
-<p>Read P22 on pre-registration. Falsifiable extension: the
+<p id="mse435-u06-c12-falsifiable-investment-decision-p12" data-kind="prose">Read P22 on pre-registration. Falsifiable extension: the
 decision log. Hypothesis: every investment over 100k has
 a written rule. It fails on the first exception, which
 triggers a process review.</p>
 <h3 id="13-assessment_11">13. Assessment</h3>
-<p>Breadth recall:</p>
-<ol>
+<p id="mse435-u06-c12-falsifiable-investment-decision-p13" data-kind="prose">Breadth recall:</p>
+<ol id="mse435-u06-c12-falsifiable-investment-decision-list01" data-kind="prose">
 <li>What four parts make a decision rule falsifiable?</li>
 <li>Why does the interval decide, not the point?</li>
 </ol>
-<p>Deep oral ladder:</p>
-<ol>
+<p id="mse435-u06-c12-falsifiable-investment-decision-p14" data-kind="prose">Deep oral ladder:</p>
+<ol id="mse435-u06-c12-falsifiable-investment-decision-list02" data-kind="prose">
 <li>Define a falsifiable investment decision without
    symbols.</li>
 <li>Toy: judge the 18 percent +/- 5 pilot.</li>
@@ -1181,20 +1181,20 @@ triggers a process review.</p>
 <li>Implement decide and state the lower-bound check.</li>
 <li>Compare the rule with gut feel: when does each win?</li>
 </ol>
-<p>Unfamiliar transfer: the team extends the pilot to 6
+<p id="mse435-u06-c12-falsifiable-investment-decision-p15" data-kind="prose">Unfamiliar transfer: the team extends the pilot to 6
 weeks to get a better number. Name what broke and the
 fix.</p>
 <h3 id="14-lab-exercises_11">14. Lab / exercises</h3>
-<p>See <code>labs/u06_lab.md</code>, task 12 (decision rule with a
+<p id="mse435-u06-c12-falsifiable-investment-decision-p16" data-kind="exercise">See <code>labs/u06_lab.md</code>, task 12 (decision rule with a
 moved threshold).</p>
 <h3 id="15-visual-units-and-audit_11">15. Visual units and audit</h3>
-<p><code>visuals/figures/u06_decision.png</code>: pilot interval
+<p id="mse435-u06-c12-falsifiable-investment-decision-p17" data-kind="prose"><code>visuals/figures/u06_decision.png</code>: pilot interval
 against the 15 percent threshold, kill/invest zones,
 rule &ldquo;the interval decides&rdquo;. Source: original. Alt text:
 two intervals against a threshold line at 0.15, one
 below (kill), one above (invest), arrow labeled the
 interval decides. Audit: PASS.</p>
-<figure><img alt="two intervals against a threshold line at 0.15, one below (kill), one above (invest), arrow labeled the interval decides. Audit: PASS." src="assets/figures/u06_decision.png"><figcaption>Decision frame</figcaption></figure>
+<figure id="mse435-u06-c12-falsifiable-investment-decision-fig01" data-kind="figure" data-reveal="fade"><img alt="two intervals against a threshold line at 0.15, one below (kill), one above (invest), arrow labeled the interval decides. Audit: PASS." src="assets/figures/u06_decision.png"><figcaption>Decision frame</figcaption></figure><span id="mse435-u06-c12-falsifiable-investment-decision-end" data-end></span>
 <hr />
       
       <nav class="pager"><a href="u05_coding_lifescience_economics.html"><span class="lbl">← Previous</span>U05 · Coding and life-science economics</a><a href="cheatsheet.html"><span class="lbl">Next →</span>Cheatsheet</a></nav>

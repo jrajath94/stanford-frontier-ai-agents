@@ -1,0 +1,811 @@
+{
+  "itemId": "u02_lesson",
+  "itemKind": "lesson",
+  "revision": "9404396cdba7cad9fa77e3d59a65d4359fd5c04b3bd8ac001793246e926fa0c1",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u02_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u02_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u02_lesson-intro-p01",
+          "definition": "P19 (retrieval), P21 (security); required background before this lesson.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u02_lesson-intro-p01",
+          "definition": "Retrieval prerequisite; opens with local remediation.",
+          "term": "P19"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u02_lesson-intro-p01",
+          "answer": "Prerequisites: P19 (retrieval), P21 (security). Local remediation on similarity, BM25, precision and recall opens the lesson.",
+          "id": "cs329z_u02_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "Building Blocks RAG (30 Sep 2026); concepts C01-C05, C07, C08 map here.",
+          "term": "S03"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "Concepts C06, C09-C12; taught as independent theory.",
+          "term": "requested extensions"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "C01-C05, C07, C08 map to S03 (Building Blocks RAG, 30 Sep 2026), source-supported at schedule-title level. C06, C09-C12 are requested extensions with source attribution pending.",
+          "id": "provenance-r1",
+          "question": "How do the concepts map to sessions?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-similarity-bm25-intuition-precision-and-recall",
+      "blocks": [
+        {
+          "anchor": "local-remediation-similarity-bm25-intuition-precision-and-recall-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-similarity-bm25-intuition-precision-and-recall-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-similarity-bm25-intuition-precision-and-recall-p01",
+          "definition": "(a.b)/(||a|| ||b||); on unit vectors it equals the dot product.",
+          "term": "cosine similarity"
+        },
+        {
+          "anchor": "local-remediation-similarity-bm25-intuition-precision-and-recall",
+          "definition": "A lexical score: term frequency saturates, rare words count more.",
+          "term": "BM25"
+        },
+        {
+          "anchor": "local-remediation-similarity-bm25-intuition-precision-and-recall-p02",
+          "definition": "The fifth occurrence of a word matters less than the first.",
+          "term": "term frequency"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-similarity-bm25-intuition-precision-and-recall-p01",
+          "answer": "On unnormalized vectors the dot product confounds angle with length, so normalize first. BM25 combines saturating term frequency with inverse document frequency; rare words like quokka count more than the.",
+          "id": "local-remediation-similarity-bm25-intuition-precision-and-recall-r1",
+          "question": "Why normalize before cosine, and what is BM25?"
+        }
+      ],
+      "title": "Local remediation: similarity, BM25 intuition, precision and recall"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction",
+          "definition": "Late-interaction scoring; the major mechanism of this unit.",
+          "term": "ColBERT"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction-list01",
+          "definition": "sum_i max_j S_ij; the shell-3 rule.",
+          "term": "max-sim"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction-list01",
+          "definition": "The pairwise matrix E_q E_d^T, shape (2, 4) in the toy.",
+          "term": "S"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction-list01",
+          "answer": "Shell 0 asks how to score query against doc without one vector each. Shells 1-3 build the toy (refund policy, 2x4 matrix) and the max-per-query-token rule. Shells 4-5 derive the matrix by hand and verify the sum 2.00.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-colbert-late-interaction-r1",
+          "question": "What does the ColBERT ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (ColBERT late interaction)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Trades recall for speed; answered in C03.",
+          "term": "approximate nearest neighbor"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "When to abstain instead of answering; answered in C11.",
+          "term": "abstain"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "ANN recall-speed tradeoffs (C03), why retriever and reader can disagree (C09), and when to abstain (C11).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve and where?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u02-c01-grounding-versus-truth",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c01-grounding-versus-truth-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth",
+          "definition": "A pointer to evidence; distinct from truth, a property of the world.",
+          "term": "grounding"
+        },
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth-p05",
+          "definition": "Does E entail c? A judgment call every downstream verdict depends on.",
+          "term": "entailment"
+        },
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth-p04",
+          "definition": "In {supported, contradicted, insufficient}; assumes trustworthy evidence.",
+          "term": "support(c, E)"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth-p03",
+          "answer": "A pointer can aim at a wrong page (grounded but false); a true statement can lack a pointer (true but ungrounded). The course cares about the pointer because checks need it.",
+          "id": "cs329z-u02-c01-grounding-versus-truth-r1",
+          "question": "How do grounding and truth differ?"
+        },
+        {
+          "anchor": "cs329z-u02-c01-grounding-versus-truth-p12",
+          "answer": "Break the trustworthy-evidence assumption: a forum post with the wrong refund window makes the answer grounded and false. A quote taken out of context gives a pointer without support.",
+          "id": "cs329z-u02-c01-grounding-versus-truth-r2",
+          "question": "When is grounded not true?"
+        }
+      ],
+      "title": "cs329z-U02-C01: grounding versus truth"
+    },
+    {
+      "anchor": "cs329z-u02-c02-embeddings",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c02-embeddings-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u02-c02-embeddings-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c02-embeddings-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c02-embeddings-p01",
+          "definition": "The angle between meaning coordinates, ignoring length.",
+          "term": "cosine similarity"
+        },
+        {
+          "anchor": "cs329z-u02-c02-embeddings-p01",
+          "definition": "Dot product equals cosine only on unit vectors; normalize first.",
+          "term": "normalization"
+        },
+        {
+          "anchor": "cs329z-u02-c02-embeddings-p04",
+          "definition": "In R^d; task-relevant similarity must match geometric closeness.",
+          "term": "e(x)"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c02-embeddings-p02",
+          "answer": "Query [1.0, 0.0]; d1 cos 0.90, d2 0.70, d3 0.00, d4 -0.60. Rank: d1, d2, d3, d4.",
+          "id": "cs329z-u02-c02-embeddings-r1",
+          "question": "How does the toy rank the four docs?"
+        },
+        {
+          "anchor": "cs329z-u02-c02-embeddings-p12",
+          "answer": "Break the training assumption: a news-trained embedder puts legal consideration near thoughtfulness instead of payment. Geometry reflects the training corpus, not your task.",
+          "id": "cs329z-u02-c02-embeddings-r2",
+          "question": "What breaks embeddings?"
+        }
+      ],
+      "title": "cs329z-U02-C02: embeddings"
+    },
+    {
+      "anchor": "cs329z-u02-c03-vector-stores",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c03-vector-stores-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c03-vector-stores-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c03-vector-stores-p03",
+          "definition": "Fraction of true top-k found; the price of approximate indexing.",
+          "term": "recall"
+        },
+        {
+          "anchor": "cs329z-u02-c03-vector-stores-p03",
+          "definition": "p partitions, probe w; cost near O(w n d / p).",
+          "term": "partitions"
+        },
+        {
+          "anchor": "cs329z-u02-c03-vector-stores-p02",
+          "definition": "Exact search on 10M docs costs about 15 GFLOPs per query.",
+          "term": "GFLOPs"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c03-vector-stores-p02",
+          "answer": "Exact search: 10M x 768 = 7.7e9 multiply-adds per query, about 15 GFLOPs; 150 GFLOPs/s at 10 queries per second. Approximate indexing trades a little recall for a lot of speed.",
+          "id": "cs329z-u02-c03-vector-stores-r1",
+          "question": "What does one query cost at 10M docs?"
+        },
+        {
+          "anchor": "cs329z-u02-c03-vector-stores-p12",
+          "answer": "Break the partition assumption: a query at a cluster boundary misses its nearest neighbor with w = 1. Stale embeddings after a model update break the index.",
+          "id": "cs329z-u02-c03-vector-stores-r2",
+          "question": "What breaks vector stores?"
+        }
+      ],
+      "title": "cs329z-U02-C03: vector stores"
+    },
+    {
+      "anchor": "cs329z-u02-c04-chunks",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c04-chunks-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c04-chunks-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c04-chunks-p01",
+          "definition": "Insurance at the cuts; any span shorter than o survives uncut.",
+          "term": "overlap"
+        },
+        {
+          "anchor": "cs329z-u02-c04-chunks-p01",
+          "definition": "With overlap o, a span is cut only if a boundary falls inside it.",
+          "term": "boundary"
+        },
+        {
+          "anchor": "cs329z-u02-c04-chunks-p04",
+          "definition": "Chunk size s tokens, overlap o tokens, count near n / (s - o).",
+          "term": "s tokens"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c04-chunks-p02",
+          "answer": "Fixed 200-token chunks on a 1000-token doc give 5 chunks. The answer span at tokens 190-210 splits across chunks 1 and 2; neither chunk alone supports the answer.",
+          "id": "cs329z-u02-c04-chunks-r1",
+          "question": "What goes wrong with fixed chunks?"
+        },
+        {
+          "anchor": "cs329z-u02-c04-chunks-p12",
+          "answer": "Break the one-chunk assumption: an answer needing facts from pages 3 and 7 cannot win with single-chunk retrieval. Multi-hop answers need multi-chunk assembly.",
+          "id": "cs329z-u02-c04-chunks-r2",
+          "question": "What breaks chunking?"
+        }
+      ],
+      "title": "cs329z-U02-C04: chunks"
+    },
+    {
+      "anchor": "cs329z-u02-c05-hybrid-lexicaldense",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c05-hybrid-lexicaldense-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense",
+          "definition": "Two witnesses: lexical catches exact words, dense catches meaning.",
+          "term": "hybrid"
+        },
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense-p01",
+          "definition": "12.5 on the refund policy doc; the lexical signal.",
+          "term": "BM25"
+        },
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense-p04",
+          "definition": "Divide each score by its list max, then fuse: s = w s_lex + (1 - w) s_dense.",
+          "term": "normalization"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense-p05",
+          "answer": "Raw BM25 and cosine live on different scales, so w is uninterpretable without normalization. After normalization, w = 0.5 is an honest even vote between witnesses.",
+          "id": "cs329z-u02-c05-hybrid-lexicaldense-r1",
+          "question": "Why normalize before fusion?"
+        },
+        {
+          "anchor": "cs329z-u02-c05-hybrid-lexicaldense-p12",
+          "answer": "Break the normalization assumption: raw BM25 (0-30) at w = 0.5 silences the dense witness. Pure-stopword queries make lexical scores noise.",
+          "id": "cs329z-u02-c05-hybrid-lexicaldense-r2",
+          "question": "What breaks hybrid search?"
+        }
+      ],
+      "title": "cs329z-U02-C05: hybrid lexical/dense"
+    },
+    {
+      "anchor": "cs329z-u02-c06-metadatapermissions",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c06-metadatapermissions-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions-p02",
+          "definition": "Bob's ACL: {d2, d3}; unfiltered top-1 d1 is a leak.",
+          "term": "ACL"
+        },
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions-p05",
+          "definition": "Apply the predicate before scoring; post-filtering still ships text through the pipeline.",
+          "term": "pre-filtering"
+        },
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions",
+          "definition": "The card catalog: date, author, section, access list.",
+          "term": "metadata"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions-p03",
+          "answer": "Filter first, then rank. The model must never see text the user may not see, because the model cannot unsee it. Pre-filtering keeps forbidden text out of the pipeline entirely.",
+          "id": "cs329z-u02-c06-metadatapermissions-r1",
+          "question": "Why filter before scoring?"
+        },
+        {
+          "anchor": "cs329z-u02-c06-metadatapermissions-p12",
+          "answer": "Break the current-ACL assumption: Bob left HR yesterday but the index still lists him. Metadata labeled public quoting a private email leaks through the label.",
+          "id": "cs329z-u02-c06-metadatapermissions-r2",
+          "question": "What breaks permissions?"
+        }
+      ],
+      "title": "cs329z-U02-C06: metadata/permissions"
+    },
+    {
+      "anchor": "cs329z-u02-c07-cross-encoder",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c07-cross-encoder-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c07-cross-encoder-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c07-cross-encoder",
+          "definition": "One careful reader with both pages open; slower, sees the interaction.",
+          "term": "cross-encoder"
+        },
+        {
+          "anchor": "cs329z-u02-c07-cross-encoder-p02",
+          "definition": "Two speed-readers who never meet; they compare notes as vectors.",
+          "term": "bi-encoder"
+        },
+        {
+          "anchor": "cs329z-u02-c07-cross-encoder-p04",
+          "definition": "Per-pair cost; the budget assumption that limits k.",
+          "term": "O((n_q + n_d)^2 d)"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c07-cross-encoder-p02",
+          "answer": "Bi-encoder ranks d2 (0.91) over d1 (0.82). Cross-encoder reads both together: d1 0.95, d2 0.30, d5 0.60. Reranked top-1: d1.",
+          "id": "cs329z-u02-c07-cross-encoder-r1",
+          "question": "How does the cross-encoder flip the ranking?"
+        },
+        {
+          "anchor": "cs329z-u02-c07-cross-encoder-p12",
+          "answer": "Break the budget: k = 1000 makes the reranker cost more than the pipeline. Short-passage training truncates on 2000-token docs.",
+          "id": "cs329z-u02-c07-cross-encoder-r2",
+          "question": "What breaks cross-encoders?"
+        }
+      ],
+      "title": "cs329z-U02-C07: cross-encoder"
+    },
+    {
+      "anchor": "cs329z-u02-c08-colbert-late-interaction",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c08-colbert-late-interaction-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c08-colbert-late-interaction-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c08-colbert-late-interaction",
+          "definition": "Keeps every token vector; decides at query time.",
+          "term": "late interaction"
+        },
+        {
+          "anchor": "cs329z-u02-c08-colbert-late-interaction-p01",
+          "definition": "Each query term finds its evidence independently.",
+          "term": "max-sim"
+        },
+        {
+          "anchor": "cs329z-u02-c08-colbert-late-interaction-p04",
+          "definition": "E_q in R^(m x d), E_d in R^(n x d); score = sum_i max_j S_ij.",
+          "term": "S = E_q E_d^T"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c08-colbert-late-interaction-p05",
+          "answer": "The max lets each query term find its evidence independently: refund matches refund exactly (1.0) even with within days between them. Nothing is averaged away before the match.",
+          "id": "cs329z-u02-c08-colbert-late-interaction-r1",
+          "question": "Why does late interaction beat one vector?"
+        },
+        {
+          "anchor": "cs329z-u02-c08-colbert-late-interaction-p12",
+          "answer": "Break the counting assumption: refund repeated four times maxes every query token at 1.0 and ties the good doc. Max-sim cannot count distinct evidence.",
+          "id": "cs329z-u02-c08-colbert-late-interaction-r2",
+          "question": "What breaks late interaction?"
+        }
+      ],
+      "title": "cs329z-U02-C08: ColBERT late interaction"
+    },
+    {
+      "anchor": "cs329z-u02-c09-rerank",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c09-rerank-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c09-rerank-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c09-rerank-p05",
+          "definition": "Cheap x k1 + expensive x k2; the cascade operating point.",
+          "term": "cascade"
+        },
+        {
+          "anchor": "cs329z-u02-c09-rerank-p04",
+          "definition": "First stage returns k1 candidates; the gold must be inside.",
+          "term": "k1"
+        },
+        {
+          "anchor": "cs329z-u02-c09-rerank-p03",
+          "definition": "The first stage must not lose the answer; the second picks the winner.",
+          "term": "recall"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c09-rerank-p03",
+          "answer": "First stage fast and rough (recall), second stage slow and careful (precision). Set k1 large enough for recall, k2 small enough for latency; total cost = cheap x k1 + expensive x k2.",
+          "id": "cs329z-u02-c09-rerank-r1",
+          "question": "How do you set the cascade operating point?"
+        },
+        {
+          "anchor": "cs329z-u02-c09-rerank-p12",
+          "answer": "Break the recall assumption: gold at rank 101 with k1 = 100 is lost forever. An untrained-domain reranker makes the pipeline pay 10x for noise.",
+          "id": "cs329z-u02-c09-rerank-r2",
+          "question": "What breaks reranking?"
+        }
+      ],
+      "title": "cs329z-U02-C09: rerank"
+    },
+    {
+      "anchor": "cs329z-u02-c10-citations",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c10-citations-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c10-citations-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c10-citations-p01",
+          "definition": "A receipt: this claim came from this span; checkable without rerunning.",
+          "term": "citation"
+        },
+        {
+          "anchor": "cs329z-u02-c10-citations-p02",
+          "definition": "Document-level is too coarse; span-level is falsifiable in seconds.",
+          "term": "span"
+        },
+        {
+          "anchor": "cs329z-u02-c10-citations-p03",
+          "definition": "(doc id, chunk id, span); quality = fraction of claims with a correct pointer.",
+          "term": "receipt"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c10-citations-p02",
+          "answer": "[1] must point to chunk 2, tokens 150-350, containing the refund sentence. Claims without receipts are assertions; the user decides trust.",
+          "id": "cs329z-u02-c10-citations-r1",
+          "question": "What must a citation contain?"
+        },
+        {
+          "anchor": "cs329z-u02-c10-citations-p12",
+          "answer": "Break the span assumption: the supporting sentence sits in chunk 3, not cited chunk 2. Correct citations plus one uncited sentence create false confidence in the whole answer.",
+          "id": "cs329z-u02-c10-citations-r2",
+          "question": "What breaks citations?"
+        }
+      ],
+      "title": "cs329z-U02-C10: citations"
+    },
+    {
+      "anchor": "cs329z-u02-c11-insufficient-evidence",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c11-insufficient-evidence-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c11-insufficient-evidence-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c11-insufficient-evidence-p01",
+          "definition": "I do not have evidence for that in the docs I can access.",
+          "term": "abstention"
+        },
+        {
+          "anchor": "cs329z-u02-c11-insufficient-evidence-p04",
+          "definition": "If max score < t or the filtered set is empty, abstain.",
+          "term": "threshold t"
+        },
+        {
+          "anchor": "cs329z-u02-c11-insufficient-evidence-p03",
+          "definition": "Answer with evidence, or I cannot answer from my sources.",
+          "term": "third answer"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c11-insufficient-evidence-p04",
+          "answer": "A score threshold plus an empty-set rule. Answering wrong costs more than abstaining for factual tasks, so the threshold sits where the expected costs cross.",
+          "id": "cs329z-u02-c11-insufficient-evidence-r1",
+          "question": "How is the abstention rule set?"
+        },
+        {
+          "anchor": "cs329z-u02-c11-insufficient-evidence-p12",
+          "answer": "Break the threshold: corpus drift makes t abstain on half the easy questions. Abstaining on 2+2 needs a fast-path exception.",
+          "id": "cs329z-u02-c11-insufficient-evidence-r2",
+          "question": "What breaks abstention?"
+        }
+      ],
+      "title": "cs329z-U02-C11: insufficient evidence"
+    },
+    {
+      "anchor": "cs329z-u02-c12-retrieval-diagnosis",
+      "blocks": [
+        {
+          "anchor": "cs329z-u02-c12-retrieval-diagnosis-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u02-c12-retrieval-diagnosis-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u02-c12-retrieval-diagnosis-p03",
+          "definition": "Coverage, ranking, or generation: fix the right stage.",
+          "term": "triage"
+        },
+        {
+          "anchor": "cs329z-u02-c12-retrieval-diagnosis-p01",
+          "definition": "The answer is not in the building; 20 of 100 failures in the toy.",
+          "term": "coverage"
+        },
+        {
+          "anchor": "cs329z-u02-c12-retrieval-diagnosis-p02",
+          "definition": "Per-question gold chunk id; attribution needs it.",
+          "term": "gold chunk"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u02-c12-retrieval-diagnosis-p02",
+          "answer": "100 failures: gold absent from corpus in 20 (coverage), present but unretrieved in 50 (ranking), retrieved but misread in the rest (generation). Check membership, then rank, then reader use.",
+          "id": "cs329z-u02-c12-retrieval-diagnosis-r1",
+          "question": "How do you attribute a retrieval failure?"
+        },
+        {
+          "anchor": "cs329z-u02-c12-retrieval-diagnosis-p12",
+          "answer": "Break the gold-label assumption: a wrong gold chunk punishes the good stage. Two stages failing at once breaks single-bucket attribution.",
+          "id": "cs329z-u02-c12-retrieval-diagnosis-r2",
+          "question": "What breaks diagnosis?"
+        }
+      ],
+      "title": "cs329z-U02-C12: retrieval diagnosis"
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact",
+      "title": "Contract 15. Figure u02_f03.",
+      "minutes": 1,
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact-end",
+      "blocks": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "keyTerms": [
+        {
+          "term": "u02_f03",
+          "definition": "Lesson plate for chunk overlap.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact"
+        },
+        {
+          "term": "lesson plate",
+          "definition": "Source original toy; before/after visual with audit.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact"
+        }
+      ],
+      "recall": [
+        {
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact-r1",
+          "question": "What does figure u02_f03 show?",
+          "answer": "A before/after lesson plate from the original toy, with caption, alt text, and audit.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f03png-lesson-plate-source-original-toy-before-a-1000-token-bar-with-a-cut-through-the-answer-span-after-overlapping-chunks-with-the-span-intact-in-one-caption-shell-3-apply-the-one-rule-overlap-past-the-span-source-original-toy-alt-text-left-long-bar-with-cut-marks-one-cut-through-a-highlighted-span-arrow-labeled-add-overlap-right-staggered-chunk-bars-the-span-whole-inside-one-chunk-audit-counts-computed-span-positions-exact-fig01"
+        }
+      ]
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified",
+      "title": "Contract 15. Figure u02_f05.",
+      "minutes": 1,
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified-end",
+      "blocks": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "keyTerms": [
+        {
+          "term": "u02_f05",
+          "definition": "Lesson plate for ColBERT max-sim.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified"
+        },
+        {
+          "term": "lesson plate",
+          "definition": "Source original toy; before/after visual with audit.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified"
+        }
+      ],
+      "recall": [
+        {
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified-r1",
+          "question": "What does figure u02_f05 show?",
+          "answer": "A before/after lesson plate from the original toy, with caption, alt text, and audit.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu02_f05png-lesson-plate-source-original-toy-before-one-query-vector-vs-one-doc-vector-with-a-blurred-score-after-the-2x4-matrix-with-row-maxes-highlighted-and-the-sum-200-caption-shell-3-apply-the-one-rule-max-per-query-token-then-sum-source-original-toy-alt-text-left-two-single-vectors-with-score-063-arrow-labeled-keep-token-vectors-right-2-by-4-grid-with-max-cells-marked-sum-200-audit-matrix-hand-computed-and-code-verified-fig01"
+        }
+      ]
+    },
+    {
+      "anchor": "u02-connection-summary",
+      "blocks": [
+        {
+          "anchor": "u02-connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "u02-connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "u02-connection-summary-p01",
+          "definition": "Grounding, retrieval, citations, abstention, diagnosis; the U02 arc.",
+          "term": "evidence pipeline"
+        },
+        {
+          "anchor": "u02-connection-summary-p01",
+          "definition": "Fast rough first stage, slow careful second stage (C09).",
+          "term": "cascade"
+        },
+        {
+          "anchor": "u02-connection-summary-p01",
+          "definition": "The honest third answer when evidence is missing (C11).",
+          "term": "abstain"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u02-connection-summary-p01",
+          "answer": "Separate grounding from truth, score by cosine, index approximately, chunk with insurance, fuse witnesses, filter by permission, read carefully or cheaply, cascade, cite spans, abstain without evidence, diagnose by stage. U03 gives the system hands: tools.",
+          "id": "u02-connection-summary-r1",
+          "question": "What is the arc of U02?"
+        }
+      ],
+      "title": "U02 connection summary"
+    }
+  ]
+}

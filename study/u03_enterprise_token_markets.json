@@ -1,0 +1,548 @@
+{
+  "itemId": "u03_enterprise_token_markets",
+  "itemKind": "lesson",
+  "revision": "705ade7a7b91c05a8be51251de95f1be05b4d30e73ef48c35023a778e12421a4",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "mse435_u03_enterprise_token_markets-intro",
+      "blocks": [],
+      "endAnchor": "mse435_u03_enterprise_token_markets-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435_u03_enterprise_token_markets-intro-p01",
+          "definition": "Parent unit; enterprise infrastructure and token markets.",
+          "term": "mse435-U03"
+        },
+        {
+          "anchor": "mse435_u03_enterprise_token_markets-intro-p01",
+          "definition": "P16, P23, P24; shared bridges linked, not rebuilt.",
+          "term": "bridges"
+        },
+        {
+          "anchor": "mse435_u03_enterprise_token_markets-intro-p02",
+          "definition": "Sessions 4-5: Infrastructure, Enterprise AI.",
+          "term": "OFFICIAL-SCHEDULE"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "mse435_u03_enterprise_token_markets-intro-p01",
+          "answer": "Parent unit mse435-U03. Bridges P16, P23, P24. Claim class OFFICIAL-SCHEDULE for sessions 4-5 (Infrastructure, Enterprise AI).",
+          "id": "mse435_u03_enterprise_token_markets-intro-r1",
+          "question": "What are the unit's ground rules?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list-unit-level",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-unit-level-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U03-R1; needed for C05, C11.",
+          "term": "token billing blocks"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U03-R2; needed for C08.",
+          "term": "contract present value"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U03-R3; needed for C06, C07.",
+          "term": "latency versus throughput"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "answer": "Token billing blocks (U03-R1) for C05 and C11, contract present value (U03-R2) for C08, latency versus throughput (U03-R3) for C06 and C07, and NPV comparison (U01-C04) for C08 and C09.",
+          "id": "not-yet-understood-dependency-list-unit-level-r1",
+          "question": "What dependencies does U03 need?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list (unit level)"
+    },
+    {
+      "anchor": "mse435-u03-c01-service-as-software-thesis",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c01-service-as-software-thesis-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u03-c01-service-as-software-thesis-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u03-c01-service-as-software-thesis-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c01-service-as-software-thesis",
+          "definition": "The price of labor-shaped work collapses toward the compute cost.",
+          "term": "service-as-software"
+        },
+        {
+          "anchor": "mse435-u03-c01-service-as-software-thesis-p05",
+          "definition": "Human cost / AI cost; 100x in the toy.",
+          "term": "repricing ratio"
+        },
+        {
+          "anchor": "mse435-u03-c01-service-as-software-thesis-p04",
+          "definition": "Human cost linear in tasks; AI cost sublinear.",
+          "term": "marginal task"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c01-service-as-software-thesis-p05",
+          "answer": "Human $50/task vs AI $0.50/task: ratio = 100. The thesis fails if the AI task does not meet the quality bar. Firms that own the compute capture the spread.",
+          "id": "mse435-u03-c01-service-as-software-thesis-r1",
+          "question": "What is the repricing ratio?"
+        }
+      ],
+      "title": "mse435-U03-C01 , service-as-software thesis"
+    },
+    {
+      "anchor": "mse435-u03-c02-enterprise-integration",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c02-enterprise-integration-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c02-enterprise-integration-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c02-enterprise-integration",
+          "definition": "The model is the engine; integration is the car around it.",
+          "term": "integration"
+        },
+        {
+          "anchor": "mse435-u03-c02-enterprise-integration-p02",
+          "definition": "Data plumbing, security, workflow redesign, training; fixed costs before the first token.",
+          "term": "layers"
+        },
+        {
+          "anchor": "mse435-u03-c02-enterprise-integration-p04",
+          "definition": "Enterprises buy outcomes, not tokens.",
+          "term": "outcomes"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c02-enterprise-integration-p04",
+          "answer": "Total first-year cost = model + data plumbing + security/compliance + workflow redesign + training. Each layer is a fixed cost paid before the first token flows.",
+          "id": "mse435-u03-c02-enterprise-integration-r1",
+          "question": "What does enterprise integration cost?"
+        }
+      ],
+      "title": "mse435-U03-C02 , enterprise integration"
+    },
+    {
+      "anchor": "mse435-u03-c03-openclosed-stacks",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c03-openclosed-stacks-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c03-openclosed-stacks-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c03-openclosed-stacks",
+          "definition": "You hold the weights; no per-token bill, but you host and operate.",
+          "term": "open"
+        },
+        {
+          "anchor": "mse435-u03-c03-openclosed-stacks",
+          "definition": "You rent intelligence; per-token bill, vendor sets price and rules.",
+          "term": "closed"
+        },
+        {
+          "anchor": "mse435-u03-c03-openclosed-stacks-p04",
+          "definition": "Extra dollars paid for data control and no vendor dependence.",
+          "term": "control premium"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c03-openclosed-stacks-p02",
+          "answer": "The closed two-year math used a flat price; the real closed cost is higher and the decision flips back. Buy-vs-rent applied to intelligence: open wins on control, closed wins on simplicity.",
+          "id": "mse435-u03-c03-openclosed-stacks-r1",
+          "question": "Open or closed stack?"
+        }
+      ],
+      "title": "mse435-U03-C03 , open/closed stacks"
+    },
+    {
+      "anchor": "mse435-u03-c04-compute-supply",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c04-compute-supply-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c04-compute-supply-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c04-compute-supply-p02",
+          "definition": "GPUs x speed x utilization; manufactured, not found.",
+          "term": "token supply"
+        },
+        {
+          "anchor": "mse435-u03-c04-compute-supply-p05",
+          "definition": "N x s x U x 86,400 tokens per day.",
+          "term": "supply per day"
+        },
+        {
+          "anchor": "mse435-u03-c04-compute-supply-p04",
+          "definition": "Many small jobs sharing the line, unlike training.",
+          "term": "factory line"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c04-compute-supply-p06",
+          "answer": "1,000 GPUs x 50 tok/s x 0.85 x 86,400 = 3.672T tokens/day = 3,672,000 blocks/day. At $4 per 1M tokens, daily revenue capacity = $14.688M at full sale.",
+          "id": "mse435-u03-c04-compute-supply-r1",
+          "question": "How much can 1,000 GPUs serve?"
+        }
+      ],
+      "title": "mse435-U03-C04 , compute supply"
+    },
+    {
+      "anchor": "mse435-u03-c05-token-demand",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c05-token-demand-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u03-c05-token-demand-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u03-c05-token-demand-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c05-token-demand",
+          "definition": "Appetite for intelligence at a price.",
+          "term": "token demand"
+        },
+        {
+          "anchor": "mse435-u03-c05-token-demand-p05",
+          "definition": "Dollars per 1M tokens.",
+          "term": "P"
+        },
+        {
+          "anchor": "mse435-u03-c05-token-demand-p05",
+          "definition": "B tokens per day; same linear machinery as U01-C01.",
+          "term": "Q"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c05-token-demand-p06",
+          "answer": "Revenue before: 16 x 68 = $1.088M/day (68B tokens). A demand shock walks the price up the supply curve; how far depends on the curve's steepness.",
+          "id": "mse435-u03-c05-token-demand-r1",
+          "question": "How does token demand clear?"
+        }
+      ],
+      "title": "mse435-U03-C05 , token demand"
+    },
+    {
+      "anchor": "mse435-u03-c06-capacity-bottlenecks",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c06-capacity-bottlenecks-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c06-capacity-bottlenecks-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c06-capacity-bottlenecks-p04",
+          "definition": "A line of stations: network, batching, GPU, network out.",
+          "term": "serving stack"
+        },
+        {
+          "anchor": "mse435-u03-c06-capacity-bottlenecks-p02",
+          "definition": "min(k_i); the line moves at the slowest station's pace.",
+          "term": "system rate"
+        },
+        {
+          "anchor": "mse435-u03-c06-capacity-bottlenecks-p02",
+          "definition": "Adding GPUs when the batcher binds buys idle silicon.",
+          "term": "bottleneck"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c06-capacity-bottlenecks-p03",
+          "answer": "The line moves at the slowest station's pace. Adding GPUs when the batcher is the bottleneck buys idle silicon. Find the binding station before spending.",
+          "id": "mse435-u03-c06-capacity-bottlenecks-r1",
+          "question": "Where is the bottleneck?"
+        }
+      ],
+      "title": "mse435-U03-C06 , capacity bottlenecks"
+    },
+    {
+      "anchor": "mse435-u03-c07-inference-versus-training-economics",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c07-inference-versus-training-economics-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u03-c07-inference-versus-training-economics-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u03-c07-inference-versus-training-economics-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c07-inference-versus-training-economics-p04",
+          "definition": "Paid once, sunk, spread over every token ever served.",
+          "term": "tuition"
+        },
+        {
+          "anchor": "mse435-u03-c07-inference-versus-training-economics-p04",
+          "definition": "Paid per token, forever.",
+          "term": "rent"
+        },
+        {
+          "anchor": "mse435-u03-c07-inference-versus-training-economics-p07",
+          "definition": "T/V x 10^6 = i gives V = 1.25T tokens.",
+          "term": "crossover"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c07-inference-versus-training-economics-p06",
+          "answer": "Training $5M, inference $4 per 1M. Below 1.25T lifetime tokens tuition dominates; above, rent dominates. At small volume the model choice barely matters; at scale it is everything.",
+          "id": "mse435-u03-c07-inference-versus-training-economics-r1",
+          "question": "When does inference dominate?"
+        }
+      ],
+      "title": "mse435-U03-C07 , inference versus training economics"
+    },
+    {
+      "anchor": "mse435-u03-c08-long-contracts",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c08-long-contracts-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c08-long-contracts-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c08-long-contracts-p04",
+          "definition": "Insurance: lock a price, the vendor locks your demand.",
+          "term": "long contract"
+        },
+        {
+          "anchor": "mse435-u03-c08-long-contracts-list01",
+          "definition": "sum p_c x Q / (1+r)^t vs sum p_t x Q / (1+r)^t.",
+          "term": "PV comparison"
+        },
+        {
+          "anchor": "mse435-u03-c08-long-contracts-p04",
+          "definition": "If the market falls you overpay; if it spikes you win.",
+          "term": "premium"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c08-long-contracts-p02",
+          "answer": "Market PV $914.20 vs contract PV $895.30 at 10%: the contract wins by $18.90 in this toy. The fair question is never is $3 good but is $3 good against the market path.",
+          "id": "mse435-u03-c08-long-contracts-r1",
+          "question": "Should you sign the long contract?"
+        }
+      ],
+      "title": "mse435-U03-C08 , long contracts"
+    },
+    {
+      "anchor": "mse435-u03-c09-ownership",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c09-ownership-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c09-ownership-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c09-ownership",
+          "definition": "Weights, data rights, evals, and the team that can change them.",
+          "term": "ownership"
+        },
+        {
+          "anchor": "mse435-u03-c09-ownership-p17",
+          "definition": "B + R x annuity vs A x annuity.",
+          "term": "own vs rent"
+        },
+        {
+          "anchor": "mse435-u03-c09-ownership-p04",
+          "definition": "Owning pays when the asset is core, long-lived, differentiating.",
+          "term": "core"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c09-ownership-p06",
+          "answer": "Own PV = -$2.746M + differentiation lift $2.487M. The owned model lifts conversion 2% on $50M revenue = $1M/year. Ownership pays when differentiation is real.",
+          "id": "mse435-u03-c09-ownership-r1",
+          "question": "When does owning the model pay?"
+        }
+      ],
+      "title": "mse435-U03-C09 , ownership"
+    },
+    {
+      "anchor": "mse435-u03-c10-data-governance",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c10-data-governance-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c10-data-governance-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c10-data-governance",
+          "definition": "The fence: who may access, where it lives, how long, what the model learns.",
+          "term": "governance"
+        },
+        {
+          "anchor": "mse435-u03-c10-data-governance-p04",
+          "definition": "Every fence has a price and a purpose.",
+          "term": "fence"
+        },
+        {
+          "anchor": "mse435-u03-c10-data-governance-p05",
+          "definition": "Public, internal, restricted.",
+          "term": "access tiers"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c10-data-governance-p06",
+          "answer": "Governance costs $100k/month. One breach costs $50M in lost trust; expected $500k/year = $41,667/month. Still below $100k/month, but narrow enough that the assumptions deserve scrutiny.",
+          "id": "mse435-u03-c10-data-governance-r1",
+          "question": "Is the governance fence worth it?"
+        }
+      ],
+      "title": "mse435-U03-C10 , data governance"
+    },
+    {
+      "anchor": "mse435-u03-c11-unit-prices",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c11-unit-prices-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u03-c11-unit-prices-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c11-unit-prices-p02",
+          "definition": "True cost + margin + buffer for abuse, spikes, bad debt.",
+          "term": "unit price"
+        },
+        {
+          "anchor": "mse435-u03-c11-unit-prices-p04",
+          "definition": "p = c + m + b; $4.00 = $2.50 + $1.00 + $0.50.",
+          "term": "sandwich"
+        },
+        {
+          "anchor": "mse435-u03-c11-unit-prices-p06",
+          "definition": "25% in the toy; the diagnostic slice.",
+          "term": "margin rate"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c11-unit-prices-p05",
+          "answer": "$4.00 = $2.50 cost + $1.00 margin + $0.50 buffer. When a competitor prices at $2.00, either their cost is lower or they are buying market share.",
+          "id": "mse435-u03-c11-unit-prices-r1",
+          "question": "What is in the $4 price?"
+        }
+      ],
+      "title": "mse435-U03-C11 , unit prices"
+    },
+    {
+      "anchor": "mse435-u03-c12-sensitivity",
+      "blocks": [
+        {
+          "anchor": "mse435-u03-c12-sensitivity-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u03-c12-sensitivity-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u03-c12-sensitivity-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u03-c12-sensitivity-p04",
+          "definition": "Lines up drivers by swing; longest bar matters most.",
+          "term": "tornado chart"
+        },
+        {
+          "anchor": "mse435-u03-c12-sensitivity-p04",
+          "definition": "H_i - L_i; rank by it.",
+          "term": "swing"
+        },
+        {
+          "anchor": "mse435-u03-c12-sensitivity-p02",
+          "definition": "Utilization, power price, batch size, chip cost.",
+          "term": "ranking"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u03-c12-sensitivity-p05",
+          "answer": "Swings: utilization $2.40, power $1.60, batch $1.20, chip $1.00. If you can negotiate one input, negotiate utilization: scheduling and batching policy move the price most.",
+          "id": "mse435-u03-c12-sensitivity-r1",
+          "question": "What moves the price most?"
+        }
+      ],
+      "title": "mse435-U03-C12 , sensitivity"
+    }
+  ]
+}

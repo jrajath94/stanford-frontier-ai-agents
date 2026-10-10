@@ -1,0 +1,750 @@
+{
+  "itemId": "u07_reasoning_formal",
+  "itemKind": "lesson",
+  "revision": "83796f01562bb037aadd857f40af6e9e38a887477c28e4616d4f05559f6546c5",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u07_reasoning_formal-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u07_reasoning_formal-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u07_reasoning_formal-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official sessions 15, 16, 18, and 19.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u07_reasoning_formal-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u07_reasoning_formal-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official sessions 15 (Nov 10, guest Denny Zhou, LLM Reasoning), 16 (Nov 14, guest Thang Luong), 18, and 19.",
+          "id": "cs329a_u07_reasoning_formal-intro-r1",
+          "question": "Which course and sessions does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Search over tactic sequences with a perfect kernel verifier.",
+          "term": "AlphaProof"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Neural proposer plus symbolic deduction engine for geometry.",
+          "term": "AlphaGeometry"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Authority must not exceed verified capability; the diagonal is safe.",
+          "term": "autonomy envelope"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "The gap between simulator success and real-robot success.",
+          "term": "sim-to-real"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "State what the guest sessions do and do not cover, describe AlphaProof-style formal proof search, describe the AlphaGeometry neuro-symbolic loop, separate conjecture from search from proof, use a symbolic environment as a verifier, draw the autonomy envelope, trace a robot perception-action loop, fuse multimodal feedback, scope sim-to-real, and judge trace validity.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Reinforcement learning prerequisite.",
+          "term": "P17"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Tools and agent state prerequisite.",
+          "term": "P20"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Experimental method prerequisite.",
+          "term": "P22"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P17 (RL), P20 (tools, agent state), and P22 (experimental method). Local remediation sits inside C05.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The judge that cannot be argued with; its yes is certain.",
+          "term": "kernel"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "P(conjecture good) times P(search finds it).",
+          "term": "proof success"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: a proof is a checkable artifact, search is the process that finds it, and the symbolic kernel is the judge that cannot be argued with. Equation: proof success = P(conjecture good) times P(search finds it). Code: a loop of propose-tactic, check-with-kernel. Observation: the kernel's yes is certain; everything else is a guess that needs evidence.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-guest-reasoning-evidence",
+      "blocks": [
+        {
+          "anchor": "c01-guest-reasoning-evidence-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c01-guest-reasoning-evidence-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-guest-reasoning-evidence-p01",
+          "definition": "A title, not a transcript; tells the topic and the speaker, not the claims.",
+          "term": "schedule line"
+        },
+        {
+          "anchor": "c01-guest-reasoning-evidence-p01",
+          "definition": "The four schedule lines; a claim needs a source stronger than the line.",
+          "term": "evidence"
+        },
+        {
+          "anchor": "c01-guest-reasoning-evidence-p05",
+          "definition": "Each rung (line, slides, transcript, recording) supports stronger claims.",
+          "term": "provenance hygiene"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c01-guest-reasoning-evidence-p03",
+          "answer": "A schedule line tells the topic and the speaker, not the claims, demos, or numbers. The discipline: say what the line supports, and stop there. Inference is not evidence.",
+          "id": "c01-guest-reasoning-evidence-r1",
+          "question": "What does a schedule line support?"
+        },
+        {
+          "anchor": "c01-guest-reasoning-evidence-p12",
+          "answer": "Break the boundary: explaining what Denny Zhou said about reasoning from the schedule line alone is fabrication with a famous name on it. A session with released slides raises the evidence rung.",
+          "id": "c01-guest-reasoning-evidence-r2",
+          "question": "What breaks the evidence boundary?"
+        }
+      ],
+      "title": "C01 guest reasoning evidence"
+    },
+    {
+      "anchor": "c02-alphaproofformal-verification",
+      "blocks": [
+        {
+          "anchor": "c02-alphaproofformal-verification-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-alphaproofformal-verification-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-alphaproofformal-verification-p01",
+          "definition": "An action transforming the goal state; rfl closes 2 + 2 = 4.",
+          "term": "tactic"
+        },
+        {
+          "anchor": "c02-alphaproofformal-verification-p02",
+          "definition": "Checks the proof deterministically; no human needs to check the steps.",
+          "term": "kernel"
+        },
+        {
+          "anchor": "c02-alphaproofformal-verification-p02",
+          "definition": "The tactic closing the toy goal 2 + 2 = 4.",
+          "term": "rfl"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-alphaproofformal-verification-p03",
+          "answer": "A ruthless referee: state the theorem, apply tactics, and after each tactic the referee says what remains. When nothing remains, the kernel certifies the proof.",
+          "id": "c02-alphaproofformal-verification-r1",
+          "question": "How does a proof assistant work?"
+        },
+        {
+          "anchor": "c02-alphaproofformal-verification-p12",
+          "answer": "Break formalization: a wrongly stated theorem gets proved perfectly. A goal with no tactic sequence in the action space burns the full search budget finding nothing.",
+          "id": "c02-alphaproofformal-verification-r2",
+          "question": "What breaks formal verification?"
+        }
+      ],
+      "title": "C02 AlphaProof/formal verification"
+    },
+    {
+      "anchor": "c03-alphageometry",
+      "blocks": [
+        {
+          "anchor": "c03-alphageometry-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c03-alphageometry-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c03-alphageometry-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-alphageometry-p02",
+          "definition": "The neural net proposes 5; the symbolic engine tries each.",
+          "term": "auxiliary constructions"
+        },
+        {
+          "anchor": "c03-alphageometry-p04",
+          "definition": "All facts derivable by the rule set; the proof is a closure containing the goal.",
+          "term": "deduction closure"
+        },
+        {
+          "anchor": "c03-alphageometry-p04",
+          "definition": "Must cover useful constructions; blamed when the rule set is the real gap.",
+          "term": "proposer"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c03-alphageometry-p03",
+          "answer": "Split by talent: the neural net generates ideas (draw the midpoint, drop a perpendicular), the symbolic engine finishes by running deductive rules to saturation. In the toy, 2 of 5 constructions close the proof.",
+          "id": "c03-alphageometry-r1",
+          "question": "How does AlphaGeometry split the work?"
+        },
+        {
+          "anchor": "c03-alphageometry-p12",
+          "answer": "Break the rule set: a missing deduction rule means no construction closes the proof, and the proposer is blamed for an engine gap. A problem needing no construction makes the proposer pure overhead.",
+          "id": "c03-alphageometry-r2",
+          "question": "What breaks AlphaGeometry?"
+        }
+      ],
+      "title": "C03 AlphaGeometry"
+    },
+    {
+      "anchor": "c04-conjecturesearchproof-distinctions",
+      "blocks": [
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c04-conjecturesearchproof-distinctions-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-p03",
+          "definition": "A proposed step: this tactic might work, this construction might help.",
+          "term": "conjecture"
+        },
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-p02",
+          "definition": "The accepted path; usually much smaller than the search tree.",
+          "term": "proof"
+        },
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-p03",
+          "definition": "Confusing search with proof; the 9 dead nodes are not the proof.",
+          "term": "cardinal sin"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-p05",
+          "answer": "One: only the proof needs storing and checking. Two: search cost is the efficiency metric, proof size the elegance metric, different numbers. Three: a lucky non-replaying trace is not a proof.",
+          "id": "c04-conjecturesearchproof-distinctions-r1",
+          "question": "Why does the conjecture/search/proof distinction matter?"
+        },
+        {
+          "anchor": "c04-conjecturesearchproof-distinctions-p12",
+          "answer": "Break replayability: a randomness-dependent proof path does not replay, so a lucky trace is not a proof. Even a zero-search first-try proof keeps the distinction: cost 1, size 4.",
+          "id": "c04-conjecturesearchproof-distinctions-r2",
+          "question": "What breaks the proof claim?"
+        }
+      ],
+      "title": "C04 conjecture/search/proof distinctions"
+    },
+    {
+      "anchor": "c05-symbolic-environment",
+      "blocks": [
+        {
+          "anchor": "c05-symbolic-environment-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c05-symbolic-environment-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-symbolic-environment-p04",
+          "definition": "The open goals as a list of propositions; the board the agent sees.",
+          "term": "goal stack"
+        },
+        {
+          "anchor": "c05-symbolic-environment-p04",
+          "definition": "Reward 1 at proof close, 0 otherwise; survivable because the verifier labels every step.",
+          "term": "sparse"
+        },
+        {
+          "anchor": "c05-symbolic-environment-p05",
+          "definition": "Discrete, deterministic, fully observed; the perfect board game.",
+          "term": "simulator"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-symbolic-environment-p03",
+          "answer": "A board game with perfect rules: the board shows the goals, a move is a tactic, the kernel never errs or tires. The agent learns by playing: propose tactics, watch the board change.",
+          "id": "c05-symbolic-environment-r1",
+          "question": "What is the symbolic environment?"
+        },
+        {
+          "anchor": "c05-symbolic-environment-p12",
+          "answer": "Break the tactic set: the needed tactic is absent, so the agent plays perfectly and never wins. A domain with no verifier (essay writing) cannot score, and the loop has no teacher.",
+          "id": "c05-symbolic-environment-r2",
+          "question": "What breaks the symbolic environment?"
+        }
+      ],
+      "title": "C05 symbolic environment"
+    },
+    {
+      "anchor": "c06-autonomy-limits",
+      "blocks": [
+        {
+          "anchor": "c06-autonomy-limits-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c06-autonomy-limits-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c06-autonomy-limits-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-autonomy-limits-p01",
+          "definition": "c: measured task success; what the agent can do well.",
+          "term": "capability"
+        },
+        {
+          "anchor": "c06-autonomy-limits-p01",
+          "definition": "a: the action set without human approval; must not exceed verified capability.",
+          "term": "authority"
+        },
+        {
+          "anchor": "c06-autonomy-limits-p01",
+          "definition": "a <= c, with margin; the diagonal is the safe zone.",
+          "term": "envelope"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c06-autonomy-limits-p05",
+          "answer": "Every new authority needs a capability measurement first. Expected harm = P(failure) times harm per failure, with P(failure) = 1 - c. The dangerous cell (low capability, high authority) is rejected until c rises or a falls.",
+          "id": "c06-autonomy-limits-r1",
+          "question": "How does the envelope check work?"
+        },
+        {
+          "anchor": "c06-autonomy-limits-p12",
+          "answer": "Break measurement: c measured on easy tasks grants high authority that meets hard tasks. On zero-cost failures the envelope is overkill and the margin can shrink.",
+          "id": "c06-autonomy-limits-r2",
+          "question": "What breaks the autonomy envelope?"
+        }
+      ],
+      "title": "C06 autonomy limits"
+    },
+    {
+      "anchor": "c07-robot-perceptionaction",
+      "blocks": [
+        {
+          "anchor": "c07-robot-perceptionaction-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c07-robot-perceptionaction-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-robot-perceptionaction-p05",
+          "definition": "Each observation corrects the state; each action is re-planned from it.",
+          "term": "closed-loop"
+        },
+        {
+          "anchor": "c07-robot-perceptionaction-p05",
+          "definition": "Plan once, execute blind; fails because the world model is wrong in detail.",
+          "term": "open-loop"
+        },
+        {
+          "anchor": "c07-robot-perceptionaction-p04",
+          "definition": "Sensors must be; a 5 cm camera offset makes every plan 5 cm wrong.",
+          "term": "calibrated"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c07-robot-perceptionaction-p03",
+          "answer": "Perception turns the world into state, action changes the world, and the loop repeats until state matches the goal or the budget ends. In the toy, three attempts succeed on the third after a slip.",
+          "id": "c07-robot-perceptionaction-r1",
+          "question": "What is the robot perception-action loop?"
+        },
+        {
+          "anchor": "c07-robot-perceptionaction-p12",
+          "answer": "Break calibration: an unrecalibrated 5 cm camera offset defeats every retry. A task with no sensing (timed pour) is open-loop by necessity.",
+          "id": "c07-robot-perceptionaction-r2",
+          "question": "What breaks the loop?"
+        }
+      ],
+      "title": "C07 robot perception/action"
+    },
+    {
+      "anchor": "c08-multimodal-feedback",
+      "blocks": [
+        {
+          "anchor": "c08-multimodal-feedback-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-multimodal-feedback-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-multimodal-feedback-p03",
+          "definition": "A vote among experts: each channel reports what it knows; act on the union.",
+          "term": "fusion"
+        },
+        {
+          "anchor": "c08-multimodal-feedback-p02",
+          "definition": "Knows the joints but not the world; the third channel alongside vision and force.",
+          "term": "proprioception"
+        },
+        {
+          "anchor": "c08-multimodal-feedback-p05",
+          "definition": "The product e_1 * e_2 * e_3 under independence; much smaller than any one channel.",
+          "term": "miss rate"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-multimodal-feedback-p05",
+          "answer": "Independent-error fusion: if each channel misses a fault with probability e_i independently, the fused miss rate is the product, much smaller than any one. In the toy, force catches the slip that vision misses.",
+          "id": "c08-multimodal-feedback-r1",
+          "question": "Why fuse multimodal channels?"
+        },
+        {
+          "anchor": "c08-multimodal-feedback-p12",
+          "answer": "Break independence: vision and depth sharing one lens miss the transparent cup together, and fusion adds nothing. When force is the only signal (weighing), vision is pure noise: drop it.",
+          "id": "c08-multimodal-feedback-r2",
+          "question": "What breaks sensor fusion?"
+        }
+      ],
+      "title": "C08 multimodal feedback"
+    },
+    {
+      "anchor": "c09-sim-to-real-scope",
+      "blocks": [
+        {
+          "anchor": "c09-sim-to-real-scope-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c09-sim-to-real-scope-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-sim-to-real-scope-p01",
+          "definition": "g = s_sim - s_real; 0.25 in the toy, 0.12 after randomization.",
+          "term": "gap"
+        },
+        {
+          "anchor": "c09-sim-to-real-scope-p02",
+          "definition": "Widen the training distribution (friction, mass, lighting) to cover reality.",
+          "term": "domain randomization"
+        },
+        {
+          "anchor": "c09-sim-to-real-scope-p03",
+          "definition": "Same shapes, wrong details: friction, lighting, wear, and sensor noise differ.",
+          "term": "dream"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c09-sim-to-real-scope-p05",
+          "answer": "Distribution matching: the policy trains on the simulator's distribution and is tested on reality's. Randomizing the dream widens training to cover reality. In the toy, real success rises 0.70 to 0.76.",
+          "id": "c09-sim-to-real-scope-r1",
+          "question": "How does domain randomization narrow the gap?"
+        },
+        {
+          "anchor": "c09-sim-to-real-scope-p12",
+          "answer": "Break the range: reality's friction outside the randomized interval meets a world never dreamed, and the gap stays wide. Where sim matches reality (kinematic reaching), the gap is near zero.",
+          "id": "c09-sim-to-real-scope-r2",
+          "question": "What breaks sim-to-real transfer?"
+        }
+      ],
+      "title": "C09 sim-to-real scope"
+    },
+    {
+      "anchor": "c10-safety",
+      "blocks": [
+        {
+          "anchor": "c10-safety-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-safety-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-safety-p04",
+          "definition": "Any rule firing blocks the action; the independent check before anything moves.",
+          "term": "veto"
+        },
+        {
+          "anchor": "c10-safety-p01",
+          "definition": "Simple, conservative, dumb on purpose; checks each action against hard rules.",
+          "term": "safety layer"
+        },
+        {
+          "anchor": "c10-safety-p03",
+          "definition": "False blocks cost time; missed blocks cost safety.",
+          "term": "conservative"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-safety-p03",
+          "answer": "Safety is a separate circuit from intelligence: the planner proposes, the safety layer disposes. It works through independence: the layer does not share the planner's model, so a planner bug does not become a safety bug.",
+          "id": "c10-safety-r1",
+          "question": "Why must the safety layer be independent?"
+        },
+        {
+          "anchor": "c10-safety-p12",
+          "answer": "Break independence: the layer reading the planner's own state estimate is blinded by the same perception bug, and the veto is theater. Purely digital agents keep only the software sandbox.",
+          "id": "c10-safety-r2",
+          "question": "What breaks the safety layer?"
+        }
+      ],
+      "title": "C10 safety"
+    },
+    {
+      "anchor": "c11-trace-validity",
+      "blocks": [
+        {
+          "anchor": "c11-trace-validity-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-trace-validity-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-trace-validity-p02",
+          "definition": "Behavior changes with X; the trace named a real cause.",
+          "term": "faithful"
+        },
+        {
+          "anchor": "c11-trace-validity-p01",
+          "definition": "Change X, hold the rest; the validity test for a trace claim.",
+          "term": "intervention"
+        },
+        {
+          "anchor": "c11-trace-validity-p03",
+          "definition": "The agent's autobiography; autobiographies can be fiction.",
+          "term": "autobiography"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-trace-validity-p03",
+          "answer": "Intervene: change the fact the trace cites and see if behavior changes. In the toy, moving the cup right while the agent still grasps left proves the trace was a story, not a cause.",
+          "id": "c11-trace-validity-r1",
+          "question": "How do you test trace validity?"
+        },
+        {
+          "anchor": "c11-trace-validity-p12",
+          "answer": "Break cleanliness: the intervention accidentally changes Y too, so a story passes as faithful. An honest I-don't-know trace is untestable but better than fiction.",
+          "id": "c11-trace-validity-r2",
+          "question": "What breaks the validity test?"
+        }
+      ],
+      "title": "C11 trace validity"
+    },
+    {
+      "anchor": "c12-guest-gaps",
+      "blocks": [
+        {
+          "anchor": "c12-guest-gaps-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-guest-gaps-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-guest-gaps-p01",
+          "definition": "A question the schedule line raises but does not answer.",
+          "term": "gap"
+        },
+        {
+          "anchor": "c12-guest-gaps-p03",
+          "definition": "Where the learner can read the answer: paper, docs, code.",
+          "term": "pointer"
+        },
+        {
+          "anchor": "c12-guest-gaps-p05",
+          "definition": "Makes ignorance explicit and actionable; each gap names its own remedy.",
+          "term": "open-question list"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c12-guest-gaps-p03",
+          "answer": "A gap inventory lists what was not learned, so nobody mistakes the schedule for the substance. Each row gets the line, the questions it raises, and where to read the answers. In the toy: 4 lines known, 0 contents known.",
+          "id": "c12-guest-gaps-r1",
+          "question": "What is a gap inventory?"
+        },
+        {
+          "anchor": "c12-guest-gaps-p12",
+          "answer": "Break the pointers: paywalled or dead sources leave gaps listed but not actionable. A session with full released video shrinks the gap list and raises the evidence rung.",
+          "id": "c12-guest-gaps-r2",
+          "question": "What breaks a gap inventory?"
+        }
+      ],
+      "title": "C12 guest gaps"
+    },
+    {
+      "anchor": "u07-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u07-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u07-not-yet-understood-dependency-list-list01",
+          "definition": "Policy gradients and search as RL; remediated in C02 items 4-6.",
+          "term": "policy gradients"
+        },
+        {
+          "anchor": "u07-not-yet-understood-dependency-list-list01",
+          "definition": "Tool-call loops and agent state; remediated in C07 items 4-6.",
+          "term": "tool-call loops"
+        },
+        {
+          "anchor": "u07-not-yet-understood-dependency-list-list01",
+          "definition": "Tactic semantics; the prover's action language.",
+          "term": "Lean"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u07-not-yet-understood-dependency-list-list01",
+          "answer": "Experimental method and ablations are remediated in C11 items 4-8. Lean tactic semantics get a local bridge as the prover's action language.",
+          "id": "u07-not-yet-understood-dependency-list-r1",
+          "question": "Where are experimental method and Lean handled?"
+        }
+      ],
+      "title": "U07 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u07-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u07-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u07-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C02, deeper shells through C02 items 6, 10, 11, 12, and C05.",
+          "term": "formal proof search"
+        },
+        {
+          "anchor": "u07-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C03, deeper shells through C03 items 6, 10, 11, 12, and C04.",
+          "term": "neuro-symbolic loop"
+        },
+        {
+          "anchor": "u07-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C11; the intervention-based validity track.",
+          "term": "trace faithfulness"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u07-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "Formal proof search, the neuro-symbolic loop, and trace faithfulness. Each runs shells 0-10, ending at production forms like C05 (prover as environment) and C04 (conjecture, search, proof split).",
+          "id": "u07-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U07 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

@@ -1,0 +1,750 @@
+{
+  "itemId": "u01_test_time_compute",
+  "itemKind": "lesson",
+  "revision": "d49b9d4b9b09527965f59076a24fc1b66f1ab104c8a56720efc550497e9fb033",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u01_test_time_compute-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u01_test_time_compute-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u01_test_time_compute-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official sessions 2 and 3.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u01_test_time_compute-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u01_test_time_compute-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official sessions 2 (Sep 26) and 3 (Sep 29).",
+          "id": "cs329a_u01_test_time_compute-intro-r1",
+          "question": "Which course and sessions does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "The probability that at least one of N independent samples succeeds.",
+          "term": "pass@N"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Sample N completions, score each with a verifier, return the highest-scoring one.",
+          "term": "best-of-N"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Sample N reasoning paths and return the majority final answer.",
+          "term": "self-consistency"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "The distance between the hard skill of generating and the easier skill of checking.",
+          "term": "generator/verifier gap"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Define pass@N and derive it, run and score best-of-N and self-consistency on a toy, explain the generator/verifier gap, train and calibrate a toy verifier, name selection bias failure modes, and read a cost-success curve to pick a compute allocation under a budget.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Statistical estimation prerequisite.",
+          "term": "P07"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Transformer decoding prerequisite.",
+          "term": "P14"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Experiments prerequisite.",
+          "term": "P22"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P07 (statistical estimation), P14 (transformer decoding), and P22 (experiments). Local remediation for the gaps sits inside C01, C10, and C12.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The probability that at least one of N independent samples succeeds, equal to 1 - (1 - p)^N.",
+          "term": "pass@N"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The number a verifier assigns to a completion; best-of-N keeps the highest.",
+          "term": "verifier score"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: more tries help when tries differ. Equation: pass@N = 1 - (1 - p)^N. Code: a seeded loop drawing N completions and keeping the best by verifier score. Observation: the measured curve rises fast then flattens, and a biased verifier bends it down.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-repeated-sampling",
+      "blocks": [
+        {
+          "anchor": "c01-repeated-sampling-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c01-repeated-sampling-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c01-repeated-sampling-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-repeated-sampling-p01",
+          "definition": "The probability that at least one of N independent samples succeeds.",
+          "term": "pass@N"
+        },
+        {
+          "anchor": "c01-repeated-sampling-p02",
+          "definition": "Per-sample success probability, in [0, 1].",
+          "term": "p"
+        },
+        {
+          "anchor": "c01-repeated-sampling-p04",
+          "definition": "A perfect checker that judges success without any model involvement.",
+          "term": "oracle"
+        },
+        {
+          "anchor": "c01-repeated-sampling-p05",
+          "definition": "The event that at least one sample succeeds, derived via P(all N fail).",
+          "term": "complement"
+        }
+      ],
+      "minutes": 5,
+      "recall": [
+        {
+          "anchor": "c01-repeated-sampling-p05",
+          "answer": "Each sample is an independent lottery ticket and the set wins if any ticket wins. P(all N fail) = (1 - p)^N by independence, so pass@N = 1 - (1 - p)^N. Each new ticket multiplies the remaining failure chance by (1 - p), so it adds less than the one before.",
+          "id": "c01-repeated-sampling-r1",
+          "question": "Why does pass@N grow with N but with shrinking gains?"
+        },
+        {
+          "anchor": "c01-repeated-sampling-p12",
+          "answer": "Loss of independence. At temperature 0 every sample is identical, so N tickets collapse into one ticket and the formula overstates success.",
+          "id": "c01-repeated-sampling-r2",
+          "question": "What breaks the pass@N derivation?"
+        }
+      ],
+      "title": "C01 repeated sampling"
+    },
+    {
+      "anchor": "c02-best-of-n",
+      "blocks": [
+        {
+          "anchor": "c02-best-of-n-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c02-best-of-n-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c02-best-of-n-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-best-of-n-p02",
+          "definition": "Sample N completions, score each with a verifier, return the highest-scoring one.",
+          "term": "best-of-N"
+        },
+        {
+          "anchor": "c02-best-of-n-p01",
+          "definition": "A scorer mapping (x, y_i) to a score s_i that should correlate with correctness.",
+          "term": "verifier"
+        },
+        {
+          "anchor": "c02-best-of-n-p01",
+          "definition": "The selection rule returning the sample with the highest verifier score.",
+          "term": "argmax"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c02-best-of-n-p07",
+          "answer": "The verifier's scores decide, not correctness. In the item-6 toy the argmax picked sample 2 with score 0.95 even though it was wrong, while samples 1 and 4 were correct. Verifier error beats generator coverage.",
+          "id": "c02-best-of-n-r1",
+          "question": "Why can best-of-N fail even when a correct sample exists?"
+        },
+        {
+          "anchor": "c02-best-of-n-p05",
+          "answer": "With a perfect verifier, selection always finds a correct sample whenever one exists, so best-of-N success equals pass@N. With a noisy verifier it is lower, and the gap is the verifier error folded through the argmax.",
+          "id": "c02-best-of-n-r2",
+          "question": "When does best-of-N success equal pass@N?"
+        }
+      ],
+      "title": "C02 best-of-N"
+    },
+    {
+      "anchor": "c03-self-consistency",
+      "blocks": [
+        {
+          "anchor": "c03-self-consistency-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c03-self-consistency-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-self-consistency-p12",
+          "definition": "Sample N reasoning paths and return the majority final answer; no verifier needed.",
+          "term": "self-consistency"
+        },
+        {
+          "anchor": "c03-self-consistency-p01",
+          "definition": "The mode of the extracted answers a_1 through a_N.",
+          "term": "majority vote"
+        },
+        {
+          "anchor": "c03-self-consistency-p11",
+          "definition": "Errors scatter over many wrong answers instead of repeating one systematic mistake.",
+          "term": "error diversity"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c03-self-consistency-p05",
+          "answer": "The Condorcet intuition: if each path is correct with probability above 0.5 and errors scatter over many wrong answers, the majority vote concentrates on the right answer as N grows.",
+          "id": "c03-self-consistency-r1",
+          "question": "Why does majority vote help when each path is only slightly better than chance?"
+        },
+        {
+          "anchor": "c03-self-consistency-p12",
+          "answer": "Shared systematic error. If all paths share one flawed lemma, every path gives the same wrong answer and the majority is wrong.",
+          "id": "c03-self-consistency-r2",
+          "question": "What breaks self-consistency?"
+        }
+      ],
+      "title": "C03 self-consistency"
+    },
+    {
+      "anchor": "c04-inference-architecture-search",
+      "blocks": [
+        {
+          "anchor": "c04-inference-architecture-search-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c04-inference-architecture-search-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-inference-architecture-search-p03",
+          "definition": "Search over inference dials per task: sample count, verifier choice, voting rule, temperature.",
+          "term": "architecture search"
+        },
+        {
+          "anchor": "c04-inference-architecture-search-p01",
+          "definition": "The set of recipes, each a tuple of technique, N, verifier, and decoding params.",
+          "term": "search space"
+        },
+        {
+          "anchor": "c04-inference-architecture-search-p03",
+          "definition": "Held-out data used to score recipes; the test set must stay locked during search.",
+          "term": "validation"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c04-inference-architecture-search-p06",
+          "answer": "Math favored self-consistency-16 (0.78 versus 0.70) while code favored best-of-8 (0.66 versus 0.55). Per-task picks average 0.72 against 0.68 for a fixed recipe, a 0.04 absolute gain on the toy.",
+          "id": "c04-inference-architecture-search-r1",
+          "question": "Why did no single recipe win both toy tasks?"
+        },
+        {
+          "anchor": "c04-inference-architecture-search-p12",
+          "answer": "Two failure modes: the search overfits a small validation set so the picked recipe loses on test, and test questions leak into the search. The 0.78 to 0.70 gap on 40 questions has standard error about 0.07, so it is noise.",
+          "id": "c04-inference-architecture-search-r2",
+          "question": "What makes an architecture search dishonest?"
+        }
+      ],
+      "title": "C04 inference architecture search"
+    },
+    {
+      "anchor": "c05-compute-allocation",
+      "blocks": [
+        {
+          "anchor": "c05-compute-allocation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c05-compute-allocation-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c05-compute-allocation-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-compute-allocation-p02",
+          "definition": "N = 20 samples with a 0.70 verifier; loses to the strong plan on the toy.",
+          "term": "cheap plan"
+        },
+        {
+          "anchor": "c05-compute-allocation-p01",
+          "definition": "Total cost units B; a plan (N, verifier) must satisfy N times (c_g + c_v) <= B.",
+          "term": "budget"
+        },
+        {
+          "anchor": "c05-compute-allocation-p02",
+          "definition": "A single number summarizing selection quality of a verifier.",
+          "term": "verifier accuracy"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c05-compute-allocation-p06",
+          "answer": "The strong plan won: 8 samples with a 0.90 verifier gives 0.8999 times 0.90 = 0.8099, beating 20 samples with a 0.70 verifier at 0.99683 times 0.70 = 0.6978. Extra samples flatten while accuracy multiplies.",
+          "id": "c05-compute-allocation-r1",
+          "question": "Which plan won the 100-unit toy and why?"
+        },
+        {
+          "anchor": "c05-compute-allocation-p12",
+          "answer": "That accuracy is uniform. A verifier at 0.90 on easy but 0.55 on hard questions overstates the strong plan, because hard questions are the ones that reach it. Real allocation needs accuracy conditioned on difficulty.",
+          "id": "c05-compute-allocation-r2",
+          "question": "What assumption does the toy's single-number verifier accuracy hide?"
+        }
+      ],
+      "title": "C05 compute allocation"
+    },
+    {
+      "anchor": "c06-generatorverifier-gap",
+      "blocks": [
+        {
+          "anchor": "c06-generatorverifier-gap-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c06-generatorverifier-gap-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-generatorverifier-gap-p04",
+          "definition": "What the generator supplies: pass@N, the chance the candidate set contains the answer.",
+          "term": "coverage"
+        },
+        {
+          "anchor": "c06-generatorverifier-gap-p01",
+          "definition": "Checking a candidate against constraints, often O(check) versus search for generation.",
+          "term": "verification"
+        },
+        {
+          "anchor": "c06-generatorverifier-gap-p02",
+          "definition": "A verifier smaller or less capable than the generator, still useful when it ranks better than chance.",
+          "term": "weak verifier"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c06-generatorverifier-gap-p05",
+          "answer": "Verification is often an easier task class than generation: checking a candidate against constraints is O(check) while finding one is search. The generator supplies coverage and the verifier supplies discrimination; the pair beats either alone when both gaps are real.",
+          "id": "c06-generatorverifier-gap-r1",
+          "question": "Why does a weak verifier still help?"
+        },
+        {
+          "anchor": "c06-generatorverifier-gap-p12",
+          "answer": "When verification is no easier than generation. On open-ended creative tasks with no ground truth the accuracy is 0.5, so best-of-N adds cost with no gain. Adversarial samples can push accuracy below 0.5 on the sample distribution.",
+          "id": "c06-generatorverifier-gap-r2",
+          "question": "When does best-of-N add cost with no gain?"
+        }
+      ],
+      "title": "C06 generator/verifier gap"
+    },
+    {
+      "anchor": "c07-weak-verifiers",
+      "blocks": [
+        {
+          "anchor": "c07-weak-verifiers-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c07-weak-verifiers-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-weak-verifiers-p04",
+          "definition": "A small judge for a large generator, worth calling when it ranks the pile better than chance.",
+          "term": "weak verifier"
+        },
+        {
+          "anchor": "c07-weak-verifiers-p02",
+          "definition": "The small judge; cheap to run, shifting optimal allocation toward larger N.",
+          "term": "1B verifier"
+        },
+        {
+          "anchor": "c07-weak-verifiers-p11",
+          "definition": "Samples that flatter the judge, pushing its accuracy below 0.5 on the sample distribution.",
+          "term": "sycophantic samples"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c07-weak-verifiers-p03",
+          "answer": "A junior editor can spot the best draft from a senior writer's pile without writing better. In the toy, a 1B judge with accuracy 0.62 at N = 16 lifts the 70B generator from 0.35 to 0.62. It must only rank better than chance on the pile in front of it.",
+          "id": "c07-weak-verifiers-r1",
+          "question": "When is a 1B judge worth calling for a 70B generator?"
+        },
+        {
+          "anchor": "c07-weak-verifiers-p12",
+          "answer": "If the weak verifier learned the generator's style, it upvotes the generator's characteristic wrong answers. Then accuracy falls below 0.5 on the sample distribution and selection hurts instead of helping.",
+          "id": "c07-weak-verifiers-r2",
+          "question": "How can a weak verifier hurt?"
+        }
+      ],
+      "title": "C07 weak verifiers"
+    },
+    {
+      "anchor": "c08-outcomeprocess-reward",
+      "blocks": [
+        {
+          "anchor": "c08-outcomeprocess-reward-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-outcomeprocess-reward-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-outcomeprocess-reward-p02",
+          "definition": "A single scalar for the final answer; sparse and unbiased about what matters.",
+          "term": "outcome reward"
+        },
+        {
+          "anchor": "c08-outcomeprocess-reward-p02",
+          "definition": "A vector of per-step rewards; dense signal that needs a teacher for every step.",
+          "term": "process reward"
+        },
+        {
+          "anchor": "c08-outcomeprocess-reward-p05",
+          "definition": "The problem of knowing which step caused success; hard under outcome reward.",
+          "term": "credit assignment"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c08-outcomeprocess-reward-p05",
+          "answer": "Process reward gives dense signal and faster learning, but each step label can be wrong and wrong labels teach wrong habits. Outcome reward is sparse but unbiased about what matters. The tradeoff is bias versus variance.",
+          "id": "c08-outcomeprocess-reward-r1",
+          "question": "Why is process reward both better and riskier than outcome reward?"
+        },
+        {
+          "anchor": "c08-outcomeprocess-reward-p12",
+          "answer": "The item-2 trace has step correctness [1, 0, 1, 1] with the right final answer. It earns full outcome reward while teaching nothing about the nonsense step 2.",
+          "id": "c08-outcomeprocess-reward-r2",
+          "question": "What does the item-2 trace show about outcome reward?"
+        }
+      ],
+      "title": "C08 outcome/process reward"
+    },
+    {
+      "anchor": "c09-verifier-training",
+      "blocks": [
+        {
+          "anchor": "c09-verifier-training-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c09-verifier-training-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-verifier-training-p03",
+          "definition": "A verifier is a classifier: input a solution, output P(correct).",
+          "term": "classifier"
+        },
+        {
+          "anchor": "c09-verifier-training-p04",
+          "definition": "L = -mean(c_i log s_i + (1 - c_i) log(1 - s_i)); the negative log-likelihood of a Bernoulli model.",
+          "term": "binary cross-entropy"
+        },
+        {
+          "anchor": "c09-verifier-training-p11",
+          "definition": "Training samples must look like the samples the verifier will score at deployment.",
+          "term": "distribution match"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c09-verifier-training-p12",
+          "answer": "Ten percent flipped labels cap the learned accuracy near 0.90 no matter the model size, because the loss fits the noisy empirical correctness rate.",
+          "id": "c09-verifier-training-r1",
+          "question": "Why does label noise cap accuracy?"
+        },
+        {
+          "anchor": "c09-verifier-training-p12",
+          "answer": "The verifier learns to trust brevity and rejects good long solutions. A verifier trained on human solutions and deployed on model samples breaks the same way.",
+          "id": "c09-verifier-training-r2",
+          "question": "What breaks when training on short human solutions and deploying on long model samples?"
+        }
+      ],
+      "title": "C09 verifier training"
+    },
+    {
+      "anchor": "c10-calibration",
+      "blocks": [
+        {
+          "anchor": "c10-calibration-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-calibration-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-calibration-p01",
+          "definition": "The match between verifier confidence and observed accuracy.",
+          "term": "calibration"
+        },
+        {
+          "anchor": "c10-calibration-p01",
+          "definition": "ECE = sum_b (|B_b|/n) * |acc_b - conf_b|; the weighted confidence-accuracy gap across bins.",
+          "term": "expected calibration error"
+        },
+        {
+          "anchor": "c10-calibration-p12",
+          "definition": "A post-hoc monotone map from raw scores to empirical accuracy, fit on held-out data.",
+          "term": "temperature scaling"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c10-calibration-p03",
+          "answer": "Selection (best-of-N) needs ranking; decision thresholds, abstention, and expected-value math need calibration. The fix is honest numbers first, not better forecasts first.",
+          "id": "c10-calibration-r1",
+          "question": "When does selection need ranking and when does it need calibration?"
+        },
+        {
+          "anchor": "c10-calibration-p12",
+          "answer": "Yes. Perfect AUC with all scores in [0.49, 0.51] ranks well and calibrates terribly. Also, 2 samples per bin makes acc_b jump between 0, 0.5, and 1.0, so ECE means nothing.",
+          "id": "c10-calibration-r2",
+          "question": "Can a verifier rank perfectly yet calibrate terribly?"
+        }
+      ],
+      "title": "C10 calibration"
+    },
+    {
+      "anchor": "c11-selection-bias",
+      "blocks": [
+        {
+          "anchor": "c11-selection-bias-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-selection-bias-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-selection-bias-p03",
+          "definition": "Systematic error from choosing samples with a biased score; the judge's taste leaking into the verdict.",
+          "term": "selection bias"
+        },
+        {
+          "anchor": "c11-selection-bias-p13",
+          "definition": "A feature z (length, style, position) that shifts scores without shifting correctness.",
+          "term": "bias feature"
+        },
+        {
+          "anchor": "c11-selection-bias-p02",
+          "definition": "Picks the highest score; chases high quality or high bias, so bias wins more often as N grows.",
+          "term": "argmax"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-selection-bias-p05",
+          "answer": "Write score s = q + w*z with q the quality signal and z the bias feature. As N grows, the max of z over the set grows while max q is capped at 1, so the bias term wins more often.",
+          "id": "c11-selection-bias-r1",
+          "question": "Why does selection bias get worse with N?"
+        },
+        {
+          "anchor": "c11-selection-bias-p12",
+          "answer": "z correlates with quality in training but not at deployment, so the verifier looks fine on training metrics and fails in production. Position bias, preferring the first sample regardless of content, is one example.",
+          "id": "c11-selection-bias-r2",
+          "question": "What is the subtle production failure?"
+        }
+      ],
+      "title": "C11 selection bias"
+    },
+    {
+      "anchor": "c12-cost-success-curves",
+      "blocks": [
+        {
+          "anchor": "c12-cost-success-curves-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-cost-success-curves-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-cost-success-curves-p03",
+          "definition": "A menu with prices: the x-axis is budget, the y-axis is success.",
+          "term": "cost-success curve"
+        },
+        {
+          "anchor": "c12-cost-success-curves-p12",
+          "definition": "A budget point where the recommended strategy changes.",
+          "term": "crossing"
+        },
+        {
+          "anchor": "c12-cost-success-curves-p05",
+          "definition": "plan_success evaluated at N = floor(B / unit_cost).",
+          "term": "plan_success"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c12-cost-success-curves-p03",
+          "answer": "The best dish is the highest point you can afford, not the highest point on the menu. Crossings mark budget points where the recommended strategy changes.",
+          "id": "c12-cost-success-curves-r1",
+          "question": "How do you read a cost-success curve?"
+        },
+        {
+          "anchor": "c12-cost-success-curves-p12",
+          "answer": "Real verifier accuracy falls as N rises, because harder questions need more samples and fool the verifier. Then the curve overstates high-budget success. A curve drawn from mismatched validation data fails the same way.",
+          "id": "c12-cost-success-curves-r2",
+          "question": "What breaks the curve at high budgets?"
+        }
+      ],
+      "title": "C12 cost-success curves"
+    },
+    {
+      "anchor": "u01-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u01-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u01-not-yet-understood-dependency-list-list01",
+          "definition": "Bernoulli trials and the complement rule; remediated in C01 items 4-6.",
+          "term": "Bernoulli trials"
+        },
+        {
+          "anchor": "u01-not-yet-understood-dependency-list-list01",
+          "definition": "Next-token sampling, temperature, and top-p; remediated in C01 item 4 and C11.",
+          "term": "next-token sampling"
+        },
+        {
+          "anchor": "u01-not-yet-understood-dependency-list-list01",
+          "definition": "Seeds, trials, and standard errors; remediated in C01 item 9 and C12 item 9.",
+          "term": "standard errors"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u01-not-yet-understood-dependency-list-list01",
+          "answer": "Binary cross-entropy as negative log-likelihood is not in the unit bridge list; its derivation is local in C09 item 5 and it is added here as a local bridge. Policy gradients and advantage are deferred to U03 C05.",
+          "id": "u01-not-yet-understood-dependency-list-r1",
+          "question": "Which dependency is a local bridge, and which is deferred?"
+        }
+      ],
+      "title": "U01 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u01-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u01-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u01-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-10 across C02, C06, C11, C05, and C12 item 12.",
+          "term": "Best-of-N"
+        },
+        {
+          "anchor": "u01-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C09 and C10, deeper shells through C10 item 6, C09 item 11, and C02 item 9.",
+          "term": "verifier training and calibration"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u01-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "Best-of-N runs shells 0-10 across C02, C06, C11, C05, and C12 item 12. Verifier training and calibration runs shells 0-10 across C09, C10, and C02 item 9.",
+          "id": "u01-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which cards carry the two major mechanisms through their shells?"
+        }
+      ],
+      "title": "U01 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

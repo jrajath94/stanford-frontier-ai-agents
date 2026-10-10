@@ -1,0 +1,688 @@
+{
+  "itemId": "u05_lesson",
+  "itemKind": "lesson",
+  "revision": "2fa08a2369742eac8682eb2eb63228c80a0be3c5cc7c6ddd72fce3dd657107e3",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u05_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u05_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u05_lesson-intro-p01",
+          "definition": "P09 (optimization), P14, P17 (RL), P22 (experiments); required background.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u05_lesson-intro-p01",
+          "definition": "Optimization prerequisite; opens with local remediation.",
+          "term": "P09"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u05_lesson-intro-p01",
+          "answer": "Prerequisites: P09 (optimization), P14 (transformers), P17 (RL), P22 (experiments). Local remediation on averages, parameter counts, ranks, and preferences opens the lesson.",
+          "id": "cs329z_u05_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "21 Oct optimization; C01-C05 map to its schedule title.",
+          "term": "S09"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "28 Oct data for agentic systems; C06-C08 map here.",
+          "term": "S11"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "2 Nov data selection and quality; C09-C12 map here.",
+          "term": "S12"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "U05 maps to planned sessions S09 (21 Oct, optimization), S11 (28 Oct, agent data), S12 (2 Nov, selection and quality), all taught as independent theory with source attribution pending.",
+          "id": "provenance-r1",
+          "question": "How do U05 concepts map to sessions?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-averages-parameter-counts-ranks-preferences",
+      "blocks": [
+        {
+          "anchor": "local-remediation-averages-parameter-counts-ranks-preferences-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-averages-parameter-counts-ranks-preferences-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-averages-parameter-counts-ranks-preferences-p01",
+          "definition": "(x_1 + ... + x_n)/n; every score in this unit is a mean over examples.",
+          "term": "mean"
+        },
+        {
+          "anchor": "local-remediation-averages-parameter-counts-ranks-preferences-p02",
+          "definition": "A d x k matrix holds d x k numbers.",
+          "term": "parameter counting"
+        },
+        {
+          "anchor": "local-remediation-averages-parameter-counts-ranks-preferences-p01",
+          "definition": "Noise near sqrt(p(1-p)/20) for a mean over 20 examples.",
+          "term": "noise"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-averages-parameter-counts-ranks-preferences-p01",
+          "answer": "Expectation is an average; a mean over 20 examples has noise near sqrt(p(1-p)/20). A d x k matrix holds d x k numbers. Fine-tuning the weights means changing those numbers.",
+          "id": "local-remediation-averages-parameter-counts-ranks-preferences-r1",
+          "question": "What are averages and parameter counts?"
+        }
+      ],
+      "title": "Local remediation: averages, parameter counts, ranks, preferences"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop",
+          "definition": "Improve a prompt using only the model's own feedback.",
+          "term": "natural-language optimizer"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop-list01",
+          "definition": "4 candidates on 20 examples: 0.55, 0.62, 0.70, 0.78.",
+          "term": "toy"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop",
+          "definition": "Read worst traces, write one feedback sentence, edit, rescore.",
+          "term": "loop"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop-list01",
+          "answer": "Shell 0 asks how to improve a prompt without touching weights. Shell 1 builds the 4-prompt toy. Shell 2 formalizes candidate p and dev set. Later shells derive the feedback-edit-rescore loop.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-the-natural-language-optimizer-loop-r1",
+          "question": "What does the optimizer ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (the natural-language optimizer loop)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C01.",
+          "term": "gradient"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C02.",
+          "term": "words versus weights"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C05.",
+          "term": "preference pair"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "What a natural-language gradient is (C01), when to tune words vs weights vs model (C02), why a preference pair trains without a reward model (C05), where agent data comes from (C06-C08), and how to keep evals honest (C10-C12).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-p01",
+          "definition": "A sentence like: the failures all drop the units.",
+          "term": "gradient"
+        },
+        {
+          "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-p03",
+          "definition": "Treat text as the parameter; the update is an edit.",
+          "term": "optimizers"
+        },
+        {
+          "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-p05",
+          "definition": "Black-box search with a language-shaped prior.",
+          "term": "mechanism"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-p02",
+          "answer": "4 candidate prompts on 20 examples: 0.55, 0.62, 0.70, 0.78. The loop reads the worst traces, writes feedback, edits the prompt, and rescores. The 0.70 vs 0.78 gap is inside the noise (SE 0.10).",
+          "id": "cs329z-u05-c01-gepamiprov2oprotextgrad-source-readings-r1",
+          "question": "What does the prompt-optimizer toy show?"
+        }
+      ],
+      "title": "cs329z-U05-C01: GEPA/MIPROv2/OPRO/TextGrad"
+    },
+    {
+      "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c02-promptweightcompute-tradeoff-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff-p01",
+          "definition": "Cheapest knob and weakest; 2 hours of work.",
+          "term": "prompts"
+        },
+        {
+          "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff-p03",
+          "definition": "Middle knob; changes behavior deeply, costs a training run.",
+          "term": "weights"
+        },
+        {
+          "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff",
+          "definition": "Bigger model or more test-time calls; 3x inference cost forever.",
+          "term": "compute"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c02-promptweightcompute-tradeoff-p02",
+          "answer": "Accuracy 0.72, bar 0.80. Rewrite prompt (2h), fine-tune small model (50 GPU-hours), or switch to big model (3x cost forever). Buy the cheapest accuracy first; per-query cost compounds over the product lifetime.",
+          "id": "cs329z-u05-c02-promptweightcompute-tradeoff-r1",
+          "question": "How do you order the three knobs?"
+        }
+      ],
+      "title": "cs329z-U05-C02: prompt/weight/compute tradeoff"
+    },
+    {
+      "anchor": "cs329z-u05-c03-loraqlora",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c03-loraqlora-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u05-c03-loraqlora-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c03-loraqlora-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c03-loraqlora",
+          "definition": "Freezes the big matrix; learns a small detour B A.",
+          "term": "LoRA"
+        },
+        {
+          "anchor": "cs329z-u05-c03-loraqlora-p04",
+          "definition": "r << min(d, k); the task's weight change must fit in rank r.",
+          "term": "rank r"
+        },
+        {
+          "anchor": "cs329z-u05-c03-loraqlora-p05",
+          "definition": "Any rank-r matrix factors as B A with r(d + k) numbers.",
+          "term": "rank factorization"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c03-loraqlora-p02",
+          "answer": "W' = W + B A with B 1024x8 and A 8x1024. Trainable numbers drop from 1,048,576 to 16,384. The base model knows language; the task needs a small steering change.",
+          "id": "cs329z-u05-c03-loraqlora-r1",
+          "question": "How does LoRA shrink the update?"
+        }
+      ],
+      "title": "cs329z-U05-C03: LoRA/QLoRA"
+    },
+    {
+      "anchor": "cs329z-u05-c04-distillation",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c04-distillation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c04-distillation-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c04-distillation",
+          "definition": "Copies behavior, not weights; teacher labels data, student trains.",
+          "term": "distillation"
+        },
+        {
+          "anchor": "cs329z-u05-c04-distillation-p03",
+          "definition": "The teacher's probabilities; teaches which wrong answers were close.",
+          "term": "soft targets"
+        },
+        {
+          "anchor": "cs329z-u05-c04-distillation-p01",
+          "definition": "Must be right often enough that its labels help.",
+          "term": "teacher"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c04-distillation-p02",
+          "answer": "Big model 0.90 at 10x cost; small model 0.75. Train the student on 1000 teacher-labeled examples. Soft targets (A 0.7, B 0.25, C 0.05) teach the boundary between answers.",
+          "id": "cs329z-u05-c04-distillation-r1",
+          "question": "How does distillation work?"
+        }
+      ],
+      "title": "cs329z-U05-C04: distillation"
+    },
+    {
+      "anchor": "cs329z-u05-c05-rlhfdpo-bridge",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c05-rlhfdpo-bridge-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u05-c05-rlhfdpo-bridge-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c05-rlhfdpo-bridge-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c05-rlhfdpo-bridge",
+          "definition": "Two stages: learn reward from pairs, then optimize policy with RL.",
+          "term": "RLHF"
+        },
+        {
+          "anchor": "cs329z-u05-c05-rlhfdpo-bridge",
+          "definition": "One stage: the optimal policy has a closed form; train directly on pairs.",
+          "term": "DPO"
+        },
+        {
+          "anchor": "cs329z-u05-c05-rlhfdpo-bridge-p02",
+          "definition": "Loss = -log sigma(beta m); beta sets how far the policy may move.",
+          "term": "margin"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c05-rlhfdpo-bridge-p02",
+          "answer": "1000 pairs (x, y_w, y_l), beta = 0.1. No reward model, no RL: train directly on w beats l. The loss rises when the model favors y_l over the reference, falls when it favors y_w.",
+          "id": "cs329z-u05-c05-rlhfdpo-bridge-r1",
+          "question": "How does DPO skip the reward model?"
+        }
+      ],
+      "title": "cs329z-U05-C05: RLHF/DPO bridge"
+    },
+    {
+      "anchor": "cs329z-u05-c06-tracesdemosfeedback",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c06-tracesdemosfeedback-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c06-tracesdemosfeedback-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c06-tracesdemosfeedback",
+          "definition": "What the agent did; $0.01 each, noisy.",
+          "term": "traces"
+        },
+        {
+          "anchor": "cs329z-u05-c06-tracesdemosfeedback",
+          "definition": "What an expert would do; $2 each, clean.",
+          "term": "demos"
+        },
+        {
+          "anchor": "cs329z-u05-c06-tracesdemosfeedback",
+          "definition": "Whether the outcome was good; thumbs up/down.",
+          "term": "feedback"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c06-tracesdemosfeedback-p02",
+          "answer": "Traces: automatic logs, $0.01 each, noisy. Demos: human performs the task, $2 each, clean. Feedback: thumbs up/down on outcomes. Mix: clone demos, learn preferences from feedback, filter traces.",
+          "id": "cs329z-u05-c06-tracesdemosfeedback-r1",
+          "question": "What are the three data sources?"
+        }
+      ],
+      "title": "cs329z-U05-C06: traces/demos/feedback"
+    },
+    {
+      "anchor": "cs329z-u05-c07-synthetic-data",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c07-synthetic-data-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c07-synthetic-data-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c07-synthetic-data",
+          "definition": "A printing press with a quality inspector.",
+          "term": "synthetic data"
+        },
+        {
+          "anchor": "cs329z-u05-c07-synthetic-data-p05",
+          "definition": "Keep x when V(x) passes; works when V beats G.",
+          "term": "rejection sampling"
+        },
+        {
+          "anchor": "cs329z-u05-c07-synthetic-data-p03",
+          "definition": "Generation after generation with no fresh real data; variance collapses.",
+          "term": "inbreeding"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c07-synthetic-data-p02",
+          "answer": "Generate 1000 examples with the big model; the verifier accepts 850; train on the 850. The loop works when the verifier is more accurate than the generator. The risk: inbreeding without fresh real data.",
+          "id": "cs329z-u05-c07-synthetic-data-r1",
+          "question": "How does synthetic data work?"
+        }
+      ],
+      "title": "cs329z-U05-C07: synthetic data"
+    },
+    {
+      "anchor": "cs329z-u05-c08-data-flywheel",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c08-data-flywheel-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c08-data-flywheel-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c08-data-flywheel",
+          "definition": "Deploy, collect, annotate, train, redeploy; the loop compounds.",
+          "term": "flywheel"
+        },
+        {
+          "anchor": "cs329z-u05-c08-data-flywheel-p01",
+          "definition": "u x f traces/day; 1000 users, 10% flagged, $2 each.",
+          "term": "yield"
+        },
+        {
+          "anchor": "cs329z-u05-c08-data-flywheel-p04",
+          "definition": "Flagged traces must be the informative ones.",
+          "term": "flag rate"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c08-data-flywheel-p02",
+          "answer": "1000 users/day, 10% flagged, $2 per annotation. Daily yield: 100 traces. The two failure points: the collection rule and the annotation lag.",
+          "id": "cs329z-u05-c08-data-flywheel-r1",
+          "question": "How does the flywheel yield data?"
+        }
+      ],
+      "title": "cs329z-U05-C08: data flywheel"
+    },
+    {
+      "anchor": "cs329z-u05-c09-selectionannotation",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c09-selectionannotation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c09-selectionannotation-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c09-selectionannotation",
+          "definition": "Triage for annotation; the 100 highest-uncertainty traces.",
+          "term": "selection"
+        },
+        {
+          "anchor": "cs329z-u05-c09-selectionannotation-p05",
+          "definition": "Train, score the pool, annotate the top-b, retrain.",
+          "term": "active learning"
+        },
+        {
+          "anchor": "cs329z-u05-c09-selectionannotation",
+          "definition": "The expensive step; selection makes it count.",
+          "term": "annotation"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c09-selectionannotation-p02",
+          "answer": "Budget covers 100 of 10,000 traces. Random 100 teach what the model knows; the 100 with highest uncertainty teach the boundary. A confident-correct example has gradient near zero.",
+          "id": "cs329z-u05-c09-selectionannotation-r1",
+          "question": "Which 100 traces do you annotate?"
+        }
+      ],
+      "title": "cs329z-U05-C09: selection/annotation"
+    },
+    {
+      "anchor": "cs329z-u05-c10-traineval-separation",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c10-traineval-separation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c10-traineval-separation-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c10-traineval-separation",
+          "definition": "Quarantine; training teaches, eval judges.",
+          "term": "separation"
+        },
+        {
+          "anchor": "cs329z-u05-c10-traineval-separation-p01",
+          "definition": "Any path by which eval content reaches training.",
+          "term": "contamination"
+        },
+        {
+          "anchor": "cs329z-u05-c10-traineval-separation-p02",
+          "definition": "A 13-gram shared between train and eval is near-certain copying.",
+          "term": "13-gram"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c10-traineval-separation-p02",
+          "answer": "200 eval docs, 12 share a 13-gram with training: 6% leakage. The model scores 0.88 on leaked items vs 0.74 on clean ones. The inflation comes from memory, not ability.",
+          "id": "cs329z-u05-c10-traineval-separation-r1",
+          "question": "What does leakage do to the score?"
+        }
+      ],
+      "title": "cs329z-U05-C10: train/eval separation"
+    },
+    {
+      "anchor": "cs329z-u05-c11-validator-calibration",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c11-validator-calibration-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c11-validator-calibration-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c11-validator-calibration",
+          "definition": "A scoring function: code, model judge, or human rubric.",
+          "term": "validator"
+        },
+        {
+          "anchor": "cs329z-u05-c11-validator-calibration",
+          "definition": "Scores track reality: 0.8 means about 80% pass.",
+          "term": "calibration"
+        },
+        {
+          "anchor": "cs329z-u05-c11-validator-calibration-p04",
+          "definition": "mean(v) - mean(h) on a calibration set.",
+          "term": "calibration gap"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c11-validator-calibration-p02",
+          "answer": "10 items; at threshold 0.5 the validator says all 10 pass but humans disagree. Calibrate before optimizing: the optimizer amplifies validator errors.",
+          "id": "cs329z-u05-c11-validator-calibration-r1",
+          "question": "Why calibrate before optimizing?"
+        }
+      ],
+      "title": "cs329z-U05-C11: validator calibration"
+    },
+    {
+      "anchor": "cs329z-u05-c12-holdouts",
+      "blocks": [
+        {
+          "anchor": "cs329z-u05-c12-holdouts-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u05-c12-holdouts-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u05-c12-holdouts-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u05-c12-holdouts-p02",
+          "definition": "The workbench: optimize freely; 1000 items.",
+          "term": "dev"
+        },
+        {
+          "anchor": "cs329z-u05-c12-holdouts-p02",
+          "definition": "The referee: score on a schedule, never tune; 200 items.",
+          "term": "held-out test"
+        },
+        {
+          "anchor": "cs329z-u05-c12-holdouts-p02",
+          "definition": "The vault: one look at the end; 200 items.",
+          "term": "sealed"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u05-c12-holdouts-p02",
+          "answer": "Dev (1000 items, touch freely), held-out test (200 items, score weekly), sealed (200 items, score once). Every peek at a higher tier leaks tuning signal into the number.",
+          "id": "cs329z-u05-c12-holdouts-r1",
+          "question": "What are the three tiers?"
+        }
+      ],
+      "title": "cs329z-U05-C12: holdouts"
+    },
+    {
+      "anchor": "connection-summary",
+      "blocks": [
+        {
+          "anchor": "connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Words to numbers to data; the U05 arc.",
+          "term": "optimization target"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Traces, demos, feedback, synthetic data, flywheel.",
+          "term": "data half"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Kept honest while optimizing (C10, C11, C12).",
+          "term": "eval"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "connection-summary-p01",
+          "answer": "Prompt optimizers search wording, the tradeoff orders knobs, LoRA and distillation change weights cheaply, DPO trains on preferences, and the data half builds the training set while C10-C12 keep the eval honest.",
+          "id": "connection-summary-r1",
+          "question": "What is the arc of U05?"
+        }
+      ],
+      "title": "Connection summary"
+    }
+  ]
+}

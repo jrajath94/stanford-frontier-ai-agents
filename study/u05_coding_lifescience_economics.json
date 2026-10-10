@@ -1,0 +1,558 @@
+{
+  "itemId": "u05_coding_lifescience_economics",
+  "itemKind": "lesson",
+  "revision": "9dc3c0381c890a83c5ea8f6630c914171267410922d64e61266f65b6886fe6ee",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "mse435_u05_coding_lifescience_economics-intro",
+      "blocks": [],
+      "endAnchor": "mse435_u05_coding_lifescience_economics-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435_u05_coding_lifescience_economics-intro-p01",
+          "definition": "Parent unit; coding/application and life-science economics.",
+          "term": "mse435-U05"
+        },
+        {
+          "anchor": "mse435_u05_coding_lifescience_economics-intro-p01",
+          "definition": "P21, P22, P23, P24; shared bridges linked, not rebuilt.",
+          "term": "bridges"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "mse435_u05_coding_lifescience_economics-intro-p01",
+          "answer": "Parent unit mse435-U05. Bridges P21, P22, P23, P24. Local remediation in prerequisites.md (U05-R1 to U05-R3).",
+          "id": "mse435_u05_coding_lifescience_economics-intro-r1",
+          "question": "What are the unit's ground rules?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list-unit-level",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-unit-level-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U05-R1; needed for C01, C08.",
+          "term": "defect cost accounting"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U05-R2; needed for C06, C07.",
+          "term": "expected value"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U05-R3; needed for C10.",
+          "term": "adoption curves"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "answer": "Defect cost accounting (U05-R1) for C01 and C08, expected value with low probabilities (U05-R2) for C06 and C07, and adoption curves (U05-R3) for C10.",
+          "id": "not-yet-understood-dependency-list-unit-level-r1",
+          "question": "What dependencies does U05 need?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list (unit level)"
+    },
+    {
+      "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c01-vibe-coding-versus-verified-software-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software",
+          "definition": "Trades review time for defect risk; defects surface in production.",
+          "term": "vibe coding"
+        },
+        {
+          "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software-p02",
+          "definition": "Review plus tests; insurance against production defects.",
+          "term": "verification"
+        },
+        {
+          "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software-p17",
+          "definition": "L/100 x d_v x f vs L/100 x d_f x f + r.",
+          "term": "total cost"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c01-vibe-coding-versus-verified-software-p03",
+          "answer": "The code appears fast and free; the defects appear later in production, where each costs far more than a review hour. Verification is insurance: pay review cost now or defect cost later.",
+          "id": "mse435-u05-c01-vibe-coding-versus-verified-software-r1",
+          "question": "Vibe coding or verified software?"
+        }
+      ],
+      "title": "mse435-U05-C01 , vibe coding versus verified software"
+    },
+    {
+      "anchor": "mse435-u05-c02-software-20",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c02-software-20-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c02-software-20-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c02-software-20-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c02-software-20-p04",
+          "definition": "Engineers write logic; the code is the asset.",
+          "term": "Software 1.0"
+        },
+        {
+          "anchor": "mse435-u05-c02-software-20",
+          "definition": "Engineers curate data; dataset plus recipe is the asset.",
+          "term": "Software 2.0"
+        },
+        {
+          "anchor": "mse435-u05-c02-software-20-p05",
+          "definition": "n x c + T; labeled data plus training.",
+          "term": "asset value"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c02-software-20-p03",
+          "answer": "In 1.0 the scarce input is engineering hours; in 2.0 it is labeled data and compute. The asset flips from code to dataset plus training recipe.",
+          "id": "mse435-u05-c02-software-20-r1",
+          "question": "What flips in Software 2.0?"
+        }
+      ],
+      "title": "mse435-U05-C02 , Software 2.0"
+    },
+    {
+      "anchor": "mse435-u05-c03-product-distribution",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c03-product-distribution-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c03-product-distribution-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c03-product-distribution-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c03-product-distribution-p02",
+          "definition": "Nearly free per user; flat pricing prints margin.",
+          "term": "software distribution"
+        },
+        {
+          "anchor": "mse435-u05-c03-product-distribution-p04",
+          "definition": "Marginal cost per token; heavy users can cost more than they pay.",
+          "term": "AI distribution"
+        },
+        {
+          "anchor": "mse435-u05-c03-product-distribution-p03",
+          "definition": "p - u_i; margin per cohort.",
+          "term": "margin"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c03-product-distribution-p03",
+          "answer": "Software's marginal cost is zero, so flat pricing prints margin. AI's marginal cost is per token: heavy users can cost more than they pay, so flat pricing subsidizes them.",
+          "id": "mse435-u05-c03-product-distribution-r1",
+          "question": "Why does flat pricing break for AI?"
+        }
+      ],
+      "title": "mse435-U05-C03 , product distribution"
+    },
+    {
+      "anchor": "mse435-u05-c04-software-service-boundary",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c04-software-service-boundary-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u05-c04-software-service-boundary-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c04-software-service-boundary-p02",
+          "definition": "Sells a copy once.",
+          "term": "license"
+        },
+        {
+          "anchor": "mse435-u05-c04-software-service-boundary",
+          "definition": "Sells outcomes monthly; pays inference monthly.",
+          "term": "service"
+        },
+        {
+          "anchor": "mse435-u05-c04-software-service-boundary-p03",
+          "definition": "n x (p - i); service margin over n months.",
+          "term": "service margin"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c04-software-service-boundary-p03",
+          "answer": "When the product needs the model on every use, it is a service no matter what the contract calls it. Pricing it as a license leaves the inference bill unpaid.",
+          "id": "mse435-u05-c04-software-service-boundary-r1",
+          "question": "License or service?"
+        }
+      ],
+      "title": "mse435-U05-C04 , software-service boundary"
+    },
+    {
+      "anchor": "mse435-u05-c05-science-workflows",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c05-science-workflows-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c05-science-workflows-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c05-science-workflows-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c05-science-workflows-p04",
+          "definition": "Design, make, test, learn; AI accelerates design and learn.",
+          "term": "science workflow"
+        },
+        {
+          "anchor": "mse435-u05-c05-science-workflows-p03",
+          "definition": "T_d / k + T_w; AI cuts design by factor k.",
+          "term": "speedup"
+        },
+        {
+          "anchor": "mse435-u05-c05-science-workflows-p04",
+          "definition": "Pipetting, incubation, observation; not accelerated by AI.",
+          "term": "physical"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c05-science-workflows-p04",
+          "answer": "T = T_d + T_w. AI cuts design by factor k: T' = T_d/k + T_w. Speedup = T/T'. The physical steps bound the speedup no matter how fast design gets.",
+          "id": "mse435-u05-c05-science-workflows-r1",
+          "question": "How much does AI speed up science?"
+        }
+      ],
+      "title": "mse435-U05-C05 , science workflows"
+    },
+    {
+      "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c06-discovery-versus-clinical-evidence-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence-p02",
+          "definition": "Many candidates enter, few survive; AI makes the top nearly free.",
+          "term": "funnel"
+        },
+        {
+          "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence-p05",
+          "definition": "Total across stages; cost lives at the bottom.",
+          "term": "sum(n_i x c_i)"
+        },
+        {
+          "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence-p02",
+          "definition": "Assays, preclinical, clinical; where the money goes.",
+          "term": "bottom"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c06-discovery-versus-clinical-evidence-p03",
+          "answer": "A cheaper top does not cheapen the funnel: the cost lives at the bottom in assays and trials. More candidates entering means more expensive failures unless selection improves.",
+          "id": "mse435-u05-c06-discovery-versus-clinical-evidence-r1",
+          "question": "Does AI cheapen drug discovery?"
+        }
+      ],
+      "title": "mse435-U05-C06 , discovery versus clinical evidence"
+    },
+    {
+      "anchor": "mse435-u05-c07-privacyip",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c07-privacyip-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u05-c07-privacyip-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c07-privacyip-p04",
+          "definition": "A lottery ticket in reverse: small chance of large loss.",
+          "term": "proprietary data"
+        },
+        {
+          "anchor": "mse435-u05-c07-privacyip-p02",
+          "definition": "p x L vs C; buy protection when C < E.",
+          "term": "expected loss"
+        },
+        {
+          "anchor": "mse435-u05-c07-privacyip-p02",
+          "definition": "Clean rooms, tenant isolation, no-train flags.",
+          "term": "protection"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c07-privacyip-p04",
+          "answer": "E = p x L per year. Buy protection when C < E. The loss L must include reputation, not just the fine.",
+          "id": "mse435-u05-c07-privacyip-r1",
+          "question": "When do you buy data protection?"
+        }
+      ],
+      "title": "mse435-U05-C07 , privacy/IP"
+    },
+    {
+      "anchor": "mse435-u05-c08-validation-costs",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c08-validation-costs-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u05-c08-validation-costs-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c08-validation-costs-p02",
+          "definition": "Cheap; the AI proposes freely.",
+          "term": "proposals"
+        },
+        {
+          "anchor": "mse435-u05-c08-validation-costs-p05",
+          "definition": "n <= B / c; the budget sets the proposal count.",
+          "term": "feasible n"
+        },
+        {
+          "anchor": "mse435-u05-c08-validation-costs-p05",
+          "definition": "Assay cost each, dollars.",
+          "term": "c"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c08-validation-costs-p03",
+          "answer": "Proposing 10x more candidates without 10x the assay budget just queues the proposals. Feasible n <= B / c: the validation budget caps the AI's output.",
+          "id": "mse435-u05-c08-validation-costs-r1",
+          "question": "What caps AI proposals?"
+        }
+      ],
+      "title": "mse435-U05-C08 , validation costs"
+    },
+    {
+      "anchor": "mse435-u05-c09-domain-expertise",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c09-domain-expertise-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u05-c09-domain-expertise-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c09-domain-expertise-p02",
+          "definition": "The one input AI cannot clone; scarce and expensive.",
+          "term": "experts"
+        },
+        {
+          "anchor": "mse435-u05-c09-domain-expertise-p03",
+          "definition": "h x w; the expert bill.",
+          "term": "bill"
+        },
+        {
+          "anchor": "mse435-u05-c09-domain-expertise-p05",
+          "definition": "Expert hours available / h per release.",
+          "term": "throughput"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c09-domain-expertise-p03",
+          "answer": "Every AI workflow needing expert sign-off moves at expert speed. Throughput <= available expert hours / hours per release. Experts are the binding constraint.",
+          "id": "mse435-u05-c09-domain-expertise-r1",
+          "question": "What bounds AI throughput?"
+        }
+      ],
+      "title": "mse435-U05-C09 , domain expertise"
+    },
+    {
+      "anchor": "mse435-u05-c10-adoption",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c10-adoption-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c10-adoption-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c10-adoption-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c10-adoption-p02",
+          "definition": "Potential times adoption; a perfect unused tool is worth zero.",
+          "term": "value"
+        },
+        {
+          "anchor": "mse435-u05-c10-adoption-p02",
+          "definition": "Slow start, fast middle, slow finish.",
+          "term": "S-curve"
+        },
+        {
+          "anchor": "mse435-u05-c10-adoption-p02",
+          "definition": "a_t x V; realized value in year t.",
+          "term": "realized"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c10-adoption-p03",
+          "answer": "Realized_t = a_t x V. The business case must price the ramp, not the peak: 3-year total = sum of yearly realized values.",
+          "id": "mse435-u05-c10-adoption-r1",
+          "question": "How do you value an AI tool?"
+        }
+      ],
+      "title": "mse435-U05-C10 , adoption"
+    },
+    {
+      "anchor": "mse435-u05-c11-human-escalation",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c11-human-escalation-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u05-c11-human-escalation-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c11-human-escalation",
+          "definition": "The AI proposes, the human disposes; in high-stakes domains.",
+          "term": "escalation"
+        },
+        {
+          "anchor": "mse435-u05-c11-human-escalation-p02",
+          "definition": "e x c_e; per-task escalation cost.",
+          "term": "cost"
+        },
+        {
+          "anchor": "mse435-u05-c11-human-escalation-p02",
+          "definition": "The price of trust; lower it but never to zero.",
+          "term": "escalation rate"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c11-human-escalation-p04",
+          "answer": "Total task cost = compute + e x c_e. The escalation rate is the price of trust: better models lower it, but high-stakes domains never reach zero.",
+          "id": "mse435-u05-c11-human-escalation-r1",
+          "question": "What does escalation cost?"
+        }
+      ],
+      "title": "mse435-U05-C11 , human escalation"
+    },
+    {
+      "anchor": "mse435-u05-c12-limitations",
+      "blocks": [
+        {
+          "anchor": "mse435-u05-c12-limitations-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u05-c12-limitations-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u05-c12-limitations-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u05-c12-limitations-p04",
+          "definition": "Strong inside training distribution, weak outside.",
+          "term": "interpolation"
+        },
+        {
+          "anchor": "mse435-u05-c12-limitations-p03",
+          "definition": "(1-o) x a_in + o x a_ood; true accuracy.",
+          "term": "accuracy"
+        },
+        {
+          "anchor": "mse435-u05-c12-limitations-p05",
+          "definition": "accuracy x v - c; expected net per proposal.",
+          "term": "expected net"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u05-c12-limitations-p03",
+          "answer": "Science lives outside the training distribution: new scaffolds, targets, assays. The model answers confidently anyway. Expected net = accuracy x v - c turns the limitation into a budget.",
+          "id": "mse435-u05-c12-limitations-r1",
+          "question": "Where does AI fail in science?"
+        }
+      ],
+      "title": "mse435-U05-C12 , limitations"
+    }
+  ]
+}

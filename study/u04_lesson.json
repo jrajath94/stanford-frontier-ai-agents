@@ -1,0 +1,744 @@
+{
+  "itemId": "u04_lesson",
+  "itemKind": "lesson",
+  "revision": "b5a3823d715241bacca3cf8daac42c4c541875ac520239dc52ea6366982657a4",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u04_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u04_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u04_lesson-intro-p01",
+          "definition": "P16 (distributed), P20 (tools); required background.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u04_lesson-intro-p01",
+          "definition": "Distributed prerequisite; opens with local remediation.",
+          "term": "P16"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u04_lesson-intro-p01",
+          "answer": "Prerequisites: P16 (distributed), P20 (tools). Local remediation on graphs, pure functions, compression, and fixed points opens the lesson.",
+          "id": "cs329z_u04_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "Planned 7/12/14/19 Oct; all U04 concepts map here as independent theory.",
+          "term": "S05"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "DSPy paper abstract; C01 is additionally grounded in it.",
+          "term": "SRC-06"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "Building Effective Agents; C03 and C04 are grounded in it.",
+          "term": "SRC-04"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "All U04 concepts map to planned sessions S05-S08 (7/12/14/19 Oct), taught as independent theory. C01 uses the DSPy abstract (SRC-06); C03 and C04 use the Anthropic article (SRC-04). Framework APIs are taught as abstractions.",
+          "id": "provenance-r1",
+          "question": "How are U04 concepts sourced?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-graphs-pure-functions-compression-fixed-points",
+      "blocks": [
+        {
+          "anchor": "local-remediation-graphs-pure-functions-compression-fixed-points-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-graphs-pure-functions-compression-fixed-points-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-graphs-pure-functions-compression-fixed-points",
+          "definition": "Nodes and directed edges; a workflow is a DAG of calls.",
+          "term": "graphs"
+        },
+        {
+          "anchor": "local-remediation-graphs-pure-functions-compression-fixed-points-p02",
+          "definition": "y = f(prompt, theta); same prompt and parameters give the same distribution.",
+          "term": "pure function"
+        },
+        {
+          "anchor": "local-remediation-graphs-pure-functions-compression-fixed-points-p01",
+          "definition": "A graph with a cycle and an exit condition.",
+          "term": "loop"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-graphs-pure-functions-compression-fixed-points-p01",
+          "answer": "A workflow (C03) is a DAG of calls with a topological order. A loop (C04) is a graph with a cycle and an exit condition. The LLM call is a pure function of prompt and parameters.",
+          "id": "local-remediation-graphs-pure-functions-compression-fixed-points-r1",
+          "question": "How do graphs model workflows and loops?"
+        }
+      ],
+      "title": "Local remediation: graphs, pure functions, compression, fixed points"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-the-react-loop",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-the-react-loop-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-react-loop",
+          "definition": "Interleaving reasoning with acting; the major mechanism of U04.",
+          "term": "ReAct loop"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-react-loop-list01",
+          "definition": "Thought t_i, action a_i, observation o_i; the alternating trace.",
+          "term": "t_i"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-react-loop-list01",
+          "definition": "Is 42 prime? with multiply and is_prime tools; seven steps.",
+          "term": "toy"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-react-loop-list01",
+          "answer": "Shell 0 asks how the model interleaves reasoning with acting. Shell 1 builds the is-42-prime toy with seven alternating steps. Shell 2 formalizes thought, action, observation. Later shells derive the loop rule and its stopping conditions.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-the-react-loop-r1",
+          "question": "What does the ReAct ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (the ReAct loop)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "What a DSPy optimizer actually searches; answered in C01.",
+          "term": "searches over"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "When a workflow beats an agent; answered in C03.",
+          "term": "beats an agent"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "What a DSPy optimizer searches over (C01), when a workflow beats an agent (C03), and where memory lives when the context fills (C06, C07).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve and where?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-p01",
+          "definition": "Declares the input-output contract: question -> answer.",
+          "term": "signature"
+        },
+        {
+          "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-p01",
+          "definition": "The program shape: which calls, in what order.",
+          "term": "module"
+        },
+        {
+          "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-p03",
+          "definition": "Compile-time search over prompts and demonstrations, scored on a dev set.",
+          "term": "teleprompter"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-p02",
+          "answer": "Signature question -> answer; module: a chain of two signatures (draft, then review). The optimizer searches candidate prompts and demonstrations instead of hand-tuning strings.",
+          "id": "cs329z-u04-c01-dspy-signaturesmodulesoptimizers-r1",
+          "question": "What is the DSPy toy?"
+        }
+      ],
+      "title": "cs329z-U04-C01: DSPy signatures/modules/optimizers"
+    },
+    {
+      "anchor": "cs329z-u04-c02-langgraphllamaindex-abstraction",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c02-langgraphllamaindex-abstraction-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c02-langgraphllamaindex-abstraction-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c02-langgraphllamaindex-abstraction-p03",
+          "definition": "Pre-built scaffolds; LangGraph is the agent as a state graph.",
+          "term": "frameworks"
+        },
+        {
+          "anchor": "cs329z-u04-c02-langgraphllamaindex-abstraction",
+          "definition": "The data layer: ingest, index, query over your docs.",
+          "term": "LlamaIndex"
+        },
+        {
+          "anchor": "cs329z-u04-c02-langgraphllamaindex-abstraction-p04",
+          "definition": "Lines of your code vs lines of framework code.",
+          "term": "abstraction level"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c02-langgraphllamaindex-abstraction-p02",
+          "answer": "Hand loop: 20 lines, full control, you own every bug. Framework: 5 lines, graph runtime, retries built in, but hidden choices. Switch when standard patterns (persistence, streaming, retries) are bug-prone to hand-roll.",
+          "id": "cs329z-u04-c02-langgraphllamaindex-abstraction-r1",
+          "question": "When do you switch to a framework?"
+        }
+      ],
+      "title": "cs329z-U04-C02: LangGraph/LlamaIndex abstraction"
+    },
+    {
+      "anchor": "cs329z-u04-c03-workflow-taxonomy",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c03-workflow-taxonomy-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u04-c03-workflow-taxonomy-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c03-workflow-taxonomy-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c03-workflow-taxonomy-p01",
+          "definition": "Fixed paths; the code decides the next step, not the model.",
+          "term": "workflows"
+        },
+        {
+          "anchor": "cs329z-u04-c03-workflow-taxonomy-p02",
+          "definition": "A then B then C; routing; parallelization; orchestrator-workers; evaluator-optimizer.",
+          "term": "five shapes"
+        },
+        {
+          "anchor": "cs329z-u04-c03-workflow-taxonomy-p04",
+          "definition": "Each pattern is a DAG with named nodes.",
+          "term": "DAG"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c03-workflow-taxonomy-p02",
+          "answer": "Draft-then-translate: prompt chaining. Ticket triage: routing. Five code reviewers: parallelization (voting). Research brief: orchestrator-workers. Match the shape to the task.",
+          "id": "cs329z-u04-c03-workflow-taxonomy-r1",
+          "question": "How do tasks map to workflow shapes?"
+        }
+      ],
+      "title": "cs329z-U04-C03: workflow taxonomy"
+    },
+    {
+      "anchor": "cs329z-u04-c04-reactplanreflection",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c04-reactplanreflection-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c04-reactplanreflection-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c04-reactplanreflection",
+          "definition": "Thinks out loud while doing; alternating (t, a, o).",
+          "term": "ReAct"
+        },
+        {
+          "anchor": "cs329z-u04-c04-reactplanreflection-p01",
+          "definition": "Writes the whole plan first, then executes; brittle to surprises.",
+          "term": "plan-and-execute"
+        },
+        {
+          "anchor": "cs329z-u04-c04-reactplanreflection",
+          "definition": "Acts, reviews its own work, repairs.",
+          "term": "reflection"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c04-reactplanreflection-p02",
+          "answer": "ReAct: thought, action, observation interleaved (7 steps). Plan-and-execute: plan [check divisibility by 2, 3, 5, 7], then execute. Reflection: act, critique the trace, revise. ReAct adapts, planning commits, reflection corrects.",
+          "id": "cs329z-u04-c04-reactplanreflection-r1",
+          "question": "How do the three patterns differ on is-42-prime?"
+        }
+      ],
+      "title": "cs329z-U04-C04: ReAct/plan/reflection"
+    },
+    {
+      "anchor": "cs329z-u04-c05-state-machine",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c05-state-machine-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c05-state-machine-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c05-state-machine",
+          "definition": "The agent's constitution: every legal move listed.",
+          "term": "state machine"
+        },
+        {
+          "anchor": "cs329z-u04-c05-state-machine-p03",
+          "definition": "States S, transitions T subset of S x S, start s_0, accepting done.",
+          "term": "chart"
+        },
+        {
+          "anchor": "cs329z-u04-c05-state-machine-p05",
+          "definition": "The scaffold owns the transition table, not the model.",
+          "term": "explicit control"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c05-state-machine-p02",
+          "answer": "States: start, plan, act, observe, reflect, done. From observe: plan (continue), reflect (check), done (answer). Debugging compares the chart against the trace.",
+          "id": "cs329z-u04-c05-state-machine-r1",
+          "question": "What is the toy state machine?"
+        }
+      ],
+      "title": "cs329z-U04-C05: state machine"
+    },
+    {
+      "anchor": "cs329z-u04-c06-shortlong-term-memory",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c06-shortlong-term-memory-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u04-c06-shortlong-term-memory-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c06-shortlong-term-memory-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c06-shortlong-term-memory-p03",
+          "definition": "The desk: small, fast, visible; the recent trace in context.",
+          "term": "short-term memory"
+        },
+        {
+          "anchor": "cs329z-u04-c06-shortlong-term-memory",
+          "definition": "The filing cabinet: big, slow, needs an index.",
+          "term": "long-term memory"
+        },
+        {
+          "anchor": "cs329z-u04-c06-shortlong-term-memory-p05",
+          "definition": "When the window fills, summarize the oldest steps into mem_L and drop them.",
+          "term": "write-on-evict"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c06-shortlong-term-memory-p03",
+          "answer": "The agent works on the desk and files to the cabinet. Recall opens the right drawer. The window is finite, so something must give; summarization is the controlled give.",
+          "id": "cs329z-u04-c06-shortlong-term-memory-r1",
+          "question": "How do desk and cabinet work?"
+        }
+      ],
+      "title": "cs329z-U04-C06: short/long-term memory"
+    },
+    {
+      "anchor": "cs329z-u04-c07-file-system-memory",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c07-file-system-memory-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c07-file-system-memory-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c07-file-system-memory",
+          "definition": "A notebook the agent carries; the file outlives the window, session, process.",
+          "term": "file-system memory"
+        },
+        {
+          "anchor": "cs329z-u04-c07-file-system-memory-p05",
+          "definition": "Move state out of the context into files; exact, inspectable, restart-safe.",
+          "term": "externalization"
+        },
+        {
+          "anchor": "cs329z-u04-c07-file-system-memory-p04",
+          "definition": "write(path, text), read(path), search(query).",
+          "term": "operations"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c07-file-system-memory-p02",
+          "answer": "notes.md with goal, constraint, step-3 fact. The agent greps the file instead of trusting the summary. Exact recall, zero loss.",
+          "id": "cs329z-u04-c07-file-system-memory-r1",
+          "question": "How does the toy file memory work?"
+        }
+      ],
+      "title": "cs329z-U04-C07: file-system memory"
+    },
+    {
+      "anchor": "cs329z-u04-c08-multi-agent-handoff",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c08-multi-agent-handoff-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c08-multi-agent-handoff-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c08-multi-agent-handoff",
+          "definition": "A baton pass with a label: task, state, constraints, done.",
+          "term": "handoff"
+        },
+        {
+          "anchor": "cs329z-u04-c08-multi-agent-handoff-p01",
+          "definition": "E = (task, state, constraints, done); the only channel between agents.",
+          "term": "envelope"
+        },
+        {
+          "anchor": "cs329z-u04-c08-multi-agent-handoff-p05",
+          "definition": "Explicit state transfer; agents do not share a context window.",
+          "term": "mechanism"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c08-multi-agent-handoff-p02",
+          "answer": "{task: book the 6pm flight, state: {flight: UA123, price: 420}, constraints: [under $500, aisle seat], done: [...]}. Without the envelope, B redoes A's work or misses constraints.",
+          "id": "cs329z-u04-c08-multi-agent-handoff-r1",
+          "question": "What is in the toy envelope?"
+        }
+      ],
+      "title": "cs329z-U04-C08: multi-agent handoff"
+    },
+    {
+      "anchor": "cs329z-u04-c09-cross-agent-state",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c09-cross-agent-state-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c09-cross-agent-state-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c09-cross-agent-state",
+          "definition": "The shared truth across agents.",
+          "term": "cross-agent state"
+        },
+        {
+          "anchor": "cs329z-u04-c09-cross-agent-state-p01",
+          "definition": "Everyone sees everything, like a whiteboard; simple and leaks.",
+          "term": "blackboard"
+        },
+        {
+          "anchor": "cs329z-u04-c09-cross-agent-state-p02",
+          "definition": "Each pair talks privately, like email; private and fragmented.",
+          "term": "messages"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c09-cross-agent-state-p02",
+          "answer": "Toy A (blackboard): one shared doc, each agent reads/writes sections. Toy B (messages): agents send envelopes (C08). The blackboard needs no routing logic; messages keep privacy.",
+          "id": "cs329z-u04-c09-cross-agent-state-r1",
+          "question": "How do blackboard and messages differ?"
+        }
+      ],
+      "title": "cs329z-U04-C09: cross-agent state"
+    },
+    {
+      "anchor": "cs329z-u04-c10-error-propagation",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c10-error-propagation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c10-error-propagation-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c10-error-propagation",
+          "definition": "Errors compound downstream; each agent inherits mistakes and adds its own.",
+          "term": "error propagation"
+        },
+        {
+          "anchor": "cs329z-u04-c10-error-propagation-p05",
+          "definition": "Effective r_i' = r_i + (1 - r_i) c_i; pipeline R = product of r_i'.",
+          "term": "product rule"
+        },
+        {
+          "anchor": "cs329z-u04-c10-error-propagation-p01",
+          "definition": "The circuit breakers; convert silent errors into loud retries.",
+          "term": "checks"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c10-error-propagation-p02",
+          "answer": "0.9^3 = 0.729; one in four runs fails somewhere. A check after each agent catching 80% of errors raises the effective reliability. The derivation shows where the check pays most: the least reliable stage.",
+          "id": "cs329z-u04-c10-error-propagation-r1",
+          "question": "What is the toy pipeline reliability?"
+        }
+      ],
+      "title": "cs329z-U04-C10: error propagation"
+    },
+    {
+      "anchor": "cs329z-u04-c11-single-agent-baseline",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c11-single-agent-baseline-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c11-single-agent-baseline-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c11-single-agent-baseline-p02",
+          "definition": "The U01-C11 logic applied to architectures.",
+          "term": "single agent"
+        },
+        {
+          "anchor": "cs329z-u04-c11-single-agent-baseline-p01",
+          "definition": "Specialization gains minus coordination losses.",
+          "term": "multi-agent"
+        },
+        {
+          "anchor": "cs329z-u04-c11-single-agent-baseline-p02",
+          "definition": "Keep multi iff (s_m - s_1)/(c_m - c_1) clears the bar, on paired evals.",
+          "term": "bar"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c11-single-agent-baseline-p02",
+          "answer": "Single agent 0.74 at 1x; three agents 0.81 at 5x. Gain per extra cost = 0.07/4 = 0.0175, below the bar. Many multi-agent systems lose to a good single agent with good tools.",
+          "id": "cs329z-u04-c11-single-agent-baseline-r1",
+          "question": "Is the multi-agent toy worth it?"
+        }
+      ],
+      "title": "cs329z-U04-C11: single-agent baseline"
+    },
+    {
+      "anchor": "cs329z-u04-c12-stopping",
+      "blocks": [
+        {
+          "anchor": "cs329z-u04-c12-stopping-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u04-c12-stopping-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u04-c12-stopping-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u04-c12-stopping-p03",
+          "definition": "The loop's brakes: answer, budget, stall, denial.",
+          "term": "stopping rules"
+        },
+        {
+          "anchor": "cs329z-u04-c12-stopping-p01",
+          "definition": "Last k observations identical (k = 3).",
+          "term": "stall"
+        },
+        {
+          "anchor": "cs329z-u04-c12-stopping-p05",
+          "definition": "Stop iff any rule fires; redundancy covers failure modes.",
+          "term": "disjunction"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u04-c12-stopping-p02",
+          "answer": "(1) answer found, (2) budget B = 10 reached, (3) stall: 3 identical observations in a row, (4) approval denied. A loop with one brake is a loop with none when that brake fails.",
+          "id": "cs329z-u04-c12-stopping-r1",
+          "question": "What are the four stopping rules?"
+        }
+      ],
+      "title": "cs329z-U04-C12: stopping"
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named",
+      "title": "Contract 15. Figure u04_f03.",
+      "minutes": 1,
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named-end",
+      "blocks": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "keyTerms": [
+        {
+          "term": "u04_f03",
+          "definition": "ReAct loop with reflection branch.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named"
+        },
+        {
+          "term": "lesson plate",
+          "definition": "Source original toy; before/after visual with audit.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named"
+        }
+      ],
+      "recall": [
+        {
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named-r1",
+          "question": "What does figure u04_f03 show?",
+          "answer": "ReAct loop with reflection branch.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f03png-lesson-plate-source-original-toy-before-one-shot-answer-after-the-alternating-tao-loop-with-a-reflection-branch-caption-shell-3-apply-the-one-rule-think-act-observe-repeat-source-original-toy-alt-text-left-one-box-labeled-answer-at-once-arrow-labeled-interleave-thought-and-action-right-thought-action-observation-boxes-in-a-loop-with-an-answer-exit-audit-alternation-shown-one-rule-named"
+        }
+      ]
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named",
+      "title": "Contract 15. Figure u04_f05.",
+      "minutes": 1,
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named-end",
+      "blocks": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "keyTerms": [
+        {
+          "term": "u04_f05",
+          "definition": "Envelope handoff with state (covers C08/C09/C10).",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named"
+        },
+        {
+          "term": "envelope handoff",
+          "definition": "After: agent A hands an envelope to agent B with state.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named"
+        }
+      ],
+      "recall": [
+        {
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named-r1",
+          "question": "What does figure u04_f05 show?",
+          "answer": "Envelope handoff with state (covers C08/C09/C10).",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu04_f05png-covers-c08c09c10-before-agents-share-one-soup-after-envelope-handoff-with-state-caption-shell-3-apply-the-one-rule-pass-explicit-state-source-original-toy-alt-text-left-two-agent-boxes-in-one-soup-bowl-arrow-labeled-pass-explicit-state-right-agent-a-hands-an-envelope-to-agent-b-with-task-state-constraints-labels-audit-envelope-keys-labeled-one-rule-named"
+        }
+      ]
+    },
+    {
+      "anchor": "u04-connection-summary",
+      "blocks": [
+        {
+          "anchor": "u04-connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "u04-connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "u04-connection-summary-p01",
+          "definition": "Compile declarative programs instead of hand-tuning prompts (C01).",
+          "term": "compile"
+        },
+        {
+          "anchor": "u04-connection-summary-p01",
+          "definition": "Split memory into desk and cabinet (C06).",
+          "term": "desk and cabinet"
+        },
+        {
+          "anchor": "u04-connection-summary-p01",
+          "definition": "Interleave thought and action (C04).",
+          "term": "ReAct"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u04-connection-summary-p01",
+          "answer": "Compile programs not prompts, pick framework level deliberately, match five workflow shapes, interleave thought and action, chart the machine, split memory desk/cabinet with files for exact facts, hand off with envelopes, and stop at the first trigger.",
+          "id": "u04-connection-summary-r1",
+          "question": "What is the arc of U04?"
+        }
+      ],
+      "title": "U04 connection summary"
+    }
+  ]
+}

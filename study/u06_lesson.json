@@ -1,0 +1,683 @@
+{
+  "itemId": "u06_lesson",
+  "itemKind": "lesson",
+  "revision": "a1cb96518da1acabd09168eec086a56114d459a8688727752303e2608710fb45",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u06_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u06_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u06_lesson-intro-p01",
+          "definition": "P07 (estimation), P10 (ML eval), P22 (experiments); required background.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u06_lesson-intro-p01",
+          "definition": "Means, standard errors, correlations, win rates; opens the lesson.",
+          "term": "local remediation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u06_lesson-intro-p01",
+          "answer": "Prerequisites: P07 (estimation), P10 (ML eval), P22 (experiments). Local remediation on means, standard errors, correlations, and win rates opens the lesson.",
+          "id": "cs329z_u06_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "4 Nov evaluation fundamentals; C01, C02 map to its title.",
+          "term": "S13"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "9 Nov LLM-as-judge and evaluation infrastructure; C03-C07 map here.",
+          "term": "S14"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "Taught as independent theory; source attribution pending.",
+          "term": "PLANNED"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "U06 maps to planned sessions S13 (4 Nov, evaluation fundamentals) and S14 (9 Nov, LLM-as-judge and infrastructure). C01-C02 map to the S13 title; C03-C07 to S14.",
+          "id": "provenance-r1",
+          "question": "How do U06 concepts map to sessions?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-means-standard-errors-correlations-win-rates",
+      "blocks": [
+        {
+          "anchor": "local-remediation-means-standard-errors-correlations-win-rates-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-means-standard-errors-correlations-win-rates-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-means-standard-errors-correlations-win-rates-p01",
+          "definition": "A benchmark score is a mean over tasks.",
+          "term": "mean"
+        },
+        {
+          "anchor": "local-remediation-means-standard-errors-correlations-win-rates-p01",
+          "definition": "About sqrt(0.5/n) for a difference of proportions near 0.5.",
+          "term": "standard error"
+        },
+        {
+          "anchor": "local-remediation-means-standard-errors-correlations-win-rates-p02",
+          "definition": "How well the metric tracks human judgment.",
+          "term": "correlation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-means-standard-errors-correlations-win-rates-p01",
+          "answer": "On n = 200, the standard error of a difference near 0.5 is 0.05, so a 0.02 delta is noise. Correlation measures how well the metric tracks what it should predict.",
+          "id": "local-remediation-means-standard-errors-correlations-win-rates-r1",
+          "question": "When is a delta noise?"
+        }
+      ],
+      "title": "Local remediation: means, standard errors, correlations, win rates"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer",
+          "definition": "Request, environment, stopping, scorer; the major mechanism of U06.",
+          "term": "eval tuple"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer-list01",
+          "definition": "Fix the null bug; R, E, S, F written out.",
+          "term": "toy"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer-list01",
+          "definition": "pytest pass rate; the scorer F.",
+          "term": "F"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer-list01",
+          "answer": "Shell 0 asks what a benchmark is, written so two teams get the same number. Shell 1 builds the null-bug toy with R, E, S, F. Shell 2 formalizes each part. Later shells derive the scoring rule.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-the-eval-tuple-and-its-scorer-r1",
+          "question": "What does the eval-tuple ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (the eval tuple and its scorer)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C01.",
+          "term": "four parts"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C02.",
+          "term": "scaffolding"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C06.",
+          "term": "judges lie"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "Why four parts (C01), why scaffolding is part of the benchmark (C02), who grades and costs (C03, C04), absolute vs relative comparison (C05), how judges lie (C06), which k-formula measures what (C07), and rig hygiene (C08).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple",
+          "definition": "The benchmark's contract: R says what, E where, S when to stop, F how to score.",
+          "term": "tuple"
+        },
+        {
+          "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-p05",
+          "definition": "score = F(trace(R, E, S)); the four parts are jointly necessary.",
+          "term": "mechanism"
+        },
+        {
+          "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-p02",
+          "definition": "A reproducible environment: image hash, data snapshot.",
+          "term": "E"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-p02",
+          "answer": "R = fix the null-pointer bug in checkout.py. E = container with repo at commit abc123. S = stop at 10 steps or tests pass. F = pytest pass rate. Two teams, same tuple, same number.",
+          "id": "cs329z-u06-c01-requestenvironmentstoppingscorer-tuple-r1",
+          "question": "What is the toy tuple?"
+        }
+      ],
+      "title": "cs329z-U06-C01: request/environment/stopping/scorer tuple"
+    },
+    {
+      "anchor": "cs329z-u06-c02-real-scaffolding",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c02-real-scaffolding-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u06-c02-real-scaffolding-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c02-real-scaffolding-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c02-real-scaffolding",
+          "definition": "Everything around the agent: tools, test rig, fixtures.",
+          "term": "scaffolding"
+        },
+        {
+          "anchor": "cs329z-u06-c02-real-scaffolding-p04",
+          "definition": "How closely benchmark tools match production.",
+          "term": "fidelity"
+        },
+        {
+          "anchor": "cs329z-u06-c02-real-scaffolding-p05",
+          "definition": "The agent's policy adapts to the tools it sees.",
+          "term": "mechanism"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c02-real-scaffolding-p02",
+          "answer": "Real container score 0.61, mock score 0.74. The mock hides a permission bug the agent never handles. The 0.13 gap is the price of the mock.",
+          "id": "cs329z-u06-c02-real-scaffolding-r1",
+          "question": "What does the mock hide?"
+        }
+      ],
+      "title": "cs329z-U06-C02: real scaffolding"
+    },
+    {
+      "anchor": "cs329z-u06-c03-programmodelhuman-grading",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c03-programmodelhuman-grading-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c03-programmodelhuman-grading-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c03-programmodelhuman-grading-p02",
+          "definition": "$0.001 each; exact but gameable.",
+          "term": "program grader"
+        },
+        {
+          "anchor": "cs329z-u06-c03-programmodelhuman-grading-p02",
+          "definition": "$0.05 each; flexible but biased.",
+          "term": "model grader"
+        },
+        {
+          "anchor": "cs329z-u06-c03-programmodelhuman-grading-p02",
+          "definition": "$2 each; trusted but expensive.",
+          "term": "human grader"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c03-programmodelhuman-grading-p02",
+          "answer": "Program: $1 total for 1000 traces, exact but gameable. Model: $50, flexible but biased. Human: $2000, trusted but slow. Cascade: cheap graders handle clear cases, expensive ones handle the rest.",
+          "id": "cs329z-u06-c03-programmodelhuman-grading-r1",
+          "question": "What are the three grader prices?"
+        }
+      ],
+      "title": "cs329z-U06-C03: program/model/human grading"
+    },
+    {
+      "anchor": "cs329z-u06-c04-judge-prompts",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c04-judge-prompts-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c04-judge-prompts-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c04-judge-prompts-p01",
+          "definition": "A grading rubric written for a model: criteria, anchors, format.",
+          "term": "judge prompt"
+        },
+        {
+          "anchor": "cs329z-u06-c04-judge-prompts-p05",
+          "definition": "Anchors pin the scale; 3 becomes match-the-anchor, not a feeling.",
+          "term": "variance reduction"
+        },
+        {
+          "anchor": "cs329z-u06-c04-judge-prompts-p01",
+          "definition": "Criteria list, level anchors, format spec.",
+          "term": "rubric"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c04-judge-prompts-p02",
+          "answer": "Vague prompt agreement with humans: 0.70. Rubric prompt (criteria, examples per level, fixed format): 0.86. Without the rubric, the judge invents its own scale.",
+          "id": "cs329z-u06-c04-judge-prompts-r1",
+          "question": "What does the rubric buy?"
+        }
+      ],
+      "title": "cs329z-U06-C04: judge prompts"
+    },
+    {
+      "anchor": "cs329z-u06-c05-pointpairwise",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c05-pointpairwise-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c05-pointpairwise-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c05-pointpairwise-p03",
+          "definition": "Absolute scores: this is a 4; fast, needs a calibrated scale.",
+          "term": "point judging"
+        },
+        {
+          "anchor": "cs329z-u06-c05-pointpairwise-p03",
+          "definition": "Comparisons: A beats B; slower but dodges scale calibration.",
+          "term": "pairwise judging"
+        },
+        {
+          "anchor": "cs329z-u06-c05-pointpairwise-p01",
+          "definition": "P(i beats j) = sigma(s_i - s_j); assumes transitivity.",
+          "term": "Bradley-Terry"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c05-pointpairwise-p02",
+          "answer": "A beats B in 7 of 10. Strength difference d = log(7/3) = 0.847. P(A beats B) = 0.70. The win rate becomes a strength number.",
+          "id": "cs329z-u06-c05-pointpairwise-r1",
+          "question": "How do pairwise wins become strengths?"
+        }
+      ],
+      "title": "cs329z-U06-C05: point/pairwise"
+    },
+    {
+      "anchor": "cs329z-u06-c06-biasnondeterminism",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c06-biasnondeterminism-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c06-biasnondeterminism-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c06-biasnondeterminism-p01",
+          "definition": "First wins ties; longer wins; own style wins.",
+          "term": "position bias"
+        },
+        {
+          "anchor": "cs329z-u06-c06-biasnondeterminism-p04",
+          "definition": "Excess win rate above 0.5 on tied pairs; 0.12 in the toy.",
+          "term": "bias b"
+        },
+        {
+          "anchor": "cs329z-u06-c06-biasnondeterminism",
+          "definition": "The seed lottery: one prompt, a distribution of verdicts.",
+          "term": "nondeterminism"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c06-biasnondeterminism-p02",
+          "answer": "100 tied pairs, judge picks first-presented 62 times. Bias = 0.62 - 0.50 = 0.12. Five seeds give a spread. Fixes: randomize position, blind the judge, average seeds.",
+          "id": "cs329z-u06-c06-biasnondeterminism-r1",
+          "question": "How big is the position bias?"
+        }
+      ],
+      "title": "cs329z-U06-C06: bias/nondeterminism"
+    },
+    {
+      "anchor": "cs329z-u06-c07-passk-versus-passk",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c07-passk-versus-passk-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u06-c07-passk-versus-passk-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c07-passk-versus-passk-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c07-passk-versus-passk",
+          "definition": "Does at least one of k pass? 1 - (1-p)^k; measures coverage.",
+          "term": "pass@k"
+        },
+        {
+          "anchor": "cs329z-u06-c07-passk-versus-passk",
+          "definition": "Do all k pass? p^k; measures reliability.",
+          "term": "pass^k"
+        },
+        {
+          "anchor": "cs329z-u06-c07-passk-versus-passk-p02",
+          "definition": "0.832 vs 0.00243 at p=0.3, k=5; different questions.",
+          "term": "two formulas"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c07-passk-versus-passk-p02",
+          "answer": "pass@5 = 1 - 0.7^5 = 0.832 (coverage). pass^5 = 0.3^5 = 0.00243 (reliability). Best-of-k systems care about the max; single-shot deployments care about every sample.",
+          "id": "cs329z-u06-c07-passk-versus-passk-r1",
+          "question": "When do you use each k-formula?"
+        }
+      ],
+      "title": "cs329z-U06-C07: pass@k versus pass^k"
+    },
+    {
+      "anchor": "cs329z-u06-c08-test-rig-isolation",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c08-test-rig-isolation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c08-test-rig-isolation-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c08-test-rig-isolation",
+          "definition": "Each task runs in a fresh world: container, filesystem, reset.",
+          "term": "isolation"
+        },
+        {
+          "anchor": "cs329z-u06-c08-test-rig-isolation-p05",
+          "definition": "Every task starts from the same initial state.",
+          "term": "state reset"
+        },
+        {
+          "anchor": "cs329z-u06-c08-test-rig-isolation-p04",
+          "definition": "One container per task.",
+          "term": "isolation unit"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c08-test-rig-isolation-p02",
+          "answer": "Task 1 leaves a helper script in a shared directory; task 2 imports it and passes. Remove the leak: task 2 fails. The score measured the leak, not the agent.",
+          "id": "cs329z-u06-c08-test-rig-isolation-r1",
+          "question": "What does the leak toy show?"
+        }
+      ],
+      "title": "cs329z-U06-C08: test rig isolation"
+    },
+    {
+      "anchor": "cs329z-u06-c09-tool-failures",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c09-tool-failures-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c09-tool-failures-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c09-tool-failures-p01",
+          "definition": "The agent's immune system: retry, switch tools, degrade gracefully.",
+          "term": "recovery"
+        },
+        {
+          "anchor": "cs329z-u06-c09-tool-failures-p05",
+          "definition": "The rig fails calls on a hidden seeded schedule.",
+          "term": "fault injection"
+        },
+        {
+          "anchor": "cs329z-u06-c09-tool-failures-p04",
+          "definition": "Which calls fail; must resemble production.",
+          "term": "fault schedule"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c09-tool-failures-p02",
+          "answer": "20 tasks, 4 with injected failures. Agent A: 16/16 clean, 0/4 fault (gives up). Agent B: 12/16 clean, 4/4 fault (recovers). The benchmark without faults measures the sunny path.",
+          "id": "cs329z-u06-c09-tool-failures-r1",
+          "question": "What does fault injection reveal?"
+        }
+      ],
+      "title": "cs329z-U06-C09: tool failures"
+    },
+    {
+      "anchor": "cs329z-u06-c10-tiny-benchmarks",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c10-tiny-benchmarks-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c10-tiny-benchmarks-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c10-tiny-benchmarks-p03",
+          "definition": "A concentrated benchmark: keep tasks where strong models disagree.",
+          "term": "tiny benchmark"
+        },
+        {
+          "anchor": "cs329z-u06-c10-tiny-benchmarks-p05",
+          "definition": "Keep tasks with high cross-model variance.",
+          "term": "item selection"
+        },
+        {
+          "anchor": "cs329z-u06-c10-tiny-benchmarks-p04",
+          "definition": "Disagreement among current models predicts future disagreement.",
+          "term": "assumption"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c10-tiny-benchmarks-p02",
+          "answer": "500 tasks, 360 minutes. Select the 7 tasks where top models disagree most. The tiny suite gives a 5-minute signal. Easy-for-all and hard-for-all tasks add time, not signal.",
+          "id": "cs329z-u06-c10-tiny-benchmarks-r1",
+          "question": "How do you build a tiny benchmark?"
+        }
+      ],
+      "title": "cs329z-U06-C10: tiny benchmarks"
+    },
+    {
+      "anchor": "cs329z-u06-c11-regressions",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c11-regressions-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u06-c11-regressions-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c11-regressions-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c11-regressions-p03",
+          "definition": "A score drop between versions; the gate blocks when the drop is real.",
+          "term": "regression"
+        },
+        {
+          "anchor": "cs329z-u06-c11-regressions-p05",
+          "definition": "Same tasks, two versions, delta per task; real means ~2 SE.",
+          "term": "paired comparison"
+        },
+        {
+          "anchor": "cs329z-u06-c11-regressions-p01",
+          "definition": "d = new - old on n tasks; tasks must be the same.",
+          "term": "delta"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c11-regressions-p02",
+          "answer": "0.70 to 0.72 on 200 tasks. SE of the difference near 0.05. The 0.02 delta is 0.4 SE: noise. A 0.12 delta would be 2.4 SE: real. Below 2 SE, the sign is a coin flip.",
+          "id": "cs329z-u06-c11-regressions-r1",
+          "question": "Ship the 0.02 delta?"
+        }
+      ],
+      "title": "cs329z-U06-C11: regressions"
+    },
+    {
+      "anchor": "cs329z-u06-c12-human-alignment",
+      "blocks": [
+        {
+          "anchor": "cs329z-u06-c12-human-alignment-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u06-c12-human-alignment-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u06-c12-human-alignment",
+          "definition": "Correlation between the benchmark number and human judgment.",
+          "term": "human alignment"
+        },
+        {
+          "anchor": "cs329z-u06-c12-human-alignment-p02",
+          "definition": "Metric values m_i, human ratings h_i, correlation r.",
+          "term": "correlation"
+        },
+        {
+          "anchor": "cs329z-u06-c12-human-alignment-p03",
+          "definition": "The outer loop keeping every inner metric honest.",
+          "term": "outer loop"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u06-c12-human-alignment-p02",
+          "answer": "30 items. Correlation 0.86: the metric is a good proxy. Correlation 0.31: the metric climbs alone. A benchmark with unknown alignment is a rumor.",
+          "id": "cs329z-u06-c12-human-alignment-r1",
+          "question": "What does the correlation tell you?"
+        }
+      ],
+      "title": "cs329z-U06-C12: human alignment"
+    },
+    {
+      "anchor": "connection-summary",
+      "blocks": [
+        {
+          "anchor": "connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Request, environment, stopping, scorer (C01).",
+          "term": "tuple"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Point vs pairwise; the grading choice (C05).",
+          "term": "graders"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Bias control and the pass@k split keep them meaningful.",
+          "term": "numbers"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "connection-summary-p01",
+          "answer": "The tuple makes benchmarks reproducible, real scaffolding keeps them honest, graders and rubrics turn traces into numbers, bias control keeps numbers meaningful, and isolation plus fault injection keep the rig clean.",
+          "id": "connection-summary-r1",
+          "question": "What is the arc of U06?"
+        }
+      ],
+      "title": "Connection summary"
+    }
+  ]
+}

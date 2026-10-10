@@ -1,0 +1,553 @@
+{
+  "itemId": "u06_capstone_evidence_stakeholder_defense",
+  "itemKind": "lesson",
+  "revision": "063a485ab751452960c1b299af535e2208527dc0610a7c2fb5e8c0e3f60a6d9a",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "mse435_u06_capstone_evidence_stakeholder_defense-intro",
+      "blocks": [],
+      "endAnchor": "mse435_u06_capstone_evidence_stakeholder_defense-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435_u06_capstone_evidence_stakeholder_defense-intro-p01",
+          "definition": "Parent unit; capstone evidence and stakeholder defense.",
+          "term": "mse435-U06"
+        },
+        {
+          "anchor": "mse435_u06_capstone_evidence_stakeholder_defense-intro-p01",
+          "definition": "P07, P22, P23, P24; shared bridges linked, not rebuilt.",
+          "term": "bridges"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "mse435_u06_capstone_evidence_stakeholder_defense-intro-p01",
+          "answer": "Parent unit mse435-U06. Bridges P07, P22, P23, P24. Local remediation in prerequisites.md (U06-R1 to U06-R3).",
+          "id": "mse435_u06_capstone_evidence_stakeholder_defense-intro-r1",
+          "question": "What are the unit's ground rules?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list-unit-level",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-unit-level-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U06-R1; needed for C01, C03.",
+          "term": "baseline measurement"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U06-R2; needed for C05, C06.",
+          "term": "expected value"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U06-R3; needed for C04, C12.",
+          "term": "decision rules"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "answer": "Baseline measurement (U06-R1) for C01 and C03, expected value under uncertainty (U06-R2) for C05 and C06, and decision rules (U06-R3) for C04 and C12.",
+          "id": "not-yet-understood-dependency-list-unit-level-r1",
+          "question": "What dependencies does U06 need?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list (unit level)"
+    },
+    {
+      "anchor": "mse435-u06-c01-baseline-business-workflow",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c01-baseline-business-workflow-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u06-c01-baseline-business-workflow-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u06-c01-baseline-business-workflow-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c01-baseline-business-workflow",
+          "definition": "The measured cost, time, and quality of the current workflow.",
+          "term": "baseline"
+        },
+        {
+          "anchor": "mse435-u06-c01-baseline-business-workflow-p05",
+          "definition": "n x c x d; yearly cost in dollars.",
+          "term": "yearly cost"
+        },
+        {
+          "anchor": "mse435-u06-c01-baseline-business-workflow-p05",
+          "definition": "Cases per day.",
+          "term": "n"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c01-baseline-business-workflow-p03",
+          "answer": "Without a measured before photo, every saving claim is fiction: you cannot show improvement against a number you never measured. Yearly cost = n x c x d.",
+          "id": "mse435-u06-c01-baseline-business-workflow-r1",
+          "question": "Why measure the baseline?"
+        }
+      ],
+      "title": "mse435-U06-C01 , baseline business workflow"
+    },
+    {
+      "anchor": "mse435-u06-c02-adoption-assumptions",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c02-adoption-assumptions-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u06-c02-adoption-assumptions-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c02-adoption-assumptions",
+          "definition": "The quietest lies: 100% by Q2 with no plan.",
+          "term": "adoption assumptions"
+        },
+        {
+          "anchor": "mse435-u06-c02-adoption-assumptions-p03",
+          "definition": "a_t x S; realized saving in year t.",
+          "term": "realized"
+        },
+        {
+          "anchor": "mse435-u06-c02-adoption-assumptions-p05",
+          "definition": "Adoption share in year t.",
+          "term": "a_t"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c02-adoption-assumptions-p03",
+          "answer": "Every case must state the ramp, the driver behind each step (training, mandate, UX), and what happens if the ramp stalls. A case with honest adoption is a case with a plan.",
+          "id": "mse435-u06-c02-adoption-assumptions-r1",
+          "question": "What makes adoption honest?"
+        }
+      ],
+      "title": "mse435-U06-C02 , adoption assumptions"
+    },
+    {
+      "anchor": "mse435-u06-c03-measurable-outcomes",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c03-measurable-outcomes-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u06-c03-measurable-outcomes-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c03-measurable-outcomes",
+          "definition": "Measurable, pre-registered, and few (three to five).",
+          "term": "outcomes"
+        },
+        {
+          "anchor": "mse435-u06-c03-measurable-outcomes-p02",
+          "definition": "m1 meets T1 AND all guardrails hold.",
+          "term": "success"
+        },
+        {
+          "anchor": "mse435-u06-c03-measurable-outcomes-p05",
+          "definition": "Primary metric with target.",
+          "term": "m1"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c03-measurable-outcomes-p03",
+          "answer": "Measurable: a number with a source. Pre-registered: written before launch, so nobody moves the goalposts. Few: three to five, so the team knows what matters.",
+          "id": "mse435-u06-c03-measurable-outcomes-r1",
+          "question": "What makes outcomes real?"
+        }
+      ],
+      "title": "mse435-U06-C03 , measurable outcomes"
+    },
+    {
+      "anchor": "mse435-u06-c04-technical-quality-gate",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c04-technical-quality-gate-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u06-c04-technical-quality-gate-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u06-c04-technical-quality-gate-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c04-technical-quality-gate",
+          "definition": "A contract: the model ships only if all thresholds pass.",
+          "term": "quality gate"
+        },
+        {
+          "anchor": "mse435-u06-c04-technical-quality-gate-p02",
+          "definition": "(a >= A) and (l <= L) and (e <= E).",
+          "term": "pass"
+        },
+        {
+          "anchor": "mse435-u06-c04-technical-quality-gate-p02",
+          "definition": "Accuracy, p99 latency, escalation thresholds.",
+          "term": "thresholds"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c04-technical-quality-gate-p03",
+          "answer": "Thresholds come from the business, not the lab: accuracy from the error budget, latency from the SLA, escalation from the staffing plan. Measured on production-like traffic, not the eval set.",
+          "id": "mse435-u06-c04-technical-quality-gate-r1",
+          "question": "Where do gate thresholds come from?"
+        }
+      ],
+      "title": "mse435-U06-C04 , technical quality gate"
+    },
+    {
+      "anchor": "mse435-u06-c05-uncertain-forecasts",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c05-uncertain-forecasts-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u06-c05-uncertain-forecasts-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c05-uncertain-forecasts-p02",
+          "definition": "A distribution, not a number; low/base/high with weights.",
+          "term": "forecast"
+        },
+        {
+          "anchor": "mse435-u06-c05-uncertain-forecasts-p02",
+          "definition": "sum(w_i x v_i); the weighted middle.",
+          "term": "expected value"
+        },
+        {
+          "anchor": "mse435-u06-c05-uncertain-forecasts-p04",
+          "definition": "min(v_i); the case that breaks the plan.",
+          "term": "downside"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c05-uncertain-forecasts-p03",
+          "answer": "The decision uses the expected value and the downside: a great expected value with a fatal downside needs a hedge. Weights must be honest and cases must cover the spread.",
+          "id": "mse435-u06-c05-uncertain-forecasts-r1",
+          "question": "How do you decide under uncertainty?"
+        }
+      ],
+      "title": "mse435-U06-C05 , uncertain forecasts"
+    },
+    {
+      "anchor": "mse435-u06-c06-sensitivitytornado-scenarios",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c06-sensitivitytornado-scenarios-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u06-c06-sensitivitytornado-scenarios-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u06-c06-sensitivitytornado-scenarios-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c06-sensitivitytornado-scenarios",
+          "definition": "Ranks inputs by swing; a map of ignorance, not a forecast.",
+          "term": "tornado"
+        },
+        {
+          "anchor": "mse435-u06-c06-sensitivitytornado-scenarios-p04",
+          "definition": "hi_i - lo_i; rank descending.",
+          "term": "swing"
+        },
+        {
+          "anchor": "mse435-u06-c06-sensitivitytornado-scenarios-p05",
+          "definition": "Base NPV.",
+          "term": "B"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c06-sensitivitytornado-scenarios-p03",
+          "answer": "The top bar is where analysis effort goes: narrow that input's range first. Never present the ranking as a prediction; it says where to look, not what will happen.",
+          "id": "mse435-u06-c06-sensitivitytornado-scenarios-r1",
+          "question": "What is a tornado chart for?"
+        }
+      ],
+      "title": "mse435-U06-C06 , sensitivity/tornado scenarios"
+    },
+    {
+      "anchor": "mse435-u06-c07-total-cost",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c07-total-cost-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u06-c07-total-cost-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u06-c07-total-cost-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c07-total-cost-p02",
+          "definition": "Build + run + labor + risk reserve; the whole bill.",
+          "term": "TCO"
+        },
+        {
+          "anchor": "mse435-u06-c07-total-cost-p05",
+          "definition": "B + 3 x (R + L) + K; three-year total.",
+          "term": "TCO_3"
+        },
+        {
+          "anchor": "mse435-u06-c07-total-cost-p04",
+          "definition": "Pricing only the build understates cost by 3-4x.",
+          "term": "understate"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c07-total-cost-p03",
+          "answer": "Business cases that price only the build understate cost by 3-4x. TCO_3 = B + 3 x (R + L) + K: the build, three years of run and labor, plus the risk reserve.",
+          "id": "mse435-u06-c07-total-cost-r1",
+          "question": "What is the whole bill?"
+        }
+      ],
+      "title": "mse435-U06-C07 , total cost"
+    },
+    {
+      "anchor": "mse435-u06-c08-governance",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c08-governance-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u06-c08-governance-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c08-governance",
+          "definition": "Friction with a purpose: stops bad changes.",
+          "term": "governance"
+        },
+        {
+          "anchor": "mse435-u06-c08-governance-p05",
+          "definition": "d x g; delay weeks times forgone saving.",
+          "term": "board cost"
+        },
+        {
+          "anchor": "mse435-u06-c08-governance-p02",
+          "definition": "p x I; incident probability times incident cost.",
+          "term": "risk"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c08-governance-p03",
+          "answer": "Too little governance invites incidents; too much delays good changes. Price both: board cost = d x g against risk = p x I. The right governance minimizes the sum.",
+          "id": "mse435-u06-c08-governance-r1",
+          "question": "How much governance?"
+        }
+      ],
+      "title": "mse435-U06-C08 , governance"
+    },
+    {
+      "anchor": "mse435-u06-c09-rolloutrollback",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c09-rolloutrollback-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u06-c09-rolloutrollback-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u06-c09-rolloutrollback-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c09-rolloutrollback",
+          "definition": "Exposure control: 1% of traffic can only cause 1% of damage.",
+          "term": "rollout"
+        },
+        {
+          "anchor": "mse435-u06-c09-rolloutrollback",
+          "definition": "A button, not a meeting; triggered by metrics.",
+          "term": "rollback"
+        },
+        {
+          "anchor": "mse435-u06-c09-rolloutrollback-p03",
+          "definition": "Error > 2 x b for 1 hour.",
+          "term": "trigger"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c09-rolloutrollback-p03",
+          "answer": "Stages 1, 10, 100 percent. Each stage needs an entry gate (metrics green) and an exit trigger (metrics red). Rollback restores the old version in minutes.",
+          "id": "mse435-u06-c09-rolloutrollback-r1",
+          "question": "How do you roll out safely?"
+        }
+      ],
+      "title": "mse435-U06-C09 , rollout/rollback"
+    },
+    {
+      "anchor": "mse435-u06-c10-ownerhandoff",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c10-ownerhandoff-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u06-c10-ownerhandoff-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c10-ownerhandoff",
+          "definition": "A named human who wakes up when it breaks.",
+          "term": "owner"
+        },
+        {
+          "anchor": "mse435-u06-c10-ownerhandoff",
+          "definition": "Runbook, dashboards, escalation paths, first joint incident.",
+          "term": "handoff"
+        },
+        {
+          "anchor": "mse435-u06-c10-ownerhandoff-p05",
+          "definition": "(h0 - h1) x c; value per incident.",
+          "term": "value"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c10-ownerhandoff-p03",
+          "answer": "Unclear ownership means every incident is a new invention at 3 a.m. Handoff transfers responsibility from builders to operators with a runbook and a first joint incident.",
+          "id": "mse435-u06-c10-ownerhandoff-r1",
+          "question": "Why name an owner?"
+        }
+      ],
+      "title": "mse435-U06-C10 , owner/handoff"
+    },
+    {
+      "anchor": "mse435-u06-c11-alternatives",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c11-alternatives-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u06-c11-alternatives-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c11-alternatives",
+          "definition": "Do nothing, buy, hire; price at least three.",
+          "term": "alternatives"
+        },
+        {
+          "anchor": "mse435-u06-c11-alternatives-p03",
+          "definition": "s_{o,c} on criteria c with weights w_c.",
+          "term": "scores"
+        },
+        {
+          "anchor": "mse435-u06-c11-alternatives-p02",
+          "definition": "A case with no alternatives is a sales pitch.",
+          "term": "honest case"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c11-alternatives-p03",
+          "answer": "Score each option on the same criteria with the same weights: cost, quality, risk, time. The winner must beat do-nothing by a margin, not just edge it.",
+          "id": "mse435-u06-c11-alternatives-r1",
+          "question": "What are the alternatives?"
+        }
+      ],
+      "title": "mse435-U06-C11 , alternatives"
+    },
+    {
+      "anchor": "mse435-u06-c12-falsifiable-investment-decision",
+      "blocks": [
+        {
+          "anchor": "mse435-u06-c12-falsifiable-investment-decision-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u06-c12-falsifiable-investment-decision-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u06-c12-falsifiable-investment-decision-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u06-c12-falsifiable-investment-decision",
+          "definition": "A bet with a kill switch.",
+          "term": "investment decision"
+        },
+        {
+          "anchor": "mse435-u06-c12-falsifiable-investment-decision-p02",
+          "definition": "Invest iff y >= Y with confidence >= C by D.",
+          "term": "rule"
+        },
+        {
+          "anchor": "mse435-u06-c12-falsifiable-investment-decision-p04",
+          "definition": "Written before the pilot; protects from sunk-cost bias.",
+          "term": "kill switch"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "mse435-u06-c12-falsifiable-investment-decision-p03",
+          "answer": "We invest X if the pilot measures Y by date D with confidence C. Otherwise we kill it. Written before the pilot, it protects the firm from sunk-cost bias.",
+          "id": "mse435-u06-c12-falsifiable-investment-decision-r1",
+          "question": "How do you make the decision falsifiable?"
+        }
+      ],
+      "title": "mse435-U06-C12 , falsifiable investment decision"
+    }
+  ]
+}

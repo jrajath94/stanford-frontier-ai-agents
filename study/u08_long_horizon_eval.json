@@ -1,0 +1,788 @@
+{
+  "itemId": "u08_long_horizon_eval",
+  "itemKind": "lesson",
+  "revision": "372d418b658124823e7e52a24a565cf366a1f97f663d6bbdb3d4cc055b76b5f1",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u08_long_horizon_eval-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u08_long_horizon_eval-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u08_long_horizon_eval-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official session 17.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u08_long_horizon_eval-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u08_long_horizon_eval-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official session 17 (Nov 17), Agentic Evaluations and Long-Horizon Tasks.",
+          "id": "cs329a_u08_long_horizon_eval-intro-r1",
+          "question": "Which course and session does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Use hours as the difficulty axis; success decays with horizon.",
+          "term": "task duration"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Blinded expert comparison of real deliverables; the agent as job candidate.",
+          "term": "GDPVal"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "A same-model judge sharing the generator's blind spots and style preference.",
+          "term": "judge contamination"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Remove one component and re-measure; the delta is its contribution.",
+          "term": "ablations"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Use task duration as a difficulty axis, value tasks economically, read GDPVal and DeepScholar-Bench at mechanism level, separate success from reliability, apply a stopping rule, detect judge contamination, budget an evaluation, run ablations, plan project milestones, report negative results, and list open questions.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Estimation and uncertainty prerequisite.",
+          "term": "P07"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Experimental method prerequisite.",
+          "term": "P22"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Production ML and stakeholders prerequisite.",
+          "term": "P24"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P07 (estimation, uncertainty), P22 (experimental method), and P24 (production ML, stakeholders). Local remediation sits inside C05 and C06.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "Hours saved times hourly rate; the weight aligning benchmarks with deployment.",
+          "term": "value"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The worst case, not the mean; deployments fail at the minimum.",
+          "term": "reliability"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: a benchmark is a contract: it says what counts, who judges, and what it costs. Equation: value = hours saved times hourly rate, reliability = worst case not the mean. Code: a loop that stops when the marginal gain falls below the cost. Observation: long tasks break agents that ace short ones, and the judge is part of the apparatus.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-task-duration",
+      "blocks": [
+        {
+          "anchor": "c01-task-duration-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c01-task-duration-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c01-task-duration-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-task-duration-p01",
+          "definition": "d in hours; the difficulty axis.",
+          "term": "duration"
+        },
+        {
+          "anchor": "c01-task-duration-p05",
+          "definition": "With per-step success q and n steps, task success falls exponentially in n.",
+          "term": "q^n"
+        },
+        {
+          "anchor": "c01-task-duration-p03",
+          "definition": "Success versus hours; the honest report of an agent's horizon.",
+          "term": "report card"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c01-task-duration-p03",
+          "answer": "Duration is difficulty in disguise: more steps that can fail, more context to hold, more drift, more compounding error. In the toy, success falls 0.90 at 15 minutes to 0.35 at 8 hours.",
+          "id": "c01-task-duration-r1",
+          "question": "Why is duration difficulty in disguise?"
+        },
+        {
+          "anchor": "c01-task-duration-p12",
+          "answer": "Break comparability: 8-hour research tasks versus 15-minute QA tasks mixes kinds, not horizons. An agent with perfect memory and no drift has a flat curve; duration is not difficulty for it.",
+          "id": "c01-task-duration-r2",
+          "question": "What breaks the duration curve?"
+        }
+      ],
+      "title": "C01 task duration"
+    },
+    {
+      "anchor": "c02-economically-valuable-tasks",
+      "blocks": [
+        {
+          "anchor": "c02-economically-valuable-tasks-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-economically-valuable-tasks-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-economically-valuable-tasks-p01",
+          "definition": "v = h * r; what the work is worth, not how clever it is.",
+          "term": "value"
+        },
+        {
+          "anchor": "c02-economically-valuable-tasks-p05",
+          "definition": "Score the agent where the money is: weight tasks by v.",
+          "term": "value weighting"
+        },
+        {
+          "anchor": "c02-economically-valuable-tasks-p04",
+          "definition": "The agent's output replaces human hours; the assumption behind v.",
+          "term": "substitutes"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-economically-valuable-tasks-p02",
+          "answer": "Task B (8 h at $80/h = $640) outranks A (2 h at $150/h = $300) and C (0.5 h at $400/h = $200). Duration alone misranks; value ranks B, A, C.",
+          "id": "c02-economically-valuable-tasks-r1",
+          "question": "Which toy task matters most and why?"
+        },
+        {
+          "anchor": "c02-economically-valuable-tasks-p12",
+          "answer": "Break substitution: 2 hours of expert review per task makes the saved hours fiction. A task with no market rate has undefined value; use task counts with a warning.",
+          "id": "c02-economically-valuable-tasks-r2",
+          "question": "What breaks economic value?"
+        }
+      ],
+      "title": "C02 economically valuable tasks"
+    },
+    {
+      "anchor": "c03-gdpval",
+      "blocks": [
+        {
+          "anchor": "c03-gdpval-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c03-gdpval-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-gdpval-p01",
+          "definition": "Tests the agent on real professional work from 44 occupations across 9 sectors.",
+          "term": "GDPVal"
+        },
+        {
+          "anchor": "c03-gdpval-p03",
+          "definition": "How often the agent's deliverable is preferred over the human expert's.",
+          "term": "win rate"
+        },
+        {
+          "anchor": "c03-gdpval-p02",
+          "definition": "Removes the judge's bias toward or against machines.",
+          "term": "blinded"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c03-gdpval-p03",
+          "answer": "GDPVal treats the agent like a job candidate: real deliverables, not puzzles. Blinded experts compare the agent's work against a human expert's. The score is the win rate.",
+          "id": "c03-gdpval-r1",
+          "question": "How does GDPVal test an agent?"
+        },
+        {
+          "anchor": "c03-gdpval-p12",
+          "answer": "Break blinding: a judge spotting machine tells grades the source, not the work. Where experts disagree with each other, the win rate measures taste, not quality.",
+          "id": "c03-gdpval-r2",
+          "question": "What breaks GDPVal?"
+        }
+      ],
+      "title": "C03 GDPVal"
+    },
+    {
+      "anchor": "c04-deepscholar-bench",
+      "blocks": [
+        {
+          "anchor": "c04-deepscholar-bench-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c04-deepscholar-bench-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c04-deepscholar-bench-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-deepscholar-bench-p02",
+          "definition": "Experts list the vital facts; the grader checks coverage.",
+          "term": "nugget"
+        },
+        {
+          "anchor": "c04-deepscholar-bench-p03",
+          "definition": "Do the citations actually support the claims; the third grading dimension.",
+          "term": "verifiability"
+        },
+        {
+          "anchor": "c04-deepscholar-bench-p05",
+          "definition": "Separate scores per dimension so a fluent fake cannot hide behind prose.",
+          "term": "decomposed grading"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c04-deepscholar-bench-p03",
+          "answer": "Three dimensions: Knowledge Synthesis (organized, covers key facts), Retrieval Quality (relevant, important, complete sources), Verifiability (citations support claims). In the toy: Organization 0.80, Nugget Coverage 0.35.",
+          "id": "c04-deepscholar-bench-r1",
+          "question": "What does DeepScholar-Bench grade?"
+        },
+        {
+          "anchor": "c04-deepscholar-bench-p12",
+          "answer": "Break the exemplars: one school's vital facts make nugget coverage measure conformity. A perfect review of a tiny field saturates every metric and the benchmark says nothing.",
+          "id": "c04-deepscholar-bench-r2",
+          "question": "What breaks DeepScholar-Bench?"
+        }
+      ],
+      "title": "C04 DeepScholar-Bench"
+    },
+    {
+      "anchor": "c05-success-versus-reliability",
+      "blocks": [
+        {
+          "anchor": "c05-success-versus-reliability-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c05-success-versus-reliability-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c05-success-versus-reliability-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-success-versus-reliability-p03",
+          "definition": "The worst case; deployments fail at it, not at the mean.",
+          "term": "reliability"
+        },
+        {
+          "anchor": "c05-success-versus-reliability-p01",
+          "definition": "w = min(s_i); B's 0.70 beats A's 0.55 in the toy.",
+          "term": "minimum"
+        },
+        {
+          "anchor": "c05-success-versus-reliability-p05",
+          "definition": "Complaints come from the tail; the mean is for research, the minimum for shipping.",
+          "term": "tail risk"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-success-versus-reliability-p02",
+          "answer": "Agent A averages 0.767 ([0.90, 0.55, 0.85]), B averages 0.72 ([0.72, 0.74, 0.70]). The mean picks A; the minimum picks B (0.70 vs 0.55). The ranking flips: B ships.",
+          "id": "c05-success-versus-reliability-r1",
+          "question": "Which agent ships and why?"
+        },
+        {
+          "anchor": "c05-success-versus-reliability-p12",
+          "answer": "Break comparability: an out-of-scope min task punishes honesty. With identical task types the min is noise and the mean is the truth.",
+          "id": "c05-success-versus-reliability-r2",
+          "question": "When does the minimum mislead?"
+        }
+      ],
+      "title": "C05 success versus reliability"
+    },
+    {
+      "anchor": "c06-stopping",
+      "blocks": [
+        {
+          "anchor": "c06-stopping-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c06-stopping-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-stopping-p04",
+          "definition": "g_t per step; run while g_t * v > c.",
+          "term": "marginal gain"
+        },
+        {
+          "anchor": "c06-stopping-p03",
+          "definition": "Where shrinking gains cross flat costs; stop after h3 in the toy.",
+          "term": "crossing point"
+        },
+        {
+          "anchor": "c06-stopping-p05",
+          "definition": "Stop at the last step with g v > c; a later step is negative-value work.",
+          "term": "optimal stopping"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c06-stopping-p03",
+          "answer": "Compare the next hour's gain versus its cost: run while the gain beats the cost. Gains shrink (+0.10, +0.06, +0.03, +0.01), costs stay flat ($50/h). At $20 per 0.01 success, stop after h3.",
+          "id": "c06-stopping-r1",
+          "question": "When do you stop the agent?"
+        },
+        {
+          "anchor": "c06-stopping-p12",
+          "answer": "Break the forecast: a breakthrough at h5 after small gains gets cut off. Non-monotone gains need the argmax form, not the first-crossing form.",
+          "id": "c06-stopping-r2",
+          "question": "What breaks the stopping rule?"
+        }
+      ],
+      "title": "C06 stopping"
+    },
+    {
+      "anchor": "c07-judge-contamination",
+      "blocks": [
+        {
+          "anchor": "c07-judge-contamination-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c07-judge-contamination-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-judge-contamination-p01",
+          "definition": "Shared blind spots and style preference between same-model judge and generator; 0.25 in the toy.",
+          "term": "contamination"
+        },
+        {
+          "anchor": "c07-judge-contamination-p04",
+          "definition": "Same-model judge agreement, 0.85 in the toy.",
+          "term": "a_near"
+        },
+        {
+          "anchor": "c07-judge-contamination-p03",
+          "definition": "The fix: a judge with different training, different blind spots.",
+          "term": "distance"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c07-judge-contamination-p03",
+          "answer": "A judge sharing the generator's training shares its blind spots: it rewards what it would write (same style, errors, shortcuts). The score measures similarity to the judge, not quality.",
+          "id": "c07-judge-contamination-r1",
+          "question": "Why is a same-model judge contaminated?"
+        },
+        {
+          "anchor": "c07-judge-contamination-p12",
+          "answer": "Break competence: a bad far judge makes the gap measure its errors. With a perfect verifier (U07 C02), contamination is zero by construction and any judge works.",
+          "id": "c07-judge-contamination-r2",
+          "question": "What breaks the contamination diagnosis?"
+        }
+      ],
+      "title": "C07 judge contamination"
+    },
+    {
+      "anchor": "c08-budgets",
+      "blocks": [
+        {
+          "anchor": "c08-budgets-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-budgets-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-budgets-p03",
+          "definition": "Agent compute, judge cost, human audit; the toy totals $1,100.",
+          "term": "fuels"
+        },
+        {
+          "anchor": "c08-budgets-p01",
+          "definition": "The largest share; sets re-run frequency and affordable scale.",
+          "term": "binding constraint"
+        },
+        {
+          "anchor": "c08-budgets-p03",
+          "definition": "Cutting the non-binding fuel saves little; cut the binding one.",
+          "term": "re-run"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-budgets-p02",
+          "answer": "200 tasks at $2 agent compute ($400), judge at $0.50 ($100), 20-task human audit at $30 ($600). Total $1,100; the human audit binds at 55 percent.",
+          "id": "c08-budgets-r1",
+          "question": "What does one evaluation cost and what binds?"
+        },
+        {
+          "anchor": "c08-budgets-p12",
+          "answer": "Break the unit costs: a human judge at 10x estimate explodes the budget. Verifier-graded evals zero the judge fuel, leaving two.",
+          "id": "c08-budgets-r2",
+          "question": "What breaks an eval budget?"
+        }
+      ],
+      "title": "C08 budgets"
+    },
+    {
+      "anchor": "c09-ablations",
+      "blocks": [
+        {
+          "anchor": "c09-ablations-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c09-ablations-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-ablations-p01",
+          "definition": "Remove one component and re-measure; the only honest is-it-pulling-its-weight test.",
+          "term": "ablation"
+        },
+        {
+          "anchor": "c09-ablations-p02",
+          "definition": "d_i = s_full - s_{-i}; memory 0.14, search 0.07 in the toy.",
+          "term": "delta"
+        },
+        {
+          "anchor": "c09-ablations-p05",
+          "definition": "Removing both versus the sum of singles; tests substitution versus complementarity.",
+          "term": "interaction"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c09-ablations-p03",
+          "answer": "The delta is the component's contribution in context. In the toy: minus memory 0.58 (delta 0.14), minus search 0.65 (delta 0.07), minus both 0.50. Without ablations every component claims credit for the whole.",
+          "id": "c09-ablations-r1",
+          "question": "What is an ablation worth?"
+        },
+        {
+          "anchor": "c09-ablations-p12",
+          "answer": "Break rest-unchanged: removing memory breaks the prompt format, so the delta measures the breakage. A zero-delta safety component is load-bearing for what was never measured.",
+          "id": "c09-ablations-r2",
+          "question": "What breaks an ablation?"
+        }
+      ],
+      "title": "C09 ablations"
+    },
+    {
+      "anchor": "c10-project-milestones-and-poster",
+      "blocks": [
+        {
+          "anchor": "c10-project-milestones-and-poster-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-project-milestones-and-poster-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-project-milestones-and-poster-p01",
+          "definition": "Gates, not ceremonies: proposal, midterm, poster; each asks if this is still worth doing.",
+          "term": "gates"
+        },
+        {
+          "anchor": "c10-project-milestones-and-poster-p04",
+          "definition": "Written before the work; the mechanism's teeth.",
+          "term": "kill rule"
+        },
+        {
+          "anchor": "c10-project-milestones-and-poster-p05",
+          "definition": "Information value is highest early, when killing is cheapest.",
+          "term": "staged commitment"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-project-milestones-and-poster-p02",
+          "answer": "Gate 1 (proposal): question, hypothesis, falsification stated. Gate 2 (midterm): baseline runs, first ablation. Gate 3 (poster): results with negative results included and honest limitations.",
+          "id": "c10-project-milestones-and-poster-r1",
+          "question": "What are the three project gates?"
+        },
+        {
+          "anchor": "c10-project-milestones-and-poster-p12",
+          "answer": "Break the kill rule: every project passing every gate makes gates theater. An exploratory project with no hypothesis needs a question and a stopping rule at the proposal gate.",
+          "id": "c10-project-milestones-and-poster-r2",
+          "question": "What breaks milestone gates?"
+        }
+      ],
+      "title": "C10 project milestones and poster"
+    },
+    {
+      "anchor": "c11-negative-results",
+      "blocks": [
+        {
+          "anchor": "c11-negative-results-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-negative-results-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-negative-results-p03",
+          "definition": "An answer, not a failure: this path does not work, here is the evidence.",
+          "term": "negative result"
+        },
+        {
+          "anchor": "c11-negative-results-p05",
+          "definition": "The falsification written before the run; the measurement decides, not hopes.",
+          "term": "preregistration"
+        },
+        {
+          "anchor": "c11-negative-results-p03",
+          "definition": "Hiding null results; the enemy of cumulative science.",
+          "term": "file drawer"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-negative-results-p02",
+          "answer": "Hypothesis: search deltas grow with horizon. Measured: 1 h delta 0.07, 8 h delta 0.06, flat. The extension is dead and the report says so.",
+          "id": "c11-negative-results-r1",
+          "question": "What makes the toy result negative?"
+        },
+        {
+          "anchor": "c11-negative-results-p12",
+          "answer": "Break fairness: an underpowered experiment (CI [-0.10, +0.10]) gives an uninformative null, not a negative result. A negative killing a field's central assumption is the year's most important result.",
+          "id": "c11-negative-results-r2",
+          "question": "What breaks a negative result?"
+        }
+      ],
+      "title": "C11 negative results"
+    },
+    {
+      "anchor": "c12-open-questions",
+      "blocks": [
+        {
+          "anchor": "c12-open-questions-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-open-questions-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-open-questions-p01",
+          "definition": "The map's blank edges: five places where a new researcher can still win.",
+          "term": "open questions"
+        },
+        {
+          "anchor": "c12-open-questions-p05",
+          "definition": "Each unit's surviving unfalsified extensions, derived not invented.",
+          "term": "gap analysis"
+        },
+        {
+          "anchor": "c12-open-questions-p03",
+          "definition": "Each names a gap, why it matters, and what counts as progress.",
+          "term": "blank edges"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c12-open-questions-p02",
+          "answer": "(1) 8+ hour reliability, (2) judge quality scaling without contamination, (3) compounding memory, (4) kernel-style verifiers outside math and code, (5) the autonomy envelope for open-ended work.",
+          "id": "c12-open-questions-r1",
+          "question": "What are the five open questions?"
+        },
+        {
+          "anchor": "c12-open-questions-p12",
+          "answer": "Break measurability: a question with no metric is a wish. A question answered next month updates the list; that is the point.",
+          "id": "c12-open-questions-r2",
+          "question": "What breaks an open-question list?"
+        }
+      ],
+      "title": "C12 open questions"
+    },
+    {
+      "anchor": "unit-close",
+      "blocks": [
+        {
+          "anchor": "unit-close-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "unit-close-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-close-p01",
+          "definition": "Says what counts, who judges, and what it costs.",
+          "term": "contract"
+        },
+        {
+          "anchor": "unit-close-p01",
+          "definition": "The shipping number; deployments fail at the worst case.",
+          "term": "minimum"
+        },
+        {
+          "anchor": "unit-close-p01",
+          "definition": "Project gates and negative-result discipline.",
+          "term": "exit skills"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-close-p01",
+          "answer": "Duration as the axis, value as the weight, the judge as part of the apparatus, and the minimum as the shipping number. The open questions are the entry points to research.",
+          "id": "unit-close-r1",
+          "question": "What is the unit's closing contract?"
+        }
+      ],
+      "title": "Unit close"
+    },
+    {
+      "anchor": "u08-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u08-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u08-not-yet-understood-dependency-list-list01",
+          "definition": "Estimation and uncertainty; remediated in C01 items 4-6.",
+          "term": "estimation"
+        },
+        {
+          "anchor": "u08-not-yet-understood-dependency-list-list01",
+          "definition": "Experimental method, ablations, controls; remediated in C09 items 4-8.",
+          "term": "experimental method"
+        },
+        {
+          "anchor": "u08-not-yet-understood-dependency-list-list01",
+          "definition": "Production ML and stakeholders; remediated in C10 items 4-6.",
+          "term": "production ML"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u08-not-yet-understood-dependency-list-list01",
+          "answer": "Economic value arithmetic is defined locally in C02 items 4-6 as a preview; full treatment lives in P24. Open research questions are listed in C12 without claimed answers.",
+          "id": "u08-not-yet-understood-dependency-list-r1",
+          "question": "How are economic value and open questions handled?"
+        }
+      ],
+      "title": "U08 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u08-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u08-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u08-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C01, deeper shells through C01 items 6, 10, 11, 12, and C02.",
+          "term": "duration"
+        },
+        {
+          "anchor": "u08-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C03 and C04, deeper shells through C03 items 6, 10, 11, 12, and C10.",
+          "term": "benchmark"
+        },
+        {
+          "anchor": "u08-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C05, deeper shells through C05 items 6, 10, 11, 12, and C06.",
+          "term": "reliability"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u08-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "Duration as the difficulty axis, benchmark as contract, and reliability over the mean. Each runs shells 0-10, ending at production forms like C02 value, C10 project gates, and C06 stopping.",
+          "id": "u08-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U08 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

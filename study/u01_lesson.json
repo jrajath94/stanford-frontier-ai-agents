@@ -1,0 +1,819 @@
+{
+  "itemId": "u01_lesson",
+  "itemKind": "lesson",
+  "revision": "f97033d5d12266f39ae25c65f717642c8e60bc9d9fcf34b804f897b7020e8b3a",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u01_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u01_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u01_lesson-intro-p01",
+          "definition": "P10, P14, P20; required background before this lesson.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u01_lesson-intro-p01",
+          "definition": "Prerequisites P10, P14, P20; opens this lesson with logits and attention cost.",
+          "term": "local remediation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u01_lesson-intro-p01",
+          "answer": "Prerequisites: P10 (ML foundations), P14 (transformer), P20 (tools). Local remediation on logits, softmax, and attention cost opens the lesson.",
+          "id": "cs329z_u01_lesson-intro-r1",
+          "question": "What prerequisites and remediation open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "Foundations session (23 Sep 2026); concepts C01-C03 map here.",
+          "term": "S01"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "LLMs for Builders (28 Sep 2026); concepts C04-C10 map here.",
+          "term": "S02"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "Anthropic Building Effective Agents article; the workflows-vs-agents framing source.",
+          "term": "SRC-04"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "C01-C03 map to S01 (Foundations, 23 Sep 2026), C04-C10 map to S02 (LLMs for Builders, 28 Sep 2026), both source-supported at schedule-title level. C11-C12 are requested extensions, taught as independent theory. The workflows-vs-agents framing follows SRC-04.",
+          "id": "provenance-r1",
+          "question": "How do the concepts map to sessions?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-logits-softmax-and-attention-cost",
+      "blocks": [
+        {
+          "anchor": "local-remediation-logits-softmax-and-attention-cost-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-logits-softmax-and-attention-cost-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-logits-softmax-and-attention-cost",
+          "definition": "z in R^V, one real number per vocabulary token.",
+          "term": "logits"
+        },
+        {
+          "anchor": "local-remediation-logits-softmax-and-attention-cost",
+          "definition": "Turns logits into probabilities: p_i = exp(z_i / T) / sum_j exp(z_j / T).",
+          "term": "softmax"
+        },
+        {
+          "anchor": "local-remediation-logits-softmax-and-attention-cost-p01",
+          "definition": "Sharpens toward argmax as T approaches 0; flattens toward uniform as T grows.",
+          "term": "temperature"
+        },
+        {
+          "anchor": "local-remediation-logits-softmax-and-attention-cost",
+          "definition": "O(n^2 d) per layer; the (n, n) score matrix dominates long contexts.",
+          "term": "attention cost"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-logits-softmax-and-attention-cost-p01",
+          "answer": "At T = 1 it is plain softmax. As T approaches 0 the distribution sharpens toward the argmax. As T grows it flattens toward uniform. Every sampling decision in U01 is an operation on this vector.",
+          "id": "local-remediation-logits-softmax-and-attention-cost-r1",
+          "question": "What does the temperature knob do?"
+        }
+      ],
+      "title": "Local remediation: logits, softmax, and attention cost"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling-list01",
+          "definition": "Shells 0-6: from one fixed logit vector to a controllable sampler.",
+          "term": "shell"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling-list01",
+          "definition": "Greedy choice; the T -> 0 limit puts probability 1 on it.",
+          "term": "argmax"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling-list01",
+          "definition": "Divide by T, exponentiate, normalize, sample; the shell-3 rule.",
+          "term": "softmax"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling-list01",
+          "answer": "Shell 0 asks how one logit vector becomes controllable choices. Shells 1-3 build the toy ([1.0, 2.0, 3.0]) and the divide-exponentiate-normalize-sample rule. Shells 4-6 derive the T -> 0 limit, check sums to 1, and predict flattening at T = 3.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-temperature-sampling-r1",
+          "question": "What does the temperature-sampling ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (temperature sampling)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C04 via variance of the dot product.",
+          "term": "sqrt(d_k)"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Changes per-token cost from quadratic to linear in n; answered in C06.",
+          "term": "KV cache"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "Why attention divides by sqrt(d_k) (C04), how the KV cache changes per-token cost (C06), and when retrieval beats a bigger model (C12 via the selection table).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve and where?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u01-c01-model-versus-system",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c01-model-versus-system-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system-p01",
+          "definition": "The pair (O_i, I_j) between components; what format crosses each boundary.",
+          "term": "interface"
+        },
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system",
+          "definition": "Components (model, retriever, tools, checks) joined by interfaces; looks things up, computes, checks.",
+          "term": "system"
+        },
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system-p05",
+          "definition": "System accuracy follows pipeline logic (retriever AND model-use), not a product of accuracies.",
+          "term": "conjunction"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system-p03",
+          "answer": "A model is a function from tokens to tokens. A system is components joined by interfaces. In the toy, the model alone scores 3/10; the system scores 8/10 at 4 times the token cost.",
+          "id": "cs329z-u01-c01-model-versus-system-r1",
+          "question": "What distinguishes a model from a system?"
+        },
+        {
+          "anchor": "cs329z-u01-c01-model-versus-system-p12",
+          "answer": "Break the testable-alone assumption: a retriever returning plausible but wrong chunks that the model trusts drops the system to 2/10, worse than the model alone. A same-model retriever is not a system.",
+          "id": "cs329z-u01-c01-model-versus-system-r2",
+          "question": "When is the system worse than the model?"
+        }
+      ],
+      "title": "cs329z-U01-C01: model versus system"
+    },
+    {
+      "anchor": "cs329z-u01-c02-decomposition",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c02-decomposition-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u01-c02-decomposition-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c02-decomposition-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c02-decomposition-p02",
+          "definition": "g_i: O_i -> {pass, fail}; the whole point of the split.",
+          "term": "gate"
+        },
+        {
+          "anchor": "cs329z-u01-c02-decomposition-p05",
+          "definition": "A wrong final answer with subtask 2 passed localizes the fault to subtask 1 or the gate.",
+          "term": "error localization"
+        },
+        {
+          "anchor": "cs329z-u01-c02-decomposition-p02",
+          "definition": "The SRC-04 example: write copy, then translate, with a style check between.",
+          "term": "prompt-chaining"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c02-decomposition-p03",
+          "answer": "Cut the task where a check can verify the cut. Each subtask gets an input contract, an output contract, and a test. Without the gate the split is decoration.",
+          "id": "cs329z-u01-c02-decomposition-r1",
+          "question": "Where do you cut a task?"
+        },
+        {
+          "anchor": "cs329z-u01-c02-decomposition-p12",
+          "answer": "Break the checkable-seam assumption: a gate that is the same model agreeing with its own bad draft fails silently. Splitting translation into one subtask per sentence is over-decomposition.",
+          "id": "cs329z-u01-c02-decomposition-r2",
+          "question": "What breaks decomposition?"
+        }
+      ],
+      "title": "cs329z-U01-C02: decomposition"
+    },
+    {
+      "anchor": "cs329z-u01-c03-dataevaluation-challenges",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c03-dataevaluation-challenges-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c03-dataevaluation-challenges-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c03-dataevaluation-challenges-p02",
+          "definition": "sqrt(m(1-m)/n) for a rate; the 8/10 vs 7/10 gap sits inside the noise at n = 10.",
+          "term": "standard error"
+        },
+        {
+          "anchor": "cs329z-u01-c03-dataevaluation-challenges-p01",
+          "definition": "The specification: if you cannot say what good looks like on 50 examples, you cannot build toward it.",
+          "term": "eval"
+        },
+        {
+          "anchor": "cs329z-u01-c03-dataevaluation-challenges-p11",
+          "definition": "Eval items must represent the deployment distribution, or every number lies.",
+          "term": "representativeness"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c03-dataevaluation-challenges-p02",
+          "answer": "The standard error of 8/10 at n = 10 is 0.13, so the 0.1 gap is noise. Neither ships on this evidence; grow the eval first.",
+          "id": "cs329z-u01-c03-dataevaluation-challenges-r1",
+          "question": "Two systems score 8/10 and 7/10. Which ships?"
+        },
+        {
+          "anchor": "cs329z-u01-c03-dataevaluation-challenges-p12",
+          "answer": "Break representativeness: an easy-only eval scores 0.95 while production is 0.5. An eval leaking into training measures memory, not ability.",
+          "id": "cs329z-u01-c03-dataevaluation-challenges-r2",
+          "question": "What breaks an eval?"
+        }
+      ],
+      "title": "cs329z-U01-C03: data/evaluation challenges"
+    },
+    {
+      "anchor": "cs329z-u01-c04-transformer-basics",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c04-transformer-basics-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-p01",
+          "definition": "A weighted vote: queries ask, keys label, values message; weights come from the softmax.",
+          "term": "attention"
+        },
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-p04",
+          "definition": "Restores unit variance to dot products so large d_k does not kill gradients.",
+          "term": "sqrt(d_k)"
+        },
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-p07",
+          "definition": "Forgetting it lets token 5 read token 6 in training; great loss, garbage generation.",
+          "term": "causal mask"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-p03",
+          "answer": "Each token asks a question (query), every token posts a label (key) and a message (value). The token listens most to messages whose labels match its question.",
+          "id": "cs329z-u01-c04-transformer-basics-r1",
+          "question": "How does attention read?"
+        },
+        {
+          "anchor": "cs329z-u01-c04-transformer-basics-p12",
+          "answer": "Break the causal mask and training sees the future. Identical keys make the weights uniform and the vote meaningless.",
+          "id": "cs329z-u01-c04-transformer-basics-r2",
+          "question": "What breaks attention?"
+        }
+      ],
+      "title": "cs329z-U01-C04: transformer basics"
+    },
+    {
+      "anchor": "cs329z-u01-c05-decoding",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c05-decoding-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u01-c05-decoding-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c05-decoding-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c05-decoding-p01",
+          "definition": "Rolls a weighted die over the reshaped distribution.",
+          "term": "temperature"
+        },
+        {
+          "anchor": "cs329z-u01-c05-decoding-p01",
+          "definition": "Throws away all but the k best faces of the die.",
+          "term": "top-k"
+        },
+        {
+          "anchor": "cs329z-u01-c05-decoding-p05",
+          "definition": "H(T) rises with T: 0.23 nats at 0.2, 0.83 at 1, 1.06 at 3 for the toy logits.",
+          "term": "entropy"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c05-decoding-p03",
+          "answer": "Greedy takes the max, temperature sampling rolls a weighted die, top-k keeps the k best faces, top-p adds faces until mass reaches p. At T = 1 on logits [1,2,3], token 1 appears about 9 times in 100.",
+          "id": "cs329z-u01-c05-decoding-r1",
+          "question": "What are the four decoding controls?"
+        },
+        {
+          "anchor": "cs329z-u01-c05-decoding-p12",
+          "answer": "Break calibration: 0.99 on a wrong token makes temperature useless; low T repeats the error confidently. Tied logits make the winner a tie-break artifact.",
+          "id": "cs329z-u01-c05-decoding-r2",
+          "question": "What breaks decoding controls?"
+        }
+      ],
+      "title": "cs329z-U01-C05: decoding"
+    },
+    {
+      "anchor": "cs329z-u01-c06-context",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c06-context-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c06-context-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c06-context-p02",
+          "definition": "Shape (L, 2, n, d); about 0.5 MB per token at L = 32, d = 4096, fp16.",
+          "term": "KV cache"
+        },
+        {
+          "anchor": "cs329z-u01-c06-context-p04",
+          "definition": "Each new token costs O(n d) attention over the cache, not O(n^2 d).",
+          "term": "prefill"
+        },
+        {
+          "anchor": "cs329z-u01-c06-context-p11",
+          "definition": "Mid-context evidence gets ignored; position matters for retrieval use.",
+          "term": "lost in the middle"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c06-context-p03",
+          "answer": "The context window is short-term memory; the KV cache is the filing cabinet making rereading cheap. Context engineering decides what earns a slot: instructions, evidence, history, tool results.",
+          "id": "cs329z-u01-c06-context-r1",
+          "question": "What is context engineering?"
+        },
+        {
+          "anchor": "cs329z-u01-c06-context-p12",
+          "answer": "Break relevance: 100k tokens of near-duplicate docs make answers worse than the top 5 chunks. Lost-in-the-middle placement gets evidence ignored.",
+          "id": "cs329z-u01-c06-context-r2",
+          "question": "What breaks long context?"
+        }
+      ],
+      "title": "cs329z-U01-C06: context"
+    },
+    {
+      "anchor": "cs329z-u01-c07-structured-io",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c07-structured-io-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u01-c07-structured-io-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c07-structured-io-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c07-structured-io-p01",
+          "definition": "A JSON schema with typed fields; turns prose into data.",
+          "term": "schema"
+        },
+        {
+          "anchor": "cs329z-u01-c07-structured-io-p03",
+          "definition": "The handshake: downstream can rely on the shape only if it runs.",
+          "term": "validation"
+        },
+        {
+          "anchor": "cs329z-u01-c07-structured-io-p01",
+          "definition": "You promise a shape, the model promises to fill it.",
+          "term": "contract"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c07-structured-io-p05",
+          "answer": "Parse-then-validate: json.loads(o), then check field types and required keys, O(size of o). The schema check is a cheap gate converting silent data corruption into a loud error.",
+          "id": "cs329z-u01-c07-structured-io-r1",
+          "question": "How does validation work?"
+        },
+        {
+          "anchor": "cs329z-u01-c07-structured-io-p12",
+          "answer": "Break coverage: demanding an unknowable field (invoice_id) makes the model hallucinate it; the contract creates the lie. Top-level-only validation misses nested breakage.",
+          "id": "cs329z-u01-c07-structured-io-r2",
+          "question": "What breaks structured I/O?"
+        }
+      ],
+      "title": "cs329z-U01-C07: structured IO"
+    },
+    {
+      "anchor": "cs329z-u01-c08-constrained-decoding",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c08-constrained-decoding-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c08-constrained-decoding-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c08-constrained-decoding-p01",
+          "definition": "m_i = 1 if i in A else 0; tokens 4 and 5 are masked in the toy.",
+          "term": "mask"
+        },
+        {
+          "anchor": "cs329z-u01-c08-constrained-decoding-p02",
+          "definition": "Conditioning the categorical on {token in A} gives exactly the masked softmax.",
+          "term": "renormalized"
+        },
+        {
+          "anchor": "cs329z-u01-c08-constrained-decoding-p01",
+          "definition": "Allowing any string for date yields yesterday: valid JSON, useless data.",
+          "term": "grammar"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c08-constrained-decoding-p02",
+          "answer": "Mask tokens 4 and 5 (they would break the JSON), keep allowed logits [2.0, 1.5, 1.0], renormalize. Prevention during sampling beats validation after the fact.",
+          "id": "cs329z-u01-c08-constrained-decoding-r1",
+          "question": "How do you prevent bad JSON during sampling?"
+        },
+        {
+          "anchor": "cs329z-u01-c08-constrained-decoding-p12",
+          "answer": "Break the grammar: a permissive date schema emits yesterday. A regex permitting {} makes the sampler emit it with high probability.",
+          "id": "cs329z-u01-c08-constrained-decoding-r2",
+          "question": "What breaks constrained decoding?"
+        }
+      ],
+      "title": "cs329z-U01-C08: constrained decoding"
+    },
+    {
+      "anchor": "cs329z-u01-c09-prepost-training",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c09-prepost-training-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c09-prepost-training-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c09-prepost-training-p01",
+          "definition": "Teaches how the world talks; capabilities come mostly from its scale.",
+          "term": "pretraining"
+        },
+        {
+          "anchor": "cs329z-u01-c09-prepost-training-p04",
+          "definition": "Minimizes -log P(response | prompt) on demonstrations: pure imitation.",
+          "term": "SFT"
+        },
+        {
+          "anchor": "cs329z-u01-c09-prepost-training-p11",
+          "definition": "Annotators rewarding you are so right teaches flattery instead of help.",
+          "term": "sycophancy"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c09-prepost-training-p03",
+          "answer": "Pretraining teaches how the world talks; post-training teaches behavior: follow instructions, refuse harm, match preferences. Capabilities come from pretraining scale, behavior from post-training.",
+          "id": "cs329z-u01-c09-prepost-training-r1",
+          "question": "What do pretraining and post-training each teach?"
+        },
+        {
+          "anchor": "cs329z-u01-c09-prepost-training-p12",
+          "answer": "Break the values assumption: sycophancy-rewarding annotators teach flattery. Post-training a must-answer topic into refusal breaks the task.",
+          "id": "cs329z-u01-c09-prepost-training-r2",
+          "question": "What breaks post-training?"
+        }
+      ],
+      "title": "cs329z-U01-C09: pre/post-training"
+    },
+    {
+      "anchor": "cs329z-u01-c10-test-time-scaling",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c10-test-time-scaling-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-p01",
+          "definition": "1 - (1 - p)^k; 0.942 at p = 0.3, k = 8.",
+          "term": "pass@k"
+        },
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-p04",
+          "definition": "Best-of-k needs only one good sample; the picker over k tries.",
+          "term": "verifier"
+        },
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-p03",
+          "definition": "More samples, longer chains, more search; all spend inference tokens.",
+          "term": "currencies"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-p05",
+          "answer": "pass@k follows from independence. Majority vote needs p > 0.5 per sample to help. A verifier needs only one good sample among k. All assume independence and checkable success.",
+          "id": "cs329z-u01-c10-test-time-scaling-r1",
+          "question": "What does each test-time currency assume?"
+        },
+        {
+          "anchor": "cs329z-u01-c10-test-time-scaling-p12",
+          "answer": "Break independence: the same systematic mistake 8 times keeps pass@8 at 0.3. With no verifier and p < 0.5, majority vote amplifies the wrong answer.",
+          "id": "cs329z-u01-c10-test-time-scaling-r2",
+          "question": "What breaks test-time scaling?"
+        }
+      ],
+      "title": "cs329z-U01-C10: test-time scaling"
+    },
+    {
+      "anchor": "cs329z-u01-c11-simple-baseline",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c11-simple-baseline-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c11-simple-baseline-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c11-simple-baseline",
+          "definition": "The scoreboard: 0.62 at 1x cost in the toy; every component must beat it per dollar.",
+          "term": "baseline"
+        },
+        {
+          "anchor": "cs329z-u01-c11-simple-baseline-p03",
+          "definition": "Without it, every new component is a story, not a result.",
+          "term": "scoreboard"
+        },
+        {
+          "anchor": "cs329z-u01-c11-simple-baseline-p05",
+          "definition": "Incremental comparison in reverse: add components, do not subtract.",
+          "term": "ablation"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c11-simple-baseline-p04",
+          "answer": "Keep component i if (b_i - b_0) / (c_i - c_0) clears the bar. Simple first also ships fastest, buying the eval data later components need.",
+          "id": "cs329z-u01-c11-simple-baseline-r1",
+          "question": "When is a component kept?"
+        },
+        {
+          "anchor": "cs329z-u01-c11-simple-baseline-p12",
+          "answer": "Break the eval: a baseline overfit to 20 items makes every addition fail against a lucky bar. A 0.1 baseline makes anything look like a breakthrough; the bar must be honest.",
+          "id": "cs329z-u01-c11-simple-baseline-r2",
+          "question": "What breaks the baseline discipline?"
+        }
+      ],
+      "title": "cs329z-U01-C11: simple baseline"
+    },
+    {
+      "anchor": "cs329z-u01-c12-architecture-choice",
+      "blocks": [
+        {
+          "anchor": "cs329z-u01-c12-architecture-choice-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u01-c12-architecture-choice-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u01-c12-architecture-choice-p03",
+          "definition": "Ask: is the path known? Is knowledge in weights or docs? Is success checkable?",
+          "term": "triage"
+        },
+        {
+          "anchor": "cs329z-u01-c12-architecture-choice-p05",
+          "definition": "Maps property combinations to the cheapest satisfying pattern; not a formula.",
+          "term": "decision table"
+        },
+        {
+          "anchor": "cs329z-u01-c12-architecture-choice-p02",
+          "definition": "Answer questions over 10k docs; the compound pattern for doc-knowledge tasks.",
+          "term": "RAG"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u01-c12-architecture-choice-p02",
+          "answer": "(a) tickets by topic: single call. (b) draft then translate: prompt chaining workflow. (c) questions over 10k docs: RAG compound system. Fancy patterns on simple tasks are cost without gain.",
+          "id": "cs329z-u01-c12-architecture-choice-r1",
+          "question": "How do the four toy tasks map to architectures?"
+        },
+        {
+          "anchor": "cs329z-u01-c12-architecture-choice-p12",
+          "answer": "Break stability: a known-path task drifting open-ended after launch breaks the workflow. A 10ms latency budget makes the correct agent too slow; the table must include latency.",
+          "id": "cs329z-u01-c12-architecture-choice-r2",
+          "question": "What breaks the architecture choice?"
+        }
+      ],
+      "title": "cs329z-U01-C12: architecture choice"
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f02-the-eval-gate-as-the-check-between-stages-logged-as-shared-no-new-plate-needed",
+      "blocks": [],
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f02-the-eval-gate-as-the-check-between-stages-logged-as-shared-no-new-plate-needed-end",
+      "keyTerms": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f02-the-eval-gate-as-the-check-between-stages-logged-as-shared-no-new-plate-needed",
+          "definition": "The eval gate as the check between stages; shared visual, no new plate.",
+          "term": "u01_f02"
+        },
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f02-the-eval-gate-as-the-check-between-stages-logged-as-shared-no-new-plate-needed",
+          "definition": "What the figure draws: the check between pipeline stages.",
+          "term": "eval gate"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f02-the-eval-gate-as-the-check-between-stages-logged-as-shared-no-new-plate-needed",
+          "answer": "Covered by figure u01_f02 (the eval gate as the check between stages). Logged as shared; no new plate needed.",
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f02-the-eval-gate-as-the-check-between-stages-logged-as-shared-no-new-plate-needed-r1",
+          "question": "What covers contract 15 here?"
+        }
+      ],
+      "title": "Contract 15. Visual units, provenance, accessibility, audit rows. Covered by figure u01_f02 (the eval gate as the check between stages). Logged as shared. No new plate needed."
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f05-shared-with-c07-logged-as-shared",
+      "blocks": [],
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f05-shared-with-c07-logged-as-shared-end",
+      "keyTerms": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f05-shared-with-c07-logged-as-shared",
+          "definition": "Shared with C07; the structured-IO visual.",
+          "term": "u01_f05"
+        },
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f05-shared-with-c07-logged-as-shared",
+          "definition": "The card whose visual is shared here.",
+          "term": "C07"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f05-shared-with-c07-logged-as-shared",
+          "answer": "Covered by figure u01_f05 (shared with C07). Logged as shared; no new plate needed.",
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u01_f05-shared-with-c07-logged-as-shared-r1",
+          "question": "What covers contract 15 here?"
+        }
+      ],
+      "title": "Contract 15. Visual units, provenance, accessibility, audit rows. Covered by figure u01_f05 (shared with C07). Logged as shared."
+    },
+    {
+      "anchor": "u01-connection-summary",
+      "blocks": [
+        {
+          "anchor": "u01-connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "u01-connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "u01-connection-summary-p01",
+          "definition": "Components with interfaces; the system as an economy, not a function.",
+          "term": "economy"
+        },
+        {
+          "anchor": "u01-connection-summary-p01",
+          "definition": "Cut the task where a check can verify the cut (C02).",
+          "term": "checkable seams"
+        },
+        {
+          "anchor": "u01-connection-summary-p01",
+          "definition": "Sampling control from C05; the major mechanism of the unit.",
+          "term": "temperature"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u01-connection-summary-p01",
+          "answer": "From the model as a function to the system as an economy: interfaces (C01), checkable seams (C02), honest evals (C03), quadratic attention (C04), temperature sampling (C05), finite context (C06), schemas (C07), constrained decoding (C08), pre/post-training (C09), test-time scaling (C10), simple baselines (C11), cheapest-sufficient choice (C12).",
+          "id": "u01-connection-summary-r1",
+          "question": "What is the arc of U01?"
+        }
+      ],
+      "title": "U01 connection summary"
+    }
+  ]
+}

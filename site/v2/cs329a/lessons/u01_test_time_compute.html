@@ -37,61 +37,61 @@
 </ul>
   </nav>
   <main class="content" id="main">
-    <article>
+    <span id="cs329a_u01_test_time_compute-intro"></span><article>
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Agentic AI and Frontier Research</a> / U01 · Test-time compute and verification</nav>
       <h1>U01 · Test-time compute and verification</h1>
       
       <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="u01-test-time-compute-and-verification">U01 , Test-time compute and verification</h1>
-<p>Course: Stanford CS329A, Autumn 2025. Official sessions 2 (Sep 26) and 3
+<p id="cs329a_u01_test_time_compute-intro-p01" data-kind="prose" data-term="CS329A">Course: Stanford CS329A, Autumn 2025. Official sessions 2 (Sep 26) and 3
 (Sep 29). Baseline: 2026-10-07.</p>
-<p>Claim class: mechanisms are taught from the requested inventory with SOURCE
+<p id="cs329a_u01_test_time_compute-intro-p02" data-kind="prose" data-term="claim class">Claim class: mechanisms are taught from the requested inventory with SOURCE
 ATTRIBUTION PENDING. Paper titles come from the verified official schedule
 (see <code>../source_manifest.md</code>). No paper contents were individually inspected
 by this builder. Toy numbers are computed and traceable. Nothing here is a
-benchmark claim.</p>
+benchmark claim.</p><span id="cs329a_u01_test_time_compute-intro-end" data-end></span>
 <h2 id="unit-objectives">Unit objectives</h2>
-<p>After this unit the learner can: define pass@N and derive it, run and score
+<p id="unit-objectives-p01" data-kind="keyIdea" data-reveal="rise" data-term="pass@N">After this unit the learner can: define pass@N and derive it, run and score
 best-of-N and self-consistency on a toy, explain the generator/verifier gap.
 train and calibrate a toy verifier, name selection bias failure modes, and
-read a cost-success curve to pick a compute allocation under a budget.</p>
+read a cost-success curve to pick a compute allocation under a budget.</p><span id="unit-objectives-end" data-end></span>
 <h2 id="dependencies">Dependencies</h2>
-<p>P07 (statistical estimation), P14 (transformer decoding), P22 (experiments).
+<p id="dependencies-p01" data-kind="prose" data-term="P07">P07 (statistical estimation), P14 (transformer decoding), P22 (experiments).
 Local remediation is inside C01, C10, and C12. The shared bridges live at
-<code>../shared/prerequisites/</code>.</p>
+<code>../shared/prerequisites/</code>.</p><span id="dependencies-end" data-end></span>
 <h2 id="four-way-link-used-in-this-unit">Four-way link used in this unit</h2>
-<p>Intuition: more tries help when tries differ. Equation: pass@N =
+<p id="four-way-link-used-in-this-unit-p01" data-kind="keyIdea" data-reveal="rise" data-term="pass@N">Intuition: more tries help when tries differ. Equation: pass@N =
 1 - (1 - p)^N. Code: a seeded loop that draws N completions and keeps the
 best by verifier score. Observation: the measured curve rises fast then
-flattens, and a biased verifier bends it down.</p>
+flattens, and a biased verifier bends it down.</p><span id="four-way-link-used-in-this-unit-end" data-end></span>
 <hr />
 <h2 id="c01-repeated-sampling">C01 repeated sampling</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c01-repeated-sampling-p01" data-kind="prose" data-term="pass@N"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 2, Test-time Compute Scaling. Reading pointer: Brown et al. 2024,
 Large Language Monkeys (SOURCE ATTRIBUTION PENDING). Scope: independent
 repeated sampling at inference time, no weight change. Objective: derive
 and compute pass@N. Dependencies: P07 (Bernoulli trials), P14 (a sample is
 one decoded completion under a fixed decoding policy), P22 (seeds).</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c01-repeated-sampling-p02" data-kind="example" data-term="p"><strong>2. Motivating question and tiny toy.</strong>
 Question: one model, one hard question. Do you ask once, or ask five times
 and keep the best? Toy: each sample is correct with probability p = 0.25,
 independent across samples. N = 5.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c01-repeated-sampling-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Each sample is a lottery ticket. The prize goes to the set, not the
 ticket: the set wins if any ticket wins. More tickets raise the win chance,
 but each new ticket adds less than the one before.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c01-repeated-sampling-p04" data-kind="definition" data-term="oracle"><strong>4. Variables, units, shapes, assumptions.</strong>
 N: sample count, integer &gt;= 1. p: per-sample success probability in
 [0, 1]. pass@N: probability at least one sample succeeds. Assumptions:
 samples are independent and identically distributed, success is binary and
 checked by an oracle, not by the model itself.</p>
-<p><strong>5. Justified derivation.</strong>
+<p id="c01-repeated-sampling-p05" data-kind="prose" data-term="complement"><strong>5. Justified derivation.</strong>
 P(all N fail) = (1 - p)^N by independence. The event &ldquo;at least one
 succeeds&rdquo; is the complement. So pass@N = 1 - (1 - p)^N. Independence is
 the load-bearing assumption. It fails when the decoding policy is
 deterministic or when samples share a systematic error.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c01-repeated-sampling-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 p = 0.25, so 1 - p = 0.75.</p>
-<table>
+<table id="c01-repeated-sampling-table01" data-kind="prose">
 <thead>
 <tr>
 <th>N</th>
@@ -142,13 +142,13 @@ p = 0.25, so 1 - p = 0.75.</p>
 </tr>
 </tbody>
 </table>
-<p>Check: 0.75^4 = 0.31640625. 1 - 0.31640625 = 0.68359375, rounds to 0.6836.
+<p id="c01-repeated-sampling-p07" data-kind="example">Check: 0.75^4 = 0.31640625. 1 - 0.31640625 = 0.68359375, rounds to 0.6836.
 The gain from N = 7 to N = 8 is 0.0334, while the gain from N = 1 to N = 2
 is 0.1875. Diminishing returns are visible in the numbers.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong>
+<p id="c01-repeated-sampling-p08" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong>
 Algorithm: fix a seed, for i in 1..N draw one completion, test each with
 the oracle, report success if any passes.</p>
-<pre><code class="language-python">import random
+<pre id="c01-repeated-sampling-code01" data-kind="prose"><code class="language-python">import random
 
 def repeated_sampling_trial(p, n, seed):
     rng = random.Random(seed)
@@ -165,87 +165,87 @@ def estimate_pass_at_n(p, n, trials, seed=0):
             hits += 1
     return hits / trials
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c01-repeated-sampling-p09" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check 1: n = 1 returns p in expectation, estimate_pass_at_n(0.25, 1,
 20000) prints about 0.25. Check 2: p = 1.0 returns 1.0 for any n.
 Check 3: the estimate rises with n and stays below 1.0.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c01-repeated-sampling-p10" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Time is O(N) samples. Memory is O(1) with streaming: keep one flag, not N
 completions. Statistical efficiency: the standard error of the pass@N
 estimate from T trials is about sqrt(q(1-q)/T) with q = pass@N, so rare
 events need many trials. Cost: N times the per-sample price, the curve in
 item 6 sets the budget conversation for C05 and C12.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c01-repeated-sampling-p11" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Greedy decoding (N = 1, temperature 0): pick when latency dominates and
 the task is easy. Beam search: pick when you need diverse high-likelihood
 paths under one decoding run and the scorer is the model likelihood, not
 an external verifier. Repeated sampling wins when samples are cheap,
 diverse, and an external check exists.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c01-repeated-sampling-p12" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break independence: set temperature to 0. All N samples are identical.
 pass@N = p, not 1 - (1 - p)^N. The formula overstates the gain by the full
 gap. Counterexample: a model that always emits the same wrong answer has
 p = 0 under the oracle, and no N helps.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c01-repeated-sampling-p13" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Brown et al. 2024 (SOURCE ATTRIBUTION PENDING). Falsifiable
 extension: hypothesis: on a fixed question set, measured pass@N matches
 1 - (1 - p)^N with p estimated from pass@1. Falsification: systematic
 over- or under-shoot across three seeds signals correlated samples or a
 misestimated p.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c01-repeated-sampling-p14" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the pass@N formula and its two assumptions. Ladder: define
 pass@N, build the lottery toy, derive the complement step, code the loop,
 state the complexity, compare with beam search, debug a flat curve,
 critique the independence assumption, design the falsification run above.
 Transfer: apply the same math to &ldquo;at least one of N independent code
 tests catches the bug&rdquo;.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c01-repeated-sampling-p15" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E1.1: compute pass@N for p = 0.1, N = 1..4 by hand. E1.2: prove that
 pass@N grows monotonically and is concave in N. E1.3: with p = 0.25, find the
 smallest N with pass@N &gt;= 0.95. E1.4: explain why temperature 0 breaks
 the derivation, in two sentences. Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c01-repeated-sampling-p16" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u01_fig01.png</code>: computed pass@N curve for p = 0.25,
 N = 1..8, with marginal-gain bars. Provenance: original, computed from the
 table in item 6. Alt text: line plot of pass@N rising from 0.25 to 0.90
 with shrinking step gains. Audit: values match item 6 to four decimals.</p>
-<figure><img alt="computed pass@N curve for p = 0.25, N = 1..8, with marginal-gain bars. Provenance: original, computed from the table in item 6. Alt text: line plot of pass@N rising from 0.25 to 0.90 with shrinking step gains. Audit: values match item 6 to four decimals" src="../assets/u01_fig01.png"><figcaption>computed pass@N curve for p = 0.25, N = 1..8, with marginal-gain bars. Provenance: original, computed from the table in item 6. Alt text: line plot of pass@N rising from 0.25 to 0.90 with shrinking step gains. Audit: values match item 6 to four decimals</figcaption></figure>
+<figure id="c01-repeated-sampling-fig01" data-kind="figure" data-reveal="fade"><img alt="computed pass@N curve for p = 0.25, N = 1..8, with marginal-gain bars. Provenance: original, computed from the table in item 6. Alt text: line plot of pass@N rising from 0.25 to 0.90 with shrinking step gains. Audit: values match item 6 to four decimals" src="../assets/u01_fig01.png"><figcaption>computed pass@N curve for p = 0.25, N = 1..8, with marginal-gain bars. Provenance: original, computed from the table in item 6. Alt text: line plot of pass@N rising from 0.25 to 0.90 with shrinking step gains. Audit: values match item 6 to four decimals</figcaption></figure><span id="c01-repeated-sampling-end" data-end></span>
 <hr />
 <h2 id="c02-best-of-n">C02 best-of-N</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c02-best-of-n-p01" data-kind="prose" data-term="verifier"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 2. Reading pointers: Snell et al. 2024, the verifier papers of
 session 3 (SOURCE ATTRIBUTION PENDING). Scope: sample N completions, score
 each with a verifier, return the argmax. No weight change. Objective:
 compute the selection outcome on a toy and name the verifier&rsquo;s role.
 Dependencies: C01, P07.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c02-best-of-n-p02" data-kind="example" data-term="best-of-N"><strong>2. Motivating question and tiny toy.</strong>
 Question: you drew 5 samples and only one oracle call is allowed at the
 end. How do you pick? Toy: N = 5 samples with correctness [0, 1, 0, 0, 1]
 and verifier scores [0.2, 0.9, 0.4, 0.3, 0.6]. Best-of-N picks sample 2
 (score 0.9), which is correct.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c02-best-of-n-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 The generator proposes. The verifier disposes. Best-of-N is an election
 with one voter (the verifier) and N candidates. A wise voter picks the
 best candidate. A biased voter picks the loudest one.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c02-best-of-n-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 N samples y_1..y_N. Verifier V maps (x, y_i) to score s_i. Output: y* =
 argmax_i s_i. Assumptions: the verifier score correlates with correctness.
 ties break by a fixed rule, scoring cost is small next to generation cost.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c02-best-of-n-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Best-of-N converts the pass@N opportunity into a single answer. Its
 success probability is P(V picks a correct sample). With a perfect
 verifier this equals pass@N. With a noisy verifier it is lower, and the
 gap is the verifier error rate folded through the argmax. The mechanism
 works when score order matches correctness order often enough.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c02-best-of-n-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy with N = 4. Correctness: [1, 0, 0, 1]. Scores: [0.55, 0.95, 0.30,
 0.60]. Argmax picks sample 2 with score 0.95, which is wrong. Oracle
 best (pass@4) would succeed because samples 1 and 4 are correct.
 Best-of-N fails here: verifier error beats generator coverage. Change
 the scores to [0.95, 0.55, 0.30, 0.60] and best-of-N picks sample 1,
 correct. The same samples, two verifiers, two outcomes.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def best_of_n(samples, scores):
+<p id="c02-best-of-n-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c02-best-of-n-code01" data-kind="prose"><code class="language-python">def best_of_n(samples, scores):
     best_i = 0
     best_s = scores[0]
     for i in range(1, len(samples)):
@@ -254,43 +254,43 @@ correct. The same samples, two verifiers, two outcomes.</p>
             best_i = i
     return best_i, samples[best_i]
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c02-best-of-n-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: on the toy above, best_of_n returns index 1. Tie rule: strict &gt;
 keeps the earliest sample on ties, the rule is stated, not hidden.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c02-best-of-n-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Time: N generations plus N verifier calls. Memory: O(N) if scores need
 all samples, O(1) streaming with running argmax. The verifier is usually
 smaller than the generator, so scoring is the cheap step. Risk: verifier
 calls add latency on the critical path.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c02-best-of-n-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Self-consistency (C03): pick when answers cluster and no verifier exists.
 Majority vote needs a discrete answer space. Rerank with a stronger model:
 pick when verifier quality is the bottleneck and budget allows it. Oracle
 pick (pass@N): the ceiling, not a deployable method.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c02-best-of-n-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the correlation assumption: a verifier that rewards length picks a
 long wrong answer over a short right one. Counterexample in item 6 shows
 the exact flip. A second failure: all N samples wrong makes best-of-N
 wrong with certainty, selection cannot create correctness.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c02-best-of-n-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Snell et al. 2024 (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: best-of-N success rises monotonically with verifier accuracy
 on a fixed sample set. Falsification: a more accurate verifier that
 scores the same set yields lower best-of-N success, which would implicate
 selection bias (C11) rather than accuracy.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c02-best-of-n-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define best-of-N and its cost. Ladder: define the argmax rule,
 run the toy, derive the perfect-verifier ceiling, code the loop, state
 O(N) cost, compare with self-consistency, debug the item-6 failure,
 critique the score-correctness link, design the verifier-accuracy sweep.
 Transfer: best-of-N for code patches with test-pass as the verifier.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c02-best-of-n-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E2.1: on correctness [0,0,1,0,0] and scores [0.1,0.8,0.7,0.2,0.3], what
 does best-of-5 return, and is it right? E2.2: prove best-of-N with a
 perfect verifier equals pass@N. E2.3: give a score vector where a better
 verifier (higher accuracy) still picks wrong. Answers:
 <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c02-best-of-n-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u01_fig02.png</code>: the item-6 toy as two panels. Left:
 samples as chips with correctness marks and scores, argmax arrow to the
 wrong pick. Right: same samples, fixed verifier, argmax arrow to the
@@ -298,38 +298,38 @@ right pick. Provenance: original, values from item 6. Alt text: two
 four-chip panels showing how the verifier decides the winner. Audit:
 scores and picks match item 6 exactly.</p>
 <hr />
-<figure><img alt="the item-6 toy as two panels. Left: samples as chips with correctness marks and scores, argmax arrow to the wrong pick. Right: same samples, fixed verifier, argmax arrow to the right pick. Provenance: original, values from item 6. Alt text: two four-chip..." src="../assets/u01_fig02.png"><figcaption>the item-6 toy as two panels. Left: samples as chips with correctness marks and scores, argmax arrow to the wrong pick. Right: same samples, fixed verifier, argmax arrow to the right pick. Provenance: original, values from item 6. Alt text: two four-chip...</figcaption></figure>
+<figure id="c02-best-of-n-fig01" data-kind="figure" data-reveal="fade"><img alt="the item-6 toy as two panels. Left: samples as chips with correctness marks and scores, argmax arrow to the wrong pick. Right: same samples, fixed verifier, argmax arrow to the right pick. Provenance: original, values from item 6. Alt text: two four-chip..." src="../assets/u01_fig02.png"><figcaption>the item-6 toy as two panels. Left: samples as chips with correctness marks and scores, argmax arrow to the wrong pick. Right: same samples, fixed verifier, argmax arrow to the right pick. Provenance: original, values from item 6. Alt text: two four-chip...</figcaption></figure><span id="c02-best-of-n-end" data-end></span>
 <h2 id="c03-self-consistency">C03 self-consistency</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c03-self-consistency-p01" data-kind="prose" data-term="majority vote"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 2. Scope: sample N reasoning paths, extract the final answer from
 each, return the majority answer. No verifier needed. Objective: compute a
 majority vote on a toy and state when it beats best-of-N. Dependencies:
 C01, C02.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c03-self-consistency-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: no verifier exists and the answer is a number. How do you pick
 from 5 samples? Toy: paths give answers [42, 17, 42, 42, 8]. Majority is
 42 with 3 of 5 votes.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c03-self-consistency-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Ask five people to show their work. The answer that most work supports
 wins. Diverse reasoning paths that converge signal a stable answer.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c03-self-consistency-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 N paths, each parsed to an answer a_i from a discrete set. Output:
 mode(a_1..a_N). Assumptions: answers are extractable and comparable.
 errors are diverse, not systematic, the majority of paths is right more
 often than any single path.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c03-self-consistency-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 If each path is correct with probability p &gt; 0.5 and errors scatter over
 many wrong answers, the majority vote concentrates on the right answer as
 N grows. This is the Condorcet intuition: many weak but better-than-chance
 votes beat one vote. The mechanism needs p &gt; 0.5 per path and error
 diversity, both are assumptions to check, not gifts.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c03-self-consistency-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 N = 5, answers [42, 17, 42, 42, 8]. Counts: 42 -&gt; 3, 17 -&gt; 1, 8 -&gt; 1.
 Winner 42, vote share 3/5 = 0.6. Tie toy: [42, 17, 42, 17, 8] gives a 2-2
 tie between 42 and 17, the stated tie rule (lowest value, or first
 seen) decides. Tie rules change outcomes, so they are part of the method.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">from collections import Counter
+<p id="c03-self-consistency-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c03-self-consistency-code01" data-kind="prose"><code class="language-python">from collections import Counter
 
 def self_consistency(answers):
     counts = Counter(answers)
@@ -338,160 +338,160 @@ def self_consistency(answers):
     tied = sorted(a for a, c in top if c == best_count)
     return tied[0], dict(counts)
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c03-self-consistency-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: self_consistency([42, 17, 42, 42, 8]) returns (42, {42: 3, 17: 1,
 8: 1}). Check: a tie returns the smallest tied answer by the stated rule.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c03-self-consistency-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Time O(N) generations plus O(N) parsing. Memory O(N) answers, tiny. No
 verifier cost. Statistically it needs discrete answers, free-text answers
 need a normalization step that can silently merge distinct answers.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c03-self-consistency-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Best-of-N: pick when a verifier exists and answers are not discrete.
 Weighted vote by verifier score: pick when both a verifier and discrete
 answers exist and the verifier is calibrated. Single greedy path: pick
 when N paths cost too much for the task value.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c03-self-consistency-p11" data-kind="prose" data-term="error diversity"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break error diversity: all paths share one flawed lemma, so all give 17.
 Majority vote returns 17 with 5/5 confidence and is wrong. Systematic
 error defeats voting. Counterexample: p &lt; 0.5 per path makes the majority
 worse than a single draw.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c03-self-consistency-p12" data-kind="prose" data-term="self-consistency"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the self-consistency paper (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: vote share predicts correctness (high agreement
 means right). Falsification: a set of high-agreement wrong answers, which
 would show agreement measures path similarity, not truth.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c03-self-consistency-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the method and its two assumptions. Ladder: define the
 vote, run the toy, justify the Condorcet step, code the counter, state
 cost, compare with best-of-N, debug the shared-flaw failure, critique
 the p &gt; 0.5 assumption, design the agreement-vs-truth test. Transfer:
 self-consistency over SQL query results from N generated queries.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c03-self-consistency-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E3.1: compute the winner and vote share for [7, 7, 3, 7, 3, 9]. E3.2:
 construct a tie and apply the stated rule. E3.3: explain in two sentences
 why systematic error breaks the method. Answers:
 <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c03-self-consistency-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Covered by <code>../visuals/u01_fig02.png</code> panel logic (vote chips) and the
 comparison plate <code>../visuals/u01_fig03.png</code>. Provenance: original. Alt
 text for the vote panel: five answer chips, three marked 42, arrow to the
-majority box. Audit: counts match item 6.</p>
+majority box. Audit: counts match item 6.</p><span id="c03-self-consistency-end" data-end></span>
 <hr />
 <h2 id="c04-inference-architecture-search">C04 inference architecture search</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c04-inference-architecture-search-p01" data-kind="prose" data-term="search space"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 2. Reading pointer: Saad-Falcon et al. 2024, Archon (SOURCE
 ATTRIBUTION PENDING). Scope: search over inference-time techniques and
 their settings per task, instead of fixing one recipe. Objective: define
 the search space and run a tiny manual search. Dependencies: C01-C03, P22.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c04-inference-architecture-search-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: best-of-8 with verifier A, or self-consistency with 16 paths?
 The answer differs by task. Toy: two tasks (math, code), two recipes
 (R1 = best-of-8, R2 = self-consistency-16). Measured toy success: math:
 R1 0.70, R2 0.78. Code: R1 0.66, R2 0.55. No single recipe wins both.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c04-inference-architecture-search-p03" data-kind="keyIdea" data-reveal="rise" data-term="architecture search"><strong>3. Plain-language mental model.</strong>
 Inference is a machine with dials: sample count, verifier choice,
 voting rule, temperature. Architecture search turns the dials per task
 and keeps the setting that scores best on a validation set.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c04-inference-architecture-search-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Search space S: set of recipes, each a tuple (technique, N, verifier,
 decoding params). Objective: validation success rate. Budget: total
 samples allowed for the search. Assumptions: validation performance
 predicts test performance, the search budget is fixed.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c04-inference-architecture-search-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 This is model selection at inference time. The mechanism is ordinary:
 score each recipe on validation data under a matched budget, pick the
 argmax, lock it, then report on held-out test data. The search is only
 honest if the test set stays locked during the search (see C09 in U04
 for the same rule in evolution).</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c04-inference-architecture-search-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Search budget: 40 validation questions per recipe. Results from item 2
 stand. Pick per task: math -&gt; R2 (0.78 &gt; 0.70), code -&gt; R1
 (0.66 &gt; 0.55). Expected gain over a fixed recipe: fixed R1 averages
 (0.70 + 0.66)/2 = 0.68. Per-task pick averages (0.78 + 0.66)/2 = 0.72.
 Gain: 0.04 absolute on the toy.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def architecture_search(recipes, score_fn):
+<p id="c04-inference-architecture-search-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c04-inference-architecture-search-code01" data-kind="prose"><code class="language-python">def architecture_search(recipes, score_fn):
     results = {}
     for name, recipe in recipes.items():
         results[name] = score_fn(recipe)
     best = max(results, key=results.get)
     return best, results
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c04-inference-architecture-search-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: with the item-2 scores, per-task calls return R2 for math and R1
 for code. Check: ties return the first max by dict order, the rule is
 stated.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c04-inference-architecture-search-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: |S| recipes times validation questions times per-question cost.
 The search itself can cost more than it saves on small workloads.
 Stability: small validation sets make the argmax noisy, report the
 margin, not just the winner.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c04-inference-architecture-search-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Fixed recipe: pick when one technique clearly dominates or search budget
 is zero. Per-prompt routing: pick when task type is known at request
 time and routing cost is low. Full search: pick when the workload is
 large enough to amortize it.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c04-inference-architecture-search-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the validation assumption: search overfits 40 validation questions
 and the picked recipe loses on test. Counterexample: R2 wins math
 validation 0.78 to 0.70 on 40 questions (standard error about 0.07), so
 the gap is noise, and locking R2 on this evidence is a gamble.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c04-inference-architecture-search-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Saad-Falcon et al. 2024 (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: per-task recipe selection beats the best fixed
 recipe on held-out test sets. Falsification: no significant gain across
 three task families with locked test sets.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c04-inference-architecture-search-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the search space and the selection rule. Ladder: define a
 recipe, run the toy, justify validation-based selection, code the argmax,
 state the search cost, compare with fixed recipes, debug overfitting,
 critique the validation-size assumption, design the held-out test.
 Transfer: search over RAG settings (chunk size, top-k) per query type.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c04-inference-architecture-search-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E4.1: compute the fixed-recipe and per-task averages from item 6. E4.2:
 with 40 validation questions and a 0.08 gap, is the winner trustworthy?
 Why? E4.3: name the leak if test questions enter the search. Answers:
 <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c04-inference-architecture-search-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6) serves as the visual, no separate PNG
 is drawn because the claim is a comparison of values (medium ladder:
-table). Logged in <code>../visual_audit.md</code> as an honest table-medium choice.</p>
+table). Logged in <code>../visual_audit.md</code> as an honest table-medium choice.</p><span id="c04-inference-architecture-search-end" data-end></span>
 <hr />
 <h2 id="c05-compute-allocation">C05 compute allocation</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c05-compute-allocation-p01" data-kind="prose" data-term="budget"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 2. Reading pointer: Snell et al. 2024 (SOURCE ATTRIBUTION
 PENDING). Scope: split a fixed inference budget across strategies, for
 example more samples versus a stronger verifier. Objective: compute the
 allocation tradeoff on a toy. Dependencies: C01, C02, P23 is not required.
 budget arithmetic is local.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c05-compute-allocation-p02" data-kind="example" data-term="cheap plan"><strong>2. Motivating question and tiny toy.</strong>
 Question: 100 cost units per query. Do you spend them on 20 samples with
 a cheap verifier or 8 samples with a strong verifier? Toy: cheap plan:
 N = 20, p = 0.25, verifier accuracy 0.70. Strong plan: N = 8, p = 0.25,
 verifier accuracy 0.90. Which wins?</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c05-compute-allocation-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A budget is a pie. Samples are slices. A better verifier is a sharper
 knife: fewer slices, cleaner cuts. The best pie split depends on how fast
 extra slices stop helping (C01 showed the flattening).</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c05-compute-allocation-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Budget B in cost units. Per-sample cost c_g, per-score cost c_v. Plan
 (N, verifier) costs N * (c_g + c_v) &lt;= B. Assumptions: costs are linear
 in N, verifier accuracy is a single number that summarizes selection
 quality, p is fixed across plans.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c05-compute-allocation-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 For each feasible plan, success is about P(verifier picks correctly from
 N draws). With a perfect verifier this is pass@N. With accuracy a, a
 usable toy model is: success = pass@N * a + (1 - pass@N) * 0, plus a
 correction when the verifier rescues nothing from an all-wrong set. The
 allocation rule: compute success per plan, pick the max under the budget.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c05-compute-allocation-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 p = 0.25. Cheap plan: N = 20. 0.75^20 = 0.00317. pass@20 = 0.99683.
 Success estimate: 0.99683 * 0.70 = 0.69778. Strong plan: N = 8.
 pass@8 = 0.8999 (from C01). Success estimate: 0.8999 * 0.90 = 0.80991.
 The strong plan wins on the toy: 0.8099 &gt; 0.6978. Check 0.75^20:
 0.75^10 = 0.05631, squared = 0.00317. Correct.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def plan_success(n, p, verifier_accuracy):
+<p id="c05-compute-allocation-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c05-compute-allocation-code01" data-kind="prose"><code class="language-python">def plan_success(n, p, verifier_accuracy):
     pass_at_n = 1.0 - (1.0 - p) ** n
     return pass_at_n * verifier_accuracy
 
@@ -506,148 +506,148 @@ def best_plan(budget, gen_cost, verifier_options, p):
             best = (s, n, v_cost, v_acc)
     return best
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c05-compute-allocation-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: best_plan(100, 4, [(1, 0.70), (8.5, 0.90)], 0.25) returns the
 strong plan with n = 8 and success about 0.81. Check: a plan with n = 0
 is skipped, never selected.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c05-compute-allocation-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 The computation is trivial, the costs it models are not. Real verifier
 accuracy is not a single number: it varies by question difficulty, which
 breaks the toy. Practical cost: misallocation wastes the whole budget
 every query, so the allocation deserves its own validation run.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c05-compute-allocation-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Adaptive allocation (spend more on hard queries): pick when a difficulty
 signal exists. Fixed allocation: pick when per-query routing costs more
 than it saves. Train-time spending instead: pick when the same budget
 buys a better base model (the Snell et al. tradeoff, SOURCE ATTRIBUTION
 PENDING).</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c05-compute-allocation-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the single-number verifier assumption: the strong verifier is
 0.90 on easy questions but 0.55 on hard ones, and hard questions are the
 ones that reach it. The toy then overstates the strong plan. Real
 allocation needs accuracy conditioned on difficulty.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c05-compute-allocation-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Snell et al. 2024 (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: the winning allocation on validation holds on test.
 Falsification: rank reversal between validation and test across three
 seeds, which points at difficulty shift.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c05-compute-allocation-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the budget constraint and the plan-success formula. Ladder:
 define the plan, run the toy, justify pass@N * accuracy, code the search,
 state that compute is trivial but inputs are noisy, compare with adaptive
 allocation, debug the difficulty-conditioned failure, critique the single
 accuracy number, design the rank-stability test. Transfer: allocate a
 fixed dollar budget between labeling data and training longer.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c05-compute-allocation-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E5.1: recompute the toy with p = 0.4 and find the new winner. E5.2: prove
 that raising N without bound cannot beat verifier accuracy under the toy
 model. E5.3: name the assumption that fails first on real workloads.
 Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c05-compute-allocation-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u01_fig03.png</code>: cost-success plate. X: budget in cost
 units (0..120). Two curves: cheap-verifier plan and strong-verifier plan,
 computed from plan_success at feasible integer N. Marker on the chosen
 plan at B = 100. Provenance: original, computed. Alt text: two rising
 curves, strong-verifier curve above at budget 100, marker on the winner.
 Audit: curve values recomputed in the render script from the same formula.</p>
-<figure><img alt="cost-success plate. X: budget in cost units (0..120). Two curves: cheap-verifier plan and strong-verifier plan, computed from plan_success at feasible integer N. Marker on the chosen plan at B = 100. Provenance: original, computed. Alt text: two rising..." src="../assets/u01_fig03.png"><figcaption>cost-success plate. X: budget in cost units (0..120). Two curves: cheap-verifier plan and strong-verifier plan, computed from plan_success at feasible integer N. Marker on the chosen plan at B = 100. Provenance: original, computed. Alt text: two rising...</figcaption></figure>
+<figure id="c05-compute-allocation-fig01" data-kind="figure" data-reveal="fade"><img alt="cost-success plate. X: budget in cost units (0..120). Two curves: cheap-verifier plan and strong-verifier plan, computed from plan_success at feasible integer N. Marker on the chosen plan at B = 100. Provenance: original, computed. Alt text: two rising..." src="../assets/u01_fig03.png"><figcaption>cost-success plate. X: budget in cost units (0..120). Two curves: cheap-verifier plan and strong-verifier plan, computed from plan_success at feasible integer N. Marker on the chosen plan at B = 100. Provenance: original, computed. Alt text: two rising...</figcaption></figure><span id="c05-compute-allocation-end" data-end></span>
 <hr />
 <h2 id="c06-generatorverifier-gap">C06 generator/verifier gap</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c06-generatorverifier-gap-p01" data-kind="prose" data-term="verification"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 3, verification. Reading pointer: Shrinking the
 Generation-Verification Gap with Weak Verifiers (SOURCE ATTRIBUTION
 PENDING). Scope: the gap between producing a correct answer and
 recognizing one. Objective: define the gap and show why weak verifiers
 can still help. Dependencies: C02, P07.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c06-generatorverifier-gap-p02" data-kind="example" data-term="weak verifier"><strong>2. Motivating question and tiny toy.</strong>
 Question: a small model cannot solve the problem, but can it still pick
 the right answer from the big model&rsquo;s samples? Toy: generator p = 0.30.
 Weak verifier accuracy 0.65. Best-of-10 with this verifier: pass@10 =
 1 - 0.7^10 = 0.97175. Success estimate: 0.97175 * 0.65 = 0.63164. The
 weak verifier lifts 0.30 to 0.63.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c06-generatorverifier-gap-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Writing a proof is hard. Checking a proof is easier. The gap is the
 distance between the two skills. A weak checker still beats no checker
 when the candidate set already contains the answer.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c06-generatorverifier-gap-p04" data-kind="definition" data-term="coverage"><strong>4. Variables, units, shapes, assumptions.</strong>
 Gap: pass@N (generator coverage) minus single-sample accuracy p, and
 separately verifier accuracy a. The usable gap for best-of-N is
 pass@N * a - p. Assumptions: coverage grows with N, verifier accuracy
 stays above 0.5 on the sample distribution.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c06-generatorverifier-gap-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Verification is often an easier task class than generation: checking a
 candidate against constraints is O(check) while finding one is search.
 The mechanism: the generator supplies coverage, the verifier supplies
 discrimination. Either alone underperforms the pair when both gaps are
 real.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c06-generatorverifier-gap-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 From item 2: p = 0.30, N = 10, a = 0.65. 0.7^10 = 0.02825. pass@10 =
 0.97175. Best-of-10 estimate: 0.63164. Gap closed: from 0.30 to 0.63,
 an absolute gain of 0.33 from a verifier weaker than the generator.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong>
+<p id="c06-generatorverifier-gap-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong>
 Same best_of_n as C02, the new content is the measurement: report p,
 pass@N, a, and the product. Code: reuse plan_success(n, p, a) from C05.</p>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c06-generatorverifier-gap-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: a = 1.0 recovers pass@N. Check: a = 0.5 gives about pass@N / 2,
 no better than a coin.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c06-generatorverifier-gap-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Same O(N) as best-of-N. The weak verifier is cheap by design, so the
 pair costs little more than sampling alone. Stability risk: a weak
 verifier&rsquo;s accuracy varies more across inputs.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c06-generatorverifier-gap-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Strong verifier: pick when verification budget allows and accuracy is
 the bottleneck. Self-consistency: pick when even weak verification is
 unavailable. Human verification: pick when stakes exceed model trust.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c06-generatorverifier-gap-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break &ldquo;verification is easier&rdquo;: on open-ended creative tasks the
 verifier has no ground truth and a = 0.5. Then best-of-N adds cost with
 no gain. Counterexample: adversarial samples that fool the weak verifier
 systematically, pushing a below 0.5 on the sample distribution.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c06-generatorverifier-gap-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the weak-verifiers paper (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: a verifier at half the generator&rsquo;s size still
 raises best-of-N success. Falsification: no gain across three task
 families, which would bound where the gap is real.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c06-generatorverifier-gap-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the gap in one formula. Ladder: define coverage and
 accuracy, run the toy, justify the product, reuse the code, state cost,
 compare with a strong verifier, debug the a &lt; 0.5 case, critique the
 &ldquo;easier task&rdquo; claim, design the half-size verifier test. Transfer:
 weak-strong collaboration in code review: junior reviewer, senior author.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c06-generatorverifier-gap-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E6.1: recompute the toy for a = 0.55 and a = 0.80. E6.2: find the
 verifier accuracy at which best-of-10 stops helping over p = 0.30.
 E6.3: give a task family where verification is not easier than
 generation. Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c06-generatorverifier-gap-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (p, pass@N, a, product). No separate PNG: the
-claim is a comparison of values. Logged in <code>../visual_audit.md</code>.</p>
+claim is a comparison of values. Logged in <code>../visual_audit.md</code>.</p><span id="c06-generatorverifier-gap-end" data-end></span>
 <hr />
 <h2 id="c07-weak-verifiers">C07 weak verifiers</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c07-weak-verifiers-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 3. Reading pointer: Shrinking the Generation-Verification Gap with
 Weak Verifiers (SOURCE ATTRIBUTION PENDING). Scope: verifiers smaller or
 less capable than the generator, used for selection. Objective: state the
 conditions under which weakness is acceptable. Dependencies: C02, C06.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c07-weak-verifiers-p02" data-kind="example" data-term="1B verifier"><strong>2. Motivating question and tiny toy.</strong>
 Question: the verifier is a 1B model and the generator is a 70B model.
 When is the 1B judge worth calling? Toy: 70B generator p = 0.35, N = 16.
 1B verifier accuracy a = 0.62. pass@16 = 1 - 0.65^16. 0.65^16 = 0.00102.
 pass@16 = 0.99898. Estimate: 0.99898 * 0.62 = 0.61937. Gain over p: 0.27.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c07-weak-verifiers-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A junior editor can still spot the best draft from a senior writer&rsquo;s pile.
 The editor need not write better. The editor must only rank better than
 chance on the pile in front of them.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c07-weak-verifiers-p04" data-kind="definition" data-term="weak verifier"><strong>4. Variables, units, shapes, assumptions.</strong>
 Same as C06. Extra assumption: the weak verifier&rsquo;s errors are not
 correlated with the generator&rsquo;s errors. If both fail on the same inputs,
 the product formula overstates success.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c07-weak-verifiers-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Weak verification works through the same product as C06. The new
 question is cost: a weak verifier is cheap to run, so the optimal
 allocation (C05) shifts toward larger N with the weak judge. Mechanism:
 coverage from scale, discrimination from the cheap judge.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c07-weak-verifiers-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 From item 2: gain 0.27 absolute. Cost comparison toy: strong verifier
 costs 8 units per score, weak costs 1. Budget 100, generation cost 4.
 Strong: N = 100 // 12 = 8, a = 0.90, success about 0.90 * pass@8.
@@ -656,75 +656,75 @@ pass@8 with p = 0.35: 1 - 0.65^8 = 1 - 0.03186 = 0.96814. Product:
 1 - 0.00018 = 0.99982. Product: 0.61989. Here the strong verifier wins
 on the toy, but the weak verifier is deployable where the strong one is
 not, for example under a latency cap.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong>
+<p id="c07-weak-verifiers-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong>
 Reuse best_of_n and plan_success. The implementation difference is
 operational: batch the weak verifier calls and cache scores per sample.</p>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c07-weak-verifiers-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: 0.65^8 = 0.03186 (0.65^4 = 0.17851, squared = 0.03186). Check:
 0.65^16 = 0.03186^2 = 0.00102. Check: 0.65^20 = 0.00102 * 0.17851 =
 0.00018.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c07-weak-verifiers-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 O(N) scores at low unit cost. The practical win is latency: a small
 verifier scores N samples in the time the generator draws one. Stability
 risk: weak judges drift more under distribution shift.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c07-weak-verifiers-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Strong verifier: pick when per-query budget allows. No verifier with
 self-consistency: pick when answers are discrete. Learned reward model
 at generator scale: pick when training budget exists and the task is
 stable.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c07-weak-verifiers-p11" data-kind="prose" data-term="sycophantic samples"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the error-independence assumption: the weak verifier learned the
 generator&rsquo;s style, so it upvotes the generator&rsquo;s characteristic wrong
 answers. Then a &lt; 0.5 on the sample distribution and selection hurts.
 Counterexample: sycophantic samples that flatter the judge.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c07-weak-verifiers-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the weak-verifiers paper (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: weak-verifier best-of-N beats single-sample
 generation across model-scale pairs. Falsification: a scale pair where
 it fails, analyzed for correlated errors.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c07-weak-verifiers-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the two conditions (a &gt; 0.5 on the pile, errors not
 correlated). Ladder: define weakness, run the toy, justify the product,
 reuse the code, state latency cost, compare with the strong judge,
 debug correlated errors, critique the single-number accuracy, design
 the scale-pair sweep. Transfer: cheap heuristic filters before an
 expensive exact check, as in search algorithms.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c07-weak-verifiers-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E7.1: recompute the item-6 comparison with verifier costs 2 and 12.
 E7.2: construct a correlated-error toy where a = 0.62 overall but
 selection fails. E7.3: state the latency argument in two sentences.
 Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c07-weak-verifiers-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6). No separate PNG: comparison of
-values. Logged in <code>../visual_audit.md</code>.</p>
+values. Logged in <code>../visual_audit.md</code>.</p><span id="c07-weak-verifiers-end" data-end></span>
 <hr />
 <h2 id="c08-outcomeprocess-reward">C08 outcome/process reward</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c08-outcomeprocess-reward-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 3. Reading pointers: Cobbe et al. 2021 (outcome/verifier
 training), Lightman et al. 2023, Let&rsquo;s Verify Step by Step, Wang et al.
 2023, Math-Shepherd (SOURCE ATTRIBUTION PENDING). Scope: where the reward
 signal attaches: final answer only, or each reasoning step. Objective:
 compute both on a toy trace and name the tradeoff. Dependencies: C02, P17.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c08-outcomeprocess-reward-p02" data-kind="example" data-term="outcome reward"><strong>2. Motivating question and tiny toy.</strong>
 Question: a four-step solution ends with the right answer but step 2 is
 nonsense. Should the reward say &ldquo;good&rdquo;? Toy trace, step correctness
 [1, 0, 1, 1], final answer right. Outcome reward: r = 1. Process reward:
 [1, 0, 1, 1], mean 0.75.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c08-outcomeprocess-reward-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Outcome reward grades the final exam. Process reward grades the homework
 along the way. The exam is cheap to grade. The homework grade teaches
 better habits but needs a teacher for every step.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c08-outcomeprocess-reward-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Trace of K steps. Outcome: single scalar R in {0, 1} or R at the end.
 Process: vector [r_1..r_K]. Assumptions: step labels exist or can be
 estimated, the final answer is checkable.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c08-outcomeprocess-reward-p05" data-kind="prose" data-term="credit assignment"><strong>5. Justified derivation or mechanism.</strong>
 Outcome reward gives sparse, unbiased signal about what matters, but
 credit assignment is hard: which step caused success is unknown. Process
 reward gives dense signal and faster learning, but each step label can be
 wrong, and wrong step labels teach wrong habits. The tradeoff is
 bias versus variance of the teaching signal.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c08-outcomeprocess-reward-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 100 traces, 40 end correct. Outcome labels: 40 ones, 60 zeros.
 Process labels on the 40 correct traces: suppose 10 have a flawed middle
 step. A process reward trained on these labels marks those steps 0.
@@ -732,80 +732,80 @@ Resulting step-label accuracy depends on the label source, with human
 step labels at 0.95 accuracy, about 2 of the 40 correct traces get a
 wrong step mark. The dense signal is noisier per label but richer per
 trace.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def outcome_reward(trace_correct):
+<p id="c08-outcomeprocess-reward-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c08-outcomeprocess-reward-code01" data-kind="prose"><code class="language-python">def outcome_reward(trace_correct):
     return 1.0 if trace_correct else 0.0
 
 def process_reward(step_correct):
     return [1.0 if c else 0.0 for c in step_correct]
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c08-outcomeprocess-reward-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: outcome_reward(True) = 1.0. Check: process_reward([1, 0, 1, 1])
 = [1.0, 0.0, 1.0, 1.0].</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c08-outcomeprocess-reward-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Outcome labels are cheap: one check per trace. Process labels cost K
 times more, or need a label model. Statistical note: dense rewards cut
 variance but each label is a new chance to inject bias.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c08-outcomeprocess-reward-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Outcome only: pick when step labels are unavailable or untrusted.
 Process: pick when step labels are reliable and credit assignment is the
 bottleneck. Hybrid: outcome for selection, process for training.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c08-outcomeprocess-reward-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break step-label trust: an automatic step labeler marks correct steps
 wrong whenever the phrasing is unusual. The policy then learns to write
 usual phrasing, not correct steps. Counterexample: the item-2 trace gets
 full outcome reward while teaching nothing about step 2.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c08-outcomeprocess-reward-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Lightman et al. 2023, Wang et al. 2023 (SOURCE ATTRIBUTION
 PENDING). Extension: hypothesis: process reward beats outcome reward on
 multi-step tasks with reliable step labels. Falsification: no gain when
 step labels come from a noisy automatic labeler.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c08-outcomeprocess-reward-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define both and the bias-variance tradeoff. Ladder: define the
 two signals, run the toy, justify the tradeoff, code the two functions,
 state label cost, compare with hybrid, debug the labeler-bias failure,
 critique label trust, design the label-source ablation. Transfer:
 grading a student on the final answer versus the shown work.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c08-outcomeprocess-reward-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E8.1: compute outcome and process rewards for step correctness
 [1, 1, 0, 1] with a wrong final answer. E8.2: explain the credit
 assignment problem in two sentences. E8.3: name one way step labels can
 be wrong. Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c08-outcomeprocess-reward-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u01_fig01.png</code> covers sampling, for this concept
 the lesson uses a step-reward table plate (comparison of values).
-Logged in <code>../visual_audit.md</code>.</p>
+Logged in <code>../visual_audit.md</code>.</p><span id="c08-outcomeprocess-reward-end" data-end></span>
 <hr />
 <h2 id="c09-verifier-training">C09 verifier training</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c09-verifier-training-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 3. Reading pointers: Cobbe et al. 2021, Training Verifiers to
 Solve Math Word Problems, Wang et al. 2023, Math-Shepherd (SOURCE
 ATTRIBUTION PENDING). Scope: train a scorer from labeled
 (prompt, completion, correct?) triples. Objective: write the training
 objective and run one gradient-free toy update. Dependencies: C02, C08,
 P10.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c09-verifier-training-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: where does the verifier&rsquo;s score come from? Toy: 6 labeled
 samples. Features: length L and number of equations E. Labels: correct
 1 or 0. Data: (L=40, E=3, y=1), (L=120, E=1, y=0), (L=55, E=4, y=1),
 (L=200, E=0, y=0), (L=60, E=2, y=1), (L=150, E=1, y=0).</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c09-verifier-training-p03" data-kind="keyIdea" data-reveal="rise" data-term="classifier"><strong>3. Plain-language mental model.</strong>
 A verifier is a classifier: input a solution, output P(correct). Train
 it like any classifier, on solutions labeled by an oracle. Its exam is
 the solutions it will judge at deployment.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c09-verifier-training-p04" data-kind="definition" data-term="binary cross-entropy"><strong>4. Variables, units, shapes, assumptions.</strong>
 Dataset D = {(x_i, y_i, c_i)} with c_i in {0, 1}. Model V_theta outputs
 a logit, score = sigmoid(logit). Loss: binary cross-entropy,
 L = -mean(c_i log s_i + (1 - c_i) log(1 - s_i)). Assumptions: labels are
 correct, the training distribution matches the deployment sample
 distribution.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c09-verifier-training-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Maximum likelihood on the labels: the loss above is the negative
 log-likelihood of a Bernoulli model. Minimizing it fits s_i to the
 empirical correctness rate. The mechanism works when the training
 samples look like the samples the verifier will score later, a verifier
 trained on human solutions and deployed on model samples faces shift.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c09-verifier-training-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy linear scorer: logit = w1 * E - w2 * (L / 100). Start w1 = 1.0,
 w2 = 1.0. Sample 1: logit = 3 - 0.4 = 2.6, s = 0.931. Label 1. Loss
 contribution: -log(0.931) = 0.0715. Sample 2: logit = 1 - 1.2 = -0.2,
@@ -814,8 +814,8 @@ s = 0.450. Label 0. Contribution: -log(1 - 0.450) = -log(0.550) =
 Contribution: -log(0.969) = 0.0315. Mean over the three: (0.0715 +
 0.5978 + 0.0315) / 3 = 0.2336. The loss is computable and finite, a
 gradient step would raise w1 and lower the score of sample 2.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">import math
+<p id="c09-verifier-training-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c09-verifier-training-code01" data-kind="prose"><code class="language-python">import math
 
 def sigmoid(z):
     return 1.0 / (1.0 + math.exp(-z))
@@ -827,78 +827,78 @@ def bce_loss(scores, labels):
         total += -(c * math.log(s) + (1 - c) * math.log(1 - s))
     return total / len(scores)
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c09-verifier-training-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: bce_loss([0.931, 0.450, 0.969], [1, 0, 1]) prints about 0.2336.
 Check: perfect scores give loss near 0. Check: scores of 0.5 give
 -log(0.5) = 0.6931 per item.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c09-verifier-training-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Training cost is one classifier training run. Data cost dominates:
 labels need an oracle. Stability: class imbalance (few correct samples
 on hard tasks) needs weighting or resampling.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c09-verifier-training-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Hand-written rubric: pick when the check is exact, like unit tests.
 LLM-as-judge with no training: pick when labels are unavailable.
 Trained verifier: pick when labels exist and the sample distribution is
 stable.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c09-verifier-training-p11" data-kind="prose" data-term="distribution match"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the distribution match: train on short human solutions, deploy on
 long model samples. The verifier trusts brevity and rejects good long
 solutions. Counterexample: label noise: 10 percent flipped labels cap
 the learned accuracy near 0.90 no matter the model size.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c09-verifier-training-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Cobbe et al. 2021, Wang et al. 2023 (SOURCE ATTRIBUTION
 PENDING). Extension: hypothesis: verifier accuracy rises with label
 count following a predictable curve. Falsification: flat accuracy as
 labels grow, which points at label noise or shift, not data size.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c09-verifier-training-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: write the loss and name its two assumptions. Ladder: define the
 dataset, run the toy, derive the Bernoulli likelihood, code the loss,
 state data cost, compare with a rubric, debug the shift failure,
 critique label trust, design the label-count sweep. Transfer: training
 a spam filter has the same shape: labeled items, same loss.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c09-verifier-training-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E9.1: compute the loss contribution of sample 4 from item 6. E9.2:
 explain why label noise caps accuracy. E9.3: name the shift between
 training and deployment samples. Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c09-verifier-training-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6). No separate PNG: comparison of
-values. Logged in <code>../visual_audit.md</code>.</p>
+values. Logged in <code>../visual_audit.md</code>.</p><span id="c09-verifier-training-end" data-end></span>
 <hr />
 <h2 id="c10-calibration">C10 calibration</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c10-calibration-p01" data-kind="prose" data-term="calibration"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 3. Scope: the match between verifier confidence and observed
 accuracy. Objective: compute expected calibration error (ECE) on a toy.
 Dependencies: C02, C09, P07. Local remediation: calibration is defined
 here from scratch.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c10-calibration-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the verifier says 0.9. Is it right 90 percent of the time?
 Toy: 10 samples with scores and labels:
 scores [0.95, 0.92, 0.88, 0.81, 0.78, 0.62, 0.55, 0.41, 0.30, 0.12],
 labels [1, 1, 0, 1, 1, 0, 1, 0, 0, 0].</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c10-calibration-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A weather forecaster who says 90 percent and is right 60 percent of the
 time is miscalibrated. The fix is not better forecasts first, it is
 honest numbers first. Selection (C02) needs ranking, decision thresholds
 need calibration.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c10-calibration-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Bin the scores. Bin b has mean score conf_b and observed accuracy
 acc_b. ECE = sum_b (|B_b| / n) * |acc_b - conf_b|. Assumptions: enough
 samples per bin for acc_b to be stable, labels correct.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c10-calibration-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Perfect calibration means P(correct | score = s) = s. ECE measures the
 weighted gap between that ideal and the data. The mechanism for repair
 is post-hoc: fit a monotone map from raw scores to empirical accuracy
 on held-out data, for example isotonic regression or temperature
 scaling. Repair never uses the test set.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c10-calibration-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Two bins. High bin: scores [0.95, 0.92, 0.88, 0.81, 0.78], labels
 [1, 1, 0, 1, 1]. conf = 4.34 / 5 = 0.868. acc = 4 / 5 = 0.8. Gap =
 0.068. Low bin: scores [0.62, 0.55, 0.41, 0.30, 0.12], labels
 [0, 1, 0, 0, 0]. conf = 2.00 / 5 = 0.40. acc = 1 / 5 = 0.2. Gap = 0.20.
 ECE = 0.5 * 0.068 + 0.5 * 0.20 = 0.034 + 0.10 = 0.134. The verifier is
 overconfident, worse in the low bin.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def ece(scores, labels, n_bins=2):
+<p id="c10-calibration-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c10-calibration-code01" data-kind="prose"><code class="language-python">def ece(scores, labels, n_bins=2):
     order = sorted(range(len(scores)), key=lambda i: scores[i])
     chunk = len(scores) // n_bins
     total = 0.0
@@ -909,150 +909,150 @@ overconfident, worse in the low bin.</p>
         total += (len(idx) / len(scores)) * abs(acc - conf)
     return total
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c10-calibration-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: ece on the item-2 data with n_bins=2 prints about 0.134. Check:
 perfect scores give 0. Check: the function sorts before binning, so bin
 order is by score.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c10-calibration-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 O(n log n) from the sort. The real cost is data: ECE with 10 samples is
 a noisy estimate, each bin needs tens of samples for a stable acc_b.
 Stability: too many bins makes the estimate jumpy.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c10-calibration-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Ranking metrics (AUC): pick when only order matters for best-of-N.
 Calibration: pick when scores drive thresholds, abstention, or expected
 value math. Both: pick when the verifier both selects and decides.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c10-calibration-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break bin stability: 2 samples per bin makes acc_b jump between 0, 0.5,
 1.0 and ECE means nothing. Counterexample: a verifier with perfect AUC
 but all scores in [0.49, 0.51] ranks well and calibrates terribly.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c10-calibration-p12" data-kind="prose" data-term="temperature scaling"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: calibration literature via P07 (SOURCE ATTRIBUTION PENDING for
 course-specific treatment). Extension: hypothesis: temperature scaling on
 held-out data cuts ECE without changing AUC. Falsification: ECE falls
 but best-of-N success does not move, which separates ranking from
 calibration value.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c10-calibration-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define ECE and its two assumptions. Ladder: define the bins,
 run the toy, justify the weighted gap, code ece, state the data need,
 compare with AUC, debug the tiny-bin failure, critique label trust,
 design the scaling test. Transfer: calibrated medical risk scores use
 the same math.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c10-calibration-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E10.1: recompute ECE with 5 bins of 2 on the item-2 data. E10.2:
 explain why ranking can be perfect while calibration is bad. E10.3:
 state the repair rule about the test set. Answers:
 <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c10-calibration-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Reliability diagram plate: table of the two bins with conf versus acc.
 No separate PNG: comparison of values. Logged in
-<code>../visual_audit.md</code>.</p>
+<code>../visual_audit.md</code>.</p><span id="c10-calibration-end" data-end></span>
 <hr />
 <h2 id="c11-selection-bias">C11 selection bias</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c11-selection-bias-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 3. Scope: systematic error introduced by choosing samples with a
 biased score. Objective: construct a toy where selection flips the
 answer and name the bias. Dependencies: C02, C10.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c11-selection-bias-p02" data-kind="example" data-term="argmax"><strong>2. Motivating question and tiny toy.</strong>
 Question: the verifier loves long answers. What does best-of-N return?
 Toy: 4 samples. Correctness [1, 0, 0, 0]. Lengths [30, 120, 150, 200].
 Scores = length / 200: [0.15, 0.60, 0.75, 1.00]. Argmax picks sample 4,
 wrong. The correct short sample loses.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c11-selection-bias-p03" data-kind="keyIdea" data-reveal="rise" data-term="selection bias"><strong>3. Plain-language mental model.</strong>
 A judge who rewards height picks the tallest contestant, not the best
 singer. Selection bias is the judge&rsquo;s taste leaking into the verdict.
 The samples did not change. The ruler did.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c11-selection-bias-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Bias: a feature z (length, style, position) that shifts scores without
 shifting correctness. Selection amplifies z because argmax chases the
 score. Assumptions for honest selection: score differences track
 correctness differences, not z.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c11-selection-bias-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Write score s = q + w * z, with q the quality signal and z the bias
 feature. Argmax over s picks high q or high z. As N grows, the max of z
 over the set grows too, so the bias term wins more often. Selection
 bias gets worse with N: larger candidate sets give the bias more room
 to dominate.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c11-selection-bias-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Item-2 toy: q is correctness (0/1), z is length/200, w = 1. Sample 1:
 s = 1 * 0.5 + 0.15 (equal weights toy) = 0.65. Sample 4: s = 0 + 1.00 =
 1.00. Argmax picks sample 4. With N = 100 the longest sample is even
 longer, and the bias wins with higher probability. The math: max z
 grows with N while max q is capped at 1.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def biased_scores(quality, bias_feature, w):
+<p id="c11-selection-bias-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c11-selection-bias-code01" data-kind="prose"><code class="language-python">def biased_scores(quality, bias_feature, w):
     return [q + w * z for q, z in zip(quality, bias_feature)]
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c11-selection-bias-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: w = 0 recovers unbiased selection. Check: the item-2 call with
 w = 1.0 picks index 3.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c11-selection-bias-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 No extra compute, the cost is wrong answers. Detection cost: measure
 score correlation with z on labeled data. Repair cost: debias the
 verifier or normalize z before scoring.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c11-selection-bias-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Debiased verifier: pick when z is measurable. Self-consistency: pick
 when no trusted scorer exists. Human audit of top picks: pick when
 stakes are high and bias is suspected.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c11-selection-bias-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 The subtle case: z correlates with quality in training but not at
 deployment (longer answers were better in training). The verifier looks
 fine on training metrics and fails in production. Counterexample:
 position bias: the verifier prefers the first sample regardless of
 content.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c11-selection-bias-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: verifier-bias discussions in the session-3 papers (SOURCE
 ATTRIBUTION PENDING). Extension: hypothesis: score correlation with
 length predicts best-of-N failure rate. Falsification: high correlation
 with no failure, which would mean length carries real signal on that
 task.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c11-selection-bias-p13" data-kind="prose" data-term="bias feature"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define selection bias and why it grows with N. Ladder: define
 the bias feature, run the toy, justify the max-z argument, code the
 scorer, state detection cost, compare with debiasing, debug the
 train-deployment shift, critique the &ldquo;measurable z&rdquo; assumption, design
 the correlation study. Transfer: hiring filters that reward keyword
 count show the same failure.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c11-selection-bias-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E11.1: in the item-2 toy, what w makes sample 1 win? E11.2: explain in
 two sentences why bias worsens as N grows. E11.3: name one detection
 measurement. Answers: <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c11-selection-bias-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6). No separate PNG: comparison of
-values. Logged in <code>../visual_audit.md</code>.</p>
+values. Logged in <code>../visual_audit.md</code>.</p><span id="c11-selection-bias-end" data-end></span>
 <hr />
 <h2 id="c12-cost-success-curves">C12 cost-success curves</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c12-cost-success-curves-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Sessions 2-3. Scope: plot task success against inference budget and read
 allocation decisions off the curve. Objective: compute two curves and
 pick a winner under a budget. Dependencies: C01, C05. Local remediation:
 seed and budget are stated before each curve.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c12-cost-success-curves-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the budget doubles from 50 to 100. Which strategy gains more?
 Toy: strategy A (cheap verifier): success(B) = (1 - 0.75^(B/5)) * 0.70.
 Strategy B (strong verifier): success(B) = (1 - 0.75^(B/12.5)) * 0.90.
 Budget in cost units, per-sample cost 5 for A, 12.5 for B.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c12-cost-success-curves-p03" data-kind="keyIdea" data-reveal="rise" data-term="cost-success curve"><strong>3. Plain-language mental model.</strong>
 A cost-success curve is a menu with prices. The x-axis is money. The
 y-axis is success. The best dish is the highest point you can afford,
 not the highest point on the menu.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c12-cost-success-curves-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 B: budget in cost units. success(B): estimated task success at that
 budget. Assumptions: the per-plan model from C05, smooth interpolation
 between integer N is a drawing aid, not a claim.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c12-cost-success-curves-p05" data-kind="prose" data-term="plan_success"><strong>5. Justified derivation or mechanism.</strong>
 Each curve is plan_success evaluated at N = floor(B / unit_cost). The
 curve rises fast where pass@N rises fast (small N) and flattens where
 the verifier accuracy caps it. Crossings mark budget points where the
 recommended strategy changes.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c12-cost-success-curves-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 B = 50. A: N = 10, pass@10 = 1 - 0.75^10 = 1 - 0.05631 = 0.94369,
 success = 0.94369 * 0.70 = 0.66058. B: N = 4, pass@4 = 0.68359,
 success = 0.68359 * 0.90 = 0.61523. A wins at 50. B = 100. A: N = 20,
 pass@20 = 0.99683, success = 0.69778. B: N = 8, pass@8 = 0.89991,
 success = 0.80992. B wins at 100. The curves cross between 50 and 100.
 Check 0.75^10: 0.75^5 = 0.23730, squared = 0.05631. Correct.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def cost_success_curve(budgets, unit_cost, p, verifier_accuracy):
+<p id="c12-cost-success-curves-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c12-cost-success-curves-code01" data-kind="prose"><code class="language-python">def cost_success_curve(budgets, unit_cost, p, verifier_accuracy):
     points = []
     for b in budgets:
         n = int(b // unit_cost)
@@ -1062,57 +1062,57 @@ Check 0.75^10: 0.75^5 = 0.23730, squared = 0.05631. Correct.</p>
             points.append((b, plan_success(n, p, verifier_accuracy)))
     return points
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c12-cost-success-curves-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: cost_success_curve([50, 100], 5, 0.25, 0.70) gives about
 [(50, 0.6606), (100, 0.6978)]. Check: budgets below unit_cost give 0.0,
 which reads as &ldquo;cannot afford one sample&rdquo;.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c12-cost-success-curves-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Trivial compute. The honest cost is measurement: real curves need
 labeled runs at each budget point, and each point needs enough trials
 for a stable estimate (P07).</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c12-cost-success-curves-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Single-budget comparison: pick when only one budget matters. Full
 curve: pick when the budget is a decision variable. Expected-value
 analysis: pick when success has a dollar value and you optimize
 value minus cost.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c12-cost-success-curves-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the model: real verifier accuracy falls as N rises (harder
 questions need more samples and fool the verifier). Then the curve
 overstates high-budget success. Counterexample: a curve drawn from
 validation data that does not match deployment difficulty.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c12-cost-success-curves-p12" data-kind="prose" data-term="crossing"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Snell et al. 2024 (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: the crossing budget measured on validation predicts the
 crossing on test within 20 percent. Falsification: a larger miss, which
 points at difficulty shift between splits.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c12-cost-success-curves-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the curve and the crossing. Ladder: define the axes,
 run the toy, justify the floor(N) step, code the curve, state
 measurement cost, compare with single-budget choice, debug the
 falling-accuracy failure, critique smooth interpolation, design the
 crossing-prediction test. Transfer: learning curves in training show
 the same read-off logic.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c12-cost-success-curves-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E12.1: find the crossing budget to the nearest 10 by evaluating the
 item-7 function. E12.2: explain what the 0.0 points mean. E12.3: name
 two measurements needed for a real curve. Answers:
 <code>../keys/u01_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c12-cost-success-curves-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u01_fig03.png</code> (C05 item 15) is the curve plate for
 this concept as well, the mapping is recorded in <code>../visual_audit.md</code>.
 Provenance: original, computed. Alt text: two curves crossing between
-budget 50 and 100, winner marked at each of three budgets.</p>
+budget 50 and 100, winner marked at each of three budgets.</p><span id="c12-cost-success-curves-end" data-end></span>
 <hr />
 <h2 id="u01-not-yet-understood-dependency-list">U01 not-yet-understood dependency list</h2>
-<ol>
+<ol id="u01-not-yet-understood-dependency-list-list01" data-kind="prose" data-term="Bernoulli trials">
 <li>Bernoulli trials and the complement rule -&gt; <code>../shared/prerequisites/p07_estimation.md</code>, remediated in C01 items 4-6.</li>
 <li>Next-token sampling, temperature, top-p -&gt; <code>../shared/prerequisites/p14_transformer.md</code>, remediated in C01 item 4 and C11.</li>
 <li>Seeds, trials, standard errors -&gt; <code>../shared/prerequisites/p22_experiments.md</code>, remediated in C01 item 9 and C12 item 9.</li>
 <li>Binary cross-entropy as negative log-likelihood -&gt; <code>../shared/prerequisites/p10_ml_foundations.md</code> is not in the unit bridge list, the derivation is local in C09 item 5. Added here as a local bridge.</li>
 <li>Policy gradients and advantage (preview for U03) -&gt; deferred to U03 C05, not needed for U01.</li>
-</ol>
+</ol><span id="u01-not-yet-understood-dependency-list-end" data-end></span>
 <h2 id="u01-russian-doll-ladder-index-major-mechanisms">U01 Russian-doll ladder index (major mechanisms)</h2>
-<ul>
+<ul id="u01-russian-doll-ladder-index-major-mechanisms-list01" data-kind="prose" data-term="Best-of-N">
 <li>Best-of-N: shells 0-10 across C02 (shells 0-5), C06 (shell 6: change
   verifier strength, shell 7: break score correlation), C11 (shell 7
   continued: break with bias), C05 (shell 8: compare with
@@ -1122,7 +1122,7 @@ budget 50 and 100, winner marked at each of three budgets.</p>
   in C10 item 6 (change bin count), shell 7 in C09 item 11 (break
   distribution match), shell 8 in C10 item 10 (compare with AUC), shell 9
   in C10 item 12, shell 10 in C02 item 9 (latency on the critical path).</li>
-</ul>
+</ul><span id="u01-russian-doll-ladder-index-major-mechanisms-end" data-end></span>
       
       <nav class="pager"><a href="../index.html"><span class="lbl">← Previous</span>CS329A: Agentic AI and Frontier Research</a><a href="../lessons/u02_feedback_tools.html"><span class="lbl">Next →</span>U02 · Feedback, tools, and constitutional learning</a></nav>
     </article>

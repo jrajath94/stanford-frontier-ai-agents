@@ -1,0 +1,745 @@
+{
+  "itemId": "u04_open_evolution",
+  "itemKind": "lesson",
+  "revision": "e3d71878cbef1d5d6b9298c8179c263ebb78fd3c0764b1e3dd7a20a6a020cad9",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u04_open_evolution-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u04_open_evolution-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u04_open_evolution-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official sessions 7, 8, and 9.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u04_open_evolution-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u04_open_evolution-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official sessions 7 (Oct 13), 8 (Oct 17), and 9 (Oct 20, guest: Melvin Johnson, Google DeepMind).",
+          "id": "cs329a_u04_open_evolution-intro-r1",
+          "question": "Which course and sessions does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Propose designs, evaluate them, keep the best; the designer moves up one level.",
+          "term": "evolutionary loop"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Small random edits to a design; one edit per child keeps change attributable.",
+          "term": "mutation"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "A locked split, reported once, that tells whether the fitness rise is real.",
+          "term": "holdout separation"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "No network, writes inside /task, read-only outside, append-only logs.",
+          "term": "sandbox rules"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Run one evolutionary loop over agent designs, define mutation and selection operators, read AI Scientist and AlphaEvolve at mechanism level, describe AlphaCode's sample-filter-cluster pipeline, use search inside reasoning, keep evidence provenance, enforce holdout separation, budget an evolution run, judge novelty claims, and write sandbox rules for safe iteration.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Tools, APIs, and agent state prerequisite.",
+          "term": "P20"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Experimental method prerequisite.",
+          "term": "P22"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P20 (tools, APIs, agent state) and P22 (experimental method). Local remediation sits inside C08, C09, and C12.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "Fitness gap times keep fraction; the knob that trades convergence speed for exploration.",
+          "term": "selection pressure"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "A loop of mutate, evaluate, select over agent designs.",
+          "term": "evolution"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: evolution keeps what works and varies it. Equation: selection pressure = fitness gap times keep fraction, expected survivors = M * k. Code: a loop of mutate, evaluate, select. Observation: fitness rises fast then plateaus, and the holdout tells whether the rise is real.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-agent-architecture-search",
+      "blocks": [
+        {
+          "anchor": "c01-agent-architecture-search-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c01-agent-architecture-search-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-agent-architecture-search-p01",
+          "definition": "(prompt template, tool set, control flow, budget); the object being searched.",
+          "term": "design"
+        },
+        {
+          "anchor": "c01-agent-architecture-search-p03",
+          "definition": "Validation success rate; the ruler that judges designs.",
+          "term": "fitness"
+        },
+        {
+          "anchor": "c01-agent-architecture-search-p05",
+          "definition": "Optimization over programs needing no gradients, only a fitness function.",
+          "term": "black-box optimization"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c01-agent-architecture-search-p03",
+          "answer": "Stop hand-carving each agent. Define the workshop (the design space), the ruler (the fitness function), and let search carve. In the toy, self-consistency at 0.71 beats ReAct at 0.62 and plan-then-execute at 0.55.",
+          "id": "c01-agent-architecture-search-r1",
+          "question": "What moves up one level in agent architecture search?"
+        },
+        {
+          "anchor": "c01-agent-architecture-search-p12",
+          "answer": "Break fitness honesty: validation tasks leak into the design proposals, so the search overfits and the winner fails on new tasks. A design space of one makes search just evaluation.",
+          "id": "c01-agent-architecture-search-r2",
+          "question": "What breaks agent architecture search?"
+        }
+      ],
+      "title": "C01 agent architecture search"
+    },
+    {
+      "anchor": "c02-candidate-mutation",
+      "blocks": [
+        {
+          "anchor": "c02-candidate-mutation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-candidate-mutation-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-candidate-mutation-p01",
+          "definition": "A small, random edit: prompt edit, tool add, or flow change.",
+          "term": "mutation"
+        },
+        {
+          "anchor": "c02-candidate-mutation-p04",
+          "definition": "Number of changed fields; one edit per child keeps change attributable.",
+          "term": "edit distance"
+        },
+        {
+          "anchor": "c02-candidate-mutation-p04",
+          "definition": "Small edits usually cause small fitness changes; what makes evolution beat random search.",
+          "term": "locality"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-candidate-mutation-p05",
+          "answer": "Locality: children of good parents are usually decent, so selection compounds gains. Without it every child is a fresh random draw and the loop is random search with extra steps.",
+          "id": "c02-candidate-mutation-r1",
+          "question": "Why does locality make evolution better than random search?"
+        },
+        {
+          "anchor": "c02-candidate-mutation-p12",
+          "answer": "Break locality: one prompt edit flips the agent from helpful to refusing everything, fitness falling 0.62 to 0.05. A mutation changing the tool schema without updating the prompt errors on every call.",
+          "id": "c02-candidate-mutation-r2",
+          "question": "What breaks mutation?"
+        }
+      ],
+      "title": "C02 candidate mutation"
+    },
+    {
+      "anchor": "c03-selection",
+      "blocks": [
+        {
+          "anchor": "c03-selection-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c03-selection-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c03-selection-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-selection-p01",
+          "definition": "Keep the top-k fitnesses; strong pressure, fast convergence, local-optimum risk.",
+          "term": "truncation"
+        },
+        {
+          "anchor": "c03-selection-p01",
+          "definition": "Random pairs, winner survives; playoffs with luck.",
+          "term": "tournament"
+        },
+        {
+          "anchor": "c03-selection-p05",
+          "definition": "Survivor mean minus population mean; 0.09 in the toy.",
+          "term": "selection differential"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c03-selection-p03",
+          "answer": "Selection is the admissions office. Truncation takes the top GPAs, tournament runs playoffs, proportionate runs a lottery with weighted tickets. All three prefer the fit; they differ in how much luck they allow.",
+          "id": "c03-selection-r1",
+          "question": "How do the three selection rules differ?"
+        },
+        {
+          "anchor": "c03-selection-p12",
+          "answer": "Break fitness reliability: a candidate got lucky on 50 tasks (true 0.55, measured 0.73), truncation keeps it, and its children inherit nothing real. Premature convergence keeps 3 near-identical designs and stalls the search.",
+          "id": "c03-selection-r2",
+          "question": "What breaks selection?"
+        }
+      ],
+      "title": "C03 selection"
+    },
+    {
+      "anchor": "c04-ai-scientistalphaevolve-readings",
+      "blocks": [
+        {
+          "anchor": "c04-ai-scientistalphaevolve-readings-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c04-ai-scientistalphaevolve-readings-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-ai-scientistalphaevolve-readings-p01",
+          "definition": "A graduate student that never sleeps: ideas, code, experiments, papers, review, in a loop.",
+          "term": "AI Scientist"
+        },
+        {
+          "anchor": "c04-ai-scientistalphaevolve-readings-p01",
+          "definition": "A programmer that never stops refactoring: every edit tested, only improvements survive.",
+          "term": "AlphaEvolve"
+        },
+        {
+          "anchor": "c04-ai-scientistalphaevolve-readings-p05",
+          "definition": "Automated empirical feedback closing the loop at research scale.",
+          "term": "generate-and-test"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c04-ai-scientistalphaevolve-readings-p02",
+          "answer": "AI Scientist loops propose idea, write code, run experiment, write up results, review, keep or discard. AlphaEvolve loops propose code edit, run tests, keep if better.",
+          "id": "c04-ai-scientistalphaevolve-readings-r1",
+          "question": "What does each loop do per iteration?"
+        },
+        {
+          "anchor": "c04-ai-scientistalphaevolve-readings-p12",
+          "answer": "Break experiment automation: an experiment needing human setup stalls the loop at the first idea. A review step approving everything mass-produces confident nonsense.",
+          "id": "c04-ai-scientistalphaevolve-readings-r2",
+          "question": "What breaks automated science loops?"
+        }
+      ],
+      "title": "C04 AI Scientist/AlphaEvolve readings"
+    },
+    {
+      "anchor": "c05-code-generation-search",
+      "blocks": [
+        {
+          "anchor": "c05-code-generation-search-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c05-code-generation-search-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-code-generation-search-p03",
+          "definition": "Flood the zone with drafts; the tests are the dam only strong swimmers pass.",
+          "term": "flood"
+        },
+        {
+          "anchor": "c05-code-generation-search-p04",
+          "definition": "N times compile rate times visible-pass rate; 25 survivors from 100 in the toy.",
+          "term": "survivors"
+        },
+        {
+          "anchor": "c05-code-generation-search-p05",
+          "definition": "Rejection sampling over programs with compilation and tests as the filter.",
+          "term": "rejection sampling"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-code-generation-search-p05",
+          "answer": "Rejection sampling over programs with compilation and tests as the filter. It works when the filter is cheap and strict: cheap because N is large, strict because survivors must be good.",
+          "id": "c05-code-generation-search-r1",
+          "question": "Why does code-generation search work?"
+        },
+        {
+          "anchor": "c05-code-generation-search-p12",
+          "answer": "Break the visible-hidden link: trivial visible tests and hard hidden tests let survivors pass visible at 0.3 but hidden at 0.02. A program hardcoding visible inputs passes the wrong filter.",
+          "id": "c05-code-generation-search-r2",
+          "question": "What breaks code-generation search?"
+        }
+      ],
+      "title": "C05 code-generation search"
+    },
+    {
+      "anchor": "c06-alphacodealphacode2",
+      "blocks": [
+        {
+          "anchor": "c06-alphacodealphacode2-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c06-alphacodealphacode2-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c06-alphacodealphacode2-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-alphacodealphacode2-p04",
+          "definition": "Group programs by outputs on new inputs, not by how they look.",
+          "term": "behavior clustering"
+        },
+        {
+          "anchor": "c06-alphacodealphacode2-p04",
+          "definition": "One pick per large cluster; diversity of submissions beats ten copies of one guess.",
+          "term": "submission budget"
+        },
+        {
+          "anchor": "c06-alphacodealphacode2-p04",
+          "definition": "S: small; the ten allowed submissions in the toy pipeline.",
+          "term": "S"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c06-alphacodealphacode2-p05",
+          "answer": "Clustering solves the diversity problem: top-10 by score are near-duplicates wasting the budget on one bet. Behavioral clustering groups programs by what they do; one pick per cluster covers distinct behaviors.",
+          "id": "c06-alphacodealphacode2-r1",
+          "question": "Why cluster before picking submissions?"
+        },
+        {
+          "anchor": "c06-alphacodealphacode2-p12",
+          "answer": "Break the behavior key: generated inputs miss the discriminating case, so two algorithms land in one cluster and the pick claims two behaviors while covering one. All 10,000 programs in one cluster makes clustering add nothing.",
+          "id": "c06-alphacodealphacode2-r2",
+          "question": "What breaks behavioral clustering?"
+        }
+      ],
+      "title": "C06 AlphaCode/AlphaCode2"
+    },
+    {
+      "anchor": "c07-search-enhanced-reasoning",
+      "blocks": [
+        {
+          "anchor": "c07-search-enhanced-reasoning-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c07-search-enhanced-reasoning-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-search-enhanced-reasoning-p01",
+          "definition": "External, fresh, citable memory the model does not have to carry.",
+          "term": "search"
+        },
+        {
+          "anchor": "c07-search-enhanced-reasoning-p01",
+          "definition": "(snippet, source); what the retriever returns for a SEARCH action.",
+          "term": "retrieval"
+        },
+        {
+          "anchor": "c07-search-enhanced-reasoning-p05",
+          "definition": "Parameters hold patterns, retrieval holds facts; the split search-enhanced reasoning exploits.",
+          "term": "knowledge"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c07-search-enhanced-reasoning-p03",
+          "answer": "Reason until hitting an unknown fact, look it up, reason on. In the toy, the reasoner emits SEARCH for a population figure, gets 1.2M back, and continues with the number in context.",
+          "id": "c07-search-enhanced-reasoning-r1",
+          "question": "How does search-enhanced reasoning work?"
+        },
+        {
+          "anchor": "c07-search-enhanced-reasoning-p12",
+          "answer": "Break retriever relevance: the top hit is a lookalike fact about the wrong entity and the reasoner computes confidently on the wrong number. A reasoner ignoring the retrieved fact makes the search theater.",
+          "id": "c07-search-enhanced-reasoning-r2",
+          "question": "What breaks search-enhanced reasoning?"
+        }
+      ],
+      "title": "C07 search-enhanced reasoning"
+    },
+    {
+      "anchor": "c08-evidence-provenance",
+      "blocks": [
+        {
+          "anchor": "c08-evidence-provenance-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-evidence-provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-evidence-provenance-p01",
+          "definition": "The receipt for a fact: no receipt, no refund.",
+          "term": "provenance"
+        },
+        {
+          "anchor": "c08-evidence-provenance-p01",
+          "definition": "(claim, source_id, retrieval_path, date, quote_or_pointer); the checkable record.",
+          "term": "record"
+        },
+        {
+          "anchor": "c08-evidence-provenance-p05",
+          "definition": "A second party replays the retrieval and confirms the claim.",
+          "term": "auditability"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-evidence-provenance-p05",
+          "answer": "Auditability: a second party replays the retrieval path and confirms the quote. It is U02 C12 independent validation applied to knowledge. It works when records are complete; a missing retrieval path breaks the replay.",
+          "id": "c08-evidence-provenance-r1",
+          "question": "How do you check an agent's factual claim?"
+        },
+        {
+          "anchor": "c08-evidence-provenance-p12",
+          "answer": "Break source access: a paywalled source leaves a complete record unverifiable to that checker. A fabricated record with a real-looking source_id passes on form and fails on reality.",
+          "id": "c08-evidence-provenance-r2",
+          "question": "What breaks evidence provenance?"
+        }
+      ],
+      "title": "C08 evidence provenance"
+    },
+    {
+      "anchor": "c09-holdout-separation",
+      "blocks": [
+        {
+          "anchor": "c09-holdout-separation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c09-holdout-separation-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c09-holdout-separation-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-holdout-separation-p01",
+          "definition": "The exam the student never saw; validation is the practice test.",
+          "term": "holdout"
+        },
+        {
+          "anchor": "c09-holdout-separation-p02",
+          "definition": "The max of noisy measurements overshoots: winner's validation exceeds true score by about s times 2.25 for 50 designs.",
+          "term": "selection optimism"
+        },
+        {
+          "anchor": "c09-holdout-separation-p01",
+          "definition": "Locked before evolution started, representative, used once.",
+          "term": "locked"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c09-holdout-separation-p05",
+          "answer": "The max of noisy measurements is biased upward. In the toy the best of 50 scores 0.78 on validation but 0.69 on the locked holdout; the 0.09 gap is selection optimism.",
+          "id": "c09-holdout-separation-r1",
+          "question": "Why is the validation winner's score not the real score?"
+        },
+        {
+          "anchor": "c09-holdout-separation-p12",
+          "answer": "Break the lock: holdout tasks leak into a design's prompt and the holdout measures memorization. Reusing the holdout for a second selection round makes it validation with a fancy name.",
+          "id": "c09-holdout-separation-r2",
+          "question": "What breaks holdout separation?"
+        }
+      ],
+      "title": "C09 holdout separation"
+    },
+    {
+      "anchor": "c10-resource-budgets",
+      "blocks": [
+        {
+          "anchor": "c10-resource-budgets-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-resource-budgets-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-resource-budgets-p03",
+          "definition": "Money, wall-clock, and attention; the run ends when any tank hits empty.",
+          "term": "fuels"
+        },
+        {
+          "anchor": "c10-resource-budgets-p02",
+          "definition": "G times M times E times c; $600 for the toy's 3 generations.",
+          "term": "money"
+        },
+        {
+          "anchor": "c10-resource-budgets-p01",
+          "definition": "The min over fuels of budget divided by burn rate; money binds in the toy.",
+          "term": "binding constraint"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-resource-budgets-p02",
+          "answer": "Eval cost $200 per generation ($600 total), time 34 minutes per generation on 10 workers, attention 2.5 hours. Money binds; fixes: cut M to 30, cut E to 120, or raise the wallet.",
+          "id": "c10-resource-budgets-r1",
+          "question": "What binds in the toy evolution run?"
+        },
+        {
+          "anchor": "c10-resource-budgets-p12",
+          "answer": "Break uniform cost: hard-task evals cost 10x and the sheet undercounts the hard slice 10x. A server allowing 2 concurrent runs makes wall-clock 5x the sheet at W = 10.",
+          "id": "c10-resource-budgets-r2",
+          "question": "What breaks the budget sheet?"
+        }
+      ],
+      "title": "C10 resource budgets"
+    },
+    {
+      "anchor": "c11-novelty-claims",
+      "blocks": [
+        {
+          "anchor": "c11-novelty-claims-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-novelty-claims-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-novelty-claims-p01",
+          "definition": "A negative claim, nobody did this before, needing search not assertion.",
+          "term": "novelty"
+        },
+        {
+          "anchor": "c11-novelty-claims-p01",
+          "definition": "Literature search, then baseline, then ablation; cheapest first.",
+          "term": "checklist"
+        },
+        {
+          "anchor": "c11-novelty-claims-p05",
+          "definition": "Each check is a chance to kill the claim; survivors are provisionally novel.",
+          "term": "falsification"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-novelty-claims-p05",
+          "answer": "Falsification: literature first (cheapest), baselines second, ablation third. A claim surviving all three is provisionally novel. Skipping the literature check is how old ideas get called novel.",
+          "id": "c11-novelty-claims-r1",
+          "question": "How do you judge a novelty claim?"
+        },
+        {
+          "anchor": "c11-novelty-claims-p12",
+          "answer": "Break search honesty: keywords missing the prior art's terminology let the check pass on an old claim. A baseline on easier tasks flatters X through task mismatch.",
+          "id": "c11-novelty-claims-r2",
+          "question": "What breaks novelty checking?"
+        }
+      ],
+      "title": "C11 novelty claims"
+    },
+    {
+      "anchor": "c12-safe-iteration",
+      "blocks": [
+        {
+          "anchor": "c12-safe-iteration-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-safe-iteration-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-safe-iteration-p01",
+          "definition": "A playpen with walls: no network, no leaving /task, watched clock and diary.",
+          "term": "sandbox"
+        },
+        {
+          "anchor": "c12-safe-iteration-p05",
+          "definition": "Each rule covers the others' failures; no network stops exfiltration even if a write escapes.",
+          "term": "defense in depth"
+        },
+        {
+          "anchor": "c12-safe-iteration-p03",
+          "definition": "Append-only (command, seed, diff, result); enables the post-mortem, prevents nothing.",
+          "term": "logs"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c12-safe-iteration-p02",
+          "answer": "R1: no network. R2: writes only inside /task. R3: read-only outside /task. R4: every run logged with command, seed, and diff. R5: wall-clock limits.",
+          "id": "c12-safe-iteration-r1",
+          "question": "What are the toy sandbox rules?"
+        },
+        {
+          "anchor": "c12-safe-iteration-p12",
+          "answer": "Break enforcement: rules living in the agent's prompt instead of the kernel get forgotten on run 301. An editable log makes the post-mortem read fiction.",
+          "id": "c12-safe-iteration-r2",
+          "question": "What breaks sandbox safety?"
+        }
+      ],
+      "title": "C12 safe iteration"
+    },
+    {
+      "anchor": "u04-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u04-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u04-not-yet-understood-dependency-list-list01",
+          "definition": "Tool sandboxes and state; remediated in C12 items 4-5.",
+          "term": "sandboxes"
+        },
+        {
+          "anchor": "u04-not-yet-understood-dependency-list-list01",
+          "definition": "Baselines, holdouts, ablations, negative results; remediated in C08, C09, C11 items 4-6.",
+          "term": "baselines"
+        },
+        {
+          "anchor": "u04-not-yet-understood-dependency-list-list01",
+          "definition": "Selection, mutation, drift; derived locally in C01-C03, no external bridge.",
+          "term": "evolutionary algorithms"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u04-not-yet-understood-dependency-list-list01",
+          "answer": "Information retrieval basics are treated as a tool call locally in C07 items 4-5; full retrieval theory lives in P19 as optional depth. The session-9 guest material is schedule-line only.",
+          "id": "u04-not-yet-understood-dependency-list-r1",
+          "question": "How are retrieval basics and the guest session handled?"
+        }
+      ],
+      "title": "U04 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u04-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u04-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u04-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C01-C03, deeper shells through C02 items 6, 11, C03 items 8, 10, 12, and C10.",
+          "term": "evolutionary loop"
+        },
+        {
+          "anchor": "u04-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C05 and C06, deeper shells through C06 items 6, 10, 12, C05 item 11.",
+          "term": "sample-filter-cluster"
+        },
+        {
+          "anchor": "u04-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C12, deeper shells through C12 items 6, 10, 11, 12, and C10 item 9.",
+          "term": "safe iteration"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u04-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "The evolutionary loop, sample-filter-cluster, and safe iteration. Each runs shells 0-10, ending at production forms like C10 budget and C09 holdout.",
+          "id": "u04-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U04 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

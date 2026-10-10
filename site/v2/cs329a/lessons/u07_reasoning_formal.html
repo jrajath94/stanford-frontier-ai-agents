@@ -37,77 +37,77 @@
 </ul>
   </nav>
   <main class="content" id="main">
-    <article>
+    <span id="cs329a_u07_reasoning_formal-intro"></span><article>
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Agentic AI and Frontier Research</a> / U07 · Reasoning, formal systems, and autonomy</nav>
       <h1>U07 · Reasoning, formal systems, and autonomy</h1>
       
       <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="u07-reasoning-formal-systems-and-autonomy">U07 , Reasoning, formal systems, and autonomy</h1>
-<p>Course: Stanford CS329A, Autumn 2025. Official sessions 15 (Nov 10,
+<p id="cs329a_u07_reasoning_formal-intro-p01" data-kind="prose" data-term="CS329A">Course: Stanford CS329A, Autumn 2025. Official sessions 15 (Nov 10,
 guest: Denny Zhou, Google DeepMind, LLM Reasoning), 16 (Nov 14,
 guest: Thang Luong, Google DeepMind, AlphaProof, AlphaGeometry, IMO
 Gold), 18 (Nov 21, guest: Misha Laskin, Reflection AI, Building
 Agentic Systems for Autonomy), 19 (Dec 1, guest: Danny Driess,
 Physical Intelligence, Multimodal AI Agents in Robotics). All guest
 content at schedule-line level only. Baseline: 2026-10-07.</p>
-<p>Claim class: mechanisms are taught from the requested inventory with SOURCE
+<p id="cs329a_u07_reasoning_formal-intro-p02" data-kind="prose" data-term="claim class">Claim class: mechanisms are taught from the requested inventory with SOURCE
 ATTRIBUTION PENDING. Paper and system names come from the verified
 official schedule (see <code>../source_manifest.md</code>). No paper contents were
 individually inspected by this builder. Guest sessions are taught at
 schedule-line level only, per the honesty note. Toy numbers are computed
-and traceable. No benchmark numbers are claimed.</p>
+and traceable. No benchmark numbers are claimed.</p><span id="cs329a_u07_reasoning_formal-intro-end" data-end></span>
 <h2 id="unit-objectives">Unit objectives</h2>
-<p>After this unit the learner can: state what the guest sessions do and
+<p id="unit-objectives-p01" data-kind="keyIdea" data-reveal="rise" data-term="AlphaProof">After this unit the learner can: state what the guest sessions do and
 do not cover, describe AlphaProof-style formal proof search, describe
 the AlphaGeometry neuro-symbolic loop, separate conjecture from search
 from proof, use a symbolic environment as a verifier, draw the autonomy
 envelope, trace a robot perception-action loop, fuse multimodal
 feedback, scope sim-to-real transfer, write safety rules, test trace
-faithfulness, and inventory guest gaps honestly.</p>
+faithfulness, and inventory guest gaps honestly.</p><span id="unit-objectives-end" data-end></span>
 <h2 id="dependencies">Dependencies</h2>
-<p>P17 (RL), P20 (tools, agent state), P22 (experimental method). Local
+<p id="dependencies-p01" data-kind="prose" data-term="P17">P17 (RL), P20 (tools, agent state), P22 (experimental method). Local
 remediation is inside C05. The shared bridges live at
-<code>../shared/prerequisites/</code>.</p>
+<code>../shared/prerequisites/</code>.</p><span id="dependencies-end" data-end></span>
 <h2 id="four-way-link-used-in-this-unit">Four-way link used in this unit</h2>
-<p>Intuition: a proof is a checkable artifact, search is the process
+<p id="four-way-link-used-in-this-unit-p01" data-kind="keyIdea" data-reveal="rise" data-term="kernel">Intuition: a proof is a checkable artifact, search is the process
 that finds it, and the symbolic kernel is the judge that cannot be
 argued with. Equation: proof success = P(conjecture good) times
 P(search finds it). Code: a loop of propose-tactic, check-with-
 kernel. Observation: the kernel&rsquo;s yes is certain, everything else is
-a guess that needs the kernel.</p>
+a guess that needs the kernel.</p><span id="four-way-link-used-in-this-unit-end" data-end></span>
 <hr />
 <h2 id="c01-guest-reasoning-evidence">C01 guest reasoning evidence</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c01-guest-reasoning-evidence-p01" data-kind="prose" data-term="schedule line"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 15 (Nov 10), guest: Denny Zhou (Google DeepMind), LLM
 Reasoning. Schedule line only. Scope: what is honestly known from
 the schedule. Objective: state the evidence boundary for all four
 guest sessions. Dependencies: none.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c01-guest-reasoning-evidence-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: what did the guest actually say? Toy answer: the
 schedule line says &ldquo;LLM Reasoning&rdquo;. That is the whole evidence.
 Everything else is inference, and inference is not evidence.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c01-guest-reasoning-evidence-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A schedule line is a title, not a transcript. It tells you the
 topic and the speaker. It does not tell you the claims, the
 demos, or the numbers. This concept teaches the discipline of
 the boundary: say what the line supports, and stop there.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c01-guest-reasoning-evidence-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Evidence set: the four schedule lines (sessions 15, 16, 18,
 19). Claim: any statement about what was said. Rule: a claim
 needs a source stronger than the line. Assumptions: the schedule
 is accurate, the talks happened as listed.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c01-guest-reasoning-evidence-p05" data-kind="prose" data-term="provenance hygiene"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is provenance hygiene. Each rung of evidence
 (schedule line, slides, transcript, recording) supports
 stronger claims. Teaching at the schedule line means: name the
 speaker, name the topic, name the gap. The gap is the point:
 it tells the learner exactly what to go read.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c01-guest-reasoning-evidence-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 4 guest sessions. Evidence level for each: schedule line.
 Claims supported: 4 (who spoke, on what topic, on what date).
 Claims not supported: everything about content. Boundary score:
 4/4 sessions correctly labeled at line level.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">GUESTS = {
+<p id="c01-guest-reasoning-evidence-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c01-guest-reasoning-evidence-code01" data-kind="prose"><code class="language-python">GUESTS = {
     15: (&quot;Denny Zhou&quot;, &quot;LLM Reasoning&quot;),
     16: (&quot;Thang Luong&quot;, &quot;AlphaProof, AlphaGeometry, IMO Gold&quot;),
     18: (&quot;Misha Laskin&quot;, &quot;Building Agentic Systems for Autonomy&quot;),
@@ -117,67 +117,67 @@ Claims not supported: everything about content. Boundary score:
 def evidence_level(session):
     return &quot;schedule-line only&quot;
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c01-guest-reasoning-evidence-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: no content claim appears for any guest. Check: all four
 sessions are listed. Check: the boundary score is 4/4.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c01-guest-reasoning-evidence-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: zero, the lines are on the schedule. The cost comes later,
 when the learner reads the actual papers.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c01-guest-reasoning-evidence-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Invented content: pick never. Silence about guests: worse, it
 hides the gap. Schedule-line teaching: pick whenever the source
 is a line.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c01-guest-reasoning-evidence-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the boundary: the lesson &ldquo;explains&rdquo; what Denny Zhou said
 about reasoning. That is fabrication with a famous name on it.
 Counterexample: a session with released slides: the evidence
 rung rises, and so may the claims.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c01-guest-reasoning-evidence-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the official schedule page (VERIFIED). Extension: the
 learner reads the AlphaProof and AlphaGeometry papers and
 raises C02-C05 from attribution-pending to inspected.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c01-guest-reasoning-evidence-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: list the four guest sessions. Ladder: define the
 boundary, run the toy, justify the rung rule, code the table,
 state the zero cost, compare with invented content, debug the
 fabrication failure, critique the line&rsquo;s thinness, design the
 paper-reading follow-up. Transfer: the same boundary rule
 covers press-release science.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c01-guest-reasoning-evidence-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E1.1: list the four sessions with dates. E1.2: explain the
 boundary in two sentences. E1.3: name the fabrication failure.
 Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c01-guest-reasoning-evidence-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 7: the guest table). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c01-guest-reasoning-evidence-end" data-end></span>
 <hr />
 <h2 id="c02-alphaproofformal-verification">C02 AlphaProof/formal verification</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c02-alphaproofformal-verification-p01" data-kind="prose" data-term="tactic"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 16 (Nov 14), guest: Thang Luong (Google DeepMind),
 AlphaProof, AlphaGeometry, IMO Gold. Schedule line only. The
 mechanism below is taught from the requested inventory with
 SOURCE ATTRIBUTION PENDING. Scope: formal proof search with a
 proof assistant. Objective: run a toy tactic search. Dependencies:
 P17.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c02-alphaproofformal-verification-p02" data-kind="example" data-term="kernel"><strong>2. Motivating question and tiny toy.</strong>
 Question: how can a machine prove a math theorem so that no
 human needs to check the steps? Toy: goal <code>2 + 2 = 4</code> in Lean.
 Tactic <code>rfl</code> closes it. The kernel checks the proof, not a
 human.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c02-alphaproofformal-verification-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A proof assistant is a ruthless referee. You state the theorem,
 then apply tactics (small proof steps). After each tactic the
 referee says what remains to prove. When nothing remains, the
 kernel certifies the proof. AlphaProof-style systems learn to
 propose tactics and search over them: the neural net conjectures
 steps, the kernel judges them.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c02-alphaproofformal-verification-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Goal state: the propositions left to prove. Tactic: an action
 that transforms the goal state. Proof: a tactic sequence the
 kernel accepts. Search: over tactic sequences, guided by a
 learned policy. Assumptions: the kernel is sound, tactics are
 the action space, the theorem statement is formalized.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c02-alphaproofformal-verification-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is search with a perfect verifier. The kernel
 accepts or rejects each tactic application deterministically,
 so every node in the search tree is labeled right or wrong for
@@ -187,14 +187,14 @@ allocates effort among them. The loop works because the
 verifier is free, fast, and infallible: the two hard problems
 of search (scoring nodes, knowing when to stop) are solved by
 construction.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c02-alphaproofformal-verification-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 6 tactic sequences tried, 2 close the goal. Success rate:
 2/6 = 1/3. Branching: 3 tactics tried at the root, 2 at depth
 2. Nodes visited: 1 + 3 + 2 = 6. The kernel judged all 6 for
 free. The proof is the 2-step winning sequence. The other 4
 sequences are search cost, not proof.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def proof_search(goal, policy, kernel, budget=6):
+<p id="c02-alphaproofformal-verification-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c02-alphaproofformal-verification-code01" data-kind="prose"><code class="language-python">def proof_search(goal, policy, kernel, budget=6):
     visited = 0
     for tactics in policy.propose(goal, budget):
         visited += 1
@@ -202,55 +202,55 @@ sequences are search cost, not proof.</p>
             return tactics, visited   # proof found
     return None, visited
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c02-alphaproofformal-verification-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: only kernel-accepted sequences return. Check: the toy
 visits 6 nodes and finds 2 proofs. Check: rejected tactics
 cost search, not correctness.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c02-alphaproofformal-verification-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Search cost: O(nodes) kernel checks, each cheap. The policy
 training is the expensive part (needs formalized theorems).
 Stability: the kernel never disagrees with itself.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c02-alphaproofformal-verification-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Informal proof (natural language): pick when humans read it.
 Automated tactics only: pick for routine goals. Neural-guided
 search: pick for hard goals with a formal statement.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c02-alphaproofformal-verification-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break formalization: the theorem is stated wrong in Lean. The
 system proves the wrong statement perfectly. Counterexample: a
 goal with no tactic sequence in the action space: search runs
 the full budget and finds nothing.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c02-alphaproofformal-verification-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: AlphaProof (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: neural tactic proposals beat uniform search at
 fixed node budget. Falsification: equal proof rates.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c02-alphaproofformal-verification-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define goal, tactic, kernel. Ladder: define the
 referee, run the toy, justify free verification, code the
 search, state the node cost, compare with informal proof,
 debug the wrong-statement failure, critique the action space,
 design the proposal experiment. Transfer: the same loop
 proves program properties.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c02-alphaproofformal-verification-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E2.1: compute the toy success rate and nodes visited. E2.2:
 explain the free verifier in two sentences. E2.3: name the
 wrong-statement failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c02-alphaproofformal-verification-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: sequences, verdicts). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c02-alphaproofformal-verification-end" data-end></span>
 <hr />
 <h2 id="c03-alphageometry">C03 AlphaGeometry</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c03-alphageometry-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 16, guest: Thang Luong, AlphaGeometry. Schedule line
 only. Mechanism taught from the requested inventory with SOURCE
 ATTRIBUTION PENDING. Scope: the neuro-symbolic geometry loop.
 Objective: trace the propose-and-close loop on a toy.
 Dependencies: C02.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c03-alphageometry-p02" data-kind="example" data-term="auxiliary constructions"><strong>2. Motivating question and tiny toy.</strong>
 Question: a geometry proof needs a clever extra line drawn in
 the diagram. Where does the cleverness come from? Toy: the
 neural net proposes 5 auxiliary constructions. The symbolic
 engine tries each: 2 close the proof, 3 are dead ends.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c03-alphageometry-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Split the job by talent. The neural net is the idea generator:
 it looks at the diagram and suggests constructions (&ldquo;draw the
 midpoint&rdquo;, &ldquo;drop a perpendicular&rdquo;). The symbolic engine is the
@@ -258,12 +258,12 @@ finisher: it runs deductive rules to saturation and checks
 whether the goal follows. Ideas are cheap and often wrong,
 deduction is certain. The loop tries ideas until deduction
 closes the proof.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c03-alphageometry-p04" data-kind="definition" data-term="deduction closure"><strong>4. Variables, units, shapes, assumptions.</strong>
 Construction: an added geometric object. Deduction closure:
 all facts derivable by the rule set. Proof: closure containing
 the goal. Assumptions: the rule set is complete enough, the
 proposer covers useful constructions, the engine is sound.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c03-alphageometry-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is guess-and-verify factored by strength. Search
 over constructions is the hard part (infinite space of things
 to draw). Deduction given a construction is mechanical. The
@@ -271,79 +271,79 @@ neural net amortizes the search: it learned which constructions
 tend to help from solved problems. The engine keeps it honest:
 a bad construction simply fails to close, costing only engine
 time.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c03-alphageometry-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 5 constructions proposed. Engine results: c1 closes in 12
 deduction steps, c2 closes in 20 steps, c3/c4/c5 fail. Close
 rate: 2/5 = 0.40. Engine cost: 5 closures attempted. The proof
 is (c1, 12 steps). The proposer&rsquo;s hit rate is 0.40.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def alphageometry_loop(problem, proposer, engine):
+<p id="c03-alphageometry-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c03-alphageometry-code01" data-kind="prose"><code class="language-python">def alphageometry_loop(problem, proposer, engine):
     for c in proposer.suggest(problem, k=5):
         closure = engine.close(problem + c)
         if problem.goal in closure:
             return c, closure   # proof found
     return None
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c03-alphageometry-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: only engine-closed constructions return. Check: the toy
 close rate is 0.40. Check: failed constructions cost engine
 time only.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c03-alphageometry-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: k engine closures per problem. The proposer training
 needs solved problems. Stability: the engine is deterministic.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c03-alphageometry-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Pure symbolic search: pick when the construction space is
 small. Pure neural proof: pick never for certification, the
 steps are uncheckable. Neuro-symbolic loop: pick when ideas
 are the bottleneck and checking is cheap.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c03-alphageometry-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the rule set: the needed deduction rule is absent. No
 construction closes the proof, and the proposer is blamed for
 an engine gap. Counterexample: a problem solvable with no
 construction: the proposer is pure overhead.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c03-alphageometry-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: AlphaGeometry (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: proposer hit rate predicts solve rate
 across problem difficulties. Falsification: no correlation.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c03-alphageometry-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define construction and closure. Ladder: define the
 split, run the toy, justify the factorization, code the loop,
 state the closure cost, compare with pure search, debug the
 missing-rule failure, critique the proposer, design the
 hit-rate experiment. Transfer: the same loop synthesizes
 programs (guess code, verify with tests).</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c03-alphageometry-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E3.1: compute the toy close rate. E3.2: explain the talent
 split in two sentences. E3.3: name the missing-rule failure.
 Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c03-alphageometry-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 PNG <code>../visuals/u07_fig01.png</code>: 5 construction chips into the
 engine, 2 close, 3 dead-end, one rule: the engine is the
 verifier. Source: original. Alt text: five chips left, engine
 box center, two green proofs and three gray dead ends right.
 Logged in <code>../visual_audit.md</code>.</p>
-<figure><img alt="5 construction chips into the engine, 2 close, 3 dead-end, one rule: the engine is the verifier. Source: original. Alt text: five chips left, engine box center, two green proofs and three gray dead ends right. Logged in ../visual_audit.md" src="../assets/u07_fig01.png"><figcaption>5 construction chips into the engine, 2 close, 3 dead-end, one rule: the engine is the verifier. Source: original. Alt text: five chips left, engine box center, two green proofs and three gray dead ends right. Logged in ../visual_audit.md</figcaption></figure>
+<figure id="c03-alphageometry-fig01" data-kind="figure" data-reveal="fade"><img alt="5 construction chips into the engine, 2 close, 3 dead-end, one rule: the engine is the verifier. Source: original. Alt text: five chips left, engine box center, two green proofs and three gray dead ends right. Logged in ../visual_audit.md" src="../assets/u07_fig01.png"><figcaption>5 construction chips into the engine, 2 close, 3 dead-end, one rule: the engine is the verifier. Source: original. Alt text: five chips left, engine box center, two green proofs and three gray dead ends right. Logged in ../visual_audit.md</figcaption></figure><span id="c03-alphageometry-end" data-end></span>
 <hr />
 <h2 id="c04-conjecturesearchproof-distinctions">C04 conjecture/search/proof distinctions</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 16. Scope: the three objects, kept separate. Objective:
 classify each piece of a toy run. Dependencies: C02, C03.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p02" data-kind="example" data-term="proof"><strong>2. Motivating question and tiny toy.</strong>
 Question: the system explored 13 nodes and output a proof. What
 was the proof? Toy: the 4-node winning path. The other 9 nodes
 were search, not proof.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p03" data-kind="keyIdea" data-reveal="rise" data-term="conjecture"><strong>3. Plain-language mental model.</strong>
 A conjecture is a guess: &ldquo;this tactic might work&rdquo;, &ldquo;this
 construction might help&rdquo;. Search is the process of trying
 guesses. A proof is the artifact that remains: the sequence
 the verifier accepted. Confusing search with proof is the
 cardinal sin: the 9 dead ends are not part of the proof, they
 are the cost of finding it.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Conjecture: a proposed step. Search tree: all tried steps.
 Proof: the accepted path. Proof size &lt;&lt; search size, usually.
 Assumptions: the verifier is sound, the path is replayable.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is the distinction itself. It matters for three
 reasons. One: only the proof needs to be stored and checked.
 Two: search cost is the efficiency metric, proof size is the
@@ -351,95 +351,95 @@ elegance metric, and they are different numbers. Three: a
 system that reports search as proof misreports what it
 knows. The derivation is definitional, and definitions are
 load-bearing here.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 13 nodes explored, proof path 4 nodes, dead ends 9.
 Search cost: 13 kernel checks. Proof size: 4 steps. Ratio:
 13/4 = 3.25 checks per proof step. The report says &ldquo;proof of
 4 steps found after 13 checks&rdquo;, not &ldquo;13-step proof&rdquo;.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def classify(run):
+<p id="c04-conjecturesearchproof-distinctions-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c04-conjecturesearchproof-distinctions-code01" data-kind="prose"><code class="language-python">def classify(run):
     proof = run.accepted_path
     search = run.tried_nodes
     return {&quot;proof&quot;: proof, &quot;search_cost&quot;: len(search),
             &quot;dead_ends&quot;: len(search) - len(proof)}
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: proof is a subset of tried nodes. Check: the toy gives
 4 proof steps, 9 dead ends. Check: the report names both
 numbers.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Storing the proof is cheap. Storing the search is optional and
 useful for training the proposer. Cost: the distinction itself
 is free.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Report search as proof: pick never. Report proof only: pick
 for certification. Report both: pick for research.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break replayability: the proof path depends on randomness and
 does not replay. A lucky trace is not a proof.
 Counterexample: a proof found with zero search (first try):
 search cost 1, proof size 4, the distinction still holds.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: proof search literature (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: dead-end patterns train better
 proposers than successes alone. Falsification: no gain.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the three objects. Ladder: define each, run the
 toy, justify the separation, code the classifier, state the
 storage cost, compare reporting styles, debug the lucky-trace
 failure, critique the ratio, design the dead-end experiment.
 Transfer: the same split covers scientific discovery (hypothesis,
 experiment, result).</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E4.1: compute the toy ratio. E4.2: explain the cardinal sin in
 two sentences. E4.3: name the lucky-trace failure. Answers:
 <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c04-conjecturesearchproof-distinctions-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 PNG <code>../visuals/u07_fig02.png</code>: the 13-node tree with the
 4-node proof path highlighted and 9 dead ends hatched, one
 rule: search is the process, proof is the artifact. Source:
 original. Alt text: tree with a highlighted path of 4 nodes,
 9 hatched dead ends. Logged in <code>../visual_audit.md</code>.</p>
-<figure><img alt="the 13-node tree with the 4-node proof path highlighted and 9 dead ends hatched, one rule: search is the process, proof is the artifact. Source: original. Alt text: tree with a highlighted path of 4 nodes, 9 hatched dead ends. Logged in ../visual_audit.md" src="../assets/u07_fig02.png"><figcaption>the 13-node tree with the 4-node proof path highlighted and 9 dead ends hatched, one rule: search is the process, proof is the artifact. Source: original. Alt text: tree with a highlighted path of 4 nodes, 9 hatched dead ends. Logged in ../visual_audit.md</figcaption></figure>
+<figure id="c04-conjecturesearchproof-distinctions-fig01" data-kind="figure" data-reveal="fade"><img alt="the 13-node tree with the 4-node proof path highlighted and 9 dead ends hatched, one rule: search is the process, proof is the artifact. Source: original. Alt text: tree with a highlighted path of 4 nodes, 9 hatched dead ends. Logged in ../visual_audit.md" src="../assets/u07_fig02.png"><figcaption>the 13-node tree with the 4-node proof path highlighted and 9 dead ends hatched, one rule: search is the process, proof is the artifact. Source: original. Alt text: tree with a highlighted path of 4 nodes, 9 hatched dead ends. Logged in ../visual_audit.md</figcaption></figure><span id="c04-conjecturesearchproof-distinctions-end" data-end></span>
 <hr />
 <h2 id="c05-symbolic-environment">C05 symbolic environment</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c05-symbolic-environment-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 16. Scope: the proof assistant as the agent&rsquo;s world.
 Objective: write the environment interface for a toy prover.
 Dependencies: C02. Local remediation: the tactic as an action
 is defined in item 4.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c05-symbolic-environment-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: what does the agent actually see and do inside Lean?
 Toy: state = the open goals. Actions = 12 tactics. Reward = 1
 when the kernel accepts the full proof, 0 otherwise. The
 environment is discrete, deterministic, and fully observed.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c05-symbolic-environment-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 The symbolic environment is a board game with perfect rules.
 The board shows the goals. A move is a tactic. The referee
 (the kernel) never makes a mistake and never gets tired. The
 agent learns the game by playing it: propose tactics, watch
 the board change, get paid only for checkmate.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c05-symbolic-environment-p04" data-kind="definition" data-term="goal stack"><strong>4. Variables, units, shapes, assumptions.</strong>
 State s: goal stack (list of propositions). Action a: tactic
 from a fixed set. Transition: deterministic, given by the
 tactic semantics. Reward: sparse, 1 at proof close.
 Assumptions: the tactic set is fixed, the kernel is sound,
 the goal stack fits in the state encoding.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c05-symbolic-environment-p05" data-kind="prose" data-term="simulator"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is RL in a perfect simulator. The sparse reward
 is survivable here because the verifier labels every step:
 a tactic that closes a subgoal is progress even before the
 full proof. Credit assignment uses the goal stack: each
 tactic&rsquo;s effect is visible in the next state. This is why
 formal domains train well: the environment is the teacher.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c05-symbolic-environment-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 12 tactics, goal needs 4 specific ones in order.
 Random play: success probability (1/12)^4 = 1/20736, about
 0.00005. Guided play (policy picks among 3 plausible per
 state): (1/3)^4 = 1/81, about 0.012. The policy buys a 250x
 improvement before search even starts.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">ENV = {&quot;state&quot;: &quot;goal_stack&quot;, &quot;actions&quot;: 12,
+<p id="c05-symbolic-environment-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c05-symbolic-environment-code01" data-kind="prose"><code class="language-python">ENV = {&quot;state&quot;: &quot;goal_stack&quot;, &quot;actions&quot;: 12,
        &quot;reward&quot;: &quot;1 if kernel accepts else 0&quot;}
 
 def step(state, tactic, kernel):
@@ -447,66 +447,66 @@ def step(state, tactic, kernel):
     done = kernel.closed(new_state)
     return new_state, (1 if done else 0), done
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c05-symbolic-environment-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: illegal tactics are rejected by the kernel. Check: the
 toy random-play rate is about 0.00005. Check: reward is 0
 until the proof closes.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c05-symbolic-environment-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Step cost: one kernel application, cheap. The expensive part
 trains the policy. Stability: deterministic transitions,
 no noise.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c05-symbolic-environment-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Learned reward model: pick when no kernel exists. Human
 judgment: pick for informal math. Symbolic environment: pick
 when the domain has a sound checker.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c05-symbolic-environment-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the tactic set: the needed tactic is absent. The agent
 plays perfectly and never wins. Counterexample: a domain with
 no verifier (essay writing): the environment cannot score,
 and the loop has no teacher.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c05-symbolic-environment-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: RL in formal domains (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: dense subgoal rewards beat sparse
 proof rewards at fixed budget. Falsification: equal proof
 rates.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c05-symbolic-environment-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define state, action, reward. Ladder: define the
 game, run the toy, justify the teacher claim, code the step,
 state the step cost, compare with learned rewards, debug the
 missing-tactic failure, critique sparsity, design the reward
 experiment. Transfer: the same setup trains game agents.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c05-symbolic-environment-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E5.1: compute the random-play and guided-play rates. E5.2:
 explain the teacher claim in two sentences. E5.3: name the
 missing-tactic failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c05-symbolic-environment-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 7: the ENV spec). No separate
-PNG. Logged in <code>../visual_audit.md</code>.</p>
+PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c05-symbolic-environment-end" data-end></span>
 <hr />
 <h2 id="c06-autonomy-limits">C06 autonomy limits</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c06-autonomy-limits-p01" data-kind="prose" data-term="capability"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 18 (Nov 21), guest: Misha Laskin (Reflection AI),
 Building Agentic Systems for Autonomy. Schedule line only.
 Scope: the envelope that bounds what an agent may do alone.
 Objective: draw the capability-authority matrix on a toy.
 Dependencies: P20.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c06-autonomy-limits-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the agent can do many things. Which may it do
 without asking? Toy matrix: capability low/high crossed with
 authority low/high. The dangerous cell: low capability, high
 authority. The wasted cell: high capability, low authority.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c06-autonomy-limits-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Autonomy is two dials, not one. Capability is what the agent
 can do well. Authority is what it is allowed to do alone. The
 rule: authority must not exceed verified capability. The
 diagonal is the safe zone. The off-diagonal cells are the two
 failure modes (danger, waste).</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c06-autonomy-limits-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Capability c: measured task success. Authority a: the action
 set without human approval. Envelope: a &lt;= c, with margin.
 Assumptions: capability is measured on representative tasks,
 authority is enforced (C10 of U05), the margin covers drift.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c06-autonomy-limits-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is the envelope check. Every new authority
 (a new tool, a bigger budget, no-approval merges) needs a
 capability measurement first. The derivation is risk math:
@@ -514,94 +514,94 @@ expected harm = P(failure) times harm per failure, and
 P(failure) = 1 - c. Raising authority without raising c
 raises expected harm linearly. The margin handles the fact
 that c is measured on the past and the future differs.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c06-autonomy-limits-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 4 agent configs. (c=0.95, a=low): safe, wasted. (c=0.95,
 a=high): safe, useful. (c=0.60, a=high): dangerous, expected
 failure 0.40 per unsupervised action. (c=0.60, a=low): safe,
 limited. The envelope admits 3 of 4. The dangerous cell is
 rejected until c rises or a falls.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def envelope_ok(capability, authority, margin=0.05):
+<p id="c06-autonomy-limits-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c06-autonomy-limits-code01" data-kind="prose"><code class="language-python">def envelope_ok(capability, authority, margin=0.05):
     allowed = {&quot;low&quot;: 0.70, &quot;high&quot;: 0.95}
     return capability &gt;= allowed[authority] + margin
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c06-autonomy-limits-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: (0.60, high) fails. Check: (0.95, high) passes with
 margin. Check: the toy admits 3 of 4.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c06-autonomy-limits-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 The check is O(1). The cost is honest measurement of c. Stability:
 c drifts, re-measure on a schedule.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c06-autonomy-limits-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Full autonomy: pick never without measured c. Human-in-loop
 everything: pick when c is unknown. Envelope: pick whenever
 authority grows.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c06-autonomy-limits-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break measurement: c was measured on easy tasks. The agent
 gets high authority and meets hard tasks. Counterexample: an
 agent with c = 0.99 on a task where failure costs nothing:
 the envelope is overkill, and the margin can shrink.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c06-autonomy-limits-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: autonomy engineering (schedule line only, SOURCE
 ATTRIBUTION PENDING). Extension: hypothesis: envelope-gated
 rollouts have fewer incidents than ungated ones.
 Falsification: equal incident rates.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c06-autonomy-limits-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define capability and authority. Ladder: define the
 dials, run the toy, justify the envelope, code the check,
 state the measurement cost, compare with full autonomy,
 debug the easy-task failure, critique the margin, design the
 rollout experiment. Transfer: the same envelope gates a
 junior employee&rsquo;s sign-off rights.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c06-autonomy-limits-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E6.1: evaluate the 4 toy configs. E6.2: explain the two dials
 in two sentences. E6.3: name the easy-task failure. Answers:
 <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c06-autonomy-limits-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 PNG <code>../visuals/u07_fig03.png</code>: the 2x2 matrix with the
 dangerous cell marked, one rule: authority must not exceed
 verified capability. Source: original. Alt text: four cells,
 low/high capability by low/high authority, one cell marked
 danger. Logged in <code>../visual_audit.md</code>.</p>
-<figure><img alt="the 2x2 matrix with the dangerous cell marked, one rule: authority must not exceed verified capability. Source: original. Alt text: four cells, low/high capability by low/high authority, one cell marked danger. Logged in ../visual_audit.md" src="../assets/u07_fig03.png"><figcaption>the 2x2 matrix with the dangerous cell marked, one rule: authority must not exceed verified capability. Source: original. Alt text: four cells, low/high capability by low/high authority, one cell marked danger. Logged in ../visual_audit.md</figcaption></figure>
+<figure id="c06-autonomy-limits-fig01" data-kind="figure" data-reveal="fade"><img alt="the 2x2 matrix with the dangerous cell marked, one rule: authority must not exceed verified capability. Source: original. Alt text: four cells, low/high capability by low/high authority, one cell marked danger. Logged in ../visual_audit.md" src="../assets/u07_fig03.png"><figcaption>the 2x2 matrix with the dangerous cell marked, one rule: authority must not exceed verified capability. Source: original. Alt text: four cells, low/high capability by low/high authority, one cell marked danger. Logged in ../visual_audit.md</figcaption></figure><span id="c06-autonomy-limits-end" data-end></span>
 <hr />
 <h2 id="c07-robot-perceptionaction">C07 robot perception/action</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c07-robot-perceptionaction-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 19 (Dec 1), guest: Danny Driess (Physical Intelligence),
 Multimodal AI Agents in Robotics. Schedule line only. Scope: the
 perception-action loop for embodied agents. Objective: trace one
 grasp loop on a toy. Dependencies: P20.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c07-robot-perceptionaction-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the robot must pick up a cup. What does one attempt
 look like? Toy: observe (camera: cup at x=3), plan (grasp at
 x=3), act (close gripper), observe (cup slipped). Three
 attempts, success on the third.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c07-robot-perceptionaction-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 The robot lives in the same loop as the code agent, but the
 tools are a camera and a gripper, and the &ldquo;tests&rdquo; are physics.
 Perception turns the world into state. Action changes the
 world. The loop repeats until the state matches the goal or
 the budget runs out. The world is the verifier, and it does
 not negotiate.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c07-robot-perceptionaction-p04" data-kind="definition" data-term="calibrated"><strong>4. Variables, units, shapes, assumptions.</strong>
 State: pose estimates from sensors. Action: motor commands.
 Goal: a predicate on state (cup in gripper). Attempts capped
 at n. Assumptions: sensors are calibrated, actions are
 reversible enough to retry, the goal is checkable.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c07-robot-perceptionaction-p05" data-kind="prose" data-term="closed-loop"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is closed-loop control with learned perception.
 Open-loop (plan once, execute blind) fails because the world
 model is wrong in detail: the cup is 2 cm left of the plan.
 Each observation corrects the state, each action is re-planned
 from the corrected state. The loop converges when perception
 error is smaller than the action tolerance.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c07-robot-perceptionaction-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 3 grasp attempts. Attempt 1: perceived x=3, true x=5,
 miss. Attempt 2: perceived x=5, true x=5, slip at lift.
 Attempt 3: slower lift, success. Success rate: 1/3 attempts,
 1/1 tasks (the task allows 3 tries). Perception error fell
 from 2 to 0 across attempts as the camera got closer.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def grasp_loop(robot, goal, max_tries=3):
+<p id="c07-robot-perceptionaction-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c07-robot-perceptionaction-code01" data-kind="prose"><code class="language-python">def grasp_loop(robot, goal, max_tries=3):
     for t in range(max_tries):
         state = robot.perceive()
         action = robot.plan(state, goal)
@@ -610,158 +610,158 @@ from 2 to 0 across attempts as the camera got closer.</p>
             return True, t + 1
     return False, max_tries
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c07-robot-perceptionaction-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: the loop stops at success. Check: the toy returns
 (True, 3). Check: perception runs before every plan.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c07-robot-perceptionaction-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost per attempt: one perceive-plan-act cycle. The camera and
 compute dominate. Stability: sensor noise needs filtering, or
 the plan chases noise.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c07-robot-perceptionaction-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Open-loop execution: pick never for contact tasks. Scripted
 policy: pick when the world is fixed. Closed loop: pick when
 the world varies.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c07-robot-perceptionaction-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break calibration: the camera is 5 cm off and nobody
 recalibrated. Every plan is 5 cm wrong, and retries never
 converge. Counterexample: a task with no sensing (timed
 pour): the loop has no observation, it is open-loop by
 necessity.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c07-robot-perceptionaction-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: multimodal robotics (schedule line only, SOURCE
 ATTRIBUTION PENDING). Extension: hypothesis: closed-loop
 beats open-loop on varied objects at fixed tries.
 Falsification: equal success.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c07-robot-perceptionaction-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the loop&rsquo;s four steps. Ladder: define the
 loop, run the toy, justify re-perception, code the loop,
 state the cycle cost, compare with open-loop, debug the
 calibration failure, critique the goal predicate, design the
 loop experiment. Transfer: the same loop drives a drone
 landing.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c07-robot-perceptionaction-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E7.1: compute the toy attempt success rate. E7.2: explain why
 the world is the verifier in two sentences. E7.3: name the
 calibration failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c07-robot-perceptionaction-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: attempt, perception,
-result). No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+result). No separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c07-robot-perceptionaction-end" data-end></span>
 <hr />
 <h2 id="c08-multimodal-feedback">C08 multimodal feedback</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c08-multimodal-feedback-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 19. Scope: fusing several sensor channels as feedback.
 Objective: show one catch that vision missed on a toy.
 Dependencies: C07.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c08-multimodal-feedback-p02" data-kind="example" data-term="proprioception"><strong>2. Motivating question and tiny toy.</strong>
 Question: the camera says the grasp is good. Is it? Toy: three
 channels. Vision: cup in gripper, looks fine. Force: slip
 detected, grip too loose. Proprioception: wrist at its limit.
 The force channel catches what vision misses. The agent
 tightens and retries.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c08-multimodal-feedback-p03" data-kind="keyIdea" data-reveal="rise" data-term="fusion"><strong>3. Plain-language mental model.</strong>
 One sensor lies by omission. Vision sees shape but not force,
 force feels slip but not position, proprioception knows the
 joints but not the world. Fusion is a vote among experts: each
 channel reports what it knows, and the agent acts on the union.
 The channels must be independent enough that their failures
 do not coincide.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c08-multimodal-feedback-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Channels: vision v, force f, proprioception p. Each gives a
 verdict (ok/fail) plus confidence. Fusion rule: fail if any
 high-confidence channel says fail. Assumptions: channels are
 calibrated, failures are not perfectly correlated.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c08-multimodal-feedback-p05" data-kind="prose" data-term="miss rate"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is independent-error fusion. If each channel
 misses a fault with probability e_i independently, the fused
 miss rate is the product e_1 * e_2 * e_3, much smaller than
 any one. The independence is the load-bearing assumption:
 two cameras with the same blind spot do not fuse, they echo.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c08-multimodal-feedback-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: miss rates: vision 0.20, force 0.10, proprioception 0.30.
 Independent fused miss: 0.20 * 0.10 * 0.30 = 0.006. The toy
 grasp: vision misses the slip (its 0.20 event), force catches
 it. One catch in 3 channels is enough under the any-fail
 rule.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def fused_verdict(channels):
+<p id="c08-multimodal-feedback-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c08-multimodal-feedback-code01" data-kind="prose"><code class="language-python">def fused_verdict(channels):
     for name, verdict, conf in channels:
         if verdict == &quot;fail&quot; and conf &gt; 0.7:
             return &quot;fail&quot;, name
     return &quot;ok&quot;, None
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c08-multimodal-feedback-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: one high-confidence fail vetoes. Check: the toy fused
 miss is 0.006. Check: the slip is caught by force.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c08-multimodal-feedback-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: running all sensors plus fusion. Calibration drift in
 one channel poisons the vote. Stability: re-calibrate on a
 schedule.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c08-multimodal-feedback-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Vision only: pick when force sensing is unavailable and the
 task is gentle. Single best channel: pick when channels are
 correlated. Fusion: pick when failures are independent and
 the cost of a miss is high.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c08-multimodal-feedback-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break independence: vision and the depth camera share one
 lens. Both miss the transparent cup together, and fusion
 adds nothing. Counterexample: a task where force is the only
 signal that matters (weighing): vision is pure noise, drop
 it.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c08-multimodal-feedback-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: sensor fusion (schedule line only, SOURCE ATTRIBUTION
 PENDING). Extension: hypothesis: fused verdicts cut grasp
 failures versus vision-only. Falsification: equal failures.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c08-multimodal-feedback-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: name the three channels and the fusion rule. Ladder:
 define the vote, run the toy, justify the product, code the
 fusion, state the sensor cost, compare with vision-only,
 debug the shared-lens failure, critique independence, design
 the fusion experiment. Transfer: the same vote fuses fraud
 signals.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c08-multimodal-feedback-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E8.1: compute the fused miss rate for the toy. E8.2: explain
 the independence assumption in two sentences. E8.3: name the
 shared-lens failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c08-multimodal-feedback-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: channel, verdict). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c08-multimodal-feedback-end" data-end></span>
 <hr />
 <h2 id="c09-sim-to-real-scope">C09 sim-to-real scope</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c09-sim-to-real-scope-p01" data-kind="prose" data-term="gap"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 19. Scope: what transfers from simulator to reality.
 Objective: compute the reality gap on a toy. Dependencies: C07.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c09-sim-to-real-scope-p02" data-kind="example" data-term="domain randomization"><strong>2. Motivating question and tiny toy.</strong>
 Question: the policy grasps 95 percent in simulation. What
 happens on the real robot? Toy: real success 0.70. Gap: 0.25.
 With domain randomization the real success rises to 0.76 and
 the gap narrows to 0.12.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c09-sim-to-real-scope-p03" data-kind="keyIdea" data-reveal="rise" data-term="dream"><strong>3. Plain-language mental model.</strong>
 The simulator is a dream of the world: same shapes, wrong
 details. Friction, lighting, wear, and sensor noise differ.
 The policy learns the dream&rsquo;s habits, then meets reality. The
 gap is the difference in success. Randomizing the dream
 (friction, mass, lighting) teaches habits that survive the
 details.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c09-sim-to-real-scope-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Sim success s_sim, real success s_real. Gap g = s_sim -
 s_real. Randomization set R: the parameters varied in
 training. Assumptions: the real world lies inside the
 randomized range, the task is the same.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c09-sim-to-real-scope-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is distribution matching. The policy is trained
 on the simulator&rsquo;s distribution. It is tested on reality&rsquo;s.
 The gap is the generalization error across that shift.
 Domain randomization widens the training distribution to
 cover reality, trading sim performance for real performance.
 The scope rule: claim only what the randomized range covers.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c09-sim-to-real-scope-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: s_sim = 0.95, s_real = 0.70, gap 0.25. After
 randomization: s_sim = 0.88 (the dream got harder),
 s_real = 0.76, gap 0.12. The sim number fell and the real
 number rose: that is the trade working. The remaining 0.12
 is the unmodeled part.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def reality_gap(s_sim, s_real):
+<p id="c09-sim-to-real-scope-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c09-sim-to-real-scope-code01" data-kind="prose"><code class="language-python">def reality_gap(s_sim, s_real):
     return s_sim - s_real
 
 def randomize(env):
@@ -769,79 +769,79 @@ def randomize(env):
     env.lighting = uniform(0.7, 1.3)
     return env
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c09-sim-to-real-scope-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: the toy gaps are 0.25 and 0.12. Check: randomization
 lowers sim success. Check: the gap never goes negative in a
 sane setup.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c09-sim-to-real-scope-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Randomization multiplies training cost (more sim worlds).
 Real evaluation is the expensive truth. Stability: measure
 the gap on the real robot, not on a second simulator.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c09-sim-to-real-scope-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Sim only: pick never for deployment claims. Real only: pick
 when sim is unavailable and robots are cheap. Randomized sim
 plus real eval: pick for deployment.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c09-sim-to-real-scope-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the range: reality&rsquo;s friction is outside the
 randomized interval. The policy meets a world it never
 dreamed, and the gap stays wide. Counterexample: a task
 where sim matches reality well (kinematic reaching): the
 gap is near zero, randomization is pure cost.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c09-sim-to-real-scope-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: sim-to-real transfer (schedule line only, SOURCE
 ATTRIBUTION PENDING). Extension: hypothesis: wider
 randomization monotonically narrows the gap to a floor.
 Falsification: the gap stops narrowing.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c09-sim-to-real-scope-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the gap. Ladder: define the shift, run the
 toy, justify randomization, code the gap, state the real-eval
 cost, compare with sim-only, debug the out-of-range failure,
 critique the range, design the width experiment. Transfer:
 the same gap logic covers train-to-deploy in ML.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c09-sim-to-real-scope-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E9.1: compute both toy gaps. E9.2: explain the trade in two
 sentences. E9.3: name the out-of-range failure. Answers:
 <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c09-sim-to-real-scope-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: sim, real, gap). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c09-sim-to-real-scope-end" data-end></span>
 <hr />
 <h2 id="c10-safety">C10 safety</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c10-safety-p01" data-kind="prose" data-term="safety layer"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 18. Scope: the safety layer for autonomous agents.
 Objective: write a safety rule set and compute its block rate
 on a toy. Dependencies: C06.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c10-safety-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the agent plans 10 actions. One would drive the arm
 through a person. Toy rules: no motion above 0.5 m/s near
 humans, no grasp over 50 N on unknown objects, stop on any
 sensor fault, human approval for new tools. The dangerous
 action trips rule 1 and is blocked. Block rate: 1/10.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c10-safety-p03" data-kind="keyIdea" data-reveal="rise" data-term="conservative"><strong>3. Plain-language mental model.</strong>
 Safety is a separate circuit from intelligence. The planner
 proposes, the safety layer disposes: it checks each action
 against hard rules before anything moves. The rules are
 simple, conservative, and dumb on purpose. Cleverness belongs
 in the planner. The safety layer&rsquo;s job is to say no.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c10-safety-p04" data-kind="definition" data-term="veto"><strong>4. Variables, units, shapes, assumptions.</strong>
 Rule set R: predicates on (state, action). Veto: any rule
 firing blocks the action. Block rate: blocked over proposed.
 Assumptions: the rules cover the known hazards, the layer
 cannot be bypassed, sensors feed it truthfully.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c10-safety-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is the independent veto. It works because it is
 independent: the safety layer does not share the planner&rsquo;s
 model, so a planner bug does not become a safety bug. The
 rules are conservative by design: false blocks cost time,
 missed blocks cost harm, and the asymmetry sets the
 threshold.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c10-safety-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 10 proposed actions. Rule checks: 9 pass, 1 blocked
 (speed near human). Block rate 0.10. Cost: the blocked action
 is re-planned slower, adding 30 seconds. The 9 good actions
 are unaffected. Safety tax: 30 seconds on the task.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">SAFETY = [
+<p id="c10-safety-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c10-safety-code01" data-kind="prose"><code class="language-python">SAFETY = [
     lambda s, a: a.speed &lt; 0.5 or not s.human_near,
     lambda s, a: a.force &lt; 50 or s.object_known,
     lambda s, a: not s.sensor_fault,
@@ -852,153 +852,153 @@ def safe_act(state, action):
         return execute(action)
     return &quot;blocked&quot;, replan(state)
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c10-safety-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: the dangerous action is blocked. Check: the toy block
 rate is 0.10. Check: blocked actions re-plan, not execute.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c10-safety-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Rule checks are O(|R|) per action, trivial. The cost is false
 blocks and the conservatism they force. Stability: rules need
 review when the task changes.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c10-safety-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 No safety layer: pick never for embodied agents. Planner-only
 caution: pick never, it shares the planner&rsquo;s bugs. Independent
 veto: pick whenever actions touch the world.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c10-safety-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break independence: the safety layer reads the planner&rsquo;s own
 state estimate. A perception bug blinds both, and the veto is
 theater. Counterexample: a purely digital agent with no
 physical actions: the layer&rsquo;s rules are vacuous, keep the
 software sandbox instead (U05 C10).</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c10-safety-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: agent safety (schedule line only, SOURCE ATTRIBUTION
 PENDING). Extension: hypothesis: independent vetoes cut
 incident rates versus planner-only caution. Falsification:
 equal rates.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c10-safety-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: list the four toy rules. Ladder: define the veto,
 run the toy, justify independence, code the layer, state the
 check cost, compare with planner caution, debug the shared-
 state failure, critique conservatism, design the incident
 experiment. Transfer: the same veto pattern guards trading
 bots.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c10-safety-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E10.1: compute the toy block rate and safety tax. E10.2:
 explain the independent veto in two sentences. E10.3: name
 the shared-state failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c10-safety-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Shares <code>../visuals/u07_fig03.png</code> with C06 (the dangerous
 cell is what the veto guards). Table plate in item 6 (rule,
-verdict). Logged in <code>../visual_audit.md</code>.</p>
+verdict). Logged in <code>../visual_audit.md</code>.</p><span id="c10-safety-end" data-end></span>
 <hr />
 <h2 id="c11-trace-validity">C11 trace validity</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c11-trace-validity-p01" data-kind="prose" data-term="intervention"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 15 and 18. Scope: whether the agent&rsquo;s stated reasons
 match its actual reasons. Objective: run the intervention test
 on a toy trace set. Dependencies: P22.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c11-trace-validity-p02" data-kind="example" data-term="faithful"><strong>2. Motivating question and tiny toy.</strong>
 Question: the trace says &ldquo;I grasped left because the cup was
 left&rdquo;. Was that the real reason? Toy: intervene, move the cup
 right, keep everything else. The agent still grasps left. The
 trace was a story, not a cause. Faithful traces change with
 the intervention.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c11-trace-validity-p03" data-kind="keyIdea" data-reveal="rise" data-term="autobiography"><strong>3. Plain-language mental model.</strong>
 A trace is the agent&rsquo;s autobiography, and autobiographies can
 be fiction. The validity test is intervention: change the fact
 the trace cites, and see if the behavior changes. If yes, the
 trace named a real cause. If no, the trace is post-hoc
 rationalization. Validity is a property of the trace, tested
 one claim at a time.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c11-trace-validity-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Trace claim: &ldquo;did A because of X&rdquo;. Intervention: change X,
 hold the rest. Faithful: behavior changes with X. Test over
 n traces, faithfulness rate = faithful / n. Assumptions: the
 intervention is clean, the behavior is observable.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c11-trace-validity-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is the causal test. Correlation between the
 trace and the behavior proves nothing: the model may always
 say &ldquo;because of X&rdquo; regardless of X. Intervention breaks the
 correlation: only a real cause moves the behavior. This is
 the same logic as ablations (U08 C09), applied to words
 instead of components.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c11-trace-validity-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 10 traces tested. 7 change behavior under intervention
 (faithful), 3 do not (stories). Faithfulness rate: 0.70. The
 3 stories cluster on the hardest decisions, where the model
 is least sure: uncertainty breeds fiction.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def trace_valid(trace, env):
+<p id="c11-trace-validity-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c11-trace-validity-code01" data-kind="prose"><code class="language-python">def trace_valid(trace, env):
     x = trace.cited_fact
     b0 = env.run(trace.context)
     b1 = env.run(trace.context.with_fact(x, flipped(x)))
     return b0 != b1   # faithful iff behavior moves
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c11-trace-validity-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: the toy rate is 0.70. Check: clean interventions only.
 Check: stories are labeled, not trusted.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c11-trace-validity-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: 2 runs per trace tested. Testing every trace is
 expensive. Sample. Stability: the flipped fact must be
 realistic, or the test is unfair.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c11-trace-validity-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Trust all traces: pick never for audits. No traces: pick when
 only outcomes matter. Intervention-tested traces: pick when
 reasons matter (safety, debugging, science).</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c11-trace-validity-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break cleanliness: the intervention changes X and
 accidentally changes Y too. The behavior moves, and a story
 passes as faithful. Counterexample: a trace that says &ldquo;I
 do not know why&rdquo;: honest, untestable, and better than fiction.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c11-trace-validity-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: faithful reasoning (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: faithfulness falls as task difficulty
 rises. Falsification: flat rate.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c11-trace-validity-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the intervention test. Ladder: define the
 claim, run the toy, justify causation, code the test, state
 the 2-run cost, compare with trust, debug the dirty-
 intervention failure, critique sampling, design the
 difficulty experiment. Transfer: the same test audits human
 explanations.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c11-trace-validity-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E11.1: compute the toy faithfulness rate. E11.2: explain the
 intervention test in two sentences. E11.3: name the dirty-
 intervention failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c11-trace-validity-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: traces, verdicts). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c11-trace-validity-end" data-end></span>
 <hr />
 <h2 id="c12-guest-gaps">C12 guest gaps</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c12-guest-gaps-p01" data-kind="prose" data-term="gap"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Sessions 15, 16, 18, 19. Scope: the honest inventory of what
 the guests did not cover in this build. Objective: write the
 gap table. Dependencies: C01.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c12-guest-gaps-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: after four guest sessions, what do we actually know?
 Toy: 4 schedule lines known, 0 talk contents known. The gap
 table lists each session, its line, and the open questions it
 leaves.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c12-guest-gaps-p03" data-kind="keyIdea" data-reveal="rise" data-term="pointer"><strong>3. Plain-language mental model.</strong>
 A gap inventory is the opposite of a summary. It lists what
 was not learned, so nobody mistakes the schedule for the
 substance. Each guest row gets: the line, the questions the
 line raises, and where to read the answers. The inventory is
 complete when every raised question has a pointer.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c12-guest-gaps-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Gap: a question the schedule line raises but does not answer.
 Pointer: where the learner can read the answer (paper, docs,
 code). Assumptions: the pointers exist, the learner will
 follow them.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c12-guest-gaps-p05" data-kind="prose" data-term="open-question list"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is the open-question list. It works by making
 ignorance explicit and actionable: each gap names its own
 remedy. A course that hides its gaps teaches confidence
 without knowledge. A course that lists them teaches the map.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c12-guest-gaps-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 4 sessions, 3 open questions each, 12 gaps. Pointers
 assigned: 12. Coverage of gaps by pointers: 12/12 = 1.00.
 The inventory is actionable when every gap has a pointer.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">GAPS = [
+<p id="c12-guest-gaps-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c12-guest-gaps-code01" data-kind="prose"><code class="language-python">GAPS = [
     (15, &quot;What reasoning methods were shown?&quot;,
      &quot;Read the course papers on reasoning&quot;),
     (16, &quot;How do AlphaProof and AlphaGeometry work?&quot;,
@@ -1009,48 +1009,48 @@ The inventory is actionable when every gap has a pointer.</p>
      &quot;Read Physical Intelligence publications&quot;),
 ]
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c12-guest-gaps-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: 4 sessions, 12 gaps, 12 pointers. Check: no gap claims
 an answer. Check: the pointers are real categories.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c12-guest-gaps-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: the reading time the pointers demand. The inventory is
 cheap. The reading is the real work.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c12-guest-gaps-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 No gap list: pick never, it hides ignorance. Fake summary:
 pick never. Gap inventory with pointers: pick always.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c12-guest-gaps-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the pointers: they lead to paywalled or dead sources.
 The gaps are listed but not actionable. Counterexample: a
 session with full released video: the gap list shrinks, the
 evidence rung rises.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c12-guest-gaps-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the four paper families named above. Extension: the
 learner closes one gap per week and logs it.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c12-guest-gaps-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: list the four gaps rows. Ladder: define the gap, run
 the toy, justify the inventory, code the table, state the
 reading cost, compare with fake summary, debug the dead-
 pointer failure, critique the pointers, design the reading
 plan. Transfer: the same inventory closes any course&rsquo;s loose
 ends.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c12-guest-gaps-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E12.1: count the toy gaps and pointers. E12.2: explain the
 inventory in two sentences. E12.3: name the dead-pointer
 failure. Answers: <code>../keys/u07_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c12-guest-gaps-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 7: the gap table). No separate
-PNG. Logged in <code>../visual_audit.md</code>.</p>
+PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c12-guest-gaps-end" data-end></span>
 <hr />
 <h2 id="u07-not-yet-understood-dependency-list">U07 not-yet-understood dependency list</h2>
-<ol>
+<ol id="u07-not-yet-understood-dependency-list-list01" data-kind="prose" data-term="policy gradients">
 <li>Policy gradients and search as RL -&gt; <code>../shared/prerequisites/p17_rl.md</code>, remediated in C02 items 4-6.</li>
 <li>Tool-call loops and agent state -&gt; <code>../shared/prerequisites/p20_tools.md</code>, remediated in C07 items 4-6.</li>
 <li>Experimental method and ablations -&gt; <code>../shared/prerequisites/p22_experiments.md</code>, remediated in C11 items 4-8.</li>
 <li>Lean tactic semantics (preview) -&gt; the tactic as an action is defined locally in C05 item 4, full proof-assistant theory is out of scope.</li>
 <li>Guest session content -&gt; schedule line only, the guests frame C01 and C12, not taught content.</li>
-</ol>
+</ol><span id="u07-not-yet-understood-dependency-list-end" data-end></span>
 <h2 id="u07-russian-doll-ladder-index-major-mechanisms">U07 Russian-doll ladder index (major mechanisms)</h2>
-<ul>
+<ul id="u07-russian-doll-ladder-index-major-mechanisms-list01" data-kind="prose" data-term="formal proof search">
 <li>Formal proof search: shells 0-5 in C02 (items 1-9), shell 6 in C02
   item 6 (change the toy numbers), shell 7 in C02 item 11 (break
   formalization), shell 8 in C02 item 10 (compare with informal proof),
@@ -1069,7 +1069,7 @@ PNG. Logged in <code>../visual_audit.md</code>.</p>
   the toy numbers), shell 7 in C06 item 11 (break the capability
   bound), shell 8 in C06 item 10 (compare with full autonomy), shell 9
   in C06 item 12, shell 10 in C10 (safety as the deployed envelope).</li>
-</ul>
+</ul><span id="u07-russian-doll-ladder-index-major-mechanisms-end" data-end></span>
       
       <nav class="pager"><a href="../lessons/u06_memory_caches.html"><span class="lbl">← Previous</span>U06 · Memory, caches, and long-context representations</a><a href="../lessons/u08_long_horizon_eval.html"><span class="lbl">Next →</span>U08 · Long-horizon evaluation and research projects</a></nav>
     </article>

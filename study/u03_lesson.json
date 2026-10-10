@@ -1,0 +1,809 @@
+{
+  "itemId": "u03_lesson",
+  "itemKind": "lesson",
+  "revision": "6ebfbbc67f0aae8d0f3a3eb055df509ebedc117a60bac860df55442072985c97",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u03_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u03_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u03_lesson-intro-p01",
+          "definition": "P16 (distributed), P20 (tools), P21 (security); required background.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u03_lesson-intro-p01",
+          "definition": "JSON, HTTP, and state machines; the remediation that opens the lesson.",
+          "term": "local remediation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u03_lesson-intro-p01",
+          "answer": "Prerequisites: P16 (distributed), P20 (tools), P21 (security). Local remediation on JSON, HTTP, and state machines opens the lesson.",
+          "id": "cs329z_u03_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "Tool Use and Function Calling (5 Oct 2026); C01, C02, C04, C06, C08, C12 map here.",
+          "term": "S04"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "The MCP architecture page; C04 additionally uses it.",
+          "term": "SRC-05"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "C03, C05, C07, C09, C10, C11; taught as independent theory.",
+          "term": "requested extensions"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "C01, C02, C04, C06, C08, C12 map to S04 (Tool Use and Function Calling, 5 Oct 2026). C04 also uses SRC-05 (MCP architecture), C12 uses SRC-04 tool-design guidance. C03, C05, C07, C09, C10, C11 are requested extensions.",
+          "id": "provenance-r1",
+          "question": "How do the concepts map to sources?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-json-http-and-state-machines",
+      "blocks": [
+        {
+          "anchor": "local-remediation-json-http-and-state-machines-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-json-http-and-state-machines-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-json-http-and-state-machines",
+          "definition": "The data format for tool arguments and results; schema describes the shape.",
+          "term": "JSON"
+        },
+        {
+          "anchor": "local-remediation-json-http-and-state-machines",
+          "definition": "Request/response protocol; 200 success, 4xx client error, 5xx server error.",
+          "term": "HTTP"
+        },
+        {
+          "anchor": "local-remediation-json-http-and-state-machines-p01",
+          "definition": "Checks a value against the schema.",
+          "term": "validation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-json-http-and-state-machines-p01",
+          "answer": "JSON carries tool arguments and results; schemas describe the allowed shape and validation checks values. HTTP is the request/response protocol: 200 success, 4xx client error, 5xx server error. State machines model the tool/result loop.",
+          "id": "local-remediation-json-http-and-state-machines-r1",
+          "question": "What are the three remediation topics?"
+        }
+      ],
+      "title": "Local remediation: JSON, HTTP, and state machines"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop",
+          "definition": "The major mechanism: model emits call, runtime executes, result returns.",
+          "term": "tool/result loop"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop-list01",
+          "definition": "s_t state, a_t action, o_t observation; policy pi maps state to action.",
+          "term": "s_t"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop-list01",
+          "definition": "What a confused model does without a budget.",
+          "term": "shell 7"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop-list01",
+          "answer": "Shell 0 asks how a model uses a tool it cannot run. Shells 1-3 build the calculator toy and the emit-execute-observe rule. Shell 4 derives the state machine; shell 7 shows the unbounded loop the budget prevents.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-the-toolresult-loop-r1",
+          "question": "What does the tool/result loop ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (the tool/result loop)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C02 via schema descriptions.",
+          "term": "which tool to call"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C09 via idempotency keys.",
+          "term": "charge twice"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "How the model picks a tool (C02), why retries can charge twice (C09), and who approves a risky call (C10).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve and where?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u03-c01-repl",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c01-repl-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u03-c01-repl-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c01-repl-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c01-repl",
+          "definition": "Read, evaluate, print, repeat; a scratchpad that actually runs.",
+          "term": "REPL"
+        },
+        {
+          "anchor": "cs329z-u03-c01-repl-p05",
+          "definition": "Later calls reuse earlier variables; the price is state leaking between tasks.",
+          "term": "stateful evaluation"
+        },
+        {
+          "anchor": "cs329z-u03-c01-repl-p04",
+          "definition": "The session namespace persists across calls.",
+          "term": "state"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c01-repl-p02",
+          "answer": "The REPL reads 6 7, evaluates to 42, prints 42, and loops. The agent sends code as text and gets back text.",
+          "id": "cs329z-u03-c01-repl-r1",
+          "question": "How does the REPL toy work?"
+        },
+        {
+          "anchor": "cs329z-u03-c01-repl-p12",
+          "answer": "Break the sandbox: os.remove on the host works as designed and destroys data. Two tasks sharing one session leak variables across tasks.",
+          "id": "cs329z-u03-c01-repl-r2",
+          "question": "What breaks the REPL?"
+        }
+      ],
+      "title": "cs329z-U03-C01: REPL"
+    },
+    {
+      "anchor": "cs329z-u03-c02-function-schema",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c02-function-schema-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c02-function-schema-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c02-function-schema",
+          "definition": "A menu with ordering instructions: name, description, parameters.",
+          "term": "schema"
+        },
+        {
+          "anchor": "cs329z-u03-c02-function-schema-p05",
+          "definition": "The model scores each description against the task and picks the best match.",
+          "term": "description-driven selection"
+        },
+        {
+          "anchor": "cs329z-u03-c02-function-schema",
+          "definition": "(name, description, parameters, required); call = (name, arguments).",
+          "term": "Schema"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c02-function-schema-p02",
+          "answer": "Name multiply, description Multiply two numbers, parameters {a: number, b: number}, required [a, b]. The model reads the menu; the runtime cooks.",
+          "id": "cs329z-u03-c02-function-schema-r1",
+          "question": "What is in the toy schema?"
+        },
+        {
+          "anchor": "cs329z-u03-c02-function-schema-p12",
+          "answer": "Break honesty: a description saying fast on a 30s tool misroutes urgent calls. Overlapping names like search and search_docs confuse selection.",
+          "id": "cs329z-u03-c02-function-schema-r2",
+          "question": "What breaks schema selection?"
+        }
+      ],
+      "title": "cs329z-U03-C02: function schema"
+    },
+    {
+      "anchor": "cs329z-u03-c03-toolresult-loop",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c03-toolresult-loop-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c03-toolresult-loop-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c03-toolresult-loop",
+          "definition": "Think, call, observe, repeat until the answer is ready or the budget dies.",
+          "term": "loop"
+        },
+        {
+          "anchor": "cs329z-u03-c03-toolresult-loop-p04",
+          "definition": "s_{t+1} = update(s_t, a_t, o_t); halting at answer or t = B.",
+          "term": "s_t"
+        },
+        {
+          "anchor": "cs329z-u03-c03-toolresult-loop-p01",
+          "definition": "Turns run until done into run until done or B steps.",
+          "term": "budget"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c03-toolresult-loop-p02",
+          "answer": "think -> call(multiply, {a:6,b:7}) -> observe(42) -> think -> call(is_prime, {n:42}) -> observe(false) -> answer(42, not prime). Six states, two tools.",
+          "id": "cs329z-u03-c03-toolresult-loop-r1",
+          "question": "What is the toy trace?"
+        },
+        {
+          "anchor": "cs329z-u03-c03-toolresult-loop-p12",
+          "answer": "Break trustworthy observations: attacker-controlled tool text (prompt injection) gets followed. Calling the same failing tool 10 times burns the budget.",
+          "id": "cs329z-u03-c03-toolresult-loop-r2",
+          "question": "What breaks the loop?"
+        }
+      ],
+      "title": "cs329z-U03-C03: tool/result loop"
+    },
+    {
+      "anchor": "cs329z-u03-c04-mcp-rolestransportversion",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c04-mcp-rolestransportversion-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c04-mcp-rolestransportversion-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c04-mcp-rolestransportversion",
+          "definition": "USB for AI tools: host, client, server; plug the device in once.",
+          "term": "MCP"
+        },
+        {
+          "anchor": "cs329z-u03-c04-mcp-rolestransportversion-p05",
+          "definition": "Client sends server/discover; version negotiation prevents method-not-found.",
+          "term": "capability discovery"
+        },
+        {
+          "anchor": "cs329z-u03-c04-mcp-rolestransportversion-p01",
+          "definition": "stdio for local, Streamable HTTP for remote with standard auth.",
+          "term": "transports"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c04-mcp-rolestransportversion-p02",
+          "answer": "One MCP server exposes file-search. Two hosts each create a client and connect. One server, many apps, no duplicate integrations.",
+          "id": "cs329z-u03-c04-mcp-rolestransportversion-r1",
+          "question": "How does MCP avoid duplicate integrations?"
+        },
+        {
+          "anchor": "cs329z-u03-c04-mcp-rolestransportversion-p12",
+          "answer": "Break the version assumption: a client requiring a missing method gets method not found. A proxy server with different versions breaks the contract.",
+          "id": "cs329z-u03-c04-mcp-rolestransportversion-r2",
+          "question": "What breaks MCP?"
+        }
+      ],
+      "title": "cs329z-U03-C04: MCP roles/transport/version"
+    },
+    {
+      "anchor": "cs329z-u03-c05-authenticationauthorization",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c05-authenticationauthorization-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c05-authenticationauthorization-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c05-authenticationauthorization",
+          "definition": "The ID check at the door: is this token valid?",
+          "term": "authentication"
+        },
+        {
+          "anchor": "cs329z-u03-c05-authenticationauthorization",
+          "definition": "The wristband: may this identity call file_delete?",
+          "term": "authorization"
+        },
+        {
+          "anchor": "cs329z-u03-c05-authenticationauthorization-p05",
+          "definition": "Authenticate first (cheap), then authorize, on every call.",
+          "term": "two-gate sequence"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c05-authenticationauthorization-p02",
+          "answer": "(1) Is this token valid (authentication)? (2) May this identity call file_delete (authorization)? A valid token with no permission still fails.",
+          "id": "cs329z-u03-c05-authenticationauthorization-r1",
+          "question": "What two questions does the server ask?"
+        },
+        {
+          "anchor": "cs329z-u03-c05-authenticationauthorization-p12",
+          "answer": "Break secrecy: a token leaked into logs gives every reader the identity. A connect-time-only permission check keeps working after revocation.",
+          "id": "cs329z-u03-c05-authenticationauthorization-r2",
+          "question": "What breaks auth?"
+        }
+      ],
+      "title": "cs329z-U03-C05: authentication/authorization"
+    },
+    {
+      "anchor": "cs329z-u03-c06-sandbox",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c06-sandbox-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u03-c06-sandbox-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c06-sandbox-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c06-sandbox-p05",
+          "definition": "Nothing allowed unless listed; fails closed on forgotten entries.",
+          "term": "default-deny"
+        },
+        {
+          "anchor": "cs329z-u03-c06-sandbox",
+          "definition": "A playpen with walls: no network, no host filesystem, limited CPU/memory.",
+          "term": "sandbox"
+        },
+        {
+          "anchor": "cs329z-u03-c06-sandbox-p01",
+          "definition": "(allow set, deny set, resource limits); enforced before and during execution.",
+          "term": "policy"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c06-sandbox-p02",
+          "answer": "Policy: allow [read, write /tmp, network off], deny [all else]. 6*7 runs; os.remove(/data) is denied before execution.",
+          "id": "cs329z-u03-c06-sandbox-r1",
+          "question": "How does the toy policy work?"
+        },
+        {
+          "anchor": "cs329z-u03-c06-sandbox-p12",
+          "answer": "Break completeness: an unfiltered subprocess-with-shell path voids the sandbox. Allowing /tmp writes without resource limits lets the model fill the disk.",
+          "id": "cs329z-u03-c06-sandbox-r2",
+          "question": "What breaks the sandbox?"
+        }
+      ],
+      "title": "cs329z-U03-C06: sandbox"
+    },
+    {
+      "anchor": "cs329z-u03-c07-timeouts",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c07-timeouts-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u03-c07-timeouts-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c07-timeouts-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c07-timeouts-p01",
+          "definition": "A promise to stop waiting; converts maybe 30s into at most 5s then a handleable error.",
+          "term": "timeout"
+        },
+        {
+          "anchor": "cs329z-u03-c07-timeouts-p04",
+          "definition": "Mass above tau collapses to tau; the tail is where the cost lives.",
+          "term": "E[min(T, tau)]"
+        },
+        {
+          "anchor": "cs329z-u03-c07-timeouts-p04",
+          "definition": "Timeout tau in seconds; assumes the latency distribution is known.",
+          "term": "tau"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c07-timeouts-p02",
+          "answer": "P(0.2s)=0.9, P(2s)=0.09, P(30s)=0.01. Expected wait without timeout: 0.66s, with 0.30 of it from 1% of calls. A 5s timeout cuts the tail.",
+          "id": "cs329z-u03-c07-timeouts-r1",
+          "question": "What does the timeout buy in the toy?"
+        },
+        {
+          "anchor": "cs329z-u03-c07-timeouts-p12",
+          "answer": "Break the distribution: post-deploy p99 at 8s makes a 5s timeout error on 5% of calls. Timing out a non-idempotent write (C09) is dangerous.",
+          "id": "cs329z-u03-c07-timeouts-r2",
+          "question": "What breaks timeouts?"
+        }
+      ],
+      "title": "cs329z-U03-C07: timeouts"
+    },
+    {
+      "anchor": "cs329z-u03-c08-retries",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c08-retries-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c08-retries-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c08-retries-p01",
+          "definition": "A second chance with a pause; backoff lets the failure clear.",
+          "term": "retry"
+        },
+        {
+          "anchor": "cs329z-u03-c08-retries-p05",
+          "definition": "All-fail probability p^r; expected tries = 1 + p + p^2 + ...",
+          "term": "p^r"
+        },
+        {
+          "anchor": "cs329z-u03-c08-retries-p05",
+          "definition": "Randomized waits avoid synchronized retry storms.",
+          "term": "jitter"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c08-retries-p02",
+          "answer": "Fail probability 0.2, 3 tries. All-fail = 0.2^3 = 0.008. Success rises from 0.80 to 0.992; two extra tries buy 19 points.",
+          "id": "cs329z-u03-c08-retries-r1",
+          "question": "What do retries buy in the toy?"
+        },
+        {
+          "anchor": "cs329z-u03-c08-retries-p12",
+          "answer": "Break transience: an hour-long outage makes 3 tries waste budget. Retrying a non-idempotent charge (C09) can double-charge.",
+          "id": "cs329z-u03-c08-retries-r2",
+          "question": "What breaks retries?"
+        }
+      ],
+      "title": "cs329z-U03-C08: retries"
+    },
+    {
+      "anchor": "cs329z-u03-c09-idempotency",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c09-idempotency-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u03-c09-idempotency-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c09-idempotency-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c09-idempotency-p02",
+          "definition": "A name tag on the request; the server files results by tag.",
+          "term": "idempotency key"
+        },
+        {
+          "anchor": "cs329z-u03-c09-idempotency-p01",
+          "definition": "Exactly-once effect via at-least-once delivery plus server-side dedupe.",
+          "term": "dedupe"
+        },
+        {
+          "anchor": "cs329z-u03-c09-idempotency-p02",
+          "definition": "Unique per logical operation; the store must be durable.",
+          "term": "key k"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c09-idempotency-p02",
+          "answer": "Charge $50 with key K. Try 1 times out after the server processed it. Try 2 sends the same K; the server sees K and returns the original receipt. One charge, not two.",
+          "id": "cs329z-u03-c09-idempotency-r1",
+          "question": "How does the key prevent double-charge?"
+        },
+        {
+          "anchor": "cs329z-u03-c09-idempotency-p12",
+          "answer": "Break uniqueness: one key reused for all charges returns the first receipt for every charge. A store expiring keys after 1 hour lets the dedupe miss.",
+          "id": "cs329z-u03-c09-idempotency-r2",
+          "question": "What breaks idempotency?"
+        }
+      ],
+      "title": "cs329z-U03-C09: idempotency"
+    },
+    {
+      "anchor": "cs329z-u03-c10-approval",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c10-approval-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u03-c10-approval-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c10-approval-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c10-approval",
+          "definition": "A checkpoint with a human; low-risk flows, high-risk waits.",
+          "term": "approval"
+        },
+        {
+          "anchor": "cs329z-u03-c10-approval-p05",
+          "definition": "Freeze the action, get signed approval of the exact (tool, args), execute only that.",
+          "term": "pause-and-bind"
+        },
+        {
+          "anchor": "cs329z-u03-c10-approval-p04",
+          "definition": "t(action) in {auto, approve, deny}; assumes the approver understands.",
+          "term": "risk tier"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c10-approval-p02",
+          "answer": "Read: auto. Write to /tmp: auto. Send email: approve. Delete database: approve + second factor. The loop pauses at the gate and resumes on decision.",
+          "id": "cs329z-u03-c10-approval-r1",
+          "question": "What are the toy approval tiers?"
+        },
+        {
+          "anchor": "cs329z-u03-c10-approval-p12",
+          "answer": "Break understanding: an approver who cannot read the args JSON approves blindly. Splitting one delete into 100 safe writes evades the gate.",
+          "id": "cs329z-u03-c10-approval-r2",
+          "question": "What breaks approval?"
+        }
+      ],
+      "title": "cs329z-U03-C10: approval"
+    },
+    {
+      "anchor": "cs329z-u03-c11-output-contracts",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c11-output-contracts-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c11-output-contracts-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c11-output-contracts-p03",
+          "definition": "The tool's promise: schema, named errors, latency SLA.",
+          "term": "output contract"
+        },
+        {
+          "anchor": "cs329z-u03-c11-output-contracts-p04",
+          "definition": "Named failure modes: RATE_LIMIT, TIMEOUT, AUTH.",
+          "term": "error enum"
+        },
+        {
+          "anchor": "cs329z-u03-c11-output-contracts-p01",
+          "definition": "(result schema, error enum, latency SLA, side-effect class).",
+          "term": "contract"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c11-output-contracts-p02",
+          "answer": "{results: [{title, url, snippet}], latency_p99_ms: 800, errors: [RATE_LIMIT, TIMEOUT, AUTH]}. The model plans retries and fallbacks from the contract, not from surprise.",
+          "id": "cs329z-u03-c11-output-contracts-r1",
+          "question": "What is in the toy output contract?"
+        },
+        {
+          "anchor": "cs329z-u03-c11-output-contracts-p12",
+          "answer": "Break the honor assumption: a silently added error code falls through the caller's switch. A p99 promise regressing to 5s breaks every timeout built on it.",
+          "id": "cs329z-u03-c11-output-contracts-r2",
+          "question": "What breaks output contracts?"
+        }
+      ],
+      "title": "cs329z-U03-C11: output contracts"
+    },
+    {
+      "anchor": "cs329z-u03-c12-tool-design",
+      "blocks": [
+        {
+          "anchor": "cs329z-u03-c12-tool-design-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u03-c12-tool-design-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u03-c12-tool-design",
+          "definition": "API design for a reader who never sees the code.",
+          "term": "tool design"
+        },
+        {
+          "anchor": "cs329z-u03-c12-tool-design-p02",
+          "definition": "Names are UI for the model; read_file beats f(p, m).",
+          "term": "names"
+        },
+        {
+          "anchor": "cs329z-u03-c12-tool-design-p04",
+          "definition": "Naming, granularity, description quality, errors, examples.",
+          "term": "design axes"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u03-c12-tool-design-p02",
+          "answer": "read_file(path) works on the first try; f(p, m) gets misused three times (wrong arg order, wrong mode). The 31-point gap has standard error 0.065.",
+          "id": "cs329z-u03-c12-tool-design-r1",
+          "question": "What does the naming toy show?"
+        },
+        {
+          "anchor": "cs329z-u03-c12-tool-design-p12",
+          "answer": "Break the reading assumption: if the model pattern-matches names only, descriptions are decoration. 50 perfect small tools make a 10,000-token menu.",
+          "id": "cs329z-u03-c12-tool-design-r2",
+          "question": "What breaks tool design?"
+        }
+      ],
+      "title": "cs329z-U03-C12: tool design"
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u03_f04-logged-as-shared",
+      "title": "Contract 15. Figure u03_f04.",
+      "minutes": 1,
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u03_f04-logged-as-shared-end",
+      "blocks": [],
+      "keyTerms": [
+        {
+          "term": "u03_f04",
+          "definition": "Covered by figure u03_f04; logged as shared.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u03_f04-logged-as-shared"
+        },
+        {
+          "term": "shared",
+          "definition": "No new plate needed.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u03_f04-logged-as-shared"
+        }
+      ],
+      "recall": [
+        {
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u03_f04-logged-as-shared-r1",
+          "question": "What covers contract 15 here?",
+          "answer": "Covered by figure u03_f04; logged as shared.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-covered-by-figure-u03_f04-logged-as-shared"
+        }
+      ]
+    },
+    {
+      "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu03_f02png-lesson-plate-source-src-05-plus-original-toy-before-two-apps-with-tangled-direct-integrations-after-hosts-clients-one-server-stdio-and-http-edges-labeled-caption-shell-3-apply-the-one-rule-standardize-the-roles-source-spec-toy-original-alt-text-left-two-app-boxes-with-crossed-lines-to-tools-arrow-labeled-standardize-roles-right-host-box-with-two-client-boxes-one-server-box-edges-labeled-stdio-and-http-audit-roles-from-the-spec-toy-original",
+      "title": "Contract 15. Figure u03_f02.",
+      "minutes": 1,
+      "endAnchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu03_f02png-lesson-plate-source-src-05-plus-original-toy-before-two-apps-with-tangled-direct-integrations-after-hosts-clients-one-server-stdio-and-http-edges-labeled-caption-shell-3-apply-the-one-rule-standardize-the-roles-source-spec-toy-original-alt-text-left-two-app-boxes-with-crossed-lines-to-tools-arrow-labeled-standardize-roles-right-host-box-with-two-client-boxes-one-server-box-edges-labeled-stdio-and-http-audit-roles-from-the-spec-toy-original-end",
+      "blocks": [],
+      "keyTerms": [
+        {
+          "term": "u03_f02",
+          "definition": "MCP roles: hosts, clients, one server.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu03_f02png-lesson-plate-source-src-05-plus-original-toy-before-two-apps-with-tangled-direct-integrations-after-hosts-clients-one-server-stdio-and-http-edges-labeled-caption-shell-3-apply-the-one-rule-standardize-the-roles-source-spec-toy-original-alt-text-left-two-app-boxes-with-crossed-lines-to-tools-arrow-labeled-standardize-roles-right-host-box-with-two-client-boxes-one-server-box-edges-labeled-stdio-and-http-audit-roles-from-the-spec-toy-original"
+        },
+        {
+          "term": "lesson plate",
+          "definition": "Source original toy; before/after visual with audit.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu03_f02png-lesson-plate-source-src-05-plus-original-toy-before-two-apps-with-tangled-direct-integrations-after-hosts-clients-one-server-stdio-and-http-edges-labeled-caption-shell-3-apply-the-one-rule-standardize-the-roles-source-spec-toy-original-alt-text-left-two-app-boxes-with-crossed-lines-to-tools-arrow-labeled-standardize-roles-right-host-box-with-two-client-boxes-one-server-box-edges-labeled-stdio-and-http-audit-roles-from-the-spec-toy-original"
+        }
+      ],
+      "recall": [
+        {
+          "id": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu03_f02png-lesson-plate-source-src-05-plus-original-toy-before-two-apps-with-tangled-direct-integrations-after-hosts-clients-one-server-stdio-and-http-edges-labeled-caption-shell-3-apply-the-one-rule-standardize-the-roles-source-spec-toy-original-alt-text-left-two-app-boxes-with-crossed-lines-to-tools-arrow-labeled-standardize-roles-right-host-box-with-two-client-boxes-one-server-box-edges-labeled-stdio-and-http-audit-roles-from-the-spec-toy-original-r1",
+          "question": "What covers contract 15 here?",
+          "answer": "MCP roles: hosts, clients, one server.",
+          "anchor": "contract-15-visual-units-provenance-accessibility-audit-rows-figure-visualsu03_f02png-lesson-plate-source-src-05-plus-original-toy-before-two-apps-with-tangled-direct-integrations-after-hosts-clients-one-server-stdio-and-http-edges-labeled-caption-shell-3-apply-the-one-rule-standardize-the-roles-source-spec-toy-original-alt-text-left-two-app-boxes-with-crossed-lines-to-tools-arrow-labeled-standardize-roles-right-host-box-with-two-client-boxes-one-server-box-edges-labeled-stdio-and-http-audit-roles-from-the-spec-toy-original-fig01"
+        }
+      ]
+    },
+    {
+      "anchor": "u03-connection-summary",
+      "blocks": [
+        {
+          "anchor": "u03-connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "u03-connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "u03-connection-summary-p01",
+          "definition": "REPL, schemas, loops, MCP, sandbox, timeouts, retries, keys, approvals, contracts.",
+          "term": "hands and rules"
+        },
+        {
+          "anchor": "u03-connection-summary-p01",
+          "definition": "Approval gates bound to exact actions (C10).",
+          "term": "bound"
+        },
+        {
+          "anchor": "u03-connection-summary-p01",
+          "definition": "Nothing allowed unless listed (C06).",
+          "term": "default-deny"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u03-connection-summary-p01",
+          "answer": "A REPL to run code, schemas as menus, the think-call-observe loop, MCP as the plug, two auth gates, a default-deny sandbox, tail-cutting timeouts, backoff retries, idempotency keys, bound approvals, output contracts, and tool design as API design. U04 adds memory.",
+          "id": "u03-connection-summary-r1",
+          "question": "What is the arc of U03?"
+        }
+      ],
+      "title": "U03 connection summary"
+    }
+  ]
+}

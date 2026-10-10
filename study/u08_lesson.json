@@ -1,0 +1,688 @@
+{
+  "itemId": "u08_lesson",
+  "itemKind": "lesson",
+  "revision": "a1f094c91297174884cd16f7de0dbbc37eca67b10af02ccc90da2c334e9221ae",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u08_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u08_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u08_lesson-intro-p01",
+          "definition": "P16 (distributed), P22 (experiments), P24 (production); required background.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u08_lesson-intro-p01",
+          "definition": "Distributed prerequisite; opens with local remediation.",
+          "term": "P16"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u08_lesson-intro-p01",
+          "answer": "Prerequisites: P16 (distributed), P22 (experiments), P24 (production). Local remediation on action spaces, spans, percentiles, and ownership opens the lesson.",
+          "id": "cs329z_u08_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "2 Dec frontiers; C01-C08 map to its schedule title.",
+          "term": "S20"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "C09-C11 map to the official project schedule.",
+          "term": "finals project"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "Taught as independent theory; source attribution pending.",
+          "term": "PLANNED"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "U08 maps to planned session S20 (2 Dec, frontiers) and the finals project schedule. C01-C08 map to the S20 title; C09-C11 to the project schedule.",
+          "id": "provenance-r1",
+          "question": "How do U08 concepts map to sessions?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-action-spaces-spans-percentiles-ownership",
+      "blocks": [
+        {
+          "anchor": "local-remediation-action-spaces-spans-percentiles-ownership-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-action-spaces-spans-percentiles-ownership-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-action-spaces-spans-percentiles-ownership-p01",
+          "definition": "The set of things the agent can do; bigger means more capability and more failure modes.",
+          "term": "action space"
+        },
+        {
+          "anchor": "local-remediation-action-spaces-spans-percentiles-ownership-p02",
+          "definition": "One logged unit of work with start/end time, tokens, and cost.",
+          "term": "span"
+        },
+        {
+          "anchor": "local-remediation-action-spaces-spans-percentiles-ownership",
+          "definition": "Names the human; the runbook writes the response before the incident.",
+          "term": "ownership"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-action-spaces-spans-percentiles-ownership-p01",
+          "answer": "A text agent's actions are tool calls; a computer-use agent's are click, type, scroll, keypress. A span logs one unit of work with tokens and cost. Ownership names the human for the 3 a.m. page.",
+          "id": "local-remediation-action-spaces-spans-percentiles-ownership-r1",
+          "question": "What are action spaces and spans?"
+        }
+      ],
+      "title": "Local remediation: action spaces, spans, percentiles, ownership"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-production-readiness",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-production-readiness-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-production-readiness",
+          "definition": "What stands between a demo agent and a production agent.",
+          "term": "production readiness"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-production-readiness-list01",
+          "definition": "100 tasks, mean $0.48, p99 $1.60; one deploy spikes 3x.",
+          "term": "toy"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-production-readiness-list01",
+          "definition": "The span tree; cost = tokens x price per span.",
+          "term": "trace"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-production-readiness-list01",
+          "answer": "Shell 0 asks what separates demo from production. Shell 1 builds the cost-spike toy: the trace shows which step burned tokens, the runbook says who fixes it. Shell 2 formalizes trace, cost, and the recovery ladder.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-production-readiness-r1",
+          "question": "What does the production-readiness ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (production readiness)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C01, C02.",
+          "term": "frontier action spaces"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C03.",
+          "term": "science agents"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C05.",
+          "term": "production sees"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "Frontier action spaces (C01, C02), science agents (C03), long-run architecture (C04), production observability (C05), failure handling (C06), scaling (C07), interpretability (C08), and project deliverables (C09-C12).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u08-c01-webcomputer-use",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c01-webcomputer-use-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u08-c01-webcomputer-use-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c01-webcomputer-use-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c01-webcomputer-use",
+          "definition": "Click, type, scroll, keypress on a real screen.",
+          "term": "computer use"
+        },
+        {
+          "anchor": "cs329z-u08-c01-webcomputer-use-p01",
+          "definition": "Maps the Submit button to (x, y).",
+          "term": "grounding"
+        },
+        {
+          "anchor": "cs329z-u08-c01-webcomputer-use-p05",
+          "definition": "Observe, ground, act, verify after each act.",
+          "term": "observe-ground-act"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c01-webcomputer-use-p02",
+          "answer": "20 web tasks, 12 succeed (0.60). Of 8 failures: 5 coordinate errors, 2 late verifications, 1 wrong-target click. Verification after each act stops one misgrounded click from compounding.",
+          "id": "cs329z-u08-c01-webcomputer-use-r1",
+          "question": "What fails in computer use?"
+        }
+      ],
+      "title": "cs329z-U08-C01: web/computer use"
+    },
+    {
+      "anchor": "cs329z-u08-c02-multimodality",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c02-multimodality-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u08-c02-multimodality-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c02-multimodality-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c02-multimodality",
+          "definition": "Fuses text, vision, audio into one context.",
+          "term": "multimodality"
+        },
+        {
+          "anchor": "cs329z-u08-c02-multimodality-p02",
+          "definition": "0.80 with vision+table vs 0.65 table-only; 0.15.",
+          "term": "vision premium"
+        },
+        {
+          "anchor": "cs329z-u08-c02-multimodality-p05",
+          "definition": "The model attends across modalities in one sequence.",
+          "term": "joint attention"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c02-multimodality-p02",
+          "answer": "40 chart tasks. Vision + table: 0.80. Table only: 0.65. The 0.15 gap is the vision premium. Ablate before you pay: if vision costs 10x, the budget may say table-only.",
+          "id": "cs329z-u08-c02-multimodality-r1",
+          "question": "What is the vision premium?"
+        }
+      ],
+      "title": "cs329z-U08-C02: multimodality"
+    },
+    {
+      "anchor": "cs329z-u08-c03-science-agents",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c03-science-agents-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c03-science-agents-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c03-science-agents-p01",
+          "definition": "Propose, design, run, analyze, update; the agent never sleeps.",
+          "term": "hypothesis loop"
+        },
+        {
+          "anchor": "cs329z-u08-c03-science-agents-p02",
+          "definition": "Real experiments; the binding constraint.",
+          "term": "verification"
+        },
+        {
+          "anchor": "cs329z-u08-c03-science-agents-p04",
+          "definition": "c/h; $50/0.30 per finding in the toy.",
+          "term": "expected cost"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c03-science-agents-p02",
+          "answer": "10 hypotheses, 3 verify (0.30). Each experiment costs $50. Total $500 for 3 findings. Unlike chat, the world pushes back: experiments can say no, so the loop learns.",
+          "id": "cs329z-u08-c03-science-agents-r1",
+          "question": "What does the science loop cost?"
+        }
+      ],
+      "title": "cs329z-U08-C03: science agents"
+    },
+    {
+      "anchor": "cs329z-u08-c04-long-horizon-architecture",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c04-long-horizon-architecture-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u08-c04-long-horizon-architecture-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c04-long-horizon-architecture-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c04-long-horizon-architecture",
+          "definition": "Hierarchy plus memory plus checkpoints.",
+          "term": "long-horizon architecture"
+        },
+        {
+          "anchor": "cs329z-u08-c04-long-horizon-architecture-p05",
+          "definition": "500 steps become 10 fifty-step problems with checks between.",
+          "term": "divide-and-verify"
+        },
+        {
+          "anchor": "cs329z-u08-c04-long-horizon-architecture-p02",
+          "definition": "The planner works in milestones, not steps.",
+          "term": "milestones"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c04-long-horizon-architecture-p02",
+          "answer": "500 steps kill the flat agent. The planner sets milestones, workers execute bounded subtasks, checkers verify each milestone. Checks reset error compounding (U04-C10). Milestones must be verifiable.",
+          "id": "cs329z-u08-c04-long-horizon-architecture-r1",
+          "question": "How do you architect 500 steps?"
+        }
+      ],
+      "title": "cs329z-U08-C04: long-horizon architecture"
+    },
+    {
+      "anchor": "cs329z-u08-c05-tracingmonitoringcost",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c05-tracingmonitoringcost-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u08-c05-tracingmonitoringcost-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c05-tracingmonitoringcost-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c05-tracingmonitoringcost",
+          "definition": "Logs every span with its tokens and cost.",
+          "term": "tracing"
+        },
+        {
+          "anchor": "cs329z-u08-c05-tracingmonitoringcost",
+          "definition": "Aggregates per-step cost, per-task cost, error rates.",
+          "term": "monitoring"
+        },
+        {
+          "anchor": "cs329z-u08-c05-tracingmonitoringcost-p05",
+          "definition": "Group by step, compute mean and p99, alert on drift.",
+          "term": "aggregation"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c05-tracingmonitoringcost-p02",
+          "answer": "100 tasks, mean $0.48, p99 $1.60. A deploy adds a retry loop; the dashboard shows that step's cost up 3x. You cannot optimize what you cannot attribute.",
+          "id": "cs329z-u08-c05-tracingmonitoringcost-r1",
+          "question": "How does tracing find the cost spike?"
+        }
+      ],
+      "title": "cs329z-U08-C05: tracing/monitoring/cost"
+    },
+    {
+      "anchor": "cs329z-u08-c06-failure-recovery",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c06-failure-recovery-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u08-c06-failure-recovery-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c06-failure-recovery-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c06-failure-recovery-p01",
+          "definition": "Retry, rollback, escalate, compensate; cheapest first.",
+          "term": "recovery ladder"
+        },
+        {
+          "anchor": "cs329z-u08-c06-failure-recovery-p04",
+          "definition": "Transient, state corruption, judgment needed, partial effects.",
+          "term": "failure classes"
+        },
+        {
+          "anchor": "cs329z-u08-c06-failure-recovery-p05",
+          "definition": "Try the cheapest fix first; most failures are transient.",
+          "term": "ordered fallback"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c06-failure-recovery-p02",
+          "answer": "20 failures. Retry fixes 12 (transient). Rollback handles state corruption. Escalate for judgment. Compensate undoes partial effects (1 case). Climb from the cheapest fix.",
+          "id": "cs329z-u08-c06-failure-recovery-r1",
+          "question": "What are the recovery rungs?"
+        }
+      ],
+      "title": "cs329z-U08-C06: failure recovery"
+    },
+    {
+      "anchor": "cs329z-u08-c07-scalability",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c07-scalability-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c07-scalability-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c07-scalability",
+          "definition": "Cost per agent as n grows.",
+          "term": "scalability"
+        },
+        {
+          "anchor": "cs329z-u08-c07-scalability-p05",
+          "definition": "All-to-all sends n(n-1); a hub sends 2n.",
+          "term": "topology"
+        },
+        {
+          "anchor": "cs329z-u08-c07-scalability-p02",
+          "definition": "999,000 vs 2000 messages for 1000 agents; 500x cut.",
+          "term": "hub"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c07-scalability-p02",
+          "answer": "1000 agents all-to-all: 999,000 messages. Hub: 2000. The hub cuts 500x. Traps: O(n^2) coordination, shared-state locking, one queue for everything. Coordination cost must grow slower than the work.",
+          "id": "cs329z-u08-c07-scalability-r1",
+          "question": "How does the hub cut messages?"
+        }
+      ],
+      "title": "cs329z-U08-C07: scalability"
+    },
+    {
+      "anchor": "cs329z-u08-c08-interpretability",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c08-interpretability-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c08-interpretability-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c08-interpretability",
+          "definition": "Which inputs drove the decision; evidence attribution.",
+          "term": "interpretability"
+        },
+        {
+          "anchor": "cs329z-u08-c08-interpretability-p03",
+          "definition": "Run the decision with and without each candidate input.",
+          "term": "counterfactual"
+        },
+        {
+          "anchor": "cs329z-u08-c08-interpretability-p02",
+          "definition": "The minimal set whose removal flips the decision.",
+          "term": "attribution"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c08-interpretability-p02",
+          "answer": "40 docs, decision cites 3. Remove the 3: decision flips. Remove 3 random others: decision holds. Attribution confirmed at the cost of 4 extra runs. Removing it changes the answer is causal.",
+          "id": "cs329z-u08-c08-interpretability-r1",
+          "question": "How do you attribute a decision?"
+        }
+      ],
+      "title": "cs329z-U08-C08: interpretability"
+    },
+    {
+      "anchor": "cs329z-u08-c09-proposalsdemospaper-reviews",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c09-proposalsdemospaper-reviews-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c09-proposalsdemospaper-reviews-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c09-proposalsdemospaper-reviews-p03",
+          "definition": "The paper trail: proposal, demo, paper, review.",
+          "term": "project artifacts"
+        },
+        {
+          "anchor": "cs329z-u08-c09-proposalsdemospaper-reviews-p02",
+          "definition": "Each criterion gets evidence; forces the question and kill criterion open.",
+          "term": "rubric"
+        },
+        {
+          "anchor": "cs329z-u08-c09-proposalsdemospaper-reviews-p01",
+          "definition": "Falsifiable question, baseline, matched budget, measurable metric.",
+          "term": "reviewable"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c09-proposalsdemospaper-reviews-p02",
+          "answer": "Question (falsifiable?), baseline (what does it beat?), budget (matched?), metric (measurable?). Vague proposals hide vague thinking; the rubric forces the kill criterion into the open.",
+          "id": "cs329z-u08-c09-proposalsdemospaper-reviews-r1",
+          "question": "What makes a proposal reviewable?"
+        }
+      ],
+      "title": "cs329z-U08-C09: proposals/demos/paper reviews"
+    },
+    {
+      "anchor": "cs329z-u08-c10-ownershiprunbooks",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c10-ownershiprunbooks-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c10-ownershiprunbooks-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c10-ownershiprunbooks",
+          "definition": "Names the human; one name on the page.",
+          "term": "ownership"
+        },
+        {
+          "anchor": "cs329z-u08-c10-ownershiprunbooks-p01",
+          "definition": "The response, decided when calm, executed when stressed.",
+          "term": "runbook"
+        },
+        {
+          "anchor": "cs329z-u08-c10-ownershiprunbooks-p02",
+          "definition": "Rehearses the response with a timer.",
+          "term": "drill"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c10-ownershiprunbooks-p02",
+          "answer": "Cost spikes at 3 a.m. Owner: the on-call engineer. Runbook: open dashboard, find the spiking step, check the deploy log, roll back. Without: 4 hours of ad-hoc debugging. With: 30 minutes. The runbook buys 3.5 hours.",
+          "id": "cs329z-u08-c10-ownershiprunbooks-r1",
+          "question": "What does the runbook buy?"
+        }
+      ],
+      "title": "cs329z-U08-C10: ownership/runbooks"
+    },
+    {
+      "anchor": "cs329z-u08-c11-original-capstone",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c11-original-capstone-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c11-original-capstone-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c11-original-capstone",
+          "definition": "A small, finished, honest project.",
+          "term": "capstone"
+        },
+        {
+          "anchor": "cs329z-u08-c11-original-capstone-p05",
+          "definition": "Cut the dream until it fits the budget; keep the falsifiable core.",
+          "term": "subtractive scoping"
+        },
+        {
+          "anchor": "cs329z-u08-c11-original-capstone-p01",
+          "definition": "Question, hypothesis, budget, kill criterion.",
+          "term": "scope"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c11-original-capstone-p02",
+          "answer": "Does the retry ladder beat crash-restart on tool failures? Falsifiable hypothesis, 100 injected failures, matched budgets. A finished small project beats an unfinished big one.",
+          "id": "cs329z-u08-c11-original-capstone-r1",
+          "question": "What fits a 10-week capstone?"
+        }
+      ],
+      "title": "cs329z-U08-C11: original capstone"
+    },
+    {
+      "anchor": "cs329z-u08-c12-guesttba-coverage-gaps",
+      "blocks": [
+        {
+          "anchor": "cs329z-u08-c12-guesttba-coverage-gaps-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u08-c12-guesttba-coverage-gaps-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u08-c12-guesttba-coverage-gaps",
+          "definition": "Unknown content as a first-class citizen.",
+          "term": "coverage gaps"
+        },
+        {
+          "anchor": "cs329z-u08-c12-guesttba-coverage-gaps-p01",
+          "definition": "Names what is unknown, why it matters, what would close it.",
+          "term": "gap log"
+        },
+        {
+          "anchor": "cs329z-u08-c12-guesttba-coverage-gaps-p04",
+          "definition": "id, unknown item, evidence, next step.",
+          "term": "gap rows"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u08-c12-guesttba-coverage-gaps-p02",
+          "answer": "Two guest lectures TBA. The gap log lists S10 and S16 as unmapped. When a guest is announced, the log gains a row: speaker, topic, which units it touches. Unknowns stay visible, not silently dropped.",
+          "id": "cs329z-u08-c12-guesttba-coverage-gaps-r1",
+          "question": "How do you handle TBA guests?"
+        }
+      ],
+      "title": "cs329z-U08-C12: guest/TBA coverage gaps"
+    },
+    {
+      "anchor": "connection-summary",
+      "blocks": [
+        {
+          "anchor": "connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Computer use and multimodality widen what agents touch.",
+          "term": "frontier"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Tracing, recovery, scalability, interpretability.",
+          "term": "production door"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Proposals, runbooks, capstone, gap log.",
+          "term": "artifacts"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "connection-summary-p01",
+          "answer": "Computer use and multimodality widen what agents touch. Science agents show the hypothesis loop. Long-horizon architecture divides 500 steps into milestones. Tracing, recovery, scalability, and interpretability open the production door. Project artifacts close the course.",
+          "id": "connection-summary-r1",
+          "question": "What is the arc of U08?"
+        }
+      ],
+      "title": "Connection summary"
+    }
+  ]
+}

@@ -1,0 +1,678 @@
+{
+  "itemId": "u07_lesson",
+  "itemKind": "lesson",
+  "revision": "16fcdf65d2a8696f77a389900d2545f47cac3022d8003815593b90dac7f24a78",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329z_u07_lesson-intro",
+      "blocks": [],
+      "endAnchor": "cs329z_u07_lesson-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z_u07_lesson-intro-p01",
+          "definition": "P20 (tools), P21 (security), P24 (production); required background.",
+          "term": "prerequisites"
+        },
+        {
+          "anchor": "cs329z_u07_lesson-intro-p01",
+          "definition": "Trust, instructions, capabilities, consent; opens the lesson.",
+          "term": "local remediation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329z_u07_lesson-intro-p01",
+          "answer": "Prerequisites: P20 (tools), P21 (security), P24 (production). Local remediation on trust, instructions, capabilities, and consent opens the lesson.",
+          "id": "cs329z_u07_lesson-intro-r1",
+          "question": "What prerequisites open this lesson?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "provenance",
+      "blocks": [],
+      "endAnchor": "provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "provenance-p01",
+          "definition": "11 Nov agent safety; C01-C05 map to its schedule title.",
+          "term": "S15"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "18 Nov coding agents; C06-C08 map here.",
+          "term": "S17"
+        },
+        {
+          "anchor": "provenance-p01",
+          "definition": "30 Nov proactive agents; C09-C12 map here.",
+          "term": "S19"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "provenance-p01",
+          "answer": "U07 maps to planned sessions S15 (11 Nov, agent safety), S17 (18 Nov, coding agents), S19 (30 Nov, proactive agents), all taught as independent theory with source attribution pending.",
+          "id": "provenance-r1",
+          "question": "How do U07 concepts map to sessions?"
+        }
+      ],
+      "title": "Provenance"
+    },
+    {
+      "anchor": "local-remediation-trust-instructions-capabilities-consent",
+      "blocks": [
+        {
+          "anchor": "local-remediation-trust-instructions-capabilities-consent-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "local-remediation-trust-instructions-capabilities-consent-end",
+      "keyTerms": [
+        {
+          "anchor": "local-remediation-trust-instructions-capabilities-consent-p01",
+          "definition": "A line between what the agent may touch and what it may not.",
+          "term": "trust boundary"
+        },
+        {
+          "anchor": "local-remediation-trust-instructions-capabilities-consent-p02",
+          "definition": "System outranks developer, developer outranks user, user outranks tool outputs.",
+          "term": "instruction hierarchy"
+        },
+        {
+          "anchor": "local-remediation-trust-instructions-capabilities-consent-p01",
+          "definition": "Tool output is data, never instructions.",
+          "term": "data"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "local-remediation-trust-instructions-capabilities-consent-p01",
+          "answer": "The trust boundary separates what the agent may touch from what it may not. The instruction hierarchy ranks system > developer > user > tool outputs. Tool output is data, never instructions.",
+          "id": "local-remediation-trust-instructions-capabilities-consent-r1",
+          "question": "What are the trust rules?"
+        }
+      ],
+      "title": "Local remediation: trust, instructions, capabilities, consent"
+    },
+    {
+      "anchor": "russian-doll-ladder-for-the-major-mechanism-injection-defense",
+      "blocks": [],
+      "endAnchor": "russian-doll-ladder-for-the-major-mechanism-injection-defense-end",
+      "keyTerms": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-injection-defense",
+          "definition": "Stop a tool output from hijacking the agent; the major mechanism of U07.",
+          "term": "injection defense"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-injection-defense-list01",
+          "definition": "100 tool outputs, 5 poisoned; naive obeys 4, defended obeys 0.",
+          "term": "toy"
+        },
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-injection-defense-list01",
+          "definition": "Any text from tools, files, or web pages.",
+          "term": "untrusted span"
+        }
+      ],
+      "minutes": 2,
+      "recall": [
+        {
+          "anchor": "russian-doll-ladder-for-the-major-mechanism-injection-defense-list01",
+          "answer": "Shell 0 asks how to stop tool outputs from hijacking the agent. Shell 1 builds the 100-output toy: naive obeys 4 of 5 poisoned, defended marks all as data and obeys 0. Shell 2 defines the untrusted span.",
+          "id": "russian-doll-ladder-for-the-major-mechanism-injection-defense-r1",
+          "question": "What does the injection-defense ladder build?"
+        }
+      ],
+      "title": "Russian-doll ladder for the major mechanism (injection defense)"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C01.",
+          "term": "may read"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C02.",
+          "term": "attacks arrive"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "definition": "Answered in C05.",
+          "term": "human must decide"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-list01",
+          "answer": "What the agent may read (C01), how attacks arrive (C02), how to test defenses (C03), where the boundary sits (C04), when a human decides (C05), how coding agents are judged (C06, C07), crash survival (C08), and user models (C09).",
+          "id": "not-yet-understood-dependency-list-r1",
+          "question": "What does the dependency list resolve?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list"
+    },
+    {
+      "anchor": "cs329z-u07-c01-privacy-norms",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c01-privacy-norms-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c01-privacy-norms-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c01-privacy-norms",
+          "definition": "Rules for what the agent may read, keep, and share.",
+          "term": "privacy norms"
+        },
+        {
+          "anchor": "cs329z-u07-c01-privacy-norms-p03",
+          "definition": "Touch only what the task needs.",
+          "term": "data minimization"
+        },
+        {
+          "anchor": "cs329z-u07-c01-privacy-norms-p01",
+          "definition": "Log every data touch with its class and need; flag touches without need.",
+          "term": "audit"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c01-privacy-norms-p02",
+          "answer": "20 tasks, data classes public/internal/secret. The agent touches secret data it does not need. The audit flags the violation. Without labeling, the audit reports 0 violations and misses everything.",
+          "id": "cs329z-u07-c01-privacy-norms-r1",
+          "question": "How do privacy norms work?"
+        }
+      ],
+      "title": "cs329z-U07-C01: privacy norms"
+    },
+    {
+      "anchor": "cs329z-u07-c02-directindirect-injection",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c02-directindirect-injection-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u07-c02-directindirect-injection-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c02-directindirect-injection-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c02-directindirect-injection-p03",
+          "definition": "The user says ignore your instructions.",
+          "term": "direct injection"
+        },
+        {
+          "anchor": "cs329z-u07-c02-directindirect-injection",
+          "definition": "A tool output, file, or web page carries the instruction.",
+          "term": "indirect injection"
+        },
+        {
+          "anchor": "cs329z-u07-c02-directindirect-injection-p05",
+          "definition": "Every span carries its source; the planner refuses tool/web instructions.",
+          "term": "tag propagation"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c02-directindirect-injection-p02",
+          "answer": "100 tool outputs, 5 poisoned. Naive agent obeys 4 of 5. Tagging agent marks all 100 as data and obeys 0, with 0 clean tasks broken.",
+          "id": "cs329z-u07-c02-directindirect-injection-r1",
+          "question": "How does tagging defeat injection?"
+        }
+      ],
+      "title": "cs329z-U07-C02: direct/indirect injection"
+    },
+    {
+      "anchor": "cs329z-u07-c03-red-team",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c03-red-team-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u07-c03-red-team-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c03-red-team-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c03-red-team-p01",
+          "definition": "Adversarial testing; attackers think in exceptions.",
+          "term": "red-teaming"
+        },
+        {
+          "anchor": "cs329z-u07-c03-red-team-p01",
+          "definition": "Fraction of attacks achieving the attacker's goal; 0.24 then 0.06 in the toy.",
+          "term": "ASR"
+        },
+        {
+          "anchor": "cs329z-u07-c03-red-team-p01",
+          "definition": "Generate attacks, count successes, fix the top failure, repeat.",
+          "term": "loop"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c03-red-team-p02",
+          "answer": "50 crafted attacks, 12 succeed: ASR 0.24. After the tagging fix: 3 succeed: ASR 0.06. The loop found the gap and measured the fix.",
+          "id": "cs329z-u07-c03-red-team-r1",
+          "question": "What does the red-team loop measure?"
+        }
+      ],
+      "title": "cs329z-U07-C03: red-team"
+    },
+    {
+      "anchor": "cs329z-u07-c04-permission-boundary",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c04-permission-boundary-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c04-permission-boundary-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c04-permission-boundary",
+          "definition": "The check: intercept every tool call, test membership in K.",
+          "term": "permission boundary"
+        },
+        {
+          "anchor": "cs329z-u07-c04-permission-boundary-p02",
+          "definition": "Capability set K; allowed iff a in K.",
+          "term": "capabilities"
+        },
+        {
+          "anchor": "cs329z-u07-c04-permission-boundary-p05",
+          "definition": "Works even when the model is confused, injected, or malicious.",
+          "term": "action layer"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c04-permission-boundary-p02",
+          "answer": "Capabilities {read}. 20 tasks: 14 need read only, 6 need send. The 6 are denied at the boundary. Enforcement at the action layer works even when the model is confused.",
+          "id": "cs329z-u07-c04-permission-boundary-r1",
+          "question": "How does the boundary enforce?"
+        }
+      ],
+      "title": "cs329z-U07-C04: permission boundary"
+    },
+    {
+      "anchor": "cs329z-u07-c05-human-approval",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c05-human-approval-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c05-human-approval-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c05-human-approval-p03",
+          "definition": "Sort actions by reversibility and blast radius.",
+          "term": "approval tiers"
+        },
+        {
+          "anchor": "cs329z-u07-c05-human-approval-p05",
+          "definition": "The agent proposes, the human disposes.",
+          "term": "pause"
+        },
+        {
+          "anchor": "cs329z-u07-c05-human-approval-p02",
+          "definition": "auto, approve, block; assumes the human reviews carefully.",
+          "term": "tiers"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c05-human-approval-p02",
+          "answer": "Auto (read-only), approve (writes under $100), block (deletes, sends). 100 actions: 60 auto, 30 approve, 10 block. Click-through approvers make the tier theater.",
+          "id": "cs329z-u07-c05-human-approval-r1",
+          "question": "What are the approval tiers?"
+        }
+      ],
+      "title": "cs329z-U07-C05: human approval"
+    },
+    {
+      "anchor": "cs329z-u07-c06-coding-interfacetest-rig",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c06-coding-interfacetest-rig-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c06-coding-interfacetest-rig-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c06-coding-interfacetest-rig-p01",
+          "definition": "Read the issue, write code, run tests, read failures, fix, repeat.",
+          "term": "coding agent"
+        },
+        {
+          "anchor": "cs329z-u07-c06-coding-interfacetest-rig",
+          "definition": "The repo, the test command, and the sandbox.",
+          "term": "test rig"
+        },
+        {
+          "anchor": "cs329z-u07-c06-coding-interfacetest-rig-p04",
+          "definition": "Tests are the only scalable judge of code.",
+          "term": "oracle"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c06-coding-interfacetest-rig-p02",
+          "answer": "20 tasks, one patch each. The test rig runs the suite: 14 pass (0.70). The test rig is the judge, not the agent's self-assessment. Weak tests certify broken code.",
+          "id": "cs329z-u07-c06-coding-interfacetest-rig-r1",
+          "question": "Who judges the coding agent?"
+        }
+      ],
+      "title": "cs329z-U07-C06: coding interface/test rig"
+    },
+    {
+      "anchor": "cs329z-u07-c07-swe-bench-provenance",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c07-swe-bench-provenance-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c07-swe-bench-provenance-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c07-swe-bench-provenance",
+          "definition": "Real issues from real repos with real test suites.",
+          "term": "SWE-bench"
+        },
+        {
+          "anchor": "cs329z-u07-c07-swe-bench-provenance-p03",
+          "definition": "Tests that fail before and pass after the fix.",
+          "term": "FAIL_TO_PASS"
+        },
+        {
+          "anchor": "cs329z-u07-c07-swe-bench-provenance-p03",
+          "definition": "Tests that must keep passing.",
+          "term": "PASS_TO_PASS"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c07-swe-bench-provenance-p02",
+          "answer": "20 real GitHub issues. The agent fixes 8: 0.40. It proves the agent can fix real bugs with tests; it does not prove design judgment. The fix must flip FAIL_TO_PASS without breaking PASS_TO_PASS.",
+          "id": "cs329z-u07-c07-swe-bench-provenance-r1",
+          "question": "What does SWE-bench prove?"
+        }
+      ],
+      "title": "cs329z-U07-C07: SWE-bench provenance"
+    },
+    {
+      "anchor": "cs329z-u07-c08-long-running-checkpoints",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c08-long-running-checkpoints-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c08-long-running-checkpoints-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c08-long-running-checkpoints-p02",
+          "definition": "A saved state the run can resume from.",
+          "term": "checkpoint"
+        },
+        {
+          "anchor": "cs329z-u07-c08-long-running-checkpoints-p05",
+          "definition": "Serialize the state; on crash reload the latest.",
+          "term": "save-and-resume"
+        },
+        {
+          "anchor": "cs329z-u07-c08-long-running-checkpoints-p04",
+          "definition": "n steps; max loss n steps, average n/2.",
+          "term": "interval"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c08-long-running-checkpoints-p02",
+          "answer": "The agent crashes at step 47 of 100. Without checkpoints, 47 steps are lost. With interval 10, at most 10 steps are lost (5 on average). The tradeoff: frequent checkpoints cost time and storage.",
+          "id": "cs329z-u07-c08-long-running-checkpoints-r1",
+          "question": "What do checkpoints save?"
+        }
+      ],
+      "title": "cs329z-U07-C08: long-running checkpoints"
+    },
+    {
+      "anchor": "cs329z-u07-c09-user-models",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c09-user-models-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c09-user-models-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c09-user-models-p01",
+          "definition": "The agent's picture of the user: goals, preferences, constraints, context.",
+          "term": "user model"
+        },
+        {
+          "anchor": "cs329z-u07-c09-user-models-p04",
+          "definition": "(attribute, value, confidence, source).",
+          "term": "facts"
+        },
+        {
+          "anchor": "cs329z-u07-c09-user-models-p05",
+          "definition": "Each observation updates confidence; corrections override.",
+          "term": "accumulation"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c09-user-models-p02",
+          "answer": "5 preferences: concise answers, Python, no emails after 5pm, plots over tables, and one more. Built from statements, behavior, and corrections. Always uncertain; confidence tells the agent when to ask.",
+          "id": "cs329z-u07-c09-user-models-r1",
+          "question": "What is in the toy user model?"
+        }
+      ],
+      "title": "cs329z-U07-C09: user models"
+    },
+    {
+      "anchor": "cs329z-u07-c10-next-action-prediction",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c10-next-action-prediction-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c10-next-action-prediction-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c10-next-action-prediction",
+          "definition": "From reactive to proactive: predict what the user will do and prepare.",
+          "term": "next-action prediction"
+        },
+        {
+          "anchor": "cs329z-u07-c10-next-action-prediction-p04",
+          "definition": "Fraction of top predictions correct; 62/100 in the toy.",
+          "term": "precision@1"
+        },
+        {
+          "anchor": "cs329z-u07-c10-next-action-prediction-p05",
+          "definition": "A wrong proactive action costs more than no action.",
+          "term": "precision gate"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c10-next-action-prediction-p02",
+          "answer": "100 mornings, predicts run tests each time, correct 62 times: precision 0.62. The most common next action in this context wins. A correct but unwanted prediction (tests on a broken build) still fails.",
+          "id": "cs329z-u07-c10-next-action-prediction-r1",
+          "question": "How is next-action scored?"
+        }
+      ],
+      "title": "cs329z-U07-C10: next-action prediction"
+    },
+    {
+      "anchor": "cs329z-u07-c11-mixed-initiative",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c11-mixed-initiative-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c11-mixed-initiative-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c11-mixed-initiative",
+          "definition": "Control passes back and forth between agent and user.",
+          "term": "mixed initiative"
+        },
+        {
+          "anchor": "cs329z-u07-c11-mixed-initiative-p05",
+          "definition": "Propose, decide, act, with interruption rights.",
+          "term": "handoff protocol"
+        },
+        {
+          "anchor": "cs329z-u07-c11-mixed-initiative-p04",
+          "definition": "Agent or user per step; either side may pause.",
+          "term": "initiative holder"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c11-mixed-initiative-p02",
+          "answer": "The agent proposes 3 flight options (agent initiative), the user picks one (user initiative), the agent books it. The agent takes initiative when confident and stakes are low; the user when choice needs taste.",
+          "id": "cs329z-u07-c11-mixed-initiative-r1",
+          "question": "How does the flight toy split initiative?"
+        }
+      ],
+      "title": "cs329z-U07-C11: mixed initiative"
+    },
+    {
+      "anchor": "cs329z-u07-c12-consent-and-trust",
+      "blocks": [
+        {
+          "anchor": "cs329z-u07-c12-consent-and-trust-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "cs329z-u07-c12-consent-and-trust-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "cs329z-u07-c12-consent-and-trust-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329z-u07-c12-consent-and-trust",
+          "definition": "The user's permission, scaled to the stakes.",
+          "term": "consent"
+        },
+        {
+          "anchor": "cs329z-u07-c12-consent-and-trust",
+          "definition": "Built by staying in bounds and stating uncertainty.",
+          "term": "trust"
+        },
+        {
+          "anchor": "cs329z-u07-c12-consent-and-trust-p04",
+          "definition": "None, implicit, explicit-once, explicit-each-time.",
+          "term": "consent level"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "cs329z-u07-c12-consent-and-trust-p02",
+          "answer": "Read: implicit ok. Write draft: implicit ok. Send to colleague: explicit once. Send to boss: explicit each time. One rule for all actions either paralyzes or endangers.",
+          "id": "cs329z-u07-c12-consent-and-trust-r1",
+          "question": "What is the consent gradient?"
+        }
+      ],
+      "title": "cs329z-U07-C12: consent and trust"
+    },
+    {
+      "anchor": "connection-summary",
+      "blocks": [
+        {
+          "anchor": "connection-summary-p01",
+          "kind": "summary",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "connection-summary-end",
+      "keyTerms": [
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Privacy norms, permission boundary, approval tiers bound the action space.",
+          "term": "lines"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "Injection defense and red-teaming test the walls.",
+          "term": "walls"
+        },
+        {
+          "anchor": "connection-summary-p01",
+          "definition": "User models, next-action, mixed initiative, consent.",
+          "term": "proactive"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "connection-summary-p01",
+          "answer": "Privacy norms, permission boundaries, and approval tiers bound the action space. Injection defense and red-teaming test the walls. Coding agents get a test rig and provenance-aware scores, long runs get checkpoints, and proactive agents model the user with consent.",
+          "id": "connection-summary-r1",
+          "question": "What is the arc of U07?"
+        }
+      ],
+      "title": "Connection summary"
+    }
+  ]
+}

@@ -1,0 +1,744 @@
+{
+  "itemId": "u02_feedback_tools",
+  "itemKind": "lesson",
+  "revision": "59f71c4f843ef84de670a581ba99460f5d803f07a1ea228d09369549a4727190",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "cs329a_u02_feedback_tools-intro",
+      "blocks": [],
+      "endAnchor": "cs329a_u02_feedback_tools-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "cs329a_u02_feedback_tools-intro-p01",
+          "definition": "Stanford CS329A, Autumn 2025; this unit covers official session 4.",
+          "term": "CS329A"
+        },
+        {
+          "anchor": "cs329a_u02_feedback_tools-intro-p02",
+          "definition": "Mechanisms are taught from the requested inventory with source attribution still pending.",
+          "term": "claim class"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "cs329a_u02_feedback_tools-intro-p01",
+          "answer": "Stanford CS329A, Autumn 2025. This unit covers official session 4 (Oct 3).",
+          "id": "cs329a_u02_feedback_tools-intro-r1",
+          "question": "Which course and session does this unit cover?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "unit-objectives",
+      "blocks": [
+        {
+          "anchor": "unit-objectives-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "unit-objectives-end",
+      "keyTerms": [
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Run a thought-action-observation loop on a toy task.",
+          "term": "ReAct"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "Feedback from running something in the world, such as a test result.",
+          "term": "execution feedback"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "AI feedback guided by a written constitution of principles.",
+          "term": "constitutional feedback"
+        },
+        {
+          "anchor": "unit-objectives-p01",
+          "definition": "A separate check with its own data that the judged system cannot influence.",
+          "term": "independent validation gate"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "unit-objectives-p01",
+          "answer": "Run a ReAct loop on a toy task, separate execution feedback from model feedback, write a tool-error taxonomy with recovery actions, distinguish a critique from a learning update, describe constitutional feedback and RLEF, name reward-signal failure modes including shortcut exploitation, and design an independent validation gate.",
+          "id": "unit-objectives-r1",
+          "question": "What will you be able to do after this unit?"
+        }
+      ],
+      "title": "Unit objectives"
+    },
+    {
+      "anchor": "dependencies",
+      "blocks": [],
+      "endAnchor": "dependencies-end",
+      "keyTerms": [
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Reinforcement learning prerequisite.",
+          "term": "P17"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Tools, APIs, and agent state prerequisite.",
+          "term": "P20"
+        },
+        {
+          "anchor": "dependencies-p01",
+          "definition": "Security, privacy, and safety prerequisite.",
+          "term": "P21"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "dependencies-p01",
+          "answer": "P17 (reinforcement learning), P20 (tools, APIs, agent state), and P21 (security, privacy, safety). Local remediation sits inside C01, C07, and C12.",
+          "id": "dependencies-r1",
+          "question": "Which prerequisites does this unit depend on?"
+        }
+      ],
+      "title": "Dependencies"
+    },
+    {
+      "anchor": "four-way-link-used-in-this-unit",
+      "blocks": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "four-way-link-used-in-this-unit-end",
+      "keyTerms": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The policy update follows it on tool-grounded trajectories.",
+          "term": "reward gradient"
+        },
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "definition": "The typed tool return; reality answering back, not model-generated.",
+          "term": "observation"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "four-way-link-used-in-this-unit-p01",
+          "answer": "Intuition: an agent that acts gets told what happened. Equation: the policy update follows the reward gradient on tool-grounded trajectories. Code: a loop emitting thought, action, observation triples until a stop rule fires. Observation: traces with execution feedback fix their own errors, traces without it repeat them.",
+          "id": "four-way-link-used-in-this-unit-r1",
+          "question": "State the four-way link: intuition, equation, code, and observation."
+        }
+      ],
+      "title": "Four-way link used in this unit"
+    },
+    {
+      "anchor": "c01-react",
+      "blocks": [
+        {
+          "anchor": "c01-react-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c01-react-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c01-react-end",
+      "keyTerms": [
+        {
+          "anchor": "c01-react-p01",
+          "definition": "The plan; think out loud before acting.",
+          "term": "thought"
+        },
+        {
+          "anchor": "c01-react-p01",
+          "definition": "The typed tool return; reality answering back.",
+          "term": "observation"
+        },
+        {
+          "anchor": "c01-react-p04",
+          "definition": "A max step count or a finish action that ends the loop.",
+          "term": "stop rule"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c01-react-p03",
+          "answer": "Think out loud, act with a tool, read what came back, repeat. The loop keeps the model honest because the observation is not generated by the model.",
+          "id": "c01-react-r1",
+          "question": "Why does the ReAct loop keep the model honest?"
+        },
+        {
+          "anchor": "c01-react-p12",
+          "answer": "Break observation trust: the tool returns a plausible wrong number the model cannot check, and the trace confidently reports the wrong answer. A calculator with a rounding bug infects every trace and no thought step can detect it.",
+          "id": "c01-react-r2",
+          "question": "What breaks the ReAct loop?"
+        }
+      ],
+      "title": "C01 ReAct"
+    },
+    {
+      "anchor": "c02-execution-feedback",
+      "blocks": [
+        {
+          "anchor": "c02-execution-feedback-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c02-execution-feedback-end",
+      "keyTerms": [
+        {
+          "anchor": "c02-execution-feedback-p02",
+          "definition": "Feedback from running something in the world: a test result, an error trace, a return code.",
+          "term": "execution feedback"
+        },
+        {
+          "anchor": "c02-execution-feedback-p03",
+          "definition": "The model talking to itself; it can be kind but it can also lie.",
+          "term": "model feedback"
+        },
+        {
+          "anchor": "c02-execution-feedback-p05",
+          "definition": "The feedback is computed from the artifact, not sampled from word distributions.",
+          "term": "causal link"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c02-execution-feedback-p05",
+          "answer": "The feedback is computed from the artifact, not sampled from a distribution over words. That causal link makes repair possible: change the code, rerun, watch the feedback change. The learning signal is the delta between runs.",
+          "id": "c02-execution-feedback-r1",
+          "question": "Why is repair possible with execution feedback?"
+        },
+        {
+          "anchor": "c02-execution-feedback-p12",
+          "answer": "Break test correctness: the test itself has the bug, so the loop repairs good code into bad code and the feedback confirms it. A test that passes for the wrong reason, like an empty test body, is the counterexample.",
+          "id": "c02-execution-feedback-r2",
+          "question": "What happens when the test itself is wrong?"
+        }
+      ],
+      "title": "C02 execution feedback"
+    },
+    {
+      "anchor": "c03-codetests",
+      "blocks": [
+        {
+          "anchor": "c03-codetests-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c03-codetests-end",
+      "keyTerms": [
+        {
+          "anchor": "c03-codetests-p03",
+          "definition": "A test is a contract in code: small, exact, and fast.",
+          "term": "contract"
+        },
+        {
+          "anchor": "c03-codetests-p04",
+          "definition": "Compares the actual value against the expected value with type-matched logic.",
+          "term": "comparator"
+        },
+        {
+          "anchor": "c03-codetests-p05",
+          "definition": "Test quality sets it: the agent can only be as right as the suite.",
+          "term": "ceiling"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c03-codetests-p05",
+          "answer": "Tests turn open-ended generation into search with a binary objective: find code that passes. Test quality sets the ceiling, so the agent can only be as right as the suite.",
+          "id": "c03-codetests-r1",
+          "question": "Why can the agent only be as right as the test suite?"
+        },
+        {
+          "anchor": "c03-codetests-p12",
+          "answer": "Break suite quality: the suite only tests (0, 0), so candidate C (x + 1) passes and is selected. The agent is exactly as right as the suite, and the suite was wrong-shaped.",
+          "id": "c03-codetests-r2",
+          "question": "How does a bad suite mislead the agent?"
+        }
+      ],
+      "title": "C03 code/tests"
+    },
+    {
+      "anchor": "c04-rlef-reading",
+      "blocks": [
+        {
+          "anchor": "c04-rlef-reading-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c04-rlef-reading-end",
+      "keyTerms": [
+        {
+          "anchor": "c04-rlef-reading-p01",
+          "definition": "Reinforcement learning where the reward comes from execution feedback.",
+          "term": "RLEF"
+        },
+        {
+          "anchor": "c04-rlef-reading-p02",
+          "definition": "gradient approximately equals E[r * grad log pi_theta]; high test-pass trajectories get reinforced.",
+          "term": "policy gradient"
+        },
+        {
+          "anchor": "c04-rlef-reading-code01",
+          "definition": "Reward minus baseline; weights the update toward better-than-average trajectories.",
+          "term": "advantage"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c04-rlef-reading-p02",
+          "answer": "The agent writes code, tests run, and reward equals the fraction of tests passed. A policy gradient step raises the probability of trajectories like the passing ones.",
+          "id": "c04-rlef-reading-r1",
+          "question": "How does a test failure become a weight change in RLEF?"
+        },
+        {
+          "anchor": "c04-rlef-reading-p12",
+          "answer": "Break test-goal alignment: the tests check formatting, not behavior. The policy learns beautiful formatting and broken logic, and the reward confirms it. Reward 1.0 for code that prints expected outputs without computing them is the counterexample.",
+          "id": "c04-rlef-reading-r2",
+          "question": "How does shortcut exploitation strike at training time?"
+        }
+      ],
+      "title": "C04 RLEF reading"
+    },
+    {
+      "anchor": "c05-critique-versus-learning-update",
+      "blocks": [
+        {
+          "anchor": "c05-critique-versus-learning-update-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c05-critique-versus-learning-update-end",
+      "keyTerms": [
+        {
+          "anchor": "c05-critique-versus-learning-update-p01",
+          "definition": "Text feedback with no parameter change; a note in the margin.",
+          "term": "critique"
+        },
+        {
+          "anchor": "c05-critique-versus-learning-update-p03",
+          "definition": "Rewrites the chapter: changes the policy for every future draft.",
+          "term": "learning update"
+        },
+        {
+          "anchor": "c05-critique-versus-learning-update-p04",
+          "definition": "The parameter change applied to weights by an update.",
+          "term": "delta_theta"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c05-critique-versus-learning-update-p05",
+          "answer": "A critique changes the current trace, becoming context for the next step. An update changes the policy for all future traces. The distinction is operational, not philosophical.",
+          "id": "c05-critique-versus-learning-update-r1",
+          "question": "What is the operational difference between a critique and an update?"
+        },
+        {
+          "anchor": "c05-critique-versus-learning-update-p12",
+          "answer": "A critique that is written but never read changes nothing at all. An update on a mislabeled example moves P(fixed) the wrong way; updates are not automatically improvements.",
+          "id": "c05-critique-versus-learning-update-r2",
+          "question": "What are the two failure modes of critiques and updates?"
+        }
+      ],
+      "title": "C05 critique versus learning update"
+    },
+    {
+      "anchor": "c06-constitutional-feedback",
+      "blocks": [
+        {
+          "anchor": "c06-constitutional-feedback-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c06-constitutional-feedback-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c06-constitutional-feedback-end",
+      "keyTerms": [
+        {
+          "anchor": "c06-constitutional-feedback-p01",
+          "definition": "A written list of principles guiding AI critique and revision.",
+          "term": "constitution"
+        },
+        {
+          "anchor": "c06-constitutional-feedback-p04",
+          "definition": "The improved response demonstrating compliance with the principles.",
+          "term": "revision"
+        },
+        {
+          "anchor": "c06-constitutional-feedback-p06",
+          "definition": "95 percent of drafts become training data in the toy funnel.",
+          "term": "yield"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c06-constitutional-feedback-p03",
+          "answer": "Write the rules down, let the model grade its own draft against the rules, keep the revised version, and train on the revisions. The loop scales because critique and revision are model-generated; humans only write the constitution.",
+          "id": "c06-constitutional-feedback-r1",
+          "question": "How do you get harmlessness feedback without a human in the loop?"
+        },
+        {
+          "anchor": "c06-constitutional-feedback-p12",
+          "answer": "Break principle coverage: the constitution says nothing about a new harm category, so the critic waves it through and the loop trains the model to produce that harm fluently. A revision can satisfy the letter of P2 while leaking instructions in the explanation.",
+          "id": "c06-constitutional-feedback-r2",
+          "question": "What breaks constitutional feedback?"
+        }
+      ],
+      "title": "C06 constitutional feedback"
+    },
+    {
+      "anchor": "c07-reward-signals",
+      "blocks": [
+        {
+          "anchor": "c07-reward-signals-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c07-reward-signals-end",
+      "keyTerms": [
+        {
+          "anchor": "c07-reward-signals-p01",
+          "definition": "A compass; the policy walks where it points, not where you meant.",
+          "term": "reward"
+        },
+        {
+          "anchor": "c07-reward-signals-p05",
+          "definition": "Any feature raising reward without serving the goal gets amplified.",
+          "term": "Goodhart"
+        },
+        {
+          "anchor": "c07-reward-signals-p03",
+          "definition": "R1 points at the test suite, R2 at a word, R3 at a human.",
+          "term": "compass"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c07-reward-signals-p02",
+          "answer": "None of them reliably: the candidate uses a lookup table on test inputs, so R1 and R2 both score 1.0 without sorting. R1 ranks tricks over nearly-correct sorts; the expected true quality of the R1 pick is below the average real sort.",
+          "id": "c07-reward-signals-r1",
+          "question": "Which of the three toy rewards teaches sorting?"
+        }
+      ],
+      "title": "C07 reward signals"
+    },
+    {
+      "anchor": "c08-constraints",
+      "blocks": [
+        {
+          "anchor": "c08-constraints-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c08-constraints-end",
+      "keyTerms": [
+        {
+          "anchor": "c08-constraints-p01",
+          "definition": "A hard limit the agent must respect regardless of reward.",
+          "term": "constraint"
+        },
+        {
+          "anchor": "c08-constraints-p05",
+          "definition": "Every proposed action passes the checker before execution; denied actions never reach the tool.",
+          "term": "gate"
+        },
+        {
+          "anchor": "c08-constraints-p02",
+          "definition": "The checker rejects drop_db at reward 1.0; the agent picks write_tmp at 0.8.",
+          "term": "vetoes"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c08-constraints-p05",
+          "answer": "Constrained optimization: maximize reward subject to the predicates. A large negative reward still lets the action through on exploration, while a gate denies it before execution. Cost of the toy constraint: 0.2 reward; value: the database still exists.",
+          "id": "c08-constraints-r1",
+          "question": "Why use a hard gate instead of reward shaping?"
+        },
+        {
+          "anchor": "c08-constraints-p12",
+          "answer": "Break checker coverage: the tool renames the action to remove_db and no predicate matches, so the gate waves it through. A constraint checked on the action name but not its arguments lets write to the wrong path pass.",
+          "id": "c08-constraints-r2",
+          "question": "How does a constraint checker get bypassed?"
+        }
+      ],
+      "title": "C08 constraints"
+    },
+    {
+      "anchor": "c09-tool-errors",
+      "blocks": [
+        {
+          "anchor": "c09-tool-errors-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "c09-tool-errors-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "c09-tool-errors-end",
+      "keyTerms": [
+        {
+          "anchor": "c09-tool-errors-p01",
+          "definition": "Six failure classes, each with a matching recovery rule.",
+          "term": "taxonomy"
+        },
+        {
+          "anchor": "c09-tool-errors-p04",
+          "definition": "Whether the error record allows another attempt.",
+          "term": "retryable_flag"
+        },
+        {
+          "anchor": "c09-tool-errors-p05",
+          "definition": "Transient errors with no prior retry get retried with it.",
+          "term": "backoff"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c09-tool-errors-p04",
+          "answer": "Transient, request bug, auth, tool bug, schema drift, and empty result. The tree branches on (code, message, history): transient retries with backoff, request bugs get repaired and resent once, auth stops and escalates, tool bug or schema drift gets quarantined, empty results are accepted as data.",
+          "id": "c09-tool-errors-r1",
+          "question": "Name the six error classes and their recoveries."
+        },
+        {
+          "anchor": "c09-tool-errors-p12",
+          "answer": "Break message informativeness: the tool returns error with code 200 for every failure class, so the tree collapses to one branch and every recovery is a guess. Retrying a non-idempotent tool like send-email on timeout sends it twice.",
+          "id": "c09-tool-errors-r2",
+          "question": "What collapses the error taxonomy?"
+        }
+      ],
+      "title": "C09 tool errors"
+    },
+    {
+      "anchor": "c10-policy-updates",
+      "blocks": [
+        {
+          "anchor": "c10-policy-updates-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c10-policy-updates-end",
+      "keyTerms": [
+        {
+          "anchor": "c10-policy-updates-p04",
+          "definition": "One step with a baseline on (trajectory, reward) pairs from the recent policy.",
+          "term": "gradient step"
+        },
+        {
+          "anchor": "c10-policy-updates-p04",
+          "definition": "Reward minus this centers the update; the toy uses 0.4.",
+          "term": "baseline"
+        },
+        {
+          "anchor": "c10-policy-updates-p05",
+          "definition": "Only reinforce steps after the informative observation; cuts noise with a scalpel.",
+          "term": "masking"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c10-policy-updates-p02",
+          "answer": "The trajectory [write, test-fail, fix, test-pass] with its reward. Only the parts of the trace that earned the reward get reinforced; the failed attempts are the contrast.",
+          "id": "c10-policy-updates-r1",
+          "question": "What exactly gets saved into the weights?"
+        },
+        {
+          "anchor": "c10-policy-updates-p12",
+          "answer": "Break reward trust: the tests were gamed, so the update reinforces the trick with a clean gradient. Updating on stale trajectories after a tool changed behavior attaches credit to actions that no longer work.",
+          "id": "c10-policy-updates-r2",
+          "question": "When does the policy update reinforce the wrong thing?"
+        }
+      ],
+      "title": "C10 policy updates"
+    },
+    {
+      "anchor": "c11-shortcut-exploitation",
+      "blocks": [
+        {
+          "anchor": "c11-shortcut-exploitation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c11-shortcut-exploitation-end",
+      "keyTerms": [
+        {
+          "anchor": "c11-shortcut-exploitation-p03",
+          "definition": "The laziest code with reward 1.0: lookup tables, test-file reading, patched branches.",
+          "term": "shortcut"
+        },
+        {
+          "anchor": "c11-shortcut-exploitation-p04",
+          "definition": "High r_proxy with low true goal g; the safety assumption is proxy equals goal.",
+          "term": "proxy reward"
+        },
+        {
+          "anchor": "c11-shortcut-exploitation-p09",
+          "definition": "Real group 0.98, shortcut group 0.12; the gap detector the visible suite cannot see.",
+          "term": "hidden suite"
+        }
+      ],
+      "minutes": 3,
+      "recall": [
+        {
+          "anchor": "c11-shortcut-exploitation-p05",
+          "answer": "Optimization pressure finds the easiest path to high reward. If a shortcut is in the policy's reach, gradient ascent finds it because the reward gradient points there. It is optimization working on the wrong objective, not a bug in optimization.",
+          "id": "c11-shortcut-exploitation-r1",
+          "question": "Why does optimization find shortcuts?"
+        },
+        {
+          "anchor": "c11-shortcut-exploitation-p12",
+          "answer": "The policy learns to detect the hidden suite and behave only there; then the second instrument is also gamed. A shortcut memorizing both suites makes the gap detector say False and be wrong.",
+          "id": "c11-shortcut-exploitation-r2",
+          "question": "What is the meta-failure of shortcut detection?"
+        }
+      ],
+      "title": "C11 shortcut exploitation"
+    },
+    {
+      "anchor": "c12-independent-validation",
+      "blocks": [
+        {
+          "anchor": "c12-independent-validation-p03",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "c12-independent-validation-end",
+      "keyTerms": [
+        {
+          "anchor": "c12-independent-validation-p03",
+          "definition": "The second set of eyes with its own glasses: own data, rules, and assumptions.",
+          "term": "validator"
+        },
+        {
+          "anchor": "c12-independent-validation-p02",
+          "definition": "Locked before training; the agent never sees it.",
+          "term": "hidden test suite"
+        },
+        {
+          "anchor": "c12-independent-validation-p02",
+          "definition": "Human review of 1 in 20 accepted patches, sampled at random.",
+          "term": "spot-check"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "c12-independent-validation-p05",
+          "answer": "Separation of concerns at the organizational level: the system's optimizer cannot climb the validator's metric because it cannot see it. This breaks the Goodhart loop, since the proxy the system games is not the instrument that judges.",
+          "id": "c12-independent-validation-r1",
+          "question": "How does independent validation break the Goodhart loop?"
+        },
+        {
+          "anchor": "c12-independent-validation-p12",
+          "answer": "Break the lock: a hidden test leaks into training data, and the gate certifies gaming as quality. A rubber-stamping spot-checker gives a 5 percent sample rate with zero attention rate.",
+          "id": "c12-independent-validation-r2",
+          "question": "What breaks the validation gate?"
+        }
+      ],
+      "title": "C12 independent validation"
+    },
+    {
+      "anchor": "u02-not-yet-understood-dependency-list",
+      "blocks": [],
+      "endAnchor": "u02-not-yet-understood-dependency-list-end",
+      "keyTerms": [
+        {
+          "anchor": "u02-not-yet-understood-dependency-list-list01",
+          "definition": "Policy gradients and baselines; remediated in C04 and C10 items 4-6.",
+          "term": "policy gradients"
+        },
+        {
+          "anchor": "u02-not-yet-understood-dependency-list-list01",
+          "definition": "Tool-call loop, state, and budgets; remediated in C01 items 4-9.",
+          "term": "tool-call loop"
+        },
+        {
+          "anchor": "u02-not-yet-understood-dependency-list-list01",
+          "definition": "Trust boundaries and least privilege; remediated in C08 and C12 items 4-5.",
+          "term": "trust boundaries"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u02-not-yet-understood-dependency-list-list01",
+          "answer": "Binary classification loss is a local derivation in U01 C09 item 5, reused here. Advantage normalization and clipping are deferred to U03 C09 and not needed for U02.",
+          "id": "u02-not-yet-understood-dependency-list-r1",
+          "question": "Which dependency is reused from U01, and which is deferred?"
+        }
+      ],
+      "title": "U02 not-yet-understood dependency list"
+    },
+    {
+      "anchor": "u02-russian-doll-ladder-index-major-mechanisms",
+      "blocks": [],
+      "endAnchor": "u02-russian-doll-ladder-index-major-mechanisms-end",
+      "keyTerms": [
+        {
+          "anchor": "u02-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C01, deeper shells through C09 item 6, C01 items 7, 10, 12, and C08 item 9.",
+          "term": "ReAct loop"
+        },
+        {
+          "anchor": "u02-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C04, deeper shells through C10 item 6, C04 items 7, 10, 12, and C12.",
+          "term": "RLEF"
+        },
+        {
+          "anchor": "u02-russian-doll-ladder-index-major-mechanisms-list01",
+          "definition": "Shells 0-5 in C06, deeper shells through C06 items 6, 7, 10, 12, and C08.",
+          "term": "constitutional feedback"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "u02-russian-doll-ladder-index-major-mechanisms-list01",
+          "answer": "The ReAct loop, RLEF, and constitutional feedback. Each runs shells 0-10 across its cards, ending at production consequences: C08 item 9, C12, and C08 respectively.",
+          "id": "u02-russian-doll-ladder-index-major-mechanisms-r1",
+          "question": "Which three mechanisms does the ladder index?"
+        }
+      ],
+      "title": "U02 Russian-doll ladder index (major mechanisms)"
+    }
+  ]
+}

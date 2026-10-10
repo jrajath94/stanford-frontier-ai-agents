@@ -1,0 +1,548 @@
+{
+  "itemId": "u01_ai_economics_value_chain",
+  "itemKind": "lesson",
+  "revision": "456ae854774f518de9aad60b3a727964ae06598f4fd3ac541d7345ff0eb5ab19",
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "anchor": "mse435_u01_ai_economics_value_chain-intro",
+      "blocks": [],
+      "endAnchor": "mse435_u01_ai_economics_value_chain-intro-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435_u01_ai_economics_value_chain-intro-p01",
+          "definition": "AI economics and the full value chain; session 1 Intro to the Economics of Generative AI.",
+          "term": "U01"
+        },
+        {
+          "anchor": "mse435_u01_ai_economics_value_chain-intro-p01",
+          "definition": "P01, P23; shared bridges linked, not rebuilt.",
+          "term": "bridges"
+        },
+        {
+          "anchor": "mse435_u01_ai_economics_value_chain-intro-p02",
+          "definition": "Toy numbers computed locally and labeled TOY.",
+          "term": "TOY"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "mse435_u01_ai_economics_value_chain-intro-p01",
+          "answer": "Parent unit mse435-U01. Bridges P01, P23. Claim class OFFICIAL-SCHEDULE for session 1. Every leaf is PLANNED with source attribution pending. Toy numbers are computed locally and labeled TOY; speaker forecasts carry evidence labels.",
+          "id": "mse435_u01_ai_economics_value_chain-intro-r1",
+          "question": "What are the unit's ground rules?"
+        }
+      ],
+      "title": "Introduction"
+    },
+    {
+      "anchor": "not-yet-understood-dependency-list-unit-level",
+      "blocks": [],
+      "endAnchor": "not-yet-understood-dependency-list-unit-level-end",
+      "keyTerms": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "P01; needed for C01 equilibrium.",
+          "term": "linear equation solving"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "U01-R1; needed for C03-C05 cost arithmetic.",
+          "term": "unit checking"
+        },
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "definition": "P23; needed for C04.",
+          "term": "present value"
+        }
+      ],
+      "minutes": 1,
+      "recall": [
+        {
+          "anchor": "not-yet-understood-dependency-list-unit-level-list01",
+          "answer": "Linear equation solving (P01) for C01, unit checking (U01-R1) for C03-C05, percent vs percentage point (U01-R2) for C02 and C10, and present value (P23) for C04.",
+          "id": "not-yet-understood-dependency-list-unit-level-r1",
+          "question": "What dependencies does the unit need?"
+        }
+      ],
+      "title": "Not-yet-understood dependency list (unit level)"
+    },
+    {
+      "anchor": "mse435-u01-c01-supplydemand",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c01-supplydemand-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u01-c01-supplydemand-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u01-c01-supplydemand-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c01-supplydemand-p02",
+          "definition": "P* = (a - c) / (b + d); the resting price.",
+          "term": "equilibrium"
+        },
+        {
+          "anchor": "mse435-u01-c01-supplydemand-p03",
+          "definition": "Dollars per GPU-hour; the price variable.",
+          "term": "P"
+        },
+        {
+          "anchor": "mse435-u01-c01-supplydemand-p03",
+          "definition": "GPU-hours per day; the quantity variable.",
+          "term": "Q"
+        }
+      ],
+      "minutes": 5,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c01-supplydemand-p06",
+          "answer": "Qd = 100 - 2P, Qs = 20 + 3P. P* = (100-20)/(2+3) = 16 dollars. Q* = 100 - 2x16 = 68 GPU-hours per day. The denominator b + d is positive, so a unique solution exists.",
+          "id": "mse435-u01-c01-supplydemand-r1",
+          "question": "What is the toy equilibrium?"
+        }
+      ],
+      "title": "mse435-U01-C01 , supply/demand"
+    },
+    {
+      "anchor": "mse435-u01-c02-complementssubstitutes",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c02-complementssubstitutes-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c02-complementssubstitutes-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c02-complementssubstitutes-p02",
+          "definition": "(% change in Qx) / (% change in Py); negative means complements.",
+          "term": "cross-price elasticity"
+        },
+        {
+          "anchor": "mse435-u01-c02-complementssubstitutes",
+          "definition": "Used together; cheaper GPUs mean more power burned.",
+          "term": "complements"
+        },
+        {
+          "anchor": "mse435-u01-c02-complementssubstitutes",
+          "definition": "Replace each other; cheaper API tokens mean less self-hosting.",
+          "term": "substitutes"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c02-complementssubstitutes-p06",
+          "answer": "GPU price falls 20%, power demand rises 6%. E_xy = 0.06 / (-0.20) = -0.30. Negative, so GPUs and power are complements; magnitude 0.30 says the link is moderate.",
+          "id": "mse435-u01-c02-complementssubstitutes-r1",
+          "question": "Are GPUs and power complements?"
+        }
+      ],
+      "title": "mse435-U01-C02 , complements/substitutes"
+    },
+    {
+      "anchor": "mse435-u01-c03-fixedvariable-costs",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c03-fixedvariable-costs-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u01-c03-fixedvariable-costs-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u01-c03-fixedvariable-costs-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c03-fixedvariable-costs-p03",
+          "definition": "The rent paid whether you serve one token or one billion.",
+          "term": "fixed cost"
+        },
+        {
+          "anchor": "mse435-u01-c03-fixedvariable-costs-p03",
+          "definition": "The compute burned per token.",
+          "term": "variable cost"
+        },
+        {
+          "anchor": "mse435-u01-c03-fixedvariable-costs-p02",
+          "definition": "Q_be = FC / (P - v); needs P > v.",
+          "term": "break-even"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c03-fixedvariable-costs-p06",
+          "answer": "FC = 100,000, v = 5, P = 15. Contribution = 10 per block. Q_be = 10,000 blocks per month. At 10,000: revenue 150,000, variable cost 50,000, fixed 100,000, profit zero.",
+          "id": "mse435-u01-c03-fixedvariable-costs-r1",
+          "question": "What is the break-even volume?"
+        }
+      ],
+      "title": "mse435-U01-C03 , fixed/variable costs"
+    },
+    {
+      "anchor": "mse435-u01-c04-capexopex",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c04-capexopex-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c04-capexopex-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c04-capexopex",
+          "definition": "Money spent once for an asset that lasts years.",
+          "term": "capex"
+        },
+        {
+          "anchor": "mse435-u01-c04-capexopex",
+          "definition": "Money spent every period to keep running.",
+          "term": "opex"
+        },
+        {
+          "anchor": "mse435-u01-c04-capexopex-p09",
+          "definition": "PV = X x (1 - (1+r)^(-T)) / r; the geometric series.",
+          "term": "present value"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c04-capexopex-p06",
+          "answer": "Buy at 200,000 now vs rent at 60,000/year for 4 years at 10%. PV of rent = 60,000 x 3.1699 = 190,194. Buying costs more upfront but the comparison needs the discount math.",
+          "id": "mse435-u01-c04-capexopex-r1",
+          "question": "Buy or rent the GPU server?"
+        }
+      ],
+      "title": "mse435-U01-C04 , capex/opex"
+    },
+    {
+      "anchor": "mse435-u01-c05-value-capture",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c05-value-capture-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c05-value-capture-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c05-value-capture-p02",
+          "definition": "The size of the pie: willingness to pay minus total cost.",
+          "term": "value creation"
+        },
+        {
+          "anchor": "mse435-u01-c05-value-capture",
+          "definition": "The slice each player keeps; bottlenecks capture more.",
+          "term": "value capture"
+        },
+        {
+          "anchor": "mse435-u01-c05-value-capture-p03",
+          "definition": "(price_i - cost_i) / price_i; pure number.",
+          "term": "margin"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c05-value-capture-p06",
+          "answer": "Chips: cost 5, price 11, margin 54.5%. Each layer keeps a margin on what it passes on. The sum of all layers' capture plus true costs equals the final price; it is an accounting identity.",
+          "id": "mse435-u01-c05-value-capture-r1",
+          "question": "Who keeps the AI value?"
+        }
+      ],
+      "title": "mse435-U01-C05 , value capture"
+    },
+    {
+      "anchor": "mse435-u01-c06-layers-from-chips-to-applications",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c06-layers-from-chips-to-applications-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u01-c06-layers-from-chips-to-applications-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u01-c06-layers-from-chips-to-applications-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c06-layers-from-chips-to-applications",
+          "definition": "Sell raw compute.",
+          "term": "chips"
+        },
+        {
+          "anchor": "mse435-u01-c06-layers-from-chips-to-applications-p04",
+          "definition": "Sell reliable compute at scale: power, cooling, networking, uptime.",
+          "term": "clouds"
+        },
+        {
+          "anchor": "mse435-u01-c06-layers-from-chips-to-applications-p04",
+          "definition": "Sell intelligence: trained weights or API calls.",
+          "term": "model labs"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c06-layers-from-chips-to-applications-p02",
+          "answer": "Trace one token from GPU to chat answer, naming the owner at each handoff. Separation persists because efficient scale differs per layer: a fab serves the world, a data center serves a region, an app serves a niche.",
+          "id": "mse435-u01-c06-layers-from-chips-to-applications-r1",
+          "question": "Why don't the layers collapse?"
+        }
+      ],
+      "title": "mse435-U01-C06 , layers from chips to applications"
+    },
+    {
+      "anchor": "mse435-u01-c07-consumer-versus-enterprise",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c07-consumer-versus-enterprise-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c07-consumer-versus-enterprise-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c07-consumer-versus-enterprise",
+          "definition": "Huge numbers times small prices; 10M users, 2% at $20/month.",
+          "term": "consumer"
+        },
+        {
+          "anchor": "mse435-u01-c07-consumer-versus-enterprise",
+          "definition": "Contracts with expansion; 50 accounts at $200k/year.",
+          "term": "enterprise"
+        },
+        {
+          "anchor": "mse435-u01-c07-consumer-versus-enterprise-p05",
+          "definition": "Dollars per account per year.",
+          "term": "ACV"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c07-consumer-versus-enterprise-p05",
+          "answer": "Consumer: 10M x 0.02 x 20 = $4M/month. Enterprise: 50 x 200,000 = $10M/year ($0.83M/month). Each enterprise account equals 833 consumer-years, which is why enterprise sales can afford a sales team.",
+          "id": "mse435-u01-c07-consumer-versus-enterprise-r1",
+          "question": "How do the unit economics compare?"
+        }
+      ],
+      "title": "mse435-U01-C07 , consumer versus enterprise"
+    },
+    {
+      "anchor": "mse435-u01-c08-productivity-versus-adoption",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c08-productivity-versus-adoption-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        },
+        {
+          "anchor": "mse435-u01-c08-productivity-versus-adoption-fig01",
+          "kind": "figure",
+          "reveal": "fade"
+        }
+      ],
+      "endAnchor": "mse435-u01-c08-productivity-versus-adoption-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c08-productivity-versus-adoption-p02",
+          "definition": "What the technology can do; announcements measure it.",
+          "term": "capability"
+        },
+        {
+          "anchor": "mse435-u01-c08-productivity-versus-adoption",
+          "definition": "Who actually uses it; the gap between announcements and payrolls.",
+          "term": "adoption"
+        },
+        {
+          "anchor": "mse435-u01-c08-productivity-versus-adoption-p03",
+          "definition": "G(a) = g_max x a / (a + k); saturating curve.",
+          "term": "realized gain"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c08-productivity-versus-adoption-p06",
+          "answer": "g_max = 0.30, k = 0.25. At a = 0.20: 13.3%. At a = 0.70: 22.1%. Tripling adoption raises the gain from 13.3% to 22.1%. The tool saves 30% for users, but only 20% use it.",
+          "id": "mse435-u01-c08-productivity-versus-adoption-r1",
+          "question": "Why hasn't productivity moved?"
+        }
+      ],
+      "title": "mse435-U01-C08 , productivity versus adoption"
+    },
+    {
+      "anchor": "mse435-u01-c09-forecasts-versus-observations",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c09-forecasts-versus-observations-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c09-forecasts-versus-observations-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c09-forecasts-versus-observations-p02",
+          "definition": "A bet about the future.",
+          "term": "forecast"
+        },
+        {
+          "anchor": "mse435-u01-c09-forecasts-versus-observations-p04",
+          "definition": "What happened.",
+          "term": "observation"
+        },
+        {
+          "anchor": "mse435-u01-c09-forecasts-versus-observations-p09",
+          "definition": "MSE = bias^2 + variance; the split tells you what to fix.",
+          "term": "decomposition"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c09-forecasts-versus-observations-p06",
+          "answer": "Observed price $4. Forecasts 2, 3, 7: errors -2, -1, +3. Bias = 0, MSE = 4.67. A second set with bias +2 has the same MSE but a fixable forecaster: subtract 2.",
+          "id": "mse435-u01-c09-forecasts-versus-observations-r1",
+          "question": "Was the forecast good?"
+        }
+      ],
+      "title": "mse435-U01-C09 , forecasts versus observations"
+    },
+    {
+      "anchor": "mse435-u01-c10-two-year-comparison",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c10-two-year-comparison-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c10-two-year-comparison-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c10-two-year-comparison-p04",
+          "definition": "Holds the ruler still: same good, same unit, same quality, two dates.",
+          "term": "fair comparison"
+        },
+        {
+          "anchor": "mse435-u01-c10-two-year-comparison-p06",
+          "definition": "Observed = true change x ruler change.",
+          "term": "ratio"
+        },
+        {
+          "anchor": "mse435-u01-c10-two-year-comparison-p04",
+          "definition": "If the 2026 good is better, part of the price change is quality change.",
+          "term": "quality adjustment"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c10-two-year-comparison-p02",
+          "answer": "2024: $10 per 1M tokens. 2026: $4 per 1M blended tokens. The 60% fall mixes real change with basket change. Fix: price the 2024 basket in 2026, or state the mix change as its own line.",
+          "id": "mse435-u01-c10-two-year-comparison-r1",
+          "question": "Did token prices fall 60%?"
+        }
+      ],
+      "title": "mse435-U01-C10 , two-year comparison"
+    },
+    {
+      "anchor": "mse435-u01-c11-uncertainty",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c11-uncertainty-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c11-uncertainty-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c11-uncertainty-p02",
+          "definition": "Hides the bet; decisions break at the edges, not the middle.",
+          "term": "point forecast"
+        },
+        {
+          "anchor": "mse435-u01-c11-uncertainty-p02",
+          "definition": "Shows the bet; capacity and cash break at the edges.",
+          "term": "range"
+        },
+        {
+          "anchor": "mse435-u01-c11-uncertainty-p02",
+          "definition": "1.125B/day; exceeds the 1B modal forecast on upside asymmetry.",
+          "term": "expected value"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c11-uncertainty-p06",
+          "answer": "Demand: 0.5B (0.25), 1B (0.50), 2B (0.25). Build for 1B costs $1M; shortfall at 2B costs $3M in lost margin; idle at 0.5B costs $0.5M. The expected value 1.125B exceeds the about-1B forecast.",
+          "id": "mse435-u01-c11-uncertainty-r1",
+          "question": "What capacity do you build?"
+        }
+      ],
+      "title": "mse435-U01-C11 , uncertainty"
+    },
+    {
+      "anchor": "mse435-u01-c12-source-claims",
+      "blocks": [
+        {
+          "anchor": "mse435-u01-c12-source-claims-p04",
+          "kind": "keyIdea",
+          "reveal": "rise"
+        }
+      ],
+      "endAnchor": "mse435-u01-c12-source-claims-end",
+      "keyTerms": [
+        {
+          "anchor": "mse435-u01-c12-source-claims-p01",
+          "definition": "Speaker, date, class, evidence; what backs the claim.",
+          "term": "claim"
+        },
+        {
+          "anchor": "mse435-u01-c12-source-claims-p02",
+          "definition": "OFFICIAL-SCHEDULE, OFFICIAL-SOURCE, REQUESTED-BRANCH, SPEAKER CLAIM, TOY.",
+          "term": "labels"
+        },
+        {
+          "anchor": "mse435-u01-c12-source-claims-p06",
+          "definition": "A SPEAKER CLAIM stays a speaker claim until an artifact is inspected.",
+          "term": "provenance discipline"
+        }
+      ],
+      "minutes": 4,
+      "recall": [
+        {
+          "anchor": "mse435-u01-c12-source-claims-p06",
+          "answer": "Claim A (Week 2 covers GPU economy): OFFICIAL-SCHEDULE, verified 2026-10-07. Claim B (Groq founder on custom chips): SPEAKER CLAIM, evidence pending. A forecast with no evidence is a hypothesis with a microphone.",
+          "id": "mse435-u01-c12-source-claims-r1",
+          "question": "How do you label claims?"
+        }
+      ],
+      "title": "mse435-U01-C12 , source claims"
+    }
+  ]
+}

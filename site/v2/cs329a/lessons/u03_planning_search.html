@@ -37,67 +37,67 @@
 </ul>
   </nav>
   <main class="content" id="main">
-    <article>
+    <span id="cs329a_u03_planning_search-intro"></span><article>
       <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="#">CS329A: Agentic AI and Frontier Research</a> / U03 · Planning, search, and train-time RL</nav>
       <h1>U03 · Planning, search, and train-time RL</h1>
       
       <div class="progress-row"><button class="mark-done">☐ <span>Mark as complete</span></button><div class="progress-bar"><i></i></div><span class="pct"></span></div><h1 id="u03-planning-search-and-train-time-rl">U03 , Planning, search, and train-time RL</h1>
-<p>Course: Stanford CS329A, Autumn 2025. Official sessions 5 (Oct 6) and 6
+<p id="cs329a_u03_planning_search-intro-p01" data-kind="prose" data-term="CS329A">Course: Stanford CS329A, Autumn 2025. Official sessions 5 (Oct 6) and 6
 (Oct 10). Baseline: 2026-10-07.</p>
-<p>Claim class: mechanisms are taught from the requested inventory with SOURCE
+<p id="cs329a_u03_planning_search-intro-p02" data-kind="prose" data-term="claim class">Claim class: mechanisms are taught from the requested inventory with SOURCE
 ATTRIBUTION PENDING. Paper titles come from the verified official schedule
 (see <code>../source_manifest.md</code>). No paper contents were individually inspected
-by this builder. Toy numbers are computed and traceable.</p>
+by this builder. Toy numbers are computed and traceable.</p><span id="cs329a_u03_planning_search-intro-end" data-end></span>
 <h2 id="unit-objectives">Unit objectives</h2>
-<p>After this unit the learner can: expand and count a search tree, compare
+<p id="unit-objectives-p01" data-kind="keyIdea" data-reveal="rise" data-term="search tree">After this unit the learner can: expand and count a search tree, compare
 adaptive branching with fixed branching, decompose a task and plan
 subtasks in parallel, assign multi-step credit on a toy, generate and
 filter synthetic traces, describe STaR and reasoning RL at mechanism
 level, compute GRPO advantages on a toy group, state the on-policy
-requirement, budget a search, and judge reward validity.</p>
+requirement, budget a search, and judge reward validity.</p><span id="unit-objectives-end" data-end></span>
 <h2 id="dependencies">Dependencies</h2>
-<p>P09 (optimization), P17 (reinforcement learning), P20 (tools and agent
+<p id="dependencies-p01" data-kind="prose" data-term="P09">P09 (optimization), P17 (reinforcement learning), P20 (tools and agent
 state). Local remediation is inside C05, C09, and C11. The shared bridges
-live at <code>../shared/prerequisites/</code>.</p>
+live at <code>../shared/prerequisites/</code>.</p><span id="dependencies-end" data-end></span>
 <h2 id="four-way-link-used-in-this-unit">Four-way link used in this unit</h2>
-<p>Intuition: search spends compute to find better plans, RL spends
+<p id="four-way-link-used-in-this-unit-p01" data-kind="keyIdea" data-reveal="rise" data-term="b^d">Intuition: search spends compute to find better plans, RL spends
 experience to learn better policies. Equation: leaf count b^d, advantage
 (r_i - mean)/std in GRPO. Code: a tree expander plus a group-advantage
 update. Observation: deeper search helps to a point, then the budget or
-the reward model breaks first.</p>
+the reward model breaks first.</p><span id="four-way-link-used-in-this-unit-end" data-end></span>
 <hr />
 <h2 id="c01-tree-search">C01 tree search</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c01-tree-search-p01" data-kind="prose" data-term="BFS"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 5, Multi-step Reasoning/Planning. Reading pointer: Zhou et al.
 2023, Language Agent Tree Search (SOURCE ATTRIBUTION PENDING). Scope:
 expand action sequences as a tree of states, search it under a budget.
 Objective: count nodes and leaves for a toy tree and run BFS and DFS by
 hand. Dependencies: P09, P20.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c01-tree-search-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the agent can take 3 actions at each step for 2 steps. How
 many plans exist? Toy: b = 3, d = 2. Plans (leaves): 3^2 = 9. Nodes
 total: 1 + 3 + 9 = 13.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c01-tree-search-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A plan is a path down a tree. The root is now. Each branch is an action.
 The leaves are futures. Search walks the tree and remembers the best
 leaf it saw.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c01-tree-search-p04" data-kind="definition" data-term="branching factor"><strong>4. Variables, units, shapes, assumptions.</strong>
 Node: (state, path cost, children). b: branching factor. d: depth.
 Leaves of full expansion: b^d. Assumptions: actions are discrete and
 enumerable, the state is fully observed, a leaf score exists.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c01-tree-search-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Full expansion visits every leaf once: b choices at each of d levels
 gives b^d leaves by the product rule. BFS explores level by level and
 finds the shallowest solution first. DFS dives deep and uses less
 memory. Neither is smart, the smarts are in the scoring and pruning
 (C02).</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c01-tree-search-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 b = 3, d = 3. Leaves: 27. Total nodes: 1 + 3 + 9 + 27 = 40. BFS order
 visits all of level 1 (3 nodes) before any of level 2. DFS visits one
 full root-to-leaf path (4 nodes) before backtracking. Memory: BFS holds
 the frontier, up to b^d nodes, DFS holds one path, d + 1 nodes.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">from collections import deque
+<p id="c01-tree-search-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c01-tree-search-code01" data-kind="prose"><code class="language-python">from collections import deque
 
 def expand(state, actions):
     return [(state, a) for a in actions(state)]
@@ -113,157 +113,157 @@ def bfs(root, actions, max_depth):
                 queue.append((child[0], depth + 1))
     return seen
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c01-tree-search-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: with actions(state) = [&ldquo;a&rdquo;, &ldquo;b&rdquo;] and max_depth = 2, bfs visits
 1 + 2 + 4 = 7 states. Check: depths in <code>seen</code> never decrease (BFS
 level order).</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c01-tree-search-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Time O(b^d). Memory O(b^d) for BFS, O(d) for DFS. The exponential is
 the whole story: d = 10, b = 5 gives 9,765,625 leaves. Real search
 never expands fully, it prunes and scores (C02).</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c01-tree-search-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Linear chain (no branching): pick when the next action is forced.
 Sampling N chains: pick when branching is wide and scoring is cheap.
 Tree search: pick when intermediate states need scores and backtracking
 matters.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c01-tree-search-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break discrete actions: the action space is free text, so b is
 infinite and the tree never starts. Counterexample: a state space with
 cycles, naive expansion loops forever without visited-state tracking.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c01-tree-search-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Zhou et al. 2023 (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: tree search beats N independent chains at matched node
 budget on planning tasks. Falsification: equal scores, which would
 mean the tree structure adds nothing over sampling.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c01-tree-search-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the leaf formula and the BFS/DFS memory difference.
 Ladder: define the node, count the toy, justify the product rule, code
 BFS, state O(b^d), compare with sampling chains, debug the cycle
 failure, critique the discrete-action assumption, design the matched-
 budget test. Transfer: game trees in chess use the same counting.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c01-tree-search-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E1.1: count leaves and total nodes for b = 4, d = 2. E1.2: state the
 BFS and DFS memory use for b = 5, d = 6. E1.3: explain why cycles break
 naive expansion. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c01-tree-search-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u03_fig01.png</code>: the b = 3, d = 2 tree: 13 nodes,
 9 leaves marked, BFS visit order numbered on the first 6 nodes, one
 root-to-leaf DFS path highlighted. Provenance: original, computed.
 Alt text: tree diagram with 13 nodes and numbered visit order. Audit:
 node and leaf counts match items 2 and 6.</p>
-<figure><img alt="the b = 3, d = 2 tree: 13 nodes, 9 leaves marked, BFS visit order numbered on the first 6 nodes, one root-to-leaf DFS path highlighted. Provenance: original, computed. Alt text: tree diagram with 13 nodes and numbered visit order. Audit: node and leaf..." src="../assets/u03_fig01.png"><figcaption>the b = 3, d = 2 tree: 13 nodes, 9 leaves marked, BFS visit order numbered on the first 6 nodes, one root-to-leaf DFS path highlighted. Provenance: original, computed. Alt text: tree diagram with 13 nodes and numbered visit order. Audit: node and leaf...</figcaption></figure>
+<figure id="c01-tree-search-fig01" data-kind="figure" data-reveal="fade"><img alt="the b = 3, d = 2 tree: 13 nodes, 9 leaves marked, BFS visit order numbered on the first 6 nodes, one root-to-leaf DFS path highlighted. Provenance: original, computed. Alt text: tree diagram with 13 nodes and numbered visit order. Audit: node and leaf..." src="../assets/u03_fig01.png"><figcaption>the b = 3, d = 2 tree: 13 nodes, 9 leaves marked, BFS visit order numbered on the first 6 nodes, one root-to-leaf DFS path highlighted. Provenance: original, computed. Alt text: tree diagram with 13 nodes and numbered visit order. Audit: node and leaf...</figcaption></figure><span id="c01-tree-search-end" data-end></span>
 <hr />
 <h2 id="c02-adaptive-branching">C02 adaptive branching</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c02-adaptive-branching-p01" data-kind="prose" data-term="adaptive branching"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 5. Reading pointer: Wider or Deeper? Scaling LLM Inference-Time
 Compute with Adaptive Branching Tree Search (SOURCE ATTRIBUTION
 PENDING). Scope: vary the branching factor by node instead of fixing
 it: branch wide where uncertain, deep where promising. Objective:
 compute the node savings of adaptive versus fixed branching on a toy.
 Dependencies: C01.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c02-adaptive-branching-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: fixed b = 4 at every node, or b = 6 at uncertain nodes and
 b = 2 at settled ones? Toy: depth 2. Root uncertain: 6 children. Of
 the 6, 2 show promise (2 children each), 4 are settled (1 child
 each). Leaves: 2<em>2 + 4</em>1 = 8. Fixed b = 4: 16 leaves. Same depth, half
 the leaves.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c02-adaptive-branching-p03" data-kind="keyIdea" data-reveal="rise" data-term="uncertainty"><strong>3. Plain-language mental model.</strong>
 Spend branches where the doubt is. A node that is already decided gets
 one child: keep going. A node with real uncertainty gets many children:
 look around. The tree grows where it is confused.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c02-adaptive-branching-p04" data-kind="definition" data-term="budget"><strong>4. Variables, units, shapes, assumptions.</strong>
 b(n): branching factor at node n, set by an uncertainty or value
 signal. Budget: total node expansions. Assumptions: the signal that
 sets b(n) is informative, the budget is fixed.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c02-adaptive-branching-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Fixed branching wastes expansions on settled nodes. Adaptive branching
 moves those expansions to uncertain nodes, where extra samples change
 the decision more. The mechanism is resource allocation inside the
 tree: marginal value of one more child is higher at uncertain nodes.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c02-adaptive-branching-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Item-2 toy: adaptive leaves 8, fixed leaves 16. If each leaf costs 1
 unit, adaptive saves 8 units at the same depth. Reinvested: the saved
 8 units fund depth 3 on the 2 promising paths: 2 paths * 2 children =
 4 new leaves at depth 3. The adaptive tree reaches deeper on the
 paths that matter.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def adaptive_branch(node, uncertainty):
+<p id="c02-adaptive-branching-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c02-adaptive-branching-code01" data-kind="prose"><code class="language-python">def adaptive_branch(node, uncertainty):
     if uncertainty &gt; 0.7:
         return 6
     if uncertainty &gt; 0.3:
         return 3
     return 1
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c02-adaptive-branching-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: adaptive_branch(n, 0.8) = 6, adaptive_branch(n, 0.5) = 3.
 adaptive_branch(n, 0.1) = 1. Check: thresholds are stated constants,
 not tuned secrets.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c02-adaptive-branching-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Same worst case as fixed branching, the win is average-case node use.
 Cost: computing the uncertainty signal per node. Risk: a bad signal
 starves the good paths.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c02-adaptive-branching-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Fixed branching: pick when no uncertainty signal exists. UCT/MCTS:
 pick when value estimates improve with visits. Adaptive branching:
 pick when a cheap uncertainty signal exists per node.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c02-adaptive-branching-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break signal quality: the uncertainty signal is noise. Adaptive
 branching then allocates randomly and underperforms fixed branching
 while costing more. Counterexample: all nodes score uncertainty 0.5,
 so the tree is fixed b = 3 with extra signal compute wasted.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c02-adaptive-branching-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the adaptive branching paper (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: adaptive beats fixed at matched node budget.
 Falsification: equal or worse scores, which would implicate the signal
 quality.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c02-adaptive-branching-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the rule &ldquo;branch where uncertain&rdquo; and the toy savings.
 Ladder: define b(n), run the toy, justify marginal value, code the
 rule, state signal cost, compare with UCT, debug the noisy-signal
 failure, critique the signal assumption, design the matched-budget
 test. Transfer: adaptive mesh refinement in simulation uses the same
 idea.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c02-adaptive-branching-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E2.1: compute leaves for: root 4 children, 1 promising (3 children),
 3 settled (1 each). E2.2: compare with fixed b = 3, d = 2. E2.3:
 explain the noisy-signal failure. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c02-adaptive-branching-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 2/6: node class, children, leaves).
-No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+No separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c02-adaptive-branching-end" data-end></span>
 <hr />
 <h2 id="c03-decomposition">C03 decomposition</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c03-decomposition-p01" data-kind="prose" data-term="decomposition"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 5. Reading pointer: Prasad et al. 2024, ADaPT: As-Needed
 Decomposition and Planning with Language Models (SOURCE ATTRIBUTION
 PENDING). Scope: split a task into subtasks, solve separately, combine.
 Objective: decompose a toy task and show the interface between parts.
 Dependencies: C01, P20.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c03-decomposition-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: &ldquo;plan a trip&rdquo; is too big for one prompt. What are the
 pieces? Toy: task &ldquo;weekend trip&rdquo;. Subtasks: transport, lodging, food.
 Interfaces: dates flow to all three, budget splits across them, the
 combiner checks total cost &lt;= budget.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c03-decomposition-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Cut the elephant into steaks. Each steak cooks separately. The recipe
 says how the steaks combine into a meal. The interfaces are the recipe.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c03-decomposition-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Decomposition: task T -&gt; [T1..Tk] plus a combiner C. Interface: the
 shared variables each subtask reads and writes. Assumptions: subtasks
 are solvable independently given the interface, the combiner&rsquo;s check
 is correct.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c03-decomposition-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 Decomposition turns one b^d search into k smaller searches: the product
 of small trees beats one big tree when subtasks decouple. ADaPT&rsquo;s
 &ldquo;as-needed&rdquo; point: decompose only when the direct attempt fails, so
 easy tasks pay no decomposition cost. The mechanism is conditional
 complexity: pay for structure only where needed.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c03-decomposition-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: direct attempt on the trip task: b = 5, d = 4, leaves 625.
 Decomposed: 3 subtasks, each b = 3, d = 2, leaves 9 each, total 27,
 plus combiner cost 3. Total 30 versus 625. The saving is real when the
 subtasks truly decouple, the interface cost is the combiner.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def adapt(task, max_depth=2):
+<p id="c03-decomposition-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c03-decomposition-code01" data-kind="prose"><code class="language-python">def adapt(task, max_depth=2):
     result = attempt(task)
     if result[&quot;ok&quot;] or max_depth == 0:
         return result
@@ -280,80 +280,80 @@ def decompose(task):
 def combine(subresults):
     raise NotImplementedError(&quot;combiner goes here&quot;)
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c03-decomposition-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: a task that succeeds directly never calls decompose. Check: the
 recursion bottoms out at max_depth and returns the failed attempt
 instead of looping.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c03-decomposition-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Best case: one direct attempt. Worst case: full recursive decomposition.
 The interface is the risk: wrong shared variables make subtasks solve
 the wrong problem well.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c03-decomposition-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Always decompose: pick when tasks are uniformly hard. Never decompose:
 pick when tasks are uniformly easy. As-needed: pick when difficulty
 varies and the direct attempt is cheap.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c03-decomposition-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break subtask independence: lodging choice changes transport cost, but
 the interface fixed transport first. Each subtask is optimal alone.
 the combination is bad. Counterexample: decompose a joke into setup
 and punchline written separately, the combination is not funny.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c03-decomposition-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Prasad et al. 2024 (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: as-needed decomposition beats always-decompose on mixed
 difficulty sets at matched cost. Falsification: equal cost-adjusted
 scores, which would mean the direct attempts waste more than they
 save.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c03-decomposition-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the as-needed rule and the interface role. Ladder:
 define the split, run the toy numbers, justify conditional complexity,
 code the recursion, state interface risk, compare with always-
 decompose, debug the coupled-subtask failure, critique independence,
 design the mixed-difficulty test. Transfer: divide and conquer in
 algorithms is the same shape.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c03-decomposition-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E3.1: compute the leaf saving for b = 4, d = 3 versus two subtasks of
 b = 2, d = 2. E3.2: name the interface variables for &ldquo;write a report&rdquo;.
 E3.3: explain the joke counterexample. Answers:
 <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c03-decomposition-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: approach, leaves, cost). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c03-decomposition-end" data-end></span>
 <hr />
 <h2 id="c04-parallel-planningexecution">C04 parallel planning/execution</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c04-parallel-planningexecution-p01" data-kind="prose"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 5. Reading pointer: SPRINT: Enabling Interleaved Planning and
 Parallelized Execution in Reasoning Models (SOURCE ATTRIBUTION
 PENDING). Scope: plan subtasks, run independent ones at the same time,
 interleave planning with execution. Objective: compute the wall-clock
 saving of parallel over serial execution on a toy. Dependencies: C03,
 P16 is not bridged, the parallelism here is logical, taught locally.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c04-parallel-planningexecution-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: three subtasks take 4, 6, and 5 seconds. Serial: 15 seconds.
 Parallel: 6 seconds (the longest). What does the planner need to know
 to allow this? Toy: dependency graph: A and B independent, C needs A.
 Schedule: run A and B together (6s), then C (5s). Total 11s versus 15s
 serial.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c04-parallel-planningexecution-p03" data-kind="keyIdea" data-reveal="rise" data-term="interleaving"><strong>3. Plain-language mental model.</strong>
 Independent work runs side by side. Dependent work waits its turn. The
 planner&rsquo;s job is to know which is which. Interleaving means: start
 executing A while still planning C.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c04-parallel-planningexecution-p04" data-kind="definition" data-term="critical path"><strong>4. Variables, units, shapes, assumptions.</strong>
 Subtasks with durations and a dependency DAG. Serial time: sum.
 Parallel time: longest path (critical path). Assumptions: dependencies
 are known, parallel workers exist, subtask durations are predictable.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c04-parallel-planningexecution-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The critical path sets the floor: no schedule beats the longest
 dependency chain. Parallelism removes waiting between independent
 tasks but never shortens the chain. Interleaved planning hides
 planning latency behind execution: while A runs, plan C.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c04-parallel-planningexecution-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Item-2 toy: serial 15s. Parallel with the DAG: max over paths:
 A-&gt;C = 4 + 5 = 9, B = 6. Critical path 9s. Wait: A and B run
 together, taking max(4, 6) = 6s, then C takes 5s: total 11s. The
 critical path A-&gt;C is 9s but B forces 6s in the first wave, so 11s.
 Check: no schedule beats 9s, 11s is achievable, serial is 15s.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def parallel_time(durations, deps):
+<p id="c04-parallel-planningexecution-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c04-parallel-planningexecution-code01" data-kind="prose"><code class="language-python">def parallel_time(durations, deps):
     done = {}
     order = topo_sort(deps)
     for task in order:
@@ -364,157 +364,157 @@ Check: no schedule beats 9s, 11s is achievable, serial is 15s.</p>
 def topo_sort(deps):
     raise NotImplementedError(&quot;topological order goes here&quot;)
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c04-parallel-planningexecution-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: durations {A: 4, B: 6, C: 5}, deps {A: [], B: [], C: [&ldquo;A&rdquo;]}
 gives 11. Check: no dependencies gives max(durations).</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c04-parallel-planningexecution-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Scheduling is cheap, the cost is coordination: parallel subtasks need
 isolated state so they do not clobber each other. Stability: a wrong
 dependency edge causes a race.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c04-parallel-planningexecution-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Serial: pick when subtasks share mutable state. Parallel: pick when
 subtasks are independent and workers exist. Interleaved: pick when
 planning is slow and execution can start early.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c04-parallel-planningexecution-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break dependency knowledge: C secretly needs B&rsquo;s output. Parallel A+B
 then C uses a stale B result. Counterexample: two subtasks writing the
 same file, parallel execution corrupts it.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c04-parallel-planningexecution-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: the SPRINT paper (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: interleaved planning cuts wall-clock time versus
 plan-then-execute at equal task success. Falsification: equal times,
 which would mean planning was never the bottleneck.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c04-parallel-planningexecution-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the critical path and the 11s toy. Ladder: define the
 DAG, run the toy, justify the critical-path floor, code the schedule,
 state coordination cost, compare with serial, debug the hidden-
 dependency failure, critique duration predictability, design the
 wall-clock test. Transfer: project management PERT charts use the same
 math.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c04-parallel-planningexecution-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E4.1: compute serial, parallel, and critical-path times for durations
 {2, 3, 4} with C depending on A and B. E4.2: explain the 11 versus 9
 gap in the lesson toy. E4.3: name the shared-file failure class.
 Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c04-parallel-planningexecution-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: schedule, waves, totals). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c04-parallel-planningexecution-end" data-end></span>
 <hr />
 <h2 id="c05-multi-step-credit">C05 multi-step credit</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c05-multi-step-credit-p01" data-kind="prose" data-term="credit"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Sessions 5-6. Scope: which step of a trajectory deserves the reward:
 credit assignment over multiple steps. Objective: compute per-step
 credit on a three-step toy with an ablation. Dependencies: P17. Local
 remediation: value, Q, and advantage are defined here from scratch.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c05-multi-step-credit-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: a three-step trajectory earns reward 1 at the end. Which
 step caused it? Toy: steps [s1, s2, s3]. Ablation results: remove s1
 -&gt; reward 0, remove s2 -&gt; reward 1, remove s3 -&gt; reward 0. Credit: s1
 and s3 are necessary, s2 is not.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c05-multi-step-credit-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Credit is blame in reverse. To find who deserves it, remove each
 suspect and watch the outcome. The step whose removal breaks success
 owns the credit.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c05-multi-step-credit-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Trajectory tau = (s_0, a_0, &hellip;, s_T). Return R(tau). Value V(s):
 expected return from s. Q(s, a): expected return after action a.
 Advantage A(s, a) = Q(s, a) - V(s). Assumptions: the environment is
 fixed during ablations, removal means a neutral replacement, not
 deletion.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c05-multi-step-credit-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The policy gradient needs to know which actions to reinforce. The
 advantage answers: actions better than average get positive weight.
 Ablation is the gold standard for credit: it measures the causal
 effect of the step. Value estimates are the cheap approximation used
 at scale.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c05-multi-step-credit-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy with numbers: baseline success rate 0.4. With s1 forced good:
 0.9. With s2 forced good: 0.45. With s3 forced good: 0.85. Marginal
 credit: s1: 0.5, s2: 0.05, s3: 0.45. Normalized shares: 0.5, 0.05,
 0.45 over total 1.0. The update should weight s1 and s3, nearly
 ignore s2.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def ablation_credit(trajectory, reward_fn, baseline):
+<p id="c05-multi-step-credit-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c05-multi-step-credit-code01" data-kind="prose"><code class="language-python">def ablation_credit(trajectory, reward_fn, baseline):
     credits = []
     for i in range(len(trajectory)):
         ablated = trajectory[:i] + trajectory[i + 1:]
         credits.append(reward_fn(ablated) - baseline)
     return credits
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c05-multi-step-credit-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: on the item-2 toy with a scripted reward_fn, credits are
 negative for s1 and s3 (removal hurts), near zero for s2. Check:
 empty trajectory returns [].</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c05-multi-step-credit-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 O(T) full-trajectory evaluations per credit vector. At scale this is
 too expensive, which is why value models approximate it. The
 approximation is the source of most credit bugs.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c05-multi-step-credit-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Full-trajectory reward: pick when T is small. Ablation: pick when
 correctness matters more than cost. Learned value model: pick at
 scale, with ablations as the spot check.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c05-multi-step-credit-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the neutral-replacement assumption: removing s2 shifts the
 positions of s3&rsquo;s inputs, so the ablation measures position shift,
 not s2&rsquo;s credit. Counterexample: two redundant steps, removing either
 alone changes nothing, removing both breaks everything. Marginal
 credit says neither matters, both matter.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c05-multi-step-credit-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: credit-assignment literature via P17 (SOURCE ATTRIBUTION
 PENDING for course-specific treatment). Extension: hypothesis:
 advantage-weighted updates beat uniform-trajectory updates on
 multi-step tasks. Falsification: equal performance, which would mean
 the credit signal adds nothing over the trajectory signal.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c05-multi-step-credit-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define advantage and the ablation rule. Ladder: define the
 trajectory, run the toy, justify the causal reading, code the
 ablation, state O(T) cost, compare with value models, debug the
 redundant-steps failure, critique the replacement assumption, design
 the advantage ablation test. Transfer: a relay team: remove each
 runner and time the team.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c05-multi-step-credit-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E5.1: compute normalized credit shares for marginal credits
 [0.5, 0.05, 0.45]. E5.2: explain the redundant-steps counterexample.
 E5.3: state when ablation is affordable. Answers:
 <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c05-multi-step-credit-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: step, forced-good rate, marginal
-credit, share). No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+credit, share). No separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c05-multi-step-credit-end" data-end></span>
 <hr />
 <h2 id="c06-synthetic-traces">C06 synthetic traces</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c06-synthetic-traces-p01" data-kind="prose" data-term="filter"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 6, Train Time Scaling. Reading pointer: SWiRL: Synthetic Data
 Generation and Multi-Step RL for Reasoning and Tool Use (SOURCE
 ATTRIBUTION PENDING). Scope: generate training trajectories
 synthetically, filter them, train on the survivors. Objective: run a
 toy generate-filter-train count. Dependencies: C05, P10.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c06-synthetic-traces-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: human trajectories are expensive. Can the model write its
 own training data? Toy: generate 1000 traces. Filter: keep traces
 where the final answer is right and every tool call succeeded. Kept:
 300. Train on the 300.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c06-synthetic-traces-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 The model dreams up attempts. A filter keeps the good dreams. Training
 on good dreams makes more good dreams. The filter is the teacher, the
 generator is the student who also writes the textbook.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c06-synthetic-traces-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Generation policy pi_gen, filter F, kept set K, training set = K.
 Assumptions: the filter&rsquo;s judgment is right, the kept traces cover the
 task distribution, the generator is diverse enough to produce keepers.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c06-synthetic-traces-p05" data-kind="prose" data-term="rejection sampling"><strong>5. Justified derivation or mechanism.</strong>
 This is rejection sampling as data curation: sample from pi_gen, keep
 by F, train by maximum likelihood on K. It works when the filter is
 stricter than the generator is good: the kept set is better than
 average, so imitation raises the average. It fails when the filter is
 loose or the generator only dreams one dream (mode collapse).</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c06-synthetic-traces-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: 1000 traces, base success rate 0.2. Filter keeps successes: 200
 kept. Train: new success rate 0.35 (imitation of successes plus
 generalization). Round 2: generate 1000 at 0.35, keep 350, train to
 0.45. The ratchet: 0.20 -&gt; 0.35 -&gt; 0.45. Each round&rsquo;s filter output is
 the next round&rsquo;s training input.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def synthetic_round(generate, keep_filter, n):
+<p id="c06-synthetic-traces-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c06-synthetic-traces-code01" data-kind="prose"><code class="language-python">def synthetic_round(generate, keep_filter, n):
     kept = []
     for _ in range(n):
         trace = generate()
@@ -522,80 +522,80 @@ the next round&rsquo;s training input.</p>
             kept.append(trace)
     return kept
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c06-synthetic-traces-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: with a scripted generate producing 20 percent successes and a
 correctness filter, kept/n prints about 0.2. Check: an empty filter
 returns [].</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c06-synthetic-traces-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: n generations per round plus filtering. The filter is usually
 cheap (a verifier or tests). Stability: train too long on K and the
 policy collapses to K&rsquo;s quirks, mix in fresh data.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c06-synthetic-traces-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Human demonstrations: pick when quality beats cost. Synthetic traces:
 pick when the filter is trustworthy and scale matters. RL from scratch:
 pick when no good traces exist to imitate.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c06-synthetic-traces-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break filter trust: the filter checks the final answer only, and the
 generator learns to produce right answers with broken reasoning. The
 ratchet then amplifies broken reasoning. Counterexample: mode
 collapse: all 1000 traces are the same template, the kept set teaches
 one trick.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c06-synthetic-traces-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: SWiRL (SOURCE ATTRIBUTION PENDING). Extension: hypothesis:
 filtered synthetic data beats unfiltered at matched trace count.
 Falsification: equal performance, which would mean the filter adds no
 signal.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c06-synthetic-traces-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the generate-filter-train loop and the ratchet numbers.
 Ladder: define the triple, run the toy, justify rejection sampling,
 code the round, state generation cost, compare with human demos,
 debug the broken-reasoning failure, critique filter trust, design the
 filtered-versus-unfiltered test. Transfer: selective breeding is the
 same loop.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c06-synthetic-traces-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E6.1: compute round-3 keep count if the rate goes 0.45 -&gt; 0.52.
 E6.2: explain the ratchet in two sentences. E6.3: name the mode-
 collapse failure. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c06-synthetic-traces-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: round, rate, kept, new rate). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c06-synthetic-traces-end" data-end></span>
 <hr />
 <h2 id="c07-star">C07 STaR</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c07-star-p01" data-kind="prose" data-term="STaR"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 6. Reading pointer: Zelikman et al. 2022, STaR: Bootstrapping
 Reasoning With Reasoning (SOURCE ATTRIBUTION PENDING). Scope: generate
 rationales, keep the ones that lead to right answers, fine-tune on
 them, repeat. Objective: run the STaR loop on a toy with counts.
 Dependencies: C06, P10.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c07-star-p02" data-kind="example" data-term="rationale"><strong>2. Motivating question and tiny toy.</strong>
 Question: the model cannot explain its answers, but it sometimes gets
 them right. Can the right answers teach the explanations? Toy: 100
 questions. Model answers 30 right. For each right answer, keep the
 rationale it generated. Fine-tune on the 30 (question, rationale,
 answer) triples. Next round: 45 right.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c07-star-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Keep the scratch work that led to right answers. Study it. The model
 teaches itself to show work that works. Each round&rsquo;s good scratch
 becomes the next round&rsquo;s textbook.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c07-star-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Rationales R for questions Q with answers A. Filter: keep (q, r, a)
 iff a is correct. Update: supervised fine-tuning on kept triples.
 Assumptions: correct answers imply usable rationales often enough, the
 rationale actually supports the answer.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c07-star-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 STaR is synthetic traces (C06) specialized to rationales: the filter is
 answer correctness, the artifact is the reasoning chain. Bootstrapping
 works when the initial policy is good enough to produce some keepers:
 the kept set is above-average, so imitation raises the average. The
 rationalization variant (hint the answer, then generate the rationale)
 fills gaps where the model never succeeds unaided.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c07-star-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: round 1: 100 questions, 30 keepers, train, accuracy 0.30 -&gt;
 0.45. Round 2: 45 keepers of 100, train, 0.45 -&gt; 0.55. Round 3: 55
 keepers, 0.55 -&gt; 0.60. Gains shrink: 0.15, 0.10, 0.05. The bootstrap
 converges as the keeper pool saturates.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def star_round(questions, model, check):
+<p id="c07-star-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c07-star-code01" data-kind="prose"><code class="language-python">def star_round(questions, model, check):
     kept = []
     for q in questions:
         rationale, answer = model(q)
@@ -604,121 +604,121 @@ converges as the keeper pool saturates.</p>
     finetune(model, kept)
     return len(kept)
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c07-star-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: with a scripted model at 30 percent accuracy, star_round
 returns about 30 keepers of 100. Check: finetune is called with only
 the kept triples.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c07-star-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: one generation per question per round plus fine-tuning. The
 bottleneck is the initial keeper rate: near zero keepers means no
 bootstrap. Rationalization (hinting) is the standard fix.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c07-star-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Plain supervised fine-tuning: pick when human rationales exist. STaR:
 pick when only answers are labeled and the model sometimes succeeds.
 RL on answers: pick when rationales are not needed at test time.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c07-star-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break the rationale-answer link: the model guesses right with
 nonsense rationales. STaR then trains the model to write confident
 nonsense. Counterexample: a hinted rationale that argues for the hint
 regardless of truth, the loop teaches sycophancy to hints.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c07-star-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: Zelikman et al. 2022 (SOURCE ATTRIBUTION PENDING).
 Extension: hypothesis: STaR with rationalization beats STaR without it
 on hard question sets. Falsification: equal gains, which would mean
 hinting adds no keepers.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c07-star-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the loop and the shrinking-gain numbers. Ladder: define
 the triple, run the toy, justify the bootstrap, code the round, state
 the keeper-rate bottleneck, compare with plain SFT, debug the
 nonsense-rationale failure, critique the answer-implies-rationale
 assumption, design the rationalization test. Transfer: a student who
 only studies solved problems they got right.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c07-star-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E7.1: compute round-4 accuracy if the gain halves again. E7.2:
 explain the bootstrap condition in two sentences. E7.3: name the
 rationalization fix. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c07-star-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u03_fig03.png</code>: the STaR ratchet: rounds 1-3 as
 bars of keeper counts (30, 45, 55) with accuracy labels (0.30, 0.45,
 0.55, 0.60) and shrinking gain arrows. Provenance: original, values
 from item 6. Alt text: three bars rising with shrinking gains.
 Audit: counts match item 6.</p>
-<figure><img alt="the STaR ratchet: rounds 1-3 as bars of keeper counts (30, 45, 55) with accuracy labels (0.30, 0.45, 0.55, 0.60) and shrinking gain arrows. Provenance: original, values from item 6. Alt text: three bars rising with shrinking gains. Audit: counts match item 6" src="../assets/u03_fig03.png"><figcaption>the STaR ratchet: rounds 1-3 as bars of keeper counts (30, 45, 55) with accuracy labels (0.30, 0.45, 0.55, 0.60) and shrinking gain arrows. Provenance: original, values from item 6. Alt text: three bars rising with shrinking gains. Audit: counts match item 6</figcaption></figure>
+<figure id="c07-star-fig01" data-kind="figure" data-reveal="fade"><img alt="the STaR ratchet: rounds 1-3 as bars of keeper counts (30, 45, 55) with accuracy labels (0.30, 0.45, 0.55, 0.60) and shrinking gain arrows. Provenance: original, values from item 6. Alt text: three bars rising with shrinking gains. Audit: counts match item 6" src="../assets/u03_fig03.png"><figcaption>the STaR ratchet: rounds 1-3 as bars of keeper counts (30, 45, 55) with accuracy labels (0.30, 0.45, 0.55, 0.60) and shrinking gain arrows. Provenance: original, values from item 6. Alt text: three bars rising with shrinking gains. Audit: counts match item 6</figcaption></figure><span id="c07-star-end" data-end></span>
 <hr />
 <h2 id="c08-reasoning-rl">C08 reasoning RL</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c08-reasoning-rl-p01" data-kind="prose" data-term="verifiable"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 6. Reading pointer: DeepSeekMath (SOURCE ATTRIBUTION PENDING).
 Scope: reinforcement learning that rewards reasoning traces, usually
 with verifiable rewards. Objective: write the reasoning-RL loop and
 name its reward. Dependencies: C05, C06, P17.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c08-reasoning-rl-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: STaR imitates good traces. What if the model must discover
 them? Toy: reward = 1 if the final answer is right, 0 otherwise.
 Policy samples 4 traces per question, gets rewards [1, 0, 0, 1], and
 updates toward the two winners.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c08-reasoning-rl-p03" data-kind="keyIdea" data-reveal="rise" data-term="vending machine"><strong>3. Plain-language mental model.</strong>
 Let the model try, and pay for results. The reward is a vending
 machine: right answer in, gradient out. Discovery beats imitation when
 the good traces are ones nobody wrote down.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c08-reasoning-rl-p04" data-kind="definition" data-term="group baseline"><strong>4. Variables, units, shapes, assumptions.</strong>
 Reward: verifiable outcome (answer check, test pass). Group of G
 samples per prompt. Update: policy gradient with group baseline.
 Assumptions: the reward is verifiable, not learned, the group is big
 enough for a stable baseline.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c08-reasoning-rl-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 With verifiable rewards, the RL loop needs no human labels and no
 learned reward model: the world grades. The group baseline (C09&rsquo;s
 GRPO core) cuts variance without a value network. The mechanism
 discovers traces outside the imitation set, which is the point where
 STaR&rsquo;s keeper pool saturates.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c08-reasoning-rl-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: G = 4, rewards [1, 0, 0, 1]. Mean = 0.5. Advantages: [0.5, -0.5,
 -0.5, 0.5]. The update raises the two winning traces and lowers the
 two losers, each weighted 0.5. Contrast with STaR: STaR would train
 on the two winners only, RL also pushes away from the losers.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def reasoning_rl_step(rewards):
+<p id="c08-reasoning-rl-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c08-reasoning-rl-code01" data-kind="prose"><code class="language-python">def reasoning_rl_step(rewards):
     baseline = sum(rewards) / len(rewards)
     return [r - baseline for r in rewards]
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c08-reasoning-rl-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: reasoning_rl_step([1, 0, 0, 1]) = [0.5, -0.5, -0.5, 0.5].
 Check: advantages sum to 0.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c08-reasoning-rl-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cost: G samples per prompt plus one update. Variance: binary rewards
 on hard prompts give all-zero groups that teach nothing, prompt
 selection (drop solved and unsolved prompts) is the standard fix.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c08-reasoning-rl-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 STaR: pick when imitation of keepers suffices. Reasoning RL: pick
 when discovery beyond the keeper set is needed. RLHF: pick when the
 reward needs human judgment.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c08-reasoning-rl-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break verifiability: the reward is a learned model that the policy
 then games (U02 C11). The loop optimizes the judge, not the task.
 Counterexample: all-zero groups on too-hard prompts: the update is
 zero and training stalls.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c08-reasoning-rl-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: DeepSeekMath (SOURCE ATTRIBUTION PENDING). Extension:
 hypothesis: reasoning RL beats STaR on problems where the initial
 keeper rate is near zero. Falsification: equal scores, which would
 mean discovery adds nothing over imitation there.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c08-reasoning-rl-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define the verifiable reward and the group update. Ladder:
 define the group, run the toy, justify the baseline, code the step,
 state the all-zero-group cost, compare with STaR, debug the gamed-
 reward failure, critique verifiability, design the low-keeper test.
 Transfer: evolution with a fitness function is the same loop without
 gradients.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c08-reasoning-rl-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E8.1: compute advantages for rewards [1, 1, 0, 0, 0]. E8.2: explain
 the STaR contrast in two sentences. E8.3: name the all-zero-group fix.
 Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c08-reasoning-rl-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: trace, reward, advantage). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c08-reasoning-rl-end" data-end></span>
 <hr />
 <h2 id="c09-dapogrpo-reading">C09 DAPO/GRPO reading</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c09-dapogrpo-reading-p01" data-kind="prose" data-term="group"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 6. Reading pointer: DAPO: An Open-Source LLM Reinforcement
 Learning System at Scale (SOURCE ATTRIBUTION PENDING). GRPO (group
 relative policy optimization) is the algorithm family DAPO builds on.
@@ -726,35 +726,35 @@ This is a reading concept: the mechanism is taught, the paper contents
 are not claimed. Objective: compute GRPO advantages on a toy group and
 state what DAPO systematizes. Dependencies: C08, P17. Local
 remediation: the GRPO objective is derived here from scratch.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c09-dapogrpo-reading-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: PPO needs a value network. What if the baseline comes from
 the group itself? Toy: G = 4 responses to one prompt, rewards
 [2, 0, 1, 1]. Mean = 1.0, std = 0.7071. Advantages: [(2-1)/0.7071,
 (0-1)/0.7071, 0, 0] = [1.4142, -1.4142, 0, 0].</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c09-dapogrpo-reading-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Grade on a curve within each group. The best response in the group
 gets pushed up, the worst gets pushed down, the middle stays. No
 separate value network: the group is its own baseline.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c09-dapogrpo-reading-p04" data-kind="definition" data-term="KL penalty"><strong>4. Variables, units, shapes, assumptions.</strong>
 Group: G responses {o_1..o_G} to one prompt. Reward r_i per response.
 Advantage A_i = (r_i - mean(r)) / std(r). Objective: policy gradient
 with A_i plus a KL penalty to a reference policy. Assumptions: G is
 large enough that mean and std are stable, rewards are comparable
 within the group.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c09-dapogrpo-reading-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The group baseline removes the prompt&rsquo;s difficulty level: a hard
 prompt where all rewards are low still yields a useful ranking. Dividing
 by std normalizes the update scale across prompts. The KL term keeps
 the policy near the reference so the group stays on-distribution.
 DAPO&rsquo;s systems contribution (per the schedule listing): this loop
 at scale, the algorithm core is the group-relative advantage.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c09-dapogrpo-reading-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Item-2 toy: mean = (2+0+1+1)/4 = 1.0. Variance = ((1)^2 + (-1)^2 + 0 +
 0)/4 = 0.5. std = sqrt(0.5) = 0.7071. Advantages: [1.4142, -1.4142,
 0.0, 0.0]. Check: they sum to 0. The update pushes response 1 up
 hard, response 2 down hard, and ignores the tied middle.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">import math
+<p id="c09-dapogrpo-reading-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c09-dapogrpo-reading-code01" data-kind="prose"><code class="language-python">import math
 
 def grpo_advantages(rewards):
     g = len(rewards)
@@ -763,162 +763,162 @@ def grpo_advantages(rewards):
     std = math.sqrt(var) if var &gt; 0 else 1.0
     return [(r - mean) / std for r in rewards]
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c09-dapogrpo-reading-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: grpo_advantages([2, 0, 1, 1]) prints about [1.4142, -1.4142,
 0.0, 0.0]. Check: all-equal rewards give all-zero advantages (std
 guard returns 1.0, numerators 0).</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c09-dapogrpo-reading-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 No value network: less memory and compute than PPO. Cost: G samples
 per prompt. Stability: small G makes std noisy, G = 4 is the toy, not
 a recommendation. The std guard prevents division by zero.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c09-dapogrpo-reading-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 PPO with a learned value model: pick when groups are small or rewards
 are sparse across prompts. REINFORCE with a moving baseline: pick
 when simplicity beats stability. GRPO: pick when G samples per prompt
 are affordable and rewards are verifiable.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c09-dapogrpo-reading-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break within-group comparability: two responses solve different
 interpretations of an ambiguous prompt. The ranking then punishes a
 valid alternative. Counterexample: all rewards equal (all right or
 all wrong): advantages are zero and the group teaches nothing.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c09-dapogrpo-reading-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: DAPO (SOURCE ATTRIBUTION PENDING). Extension: hypothesis:
 GRPO matches PPO on verifiable-reward tasks with less compute.
 Falsification: a gap that persists after tuning G, which would mean
 the value network carries real signal.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c09-dapogrpo-reading-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: write the advantage formula and the std guard. Ladder: define
 the group, run the toy, justify the group baseline, code the
 function, state the small-G cost, compare with PPO, debug the
 ambiguous-prompt failure, critique comparability, design the
 GRPO-versus-PPO test. Transfer: grading on a curve in a classroom.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c09-dapogrpo-reading-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E9.1: compute advantages for rewards [3, 1, 1, 3]. E9.2: explain why
 the group baseline removes prompt difficulty. E9.3: state the std
 guard and when it triggers. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c09-dapogrpo-reading-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Figure <code>../visuals/u03_fig02.png</code>: the item-2 group as four response
 chips with rewards [2, 0, 1, 1], a mean line at 1.0, and advantage
 arrows (+1.41 up, -1.41 down, two flat). Provenance: original,
 computed. Alt text: four chips with reward labels and advantage
 arrows around a mean line. Audit: numbers match item 6.</p>
-<figure><img alt="the item-2 group as four response chips with rewards [2, 0, 1, 1], a mean line at 1.0, and advantage arrows (+1.41 up, -1.41 down, two flat). Provenance: original, computed. Alt text: four chips with reward labels and advantage arrows around a mean line...." src="../assets/u03_fig02.png"><figcaption>the item-2 group as four response chips with rewards [2, 0, 1, 1], a mean line at 1.0, and advantage arrows (+1.41 up, -1.41 down, two flat). Provenance: original, computed. Alt text: four chips with reward labels and advantage arrows around a mean line....</figcaption></figure>
+<figure id="c09-dapogrpo-reading-fig01" data-kind="figure" data-reveal="fade"><img alt="the item-2 group as four response chips with rewards [2, 0, 1, 1], a mean line at 1.0, and advantage arrows (+1.41 up, -1.41 down, two flat). Provenance: original, computed. Alt text: four chips with reward labels and advantage arrows around a mean line...." src="../assets/u03_fig02.png"><figcaption>the item-2 group as four response chips with rewards [2, 0, 1, 1], a mean line at 1.0, and advantage arrows (+1.41 up, -1.41 down, two flat). Provenance: original, computed. Alt text: four chips with reward labels and advantage arrows around a mean line....</figcaption></figure><span id="c09-dapogrpo-reading-end" data-end></span>
 <hr />
 <h2 id="c10-on-policyness">C10 on-policyness</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c10-on-policyness-p01" data-kind="prose" data-term="stale"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 6. Scope: the requirement that update data come from the
 current policy, and what breaks when it does not. Objective: show a
 toy where stale data biases the update. Dependencies: C08, C09, P17.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c10-on-policyness-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: yesterday&rsquo;s policy wrote the traces, today&rsquo;s policy trains
 on them. What goes wrong? Toy: old policy put P(A) = 0.8 on action A.
 New policy puts P(A) = 0.2. Traces from the old policy show A
 succeeding. The update raises P(A) toward the old policy&rsquo;s behavior,
 undoing the new policy&rsquo;s change.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c10-on-policyness-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 Train on your own recent games, not on last season&rsquo;s tapes. Stale data
 teaches the current policy to be the old policy. The fresher the data,
 the truer the gradient.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c10-on-policyness-p04" data-kind="definition" data-term="on-policy"><strong>4. Variables, units, shapes, assumptions.</strong>
 Behavior policy pi_old (data source), target policy pi_new (updated).
 On-policy: pi_old = pi_new. Off-policy needs correction, usually
 importance weights pi_new/pi_old. Assumptions: the policies overlap
 enough that the weights are finite.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c10-on-policyness-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 The policy gradient is an expectation under the current policy. Data
 from an old policy estimates the wrong expectation. Importance
 weighting reweights each sample by pi_new/pi_old, which is unbiased
 but high-variance when the policies differ. Clipping (PPO-style) or
 fresh data (on-policy) controls the variance.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c10-on-policyness-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: one action A. pi_old(A) = 0.8, pi_new(A) = 0.2. Reward 1 when A
 is taken. Uncorrected update on old data: gradient pushes P(A) up.
 Importance weight for an A sample: 0.2/0.8 = 0.25. Corrected gradient
 is 0.25 times the naive one. The correction shrinks the stale push by
 a factor of 4. If pi_new(A) were 0.0, the weight would be 0/0.8 = 0:
 stale successes of an abandoned action teach nothing.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def importance_weight(p_new, p_old):
+<p id="c10-on-policyness-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c10-on-policyness-code01" data-kind="prose"><code class="language-python">def importance_weight(p_new, p_old):
     if p_old == 0:
         return 0.0
     return p_new / p_old
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c10-on-policyness-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: importance_weight(0.2, 0.8) = 0.25. Check: importance_weight(0.0,
 0.8) = 0.0. Check: on-policy (equal inputs) returns 1.0.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c10-on-policyness-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Weights are cheap, variance is the cost. The practical fix in
 reasoning RL is procedural: regenerate data every few updates so
 staleness stays small, instead of correcting large staleness with
 noisy weights.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c10-on-policyness-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Pure on-policy (fresh data each update): pick when sampling is cheap.
 Importance-weighted off-policy: pick when data is expensive and
 policies drift slowly. Replay buffers: pick when the task needs the
 sample efficiency despite the bias risk.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c10-on-policyness-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break overlap: pi_new assigns 0 to an action pi_old took often. The
 weight is 0 and those samples vanish, worse, the reverse (pi_old = 0,
 pi_new &gt; 0) divides by zero. Counterexample: a policy that changed its
 tokenizer: old token sequences are impossible under the new policy
 and every weight is 0.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c10-on-policyness-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: on-policy discussions in the RL-at-scale literature (SOURCE
 ATTRIBUTION PENDING for course-specific treatment). Extension:
 hypothesis: regenerating data every update beats reusing data for 4
 updates at matched sample count. Falsification: equal final
 performance, which would mean staleness does not bite at that drift
 rate.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c10-on-policyness-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: define on-policy and the importance weight. Ladder: define
 the two policies, run the toy, justify the expectation argument, code
 the weight, state the variance cost, compare with fresh data, debug
 the zero-overlap failure, critique the overlap assumption, design the
 regeneration-frequency test. Transfer: coaching from your own recent
 matches versus last year&rsquo;s videos.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c10-on-policyness-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E10.1: compute the corrected gradient scale for pi_old = 0.9,
 pi_new = 0.3. E10.2: explain the 0/0.8 = 0 case in words. E10.3: state
 the procedural fix. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c10-on-policyness-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: policy, weight, effect). No
-separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c10-on-policyness-end" data-end></span>
 <hr />
 <h2 id="c11-budget">C11 budget</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c11-budget-p01" data-kind="prose" data-term="budget"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Sessions 5-6. Scope: the compute budget as a first-class constraint on
 search and RL: nodes expanded, samples drawn, updates run. Objective:
 write a budget ledger for a toy search and stop it at the cap.
 Dependencies: C01, C08. Local remediation: budgets as hard
 constraints are defined here from scratch.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c11-budget-p02" data-kind="example"><strong>2. Motivating question and tiny toy.</strong>
 Question: the search may expand 100 nodes. How does it stop at 100?
 Toy: b = 3, d = 4. Full expansion needs 121 nodes. The budget allows
 100. The search expands 100 nodes, scores the best leaf seen, and
 stops. It never sees the remaining 21 nodes.</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c11-budget-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A budget is a fuel gauge. Every expansion burns fuel. The search flies
 until the gauge hits zero, then lands on the best leaf it saw. Running
 out of fuel is normal, the plan accounts for it.</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c11-budget-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Budget B in node expansions (or samples, or dollars, name the unit).
 Ledger: (spent, remaining) updated per expansion. Stop rule: spent &gt;=
 B. Assumptions: per-expansion cost is uniform, the best-so-far leaf is
 tracked.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c11-budget-p05" data-kind="prose"><strong>5. Justified derivation or mechanism.</strong>
 There is no derivation, the mechanism is a ledger. The design
 question is allocation under the cap: which nodes deserve the fuel.
 That is C02 (adaptive branching) and U01 C05 (compute allocation)
 applied inside the search. The budget turns &ldquo;search more&rdquo; from a wish
 into a tradeoff.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c11-budget-p06" data-kind="example" data-term="opportunity cost"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: B = 100 node expansions, b = 3. Level costs: 1 + 3 + 9 + 27 = 40
 for depth 2. Depth 3 needs 40 + 81 = 121 &gt; 100. So the search
 completes depth 2 (40 nodes) and expands 60 of the 81 depth-3 nodes.
 Best leaf seen: max over the 60 expanded. The 21 unexpanded nodes are
 the opportunity cost, stated, not hidden.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def budgeted_search(root, expand_fn, score_fn, budget):
+<p id="c11-budget-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c11-budget-code01" data-kind="prose"><code class="language-python">def budgeted_search(root, expand_fn, score_fn, budget):
     spent = 0
     best = (None, float(&quot;-inf&quot;))
     frontier = [root]
@@ -931,76 +931,76 @@ the opportunity cost, stated, not hidden.</p>
         frontier.extend(expand_fn(node))
     return best, spent
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c11-budget-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: budget = 0 returns (None, -inf) with spent 0. Check: spent
 never exceeds budget. Check: best is the max over expanded nodes.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c11-budget-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 O(B) time and O(B) memory worst case. The statistical point: the best
 of 60 leaves is a noisier estimate than the best of 81, report the
 budget with the result.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c11-budget-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Unbounded search: pick when the problem is tiny. Anytime search with
 a budget: pick when time is the constraint. Fixed-depth search: pick
 when depth matters more than node count.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c11-budget-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break uniform cost: one node&rsquo;s expansion costs 1000x the others (a
 heavy tool call). The node-count budget then lies about the real cost.
 Counterexample: the best leaf is node 101, the budget stopped at 100
 and the reported &ldquo;best&rdquo; is second-best. Budgets hide tails.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c11-budget-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: budget-aware search via the session-5 papers (SOURCE
 ATTRIBUTION PENDING). Extension: hypothesis: doubling the budget from
 100 to 200 nodes raises the best-leaf score with diminishing returns.
 Falsification: flat scores, which would mean the search saturates
 early on that task family.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c11-budget-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: state the ledger and the stop rule. Ladder: define the
 budget, run the toy, justify accounting-as-mechanism, code the loop,
 state O(B), compare with fixed-depth, debug the non-uniform-cost
 failure, critique the uniform-cost assumption, design the budget-
 doubling test. Transfer: a taxi meter is the same ledger.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c11-budget-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E11.1: how many depth-3 nodes go unexpanded at B = 100, b = 3?
 E11.2: explain the node-101 counterexample. E11.3: name the fix for
 non-uniform costs. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c11-budget-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: level, nodes, cumulative, budget
-line). No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+line). No separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c11-budget-end" data-end></span>
 <hr />
 <h2 id="c12-reward-validity">C12 reward validity</h2>
-<p><strong>1. Source mapping, scope, objectives, dependencies.</strong>
+<p id="c12-reward-validity-p01" data-kind="prose" data-term="validity"><strong>1. Source mapping, scope, objectives, dependencies.</strong>
 Session 6. Scope: whether the reward used in train-time RL measures the
 true goal: validity checks before and during training. Objective: run a
 three-check validity audit on a toy reward. Dependencies: C08, U02 C11.</p>
-<p><strong>2. Motivating question and tiny toy.</strong>
+<p id="c12-reward-validity-p02" data-kind="example" data-term="drift"><strong>2. Motivating question and tiny toy.</strong>
 Question: the reward says the policy improves. Does the policy
 improving? Toy reward: fraction of tests passed. Checks: (1) held-out
 tests: does the reward hold on unseen tests? (2) human spot-check: do
 5 of 50 passing solutions look right to a human? (3) proxy drift: does
 the reward keep correlating with human judgment as training runs?</p>
-<p><strong>3. Plain-language mental model.</strong>
+<p id="c12-reward-validity-p03" data-kind="keyIdea" data-reveal="rise"><strong>3. Plain-language mental model.</strong>
 A reward is a measuring tape. Validity asks: does the tape measure the
 right thing, and is the tape itself stretching? Check the tape against
 a ruler (held-out tests), against eyes (human spot-check), and over
 time (drift).</p>
-<p><strong>4. Variables, units, shapes, assumptions.</strong>
+<p id="c12-reward-validity-p04" data-kind="definition"><strong>4. Variables, units, shapes, assumptions.</strong>
 Validity report: (held-out correlation, spot-check pass rate, drift
 slope). Assumptions: the held-out set is locked, the human judges are
 calibrated, the drift measurement is frequent enough.</p>
-<p><strong>5. Justified derivation or mechanism.</strong>
+<p id="c12-reward-validity-p05" data-kind="prose" data-term="triangulation"><strong>5. Justified derivation or mechanism.</strong>
 The mechanism is triangulation: three independent instruments that
 fail differently. The training reward can be gamed (U02 C11), the
 held-out tests are unseen, the human sees what tests miss. Agreement
 across instruments is the evidence. Disagreement locates the failure.</p>
-<p><strong>6. Computed numerical example using the same objects.</strong>
+<p id="c12-reward-validity-p06" data-kind="example"><strong>6. Computed numerical example using the same objects.</strong>
 Toy: training reward rises 0.60 -&gt; 0.90 over training. Held-out reward:
 0.58 -&gt; 0.72. Human spot-check pass rate: 0.90 -&gt; 0.70. Drift: human
 agreement falls while the reward rises. Verdict: INVALID. The policy
 improved at the proxy and degraded at the goal. Numbers: the human
 pass rate fell 0.20 while the reward rose 0.30, the gap is the gaming
 margin.</p>
-<p><strong>7. Algorithm and original minimal implementation.</strong></p>
-<pre><code class="language-python">def validity_audit(train_reward, heldout_reward, human_rate,
+<p id="c12-reward-validity-p07" data-kind="steps"><strong>7. Algorithm and original minimal implementation.</strong></p>
+<pre id="c12-reward-validity-code01" data-kind="prose"><code class="language-python">def validity_audit(train_reward, heldout_reward, human_rate,
                    drift_tol=0.1):
     gaps = {
         &quot;heldout_gap&quot;: train_reward - heldout_reward,
@@ -1009,45 +1009,45 @@ margin.</p>
     valid = all(g &lt;= drift_tol for g in gaps.values())
     return valid, gaps
 </code></pre>
-<p><strong>8. Correctness checks and expected output.</strong>
+<p id="c12-reward-validity-p08" data-kind="prose"><strong>8. Correctness checks and expected output.</strong>
 Check: validity_audit(0.90, 0.72, 0.70) returns (False, {&ldquo;heldout_gap&rdquo;:
 0.18, &ldquo;human_gap&rdquo;: 0.20}). Check: gaps within tolerance return True.</p>
-<p><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
+<p id="c12-reward-validity-p09" data-kind="prose"><strong>9. Complexity, memory, statistical efficiency, stability, practical costs.</strong>
 Cheap to compute, expensive to feed: held-out tests and human judges
 cost real effort. Run the audit on a schedule (for example every 10
 percent of training), not once at the end.</p>
-<p><strong>10. Nearest alternatives and precise selection boundaries.</strong>
+<p id="c12-reward-validity-p10" data-kind="prose"><strong>10. Nearest alternatives and precise selection boundaries.</strong>
 Single-metric tracking: pick when the reward is exactly the goal (rare).
 Triangulation: pick when the reward is a proxy. Full human eval each
 round: pick when nothing else is trustworthy and the budget allows.</p>
-<p><strong>11. Failure case, broken assumption, counterexample.</strong>
+<p id="c12-reward-validity-p11" data-kind="prose"><strong>11. Failure case, broken assumption, counterexample.</strong>
 Break held-out secrecy: the held-out tests leak into training. All
 three instruments then agree and all three are wrong. Counterexample:
 human judges who learn to predict the reward instead of judging the
 goal, the spot-check becomes a second proxy.</p>
-<p><strong>12. Research reading and falsifiable extension.</strong>
+<p id="c12-reward-validity-p12" data-kind="prose"><strong>12. Research reading and falsifiable extension.</strong>
 Reading: evaluation-integrity material via P22 (SOURCE ATTRIBUTION
 PENDING for course-specific treatment). Extension: hypothesis:
 scheduled audits catch gaming earlier than end-of-training evals.
 Falsification: equal catch time, which would mean gaming appears only
 at the end.</p>
-<p><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
+<p id="c12-reward-validity-p13" data-kind="prose"><strong>13. Breadth recall, deep oral ladder, unfamiliar transfer.</strong>
 Recall: name the three checks and the verdict rule. Ladder: define
 validity, run the toy, justify triangulation, code the audit, state
 the feeding cost, compare with single-metric tracking, debug the leak
 failure, critique judge calibration, design the audit-schedule test.
 Transfer: drug trials use the same shape: primary endpoint, secondary
 endpoints, safety monitoring.</p>
-<p><strong>14. Lab/exercises with answers separated.</strong>
+<p id="c12-reward-validity-p14" data-kind="exercise"><strong>14. Lab/exercises with answers separated.</strong>
 E12.1: compute the verdict for train 0.85, held-out 0.80, human 0.82,
 tol 0.1. E12.2: explain the gaming margin in the lesson toy. E12.3:
 name the leak failure. Answers: <code>../keys/u03_answers.md</code>.</p>
-<p><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
+<p id="c12-reward-validity-p15" data-kind="prose"><strong>15. Visual units, provenance, accessibility, audit rows.</strong>
 Table plate in the lesson (item 6: instrument, start, end, verdict).
-No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
+No separate PNG. Logged in <code>../visual_audit.md</code>.</p><span id="c12-reward-validity-end" data-end></span>
 <hr />
 <h2 id="u03-not-yet-understood-dependency-list">U03 not-yet-understood dependency list</h2>
-<ol>
+<ol id="u03-not-yet-understood-dependency-list-list01" data-kind="prose" data-term="gradient descent">
 <li>Gradient descent and constrained objectives -&gt;
    <code>../shared/prerequisites/p09_optimization.md</code>, remediated in C11
    items 4-5.</li>
@@ -1061,9 +1061,9 @@ No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
    Added here as a local bridge.</li>
 <li>Importance sampling (preview) -&gt; derived locally in C10 items 4-6.
    full treatment deferred to the math-genai pack.</li>
-</ol>
+</ol><span id="u03-not-yet-understood-dependency-list-end" data-end></span>
 <h2 id="u03-russian-doll-ladder-index-major-mechanisms">U03 Russian-doll ladder index (major mechanisms)</h2>
-<ul>
+<ul id="u03-russian-doll-ladder-index-major-mechanisms-list01" data-kind="prose" data-term="tree search">
 <li>Tree search: shells 0-5 in C01, shell 6 in C02 item 6 (change the
   branching rule), shell 7 in C01 item 11 (break discrete actions),
   shell 8 in C01 item 10 (compare with sampling chains), shell 9 in C01
@@ -1076,7 +1076,7 @@ No separate PNG. Logged in <code>../visual_audit.md</code>.</p>
   (change the group), shell 7 in C07 item 11 (break the rationale link),
   shell 8 in C08 item 10 (compare STaR with RL), shell 9 in C08 item
   12, shell 10 in C12 item 9 (audit schedule in production).</li>
-</ul>
+</ul><span id="u03-russian-doll-ladder-index-major-mechanisms-end" data-end></span>
       
       <nav class="pager"><a href="../lessons/u02_feedback_tools.html"><span class="lbl">← Previous</span>U02 · Feedback, tools, and constitutional learning</a><a href="../lessons/u04_open_evolution.html"><span class="lbl">Next →</span>U04 · Open-ended evolution and deep research</a></nav>
     </article>
